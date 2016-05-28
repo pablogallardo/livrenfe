@@ -1,0 +1,149 @@
+/* Copyright (c) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
+ *
+ * This file is part of LivreNFE.
+ *
+ * LibreNFE is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LibreNFE is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+#ifndef	LIVRENFE_H
+#define	LIVRENFE_H
+#define	VERSION_NAME	0.1
+#define	VERSION_COUNTER	1
+
+typedef struct {
+	char *uf;
+	char *municipio;
+	unsigned int codigo;
+} t_municipio;
+
+typedef struct {
+	t_municipio municipio;
+	unsigned int id_nfe;
+	char *nat_op;
+	int ind_pag;
+	enum t_mod {mod_nfe=55, mod_nfce=65} mod;
+	int serie;
+	unsigned int num_nf;
+	char *dhi_emis;
+	char *dh_saida;
+	enum t_tipo {tipo_entrada=0,tipo_saida=1} t;
+	enum t_local_destino {dest_interna=1,dest_interestadual=2,dest_exterior=3} local_destino;
+	enum t_tipo_impressao {imp_none=0,imp_ret=1,imp_pai=2,imp_simp=3,imp_nfce=4,imp_nfce_msg=5}
+	tipo_impresao;
+	enum t_tipo_emissao {te_normal=1, te_fs=2, te_scan=3, te_dpec=4, te_fsda=5, te_svcan=6, 
+		te_svcrs=7, te_offline_nfce=9} tipo_emissao;
+	enum t_tipo_ambiente {producao=1, homologacao=2} tipo_ambiente;
+	enum t_finalidade {fin_normal=1, fin_complementar=2, fin_ajuste=3, fin_retorno=4}
+	finalidade;
+	enum t_consumidor_final {false=0, true=1} consumidor_final;
+	enum t_presencial {pre_na=0, pre_presencial=1, pre_internet=2, pre_teleatendimento=3,
+		pre_nfce_ed=4, pre_outro=5} presencial;
+	const char *versao;
+	char div;
+	char *chave;
+} t_idnfe;
+
+typedef struct {
+	unsigned int codigo;
+	char *nome;
+} t_pais;
+
+typedef struct {
+	char *rua;
+	unsigned int num;
+	char **complemento;
+	char *bairro;
+	t_municipio municipio;
+	unsigned int cep;
+	t_pais pais;
+} t_endereco;
+
+typedef struct {
+	char *cnpj;
+	char *razao_social;
+	unsigned int *inscricao_estadual;
+	t_endereco endereco;
+	enum t_crt {crt_snac=1, crt_snac_exc=2, crt_normal=3} crt;
+} t_emitente;
+
+typedef struct {
+	char *cnpj;
+	char *nome;
+	t_endereco endereco;
+	enum t_tipo_ie {cont_av=1, cont_is=2, nao_cont=3} tipo_ie;
+} t_destinatario;
+
+typedef struct {
+	unsigned int codigo;
+	char *descricao;
+	unsigned int ncm;
+	unsigned int cfop;
+	char *unidade_comercial;
+	float quantidade;
+	float valor_unit_com;
+	float valor_unit_bruto;
+	char *unidade_tributaria;
+	float quantidade_trib;
+} t_produto;
+
+typedef struct {
+	enum t_origem {nacional=0, e_id=1, e_ai=2} origem;
+	unsigned int tipo;
+	float aliquota;
+	float valor;
+} t_icms;
+
+typedef struct {
+	float aliquota;
+	unsigned int quantidade;
+	char *nt;
+} t_pis;
+
+typedef struct {
+	float aliquota;
+	unsigned int quantidade;
+	char *nt;
+} t_cofins;
+
+typedef struct {
+	t_icms *icms;
+	t_pis *pis;
+	t_cofins *cofins;
+} t_imposto;
+
+typedef struct {
+	t_produto produto;
+	t_imposto imposto;
+	unsigned int ordem;
+} t_item;
+
+typedef struct {
+	enum t_modfrete {frete_emitente=0, frete_destinatario=1, frete_terceiros=2, frete_sem=9} modfrete;
+} t_transp;
+
+typedef struct {
+	t_idnfe idnfe;
+	t_emitente emitente;
+	t_destinatario destinatario;
+	t_item *itens;
+	float total;
+	t_transp transp;
+} nfe;
+
+int gen_nfe(int);
+int validate_nfe(int);
+int sign_nfe(int);
+int transmit_nfe(int);
+#endif

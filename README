@@ -1,0 +1,25 @@
+LivreNFE
+========
+
+Copyright (C) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
+
+Descrição
+---------
+LivreNFE é um projeto opensource para a emissão de Notas Ficais Eletrónicas
+orientado para pequenas e medianas empressas. Este programa se distribui baixo
+a licença GPLv3. Para mais informação veja o documento LICENSE.
+
+Instalação
+----------
+
+Erros
+-----
+Se encontrar um bug, por favor, envie a descrição do erro (qualquer output da
+tela) junto com o passo-a-passo de como replicá-lo ao seguinte endereço:
+pggllrd@gmail.com
+
+Contribuições
+-------------
+Sinta-se à vontade de criar Pull Requests para contribuir com funcionalidades
+novas ou correção de erros de preferencia acompanhe os PR com um e-mail
+descrevendo o patch.
