@@ -41,7 +41,7 @@ typedef struct {
 	enum t_tipo {tipo_entrada=0,tipo_saida=1} t;
 	enum t_local_destino {dest_interna=1,dest_interestadual=2,dest_exterior=3} local_destino;
 	enum t_tipo_impressao {imp_none=0,imp_ret=1,imp_pai=2,imp_simp=3,imp_nfce=4,imp_nfce_msg=5}
-	tipo_impresao;
+		tipo_impresao;
 	enum t_tipo_emissao {te_normal=1, te_fs=2, te_scan=3, te_dpec=4, te_fsda=5, te_svcan=6, 
 		te_svcrs=7, te_offline_nfce=9} tipo_emissao;
 	enum t_tipo_ambiente {producao=1, homologacao=2} tipo_ambiente;
@@ -142,8 +142,4 @@ typedef struct {
 	t_transp transp;
 } nfe;
 
-int gen_nfe(int);
-int validate_nfe(int);
-int sign_nfe(int);
-int transmit_nfe(int);
 #endif
