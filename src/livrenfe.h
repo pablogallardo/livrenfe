@@ -26,6 +26,7 @@ typedef struct {
 	char *uf;
 	char *municipio;
 	unsigned int codigo;
+	unsigned int cod_uf;
 } t_municipio;
 
 typedef struct {
@@ -130,8 +131,15 @@ typedef struct {
 } t_item;
 
 typedef struct {
-	enum t_modfrete {frete_emitente=0, frete_destinatario=1, frete_terceiros=2, frete_sem=9} modfrete;
+	enum t_modfrete {frete_emitente=0, frete_destinatario=1, frete_terceiros=2, frete_sem=9}
+		modfrete;
 } t_transp;
+
+typedef struct {
+	char *dh_recib;
+	unsigned long long numero;
+	int cod_status;
+} t_protocolo;
 
 typedef struct {
 	t_idnfe idnfe;
@@ -140,6 +148,7 @@ typedef struct {
 	t_item *itens;
 	float total;
 	t_transp transp;
-} nfe;
+	t_protocolo *protocolo;
+} t_nfe;
 
 #endif
