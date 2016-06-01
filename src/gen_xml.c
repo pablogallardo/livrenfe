@@ -22,7 +22,10 @@
 #include <string.h>
 #include <libxml/xmlwriter.h>
 
+int is_cpf(char *);
+
 char *generate_xml(t_nfe *nfe) {
+
 	int rc;
 	xmlTextWriterPtr writer;
 	xmlBufferPtr buf;
@@ -59,6 +62,146 @@ char *generate_xml(t_nfe *nfe) {
 		return NULL;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cUF",
 			"%d", nfe->idnfe.municipio.cod_uf);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cNF",
+			"%d", nfe->idnfe.id_nfe);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "natOp",
+			"%s", nfe->idnfe.nat_op);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "indPag",
+			"%d", nfe->idnfe.ind_pag);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "mod",
+			"%d", nfe->idnfe.mod);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "serie",
+			"%d", nfe->idnfe.serie);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "nNF",
+			"%d", nfe->idnfe.num_nf);
+	if (rc < 0)
+		return NULL;
+	
+	char buffer[26];
+	struct tm *tm_info;
+	tm_info = localtime(&(nfe->idnfe.dh_emis));
+	strftime(buffer, 26, "%Y-%m-%dT%H:%M:%S-03:00", tm_info);
 
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "dhEmi",
+			"%s", buffer);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "tpNF",
+			"%d", nfe->idnfe.tipo);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "idDest",
+			"%d", nfe->idnfe.local_destino);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cMunFG",	
+			"%d", nfe->idnfe.municipio.codigo);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "tpImp",	
+			"%d", nfe->idnfe.tipo_impressao);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "tpEmis",
+			"%d", nfe->idnfe.tipo_emissao);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cDV",
+			"%s", &(nfe->idnfe.div));
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "tpAmb",
+			"%d", nfe->idnfe.tipo_ambiente);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "finNFe",
+			"%d", nfe->idnfe.finalidade);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "indFinal",
+			"%d", nfe->idnfe.consumidor_final);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "indPres",
+			"%d", nfe->idnfe.presencial);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "procEmi",
+			"%d", 3);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "verProc",
+			"%s", nfe->idnfe.versao);
+	if (rc < 0)
+		return NULL;
+
+	rc = xmlTextWriterEndElement(writer);
+	if (rc < 0)
+		return NULL;
+
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "emit");
+	if (rc < 0)
+		return NULL;
+	
+	if (is_cpf(nfe->emitente.id))
+		rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "CPF",
+				"%s", nfe->emitente.id);
+	else
+		rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "CNPJ",
+				"%s", nfe->emitente.id);
+	if (rc < 0)
+		return NULL;
+	
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "xNome",
+			"%s", nfe->emitente.nome);
+	if (rc < 0)
+		return NULL;
+
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "enderEmit");
+	if (rc < 0)
+		return NULL;
+
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "xLgr",
+			"%s", nfe->emitente.endereco.rua);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "nro",
+			"%d", nfe->emitente.endereco.num);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "xBairro",
+			"%s", nfe->emitente.endereco.bairro);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cMun",
+			"%d", nfe->emitente.endereco.municipio.codigo);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "xMun",
+			"%d", nfe->emitente.endereco.municipio.municipio);
+	if (rc < 0)
+		return NULL;
+
+
+	
 	return buf->content;
+}
+
+int is_cpf(char *v) {
+	int i = strlen(v);
+	if (i == 11)
+		return 1;
+	return 0;
 }

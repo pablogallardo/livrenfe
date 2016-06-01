@@ -19,6 +19,9 @@
 
 #ifndef	LIVRENFE_H
 #define	LIVRENFE_H
+
+#include <time.h>
+
 #define	VERSION_NAME	0.1
 #define	VERSION_COUNTER	1
 
@@ -37,12 +40,12 @@ typedef struct {
 	enum t_mod {mod_nfe=55, mod_nfce=65} mod;
 	int serie;
 	unsigned int num_nf;
-	char *dhi_emis;
-	char *dh_saida;
-	enum t_tipo {tipo_entrada=0,tipo_saida=1} t;
+	time_t dh_emis;
+	time_t dh_saida;
+	enum t_tipo {tipo_entrada=0,tipo_saida=1} tipo;
 	enum t_local_destino {dest_interna=1,dest_interestadual=2,dest_exterior=3} local_destino;
 	enum t_tipo_impressao {imp_none=0,imp_ret=1,imp_pai=2,imp_simp=3,imp_nfce=4,imp_nfce_msg=5}
-		tipo_impresao;
+		tipo_impressao;
 	enum t_tipo_emissao {te_normal=1, te_fs=2, te_scan=3, te_dpec=4, te_fsda=5, te_svcan=6, 
 		te_svcrs=7, te_offline_nfce=9} tipo_emissao;
 	enum t_tipo_ambiente {producao=1, homologacao=2} tipo_ambiente;
@@ -72,15 +75,15 @@ typedef struct {
 } t_endereco;
 
 typedef struct {
-	char *cnpj;
-	char *razao_social;
+	char *id;
+	char *nome;
 	unsigned int *inscricao_estadual;
 	t_endereco endereco;
 	enum t_crt {crt_snac=1, crt_snac_exc=2, crt_normal=3} crt;
 } t_emitente;
 
 typedef struct {
-	char *cnpj;
+	char *id;
 	char *nome;
 	t_endereco endereco;
 	enum t_tipo_ie {cont_av=1, cont_is=2, nao_cont=3} tipo_ie;
