@@ -193,8 +193,109 @@ char *generate_xml(t_nfe *nfe) {
 			"%d", nfe->emitente.endereco.municipio.municipio);
 	if (rc < 0)
 		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "UF",
+			"%s", nfe->emitente.endereco.municipio.uf);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "CEP",
+			"%d", nfe->emitente.endereco.cep);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cPais",
+			"%d", nfe->emitente.pais.codigo);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "xPais",
+			"%s", nfe->emitente.pais.nome);
+	if (rc < 0)
+		return NULL;
+		
+	rc = xmlTextWriterEndElement(writer);
+	if (rc < 0)
+		return NULL;
+	
+	if (nfe->emitente.inscrição_estadual) {
+		rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "IE",
+				"%s", nfe->emitente.inscrição_estadual);
+		if (rc < 0)
+			return NULL;
+	}
+	
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "CRT",
+				"%d", nfe->emitente.crt);
+	if (rc < 0)
+		return NULL;
+	
+	rc = xmlTextWriterEndElement(writer);
+	
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "dest");
+	if (rc < 0)
+		return NULL;
+	
+	if (is_cpf(nfe->destinatario.id))
+		rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "CPF",
+				"%s", nfe->destinatario.id);
+	else
+		rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "CNPJ",
+				"%s", nfe->destinatario.id);
+	if (rc < 0)
+		return NULL;
+	
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "xNome",
+			"%s", nfe->destinatario.nome);
+	if (rc < 0)
+		return NULL;
 
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "enderDest");
+	if (rc < 0)
+		return NULL;
 
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "xLgr",
+			"%s", nfe->destinatario.endereco.rua);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "nro",
+			"%d", nfe->destinatario.endereco.num);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "xBairro",
+			"%s", nfe->destinatario.endereco.bairro);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cMun",
+			"%d", nfe->destinatario.endereco.municipio.codigo);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "xMun",
+			"%d", nfe->destinatario.endereco.municipio.municipio);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "UF",
+			"%s", nfe->destinatario.endereco.municipio.uf);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cPais",
+			"%d", nfe->destinatario.pais.codigo);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "xPais",
+			"%s", nfe->destinatario.pais.nome);
+	if (rc < 0)
+		return NULL;
+		
+	rc = xmlTextWriterEndElement(writer);
+	if (rc < 0)
+		return NULL;
+	
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "indIEDest",
+			"%d", nfe->destinatario.tipo_ie);
+	if (rc < 0)
+		return NULL;
+	
+	rc = xmlTextWriterEndElement(writer);
+	if (rc < 0)
+		return NULL;
+	
 	
 	return buf->content;
 }

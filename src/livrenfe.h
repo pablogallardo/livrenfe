@@ -77,7 +77,7 @@ typedef struct {
 typedef struct {
 	char *id;
 	char *nome;
-	unsigned int *inscricao_estadual;
+	char *inscricao_estadual;
 	t_endereco endereco;
 	enum t_crt {crt_snac=1, crt_snac_exc=2, crt_normal=3} crt;
 } t_emitente;
