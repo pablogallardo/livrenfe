@@ -96,10 +96,7 @@ typedef struct {
 	unsigned int cfop;
 	char *unidade_comercial;
 	float quantidade;
-	float valor_unit_com;
-	float valor_unit_bruto;
-	char *unidade_tributaria;
-	float quantidade_trib;
+	float valor;
 } t_produto;
 
 typedef struct {
@@ -149,6 +146,7 @@ typedef struct {
 	t_emitente emitente;
 	t_destinatario destinatario;
 	t_item *itens;
+	unsigned int q_itens;
 	float total;
 	t_transp transp;
 	t_protocolo *protocolo;
