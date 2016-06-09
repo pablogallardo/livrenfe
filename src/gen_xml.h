@@ -19,11 +19,22 @@
 
 #ifndef	GEN_XML_H
 #define	GEN_XML_H
+
+/**
+ * NFE Version used to generate XML
+ */
 #define NFE_VERSAO	"3.10"
+/**
+ * NFE prefix used on NF id
+ */
 #define	ID_PREFIX	"NFe"
 
 #include "livrenfe.h"
 
+/**
+ * This function generate a basic XML for the NFE WITHOUT signature and
+ * SEFAZ response (protocolo).
+ */
 extern char *generate_xml(t_nfe *);
 
 #endif

@@ -25,6 +25,9 @@
 #define	VERSION_NAME	0.1
 #define	VERSION_COUNTER	1
 
+/*
+ * City information
+ */
 typedef struct {
 	char *uf;
 	char *municipio;
@@ -32,6 +35,9 @@ typedef struct {
 	unsigned int cod_uf;
 } t_municipio;
 
+/*
+ * NFE identification
+ */
 typedef struct {
 	t_municipio municipio;
 	unsigned int id_nfe;
@@ -59,11 +65,17 @@ typedef struct {
 	char *chave;
 } t_idnfe;
 
+/*
+ * Country information
+ */
 typedef struct {
 	unsigned int codigo;
 	char *nome;
 } t_pais;
 
+/*
+ * Address information
+ */
 typedef struct {
 	char *rua;
 	unsigned int num;
@@ -74,6 +86,9 @@ typedef struct {
 	t_pais pais;
 } t_endereco;
 
+/*
+ * Issuer information
+ */
 typedef struct {
 	char *id;
 	char *nome;
@@ -82,6 +97,9 @@ typedef struct {
 	enum t_crt {crt_snac=1, crt_snac_exc=2, crt_normal=3} crt;
 } t_emitente;
 
+/*
+ * Recipient information
+ */
 typedef struct {
 	char *id;
 	char *nome;
@@ -89,6 +107,9 @@ typedef struct {
 	enum t_tipo_ie {cont_av=1, cont_is=2, nao_cont=3} tipo_ie;
 } t_destinatario;
 
+/*
+ * Product information
+ */
 typedef struct {
 	unsigned int codigo;
 	char *descricao;
@@ -99,6 +120,9 @@ typedef struct {
 	float valor;
 } t_produto;
 
+/*
+ * ICMS tax
+ */
 typedef struct {
 	enum t_origem {nacional=0, e_id=1, e_ai=2} origem;
 	unsigned int tipo;
@@ -106,41 +130,62 @@ typedef struct {
 	float valor;
 } t_icms;
 
+/*
+ * PIS tax
+ */
 typedef struct {
 	float aliquota;
 	unsigned int quantidade;
 	char *nt;
 } t_pis;
 
+/* 
+ * COFINS tax
+ */
 typedef struct {
 	float aliquota;
 	unsigned int quantidade;
 	char *nt;
 } t_cofins;
 
+/*
+ * Tax information
+ */
 typedef struct {
 	t_icms *icms;
 	t_pis *pis;
 	t_cofins *cofins;
 } t_imposto;
 
+/*
+ * Items
+ */
 typedef struct {
 	t_produto produto;
 	t_imposto imposto;
 	unsigned int ordem;
 } t_item;
 
+/*
+ * Transportation information
+ */
 typedef struct {
 	enum t_modfrete {frete_emitente=0, frete_destinatario=1, frete_terceiros=2, frete_sem=9}
 		modfrete;
 } t_transp;
 
+/* 
+ * SEFAZ record information
+ */
 typedef struct {
 	char *dh_recib;
 	unsigned long long numero;
 	int cod_status;
 } t_protocolo;
 
+/*
+ * Complete NFE information
+ */
 typedef struct {
 	t_idnfe idnfe;
 	t_emitente emitente;

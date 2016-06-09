@@ -20,6 +20,9 @@
 #ifndef	ERRNO_H
 #define	ERRNO_H
 
+/**
+ * Erro na geração de XML
+ */
 #define	EXML	1;	
 
 #endif
