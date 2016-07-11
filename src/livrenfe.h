@@ -197,4 +197,9 @@ typedef struct {
 	t_protocolo *protocolo;
 } t_nfe;
 
+/*
+ * Database file
+ */
+char *db_file;
+
 #endif

@@ -17,13 +17,13 @@
  *
  */
 
-#ifndef	ERRNO_H
-#define	ERRNO_H
+#ifndef	DBI_H
+#define	DBI_H
 
-/**
- * Erro na geração de XML
- */
-#define	EXML	1;	
-#define	ESQL	2;	
+#define DB_VERSION	1
+
+extern int create_db();
+
+extern int register_nfe(t_nfe);
 
 #endif

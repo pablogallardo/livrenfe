@@ -17,13 +17,36 @@
  *
  */
 
-#ifndef	ERRNO_H
-#define	ERRNO_H
+#include "db.h"
+#include "errno.h"
+#include <glib-2.0/glib.h>
+#include <sqlite3.h>
+#include <stdio.h>
+#include <string.h>
 
-/**
- * Erro na geração de XML
- */
-#define	EXML	1;	
-#define	ESQL	2;	
+int db_exec(char *sql, char **err){
+	sqlite3 *db;
+	sqlite3_stmt *stmt;
+	int rc;
+	const char *tail_sql;
 
-#endif
+	rc = sqlite3_open(db_file, &db);
+	if(rc)
+		return -ESQL;
+
+	do{
+		rc = sqlite3_prepare_v2(db, sql, -1, &stmt, &tail_sql);
+		if(rc != SQLITE_OK)
+			return -ESQL;
+		rc = sqlite3_step(stmt);
+		if(rc != SQLITE_DONE)
+			return -ESQL;
+		rc = sqlite3_finalize(stmt);
+		if(rc != SQLITE_OK)
+			return -ESQL;
+		sql = strdup(tail_sql);
+	} while(!tail_sql);
+
+	sqlite3_close(db);
+	return 0;
+}

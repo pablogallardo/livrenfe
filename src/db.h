@@ -17,13 +17,15 @@
  *
  */
 
-#ifndef	ERRNO_H
-#define	ERRNO_H
+#ifndef	DB_H
+#define	DB_H
 
-/**
- * Erro na geração de XML
- */
-#define	EXML	1;	
-#define	ESQL	2;	
+#include "livrenfe.h"
+
+#define DB_VERSION	1
+
+extern int db_exec(char *, char **);
+
+extern int db_select(char *, char **);
 
 #endif
