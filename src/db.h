@@ -21,11 +21,35 @@
 #define	DB_H
 
 #include "livrenfe.h"
+#include <sqlite3.h>
 
 #define DB_VERSION	1
 
-extern int db_exec(char *, char **);
+/**
+ * Execute SQL commands without returning results
+ * args:
+ * 	1st: IN: sql statement
+ * 	2nd: OUT: errmsg
+ */
+extern int db_exec(const char *, char **);
 
-extern int db_select(char *, char **);
+/**
+ * Execute SQL commands returning results
+ * args:
+ * 	1st: IN: sql statement
+ *	2nd: OUT: errmsg
+ *	3rd: OUT: db object
+ *	4st: OUT: stmt object
+ */
+extern int db_select(const char *, char **, sqlite3 *db, sqlite3_stmt *stmt);
+
+/**
+ * Close DB connection after db_select()
+ * args:
+ *	1st: IN: db object
+ *	2nd: IN: stmt object
+ *	3rd: OUT: errmsg
+ */
+extern int db_close(sqlite3 *, sqlite3_stmt *, char **);
 
 #endif

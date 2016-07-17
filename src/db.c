@@ -19,12 +19,11 @@
 
 #include "db.h"
 #include "errno.h"
-#include <glib-2.0/glib.h>
 #include <sqlite3.h>
 #include <stdio.h>
 #include <string.h>
 
-int db_exec(char *sql, char **err){
+int db_exec(const char *sql, char **err){
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int rc;
@@ -36,17 +35,49 @@ int db_exec(char *sql, char **err){
 
 	do{
 		rc = sqlite3_prepare_v2(db, sql, -1, &stmt, &tail_sql);
-		if(rc != SQLITE_OK)
+		if(rc != SQLITE_OK){
+			strcpy(*err, sqlite3_errmsg(db));
 			return -ESQL;
+		}
 		rc = sqlite3_step(stmt);
-		if(rc != SQLITE_DONE)
+		if(rc != SQLITE_DONE){
+			strcpy(*err, sqlite3_errmsg(db));
 			return -ESQL;
+		}
 		rc = sqlite3_finalize(stmt);
-		if(rc != SQLITE_OK)
+		if(rc != SQLITE_OK){
+			strcpy(*err, sqlite3_errmsg(db));
 			return -ESQL;
+		}
 		sql = strdup(tail_sql);
 	} while(!tail_sql);
 
+	sqlite3_close(db);
+	return 0;
+}
+
+int db_select(const char *sql, char **err, sqlite3 *db, sqlite3_stmt *stmt){
+	int rc;
+
+	rc = sqlite3_open(db_file, &db);
+	if(rc)
+		return -ESQL;
+	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+	if(rc != SQLITE_DONE){
+		strcpy(*err, sqlite3_errmsg(db));
+		return -ESQL;
+	}
+	return 0;
+}
+
+int db_close(sqlite3 *db, sqlite3_stmt *stmt, char **err){
+	int rc;
+
+	rc = sqlite3_finalize(stmt);
+	if(rc != SQLITE_OK){
+		strcpy(*err, sqlite3_errmsg(db));
+		return -ESQL;
+	}
 	sqlite3_close(db);
 	return 0;
 }

@@ -24,6 +24,6 @@
 
 extern int create_db();
 
-extern int register_nfe(t_nfe);
+extern int register_nfe(t_nfe *);
 
 #endif

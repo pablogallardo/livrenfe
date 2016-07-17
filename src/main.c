@@ -18,6 +18,7 @@
  */
 
 #include "livrenfe.h"
+#include "db.h"
 #include <stdio.h>
 
 int main(int argc, char **args) {
