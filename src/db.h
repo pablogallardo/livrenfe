@@ -52,4 +52,6 @@ extern int db_select(const char *, char **, sqlite3 *db, sqlite3_stmt *stmt);
  */
 extern int db_close(sqlite3 *, sqlite3_stmt *, char **);
 
+extern const char *db_file;
+
 #endif

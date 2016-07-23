@@ -22,9 +22,9 @@
 
 #include <time.h>
 
-#define	VERSION_NAME	0.1
+#define	VERSION_NAME	"0.1"
 #define	VERSION_COUNTER	1
-#define	LIVRENFE_FOLDER_NAME	".livrenfe"
+#define	LIVRENFE_FOLDER_NAME	"/.livrenfe"
 
 /*
  * City information
@@ -197,10 +197,5 @@ typedef struct {
 	t_transp transp;
 	t_protocolo *protocolo;
 } t_nfe;
-
-/*
- * Database file
- */
-char *db_file;
 
 #endif

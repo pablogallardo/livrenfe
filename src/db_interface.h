@@ -22,8 +22,12 @@
 
 #define DB_VERSION	1
 
+#include "livrenfe.h"
+
 extern int create_db();
 
 extern int register_nfe(t_nfe *);
+
+extern void set_db(char *);
 
 #endif

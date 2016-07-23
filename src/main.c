@@ -23,32 +23,58 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <dirent.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 
-int init();
+int init(char *path);
+int init_db(char *path);
 char *get_livrenfepath();
 
 int main(int argc, char **args) {
+	fprintf(stdout, "LivreNFE version %s\n", VERSION_NAME);
+	char *path = get_livrenfepath();
+	DIR *dir = opendir(path);
+	if(dir){
+		char *p = strdup(path);
+		strcat(p, "/livrenfe.db");
+		if(access(p, F_OK) == -1){
+			if(init_db(path))
+				return -EFOL;
+		} else {
+			set_db(p);
+		}
+	} else {
+		if(init(path))
+			return -EFOL;
+	}
 	return 0;
 }
 
-int init(){
-	char *path = get_livrenfepath();
+int init(char *path){
 	if(mkdir(path, S_IRWXU)){
-		fprintf(stderr, "livrenfe: could't create application folder");
+		fprintf(stderr, "livrenfe: couldn't create application folder\n");
 		return -EFOL;
 	}
-	strcat(path, "livrenfe.db");
+	if(init_db(path))
+		return -EFOP;
+	return 0;
+}
+
+int init_db(char *path){
+	strcat(path, "/livrenfe.db");
+	fprintf(stdout, "livrenfe: creating database...\n");
 	FILE *fp = fopen(path, "wb");
 	if(fp == NULL){
-		fprintf(stderr, "livrenfe: could't create database");
+		fprintf(stderr, "livrenfe: couldn't create database\n");
 		return -EFOP;
 	}
 	if(fclose(fp)){
-		fprintf(stderr, "livrenfe: could't create database");
+		fprintf(stderr, "livrenfe: couldn't create database\n");
 		return -EFOP;
 	}
+	set_db(path);
 	return 0;
 }
 
