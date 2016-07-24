@@ -5,16 +5,16 @@ AC_PREREQ([2.69])
 AC_INIT([LivreNFE], [0.1], [pggllrd@gmail.com])
 AM_INIT_AUTOMAKE([livrenfe], [2.6])
 AC_OUTPUT([Makefile src/Makefile])
-AC_CONFIG_SRCDIR([_tests/libxml/testWriter.c])
 AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
 AC_PROG_CC
 
 # Checks for libraries.
+AC_CHECK_LIB([sqlite3], [main])
 
 # Checks for header files.
-AC_CHECK_HEADERS([stdlib.h string.h])
+AC_CHECK_HEADERS([stdlib.h string.h sqlite3.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_CHECK_HEADER_STDBOOL
