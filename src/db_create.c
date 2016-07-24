@@ -85,10 +85,9 @@ CREATE TABLE nfe_itens (id_nfe integer, ordem integer, id_produto integer, icms_
 	CONSTRAINT itens_nfe_fk FOREIGN KEY (id_nfe)\
 	REFERENCES nfe(id_nfe),\
 	CONSTRAINT itens_produto_fk FOREIGN KEY (id_produto)\
-	REFERENCES produtos(id_produto));\
-";
+	REFERENCES produtos(id_produto));";
 
-const char *insert_sql = "INSERT INTO paises (id_pais, nome) VALUES (1, 'Brasil'); \
+const char *insert_sql = "INSERT INTO paises (id_pais, nome) VALUES (1, 'Brasil');\
 		    INSERT INTO municipios (id_municipio, id_uf, nome, id_pais) VALUES ('1100015', 'RO', 'Alta Floresta D''Oeste', 1);\
 		    INSERT INTO municipios (id_municipio, id_uf, nome, id_pais) VALUES ('1100379', 'RO', 'Alto Alegre dos Parecis', 1);\
 		    INSERT INTO municipios (id_municipio, id_uf, nome, id_pais) VALUES ('1100403', 'RO', 'Alto Paraíso', 1);\
@@ -5657,13 +5656,17 @@ const char *insert_sql = "INSERT INTO paises (id_pais, nome) VALUES (1, 'Brasil'
 
 int create_db(){
 	int rc;
-	char **err;
+	char *err = NULL;
 
-	rc = db_exec(create_sql, err);
-	if(!rc)
+	rc = db_exec(create_sql, &err);
+	if(rc){
+		fprintf(stderr, "livrenfe: SQL Error: %s\n", err);
 		return -ESQL;
-	rc = db_exec(insert_sql, err);
-	if(!rc)
+	}
+	rc = db_exec(insert_sql, &err);
+	if(rc){
+		fprintf(stderr, "livrenfe: SQL Error: %s\n", err);
 		return -ESQL;
+	}
 	return 0;
 }

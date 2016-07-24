@@ -40,8 +40,10 @@ int main(int argc, char **args) {
 		char *p = strdup(path);
 		strcat(p, "/livrenfe.db");
 		if(access(p, F_OK) == -1){
-			if(init_db(path))
+			if(init_db(path)){
+				fprintf(stderr, "livrenfe: couldn't create database\n");
 				return -EFOL;
+			}
 		} else {
 			set_db(p);
 		}
@@ -75,7 +77,8 @@ int init_db(char *path){
 		return -EFOP;
 	}
 	set_db(path);
-	create_db();
+	if(create_db())
+		return -EFOP;
 	return 0;
 }
 

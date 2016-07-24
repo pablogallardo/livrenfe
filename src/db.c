@@ -43,16 +43,19 @@ int db_exec(const char *sql, char **err){
 		}
 		rc = sqlite3_step(stmt);
 		if(rc != SQLITE_DONE){
-			strcpy(*err, sqlite3_errmsg(db));
-			return -ESQL;
+			if(rc == SQLITE_ERROR){
+				strcpy(*err, sqlite3_errmsg(db));
+				return -ESQL;
+			}
+			break;
 		}
 		rc = sqlite3_finalize(stmt);
 		if(rc != SQLITE_OK){
 			strcpy(*err, sqlite3_errmsg(db));
 			return -ESQL;
 		}
-		sql = strdup(tail_sql);
-	} while(!tail_sql);
+		sql = tail_sql;
+	} while(tail_sql != NULL);
 
 	sqlite3_close(db);
 	return 0;
