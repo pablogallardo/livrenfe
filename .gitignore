@@ -1,2 +1,12 @@
 _*
 *.swp
+Makefile
+*.log
+*.cache
+*.status
+*.o
+*~
+stamp-h1
+.deps
+config.h
+livrenfe

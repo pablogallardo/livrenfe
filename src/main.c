@@ -75,6 +75,7 @@ int init_db(char *path){
 		return -EFOP;
 	}
 	set_db(path);
+	create_db();
 	return 0;
 }
 

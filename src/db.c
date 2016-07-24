@@ -23,6 +23,8 @@
 #include <stdio.h>
 #include <string.h>
 
+const char *db_file = NULL;
+
 int db_exec(const char *sql, char **err){
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
