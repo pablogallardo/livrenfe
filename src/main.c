@@ -27,13 +27,19 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <gtk/gtk.h>
 
-int init(char *path);
-int init_db(char *path);
-char *get_livrenfepath();
+static int init(char *);
+static int init_db(char *);
+static char *get_livrenfepath(void);
+static int connect(void);
 
-int main(int argc, char **args) {
+int main(int argc, char **argv) {
 	fprintf(stdout, "LivreNFE version %s\n", VERSION_NAME);
+	return 0;
+}
+
+int connect(){
 	char *path = get_livrenfepath();
 	DIR *dir = opendir(path);
 	if(dir){
@@ -41,7 +47,7 @@ int main(int argc, char **args) {
 		strcat(p, "/livrenfe.db");
 		if(access(p, F_OK) == -1){
 			if(init_db(path)){
-				fprintf(stderr, "livrenfe: couldn't create database\n");
+				fprintf(stderr, "livrenfe: couldn't create database %s\n", path);
 				return -EFOL;
 			}
 		} else {
@@ -56,7 +62,7 @@ int main(int argc, char **args) {
 
 int init(char *path){
 	if(mkdir(path, S_IRWXU)){
-		fprintf(stderr, "livrenfe: couldn't create application folder\n");
+		fprintf(stderr, "livrenfe: couldn't create application folder %s\n", path);
 		return -EFOL;
 	}
 	if(init_db(path))
@@ -66,14 +72,14 @@ int init(char *path){
 
 int init_db(char *path){
 	strcat(path, "/livrenfe.db");
-	fprintf(stdout, "livrenfe: creating database...\n");
+	fprintf(stdout, "livrenfe: creating database...\n\t%s", path);
 	FILE *fp = fopen(path, "wb");
 	if(fp == NULL){
-		fprintf(stderr, "livrenfe: couldn't create database\n");
+		fprintf(stderr, "livrenfe: couldn't create database %s\n", path);
 		return -EFOP;
 	}
 	if(fclose(fp)){
-		fprintf(stderr, "livrenfe: couldn't create database\n");
+		fprintf(stderr, "livrenfe: couldn't create database %s\n", path);
 		return -EFOP;
 	}
 	set_db(path);

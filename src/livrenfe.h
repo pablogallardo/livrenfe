@@ -198,4 +198,5 @@ typedef struct {
 	t_protocolo *protocolo;
 } t_nfe;
 
+
 #endif
