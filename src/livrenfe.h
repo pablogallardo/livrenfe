@@ -21,6 +21,7 @@
 #define	LIVRENFE_H
 
 #include <time.h>
+#include <gtk/gtk.h>
 
 #define	VERSION_NAME	"0.1"
 #define	VERSION_COUNTER	1
@@ -198,5 +199,13 @@ typedef struct {
 	t_protocolo *protocolo;
 } t_nfe;
 
+#define LIVRENFE_TYPE	(livrenfe_get_type())
+#define	LIVRENFE_APP(obj)	(G_TYPE_CHECK_INSTANCE_CAST ((obj), LIVRENFE_TYPE, Livrenfe))
+
+typedef struct _Livrenfe Livrenfe;
+typedef struct _LivrenfeClass LivrenfeClass;
+
+GType livrenfe_get_type(void);
+Livrenfe *livrenfe_new(void);
 
 #endif

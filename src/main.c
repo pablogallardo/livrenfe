@@ -36,7 +36,7 @@ static int connect(void);
 
 int main(int argc, char **argv) {
 	fprintf(stdout, "LivreNFE version %s\n", VERSION_NAME);
-	return 0;
+	g_application_run(G_APPLICATION(livrenfe_new()), argc, argv);
 }
 
 int connect(){
@@ -72,7 +72,7 @@ int init(char *path){
 
 int init_db(char *path){
 	strcat(path, "/livrenfe.db");
-	fprintf(stdout, "livrenfe: creating database...\n\t%s", path);
+	fprintf(stdout, "livrenfe: creating database...\n\t%s\n", path);
 	FILE *fp = fopen(path, "wb");
 	if(fp == NULL){
 		fprintf(stderr, "livrenfe: couldn't create database %s\n", path);
