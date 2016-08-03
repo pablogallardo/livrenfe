@@ -57,7 +57,7 @@ CREATE TABLE transportadoras (id_transportadora varchar(20), modfrete char(1), \
 	CONSTRAINT transportadora_pk PRIMARY KEY (id_transportadora));\
 CREATE TABLE nfe (id_nfe integer, id_municipio varchar(8),\
 	nat_op varchar(20), ind_pag integer, mod_nfe char(2),\
-	serie varchar(10), num_nf integer, dh_emis integer, dh_saida integer, tipo char(1),\
+	serie varchar(10), num_nf integer, dh_emis datetime, dh_saida datetime, tipo char(1),\
 	local_destino char(1), tipo_impressao char(1), tipo_emissao char(1),\
 	tipo_ambiente char(1), finalidade char(1), consumidor_final char(1),\
 	presencial char(1), versao varchar(10), div char(1), chave varchar(20),\
@@ -73,7 +73,7 @@ CREATE TABLE nfe (id_nfe integer, id_municipio varchar(8),\
 	CONSTRAINT nfe_transportadora_fk FOREIGN KEY (id_transportadora)\
 	REFERENCES transportadoras(id_transportadora));\
 CREATE TABLE protocolos (id_protocolo integer, numero varchar(20), \
-	dh_recib integer, id_nfe integer,\
+	dh_recib datetime, id_nfe integer,\
 	CONSTRAINT protocolo_pk PRIMARY KEY (id_protocolo),\
 	CONSTRAINT protocolo_nfe_fk FOREIGN KEY (id_nfe)\
 	REFERENCES nfe(id_nfe));\

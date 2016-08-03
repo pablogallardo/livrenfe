@@ -23,11 +23,26 @@
 #define DB_VERSION	1
 
 #include "livrenfe.h"
+#include <gtk/gtk.h>
 
+/**
+ * Creates an empty app DB
+ */
 extern int create_db();
 
+/**
+ * Materialize NFE
+ */
 extern int register_nfe(t_nfe *);
 
+/**
+ * Set db path
+ */
 extern void set_db(char *);
+
+/**
+ * Get opened NFEs for GTKTreeView
+ */
+extern GtkListStore *get_list_nfe();
 
 #endif

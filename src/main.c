@@ -37,6 +37,10 @@ static int connect(void);
 int main(int argc, char **argv) {
 	fprintf(stdout, "LivreNFE version %s\n", VERSION_NAME);
 	g_application_run(G_APPLICATION(livrenfe_new()), argc, argv);
+	connect();
+	if(get_list_nfe() == NULL)
+		fprintf(stderr, "livrenfe: List didn't return\n");
+	return 0;
 }
 
 int connect(){

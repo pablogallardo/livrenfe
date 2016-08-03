@@ -68,7 +68,7 @@ int db_select(const char *sql, char **err, sqlite3 *db, sqlite3_stmt *stmt){
 	if(rc)
 		return -ESQL;
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-	if(rc != SQLITE_DONE){
+	if(rc != SQLITE_OK){
 		strcpy(*err, sqlite3_errmsg(db));
 		return -ESQL;
 	}
@@ -83,6 +83,6 @@ int db_close(sqlite3 *db, sqlite3_stmt *stmt, char **err){
 		strcpy(*err, sqlite3_errmsg(db));
 		return -ESQL;
 	}
-	sqlite3_close(db);
+	sqlite3_close_v2(db);
 	return 0;
 }
