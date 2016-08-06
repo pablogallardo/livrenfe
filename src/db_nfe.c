@@ -40,7 +40,7 @@ GtkListStore *get_list_nfe(){
 	list_store = gtk_list_store_new(N_COLS, G_TYPE_INT, G_TYPE_INT);
 
 	char *sql = "SELECT id_nfe, dh_emis FROM nfe";
-	if(db_select(sql, &err, db, stmt)){
+	if(db_select(sql, &err, &db, &stmt)){
 		return NULL;
 	}
 

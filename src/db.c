@@ -61,15 +61,15 @@ int db_exec(const char *sql, char **err){
 	return 0;
 }
 
-int db_select(const char *sql, char **err, sqlite3 *db, sqlite3_stmt *stmt){
+int db_select(const char *sql, char **err, sqlite3 **db, sqlite3_stmt **stmt){
 	int rc;
 
-	rc = sqlite3_open(db_file, &db);
+	rc = sqlite3_open(db_file, db);
 	if(rc)
 		return -ESQL;
-	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+	rc = sqlite3_prepare_v2(*db, sql, -1, stmt, NULL);
 	if(rc != SQLITE_OK){
-		strcpy(*err, sqlite3_errmsg(db));
+		strcpy(*err, sqlite3_errmsg(*db));
 		return -ESQL;
 	}
 	return 0;

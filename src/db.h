@@ -41,7 +41,7 @@ extern int db_exec(const char *, char **);
  *	3rd: OUT: db object
  *	4st: OUT: stmt object
  */
-extern int db_select(const char *, char **, sqlite3 *db, sqlite3_stmt *stmt);
+extern int db_select(const char *, char **, sqlite3 **db, sqlite3_stmt **stmt);
 
 /**
  * Close DB connection after db_select()

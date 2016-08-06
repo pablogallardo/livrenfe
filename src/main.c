@@ -36,17 +36,16 @@ static int connect(void);
 
 int main(int argc, char **argv) {
 	fprintf(stdout, "LivreNFE version %s\n", VERSION_NAME);
-	g_application_run(G_APPLICATION(livrenfe_new()), argc, argv);
 	connect();
 	if(get_list_nfe() == NULL)
 		fprintf(stderr, "livrenfe: List didn't return\n");
+	g_application_run(G_APPLICATION(livrenfe_new()), argc, argv);
 	return 0;
 }
 
 int connect(){
 	char *path = get_livrenfepath();
-	DIR *dir = opendir(path);
-	if(dir){
+	if(access(path, F_OK) != -1){
 		char *p = strdup(path);
 		strcat(p, "/livrenfe.db");
 		if(access(p, F_OK) == -1){
@@ -55,7 +54,7 @@ int connect(){
 				return -EFOL;
 			}
 		} else {
-			set_db(p);
+			//set_db(p);
 		}
 	} else {
 		if(init(path))
