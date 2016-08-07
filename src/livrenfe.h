@@ -26,6 +26,7 @@
 #define	VERSION_NAME	"0.1"
 #define	VERSION_COUNTER	1
 #define	LIVRENFE_FOLDER_NAME	"/.livrenfe"
+#define	LIVRENFE_DB	"/livrenfe.db"
 
 /*
  * City information

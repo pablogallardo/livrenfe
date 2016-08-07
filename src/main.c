@@ -37,8 +37,7 @@ static int connect(void);
 int main(int argc, char **argv) {
 	fprintf(stdout, "LivreNFE version %s\n", VERSION_NAME);
 	connect();
-	if(get_list_nfe() == NULL)
-		fprintf(stderr, "livrenfe: List didn't return\n");
+	GtkListStore *liststore1 = get_list_nfe(); 
 	g_application_run(G_APPLICATION(livrenfe_new()), argc, argv);
 	return 0;
 }
@@ -46,7 +45,8 @@ int main(int argc, char **argv) {
 int connect(){
 	char *path = get_livrenfepath();
 	if(access(path, F_OK) != -1){
-		char *p = strdup(path);
+		char *p = malloc(sizeof(char) * (strlen(path) + strlen(LIVRENFE_DB)));
+		strcpy(p, path);
 		strcat(p, "/livrenfe.db");
 		if(access(p, F_OK) == -1){
 			if(init_db(path)){
@@ -54,7 +54,9 @@ int connect(){
 				return -EFOL;
 			}
 		} else {
-			//set_db(p);
+			free(path);
+			path = p;
+			set_db(path);
 		}
 	} else {
 		if(init(path))
@@ -93,7 +95,8 @@ int init_db(char *path){
 
 char *get_livrenfepath(){
 	char *home_path = getenv("HOME");
-	char *livrenfe_path = home_path;
+	char *livrenfe_path = malloc(sizeof(char) * (strlen(home_path) + 1));
+	strcpy(livrenfe_path, home_path);
 	strcat(livrenfe_path, LIVRENFE_FOLDER_NAME);
 	return livrenfe_path;
 }
