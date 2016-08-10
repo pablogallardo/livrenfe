@@ -54,7 +54,6 @@ int connect(){
 				return -EFOL;
 			}
 		} else {
-			free(path);
 			path = p;
 			set_db(path);
 		}
