@@ -19,7 +19,21 @@
 
 #include "livrenfe.h"
 #include "lnfe_window.h"
+#include "db_interface.h"
+#include "errno.h"
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <gtk/gtk.h>
+
+static int init(char *);
+static int init_db(char *);
+static char *get_livrenfepath(void);
+static int connect(void);
 
 struct _Livrenfe{
 	GtkApplication parent;
@@ -65,6 +79,65 @@ static void livrenfe_class_init(LivrenfeClass *class){
 }
 
 Livrenfe *livrenfe_new(void){
+	connect();
 	return g_object_new(LIVRENFE_TYPE, "application-id", "br.com.lapagina.livrenfe",
 			"flags", G_APPLICATION_HANDLES_OPEN, NULL);
+}
+
+int connect(){
+	char *path = get_livrenfepath();
+	if(access(path, F_OK) != -1){
+		char *p = malloc(sizeof(char) * (strlen(path) + strlen(LIVRENFE_DB)));
+		strcpy(p, path);
+		strcat(p, "/livrenfe.db");
+		if(access(p, F_OK) == -1){
+			if(init_db(path)){
+				fprintf(stderr, "livrenfe: couldn't create database %s\n", path);
+				return -EFOL;
+			}
+		} else {
+			path = p;
+			set_db(path);
+		}
+	} else {
+		if(init(path))
+			return -EFOL;
+	}
+	return 0;
+}
+
+int init(char *path){
+	if(mkdir(path, S_IRWXU)){
+		fprintf(stderr, "livrenfe: couldn't create application folder %s\n", path);
+		return -EFOL;
+	}
+	if(init_db(path))
+		return -EFOP;
+	return 0;
+}
+
+int init_db(char *path){
+	strcat(path, "/livrenfe.db");
+	fprintf(stdout, "livrenfe: creating database...\n\t%s\n", path);
+	FILE *fp = fopen(path, "wb");
+	if(fp == NULL){
+		fprintf(stderr, "livrenfe: couldn't create database %s\n", path);
+		return -EFOP;
+	}
+	if(fclose(fp)){
+		fprintf(stderr, "livrenfe: couldn't create database %s\n", path);
+		return -EFOP;
+	}
+	set_db(path);
+	if(create_db())
+		return -EFOP;
+	return 0;
+}
+
+char *get_livrenfepath(){
+	char *home_path = getenv("HOME");
+	char *livrenfe_path = malloc(sizeof(char) * (strlen(home_path)));
+	strcpy(livrenfe_path, home_path);
+	strcat(livrenfe_path, LIVRENFE_FOLDER_NAME);
+	return livrenfe_path;
 }
