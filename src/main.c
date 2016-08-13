@@ -24,7 +24,6 @@
 
 int main(int argc, char **argv) {
 	fprintf(stdout, "LivreNFE version %s\n", VERSION_NAME);
-	g_application_run(G_APPLICATION(livrenfe_new()), argc, argv);
-	return 0;
+	return g_application_run(G_APPLICATION(livrenfe_new()), argc, argv);
 }
 

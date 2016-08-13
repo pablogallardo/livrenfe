@@ -87,9 +87,9 @@ Livrenfe *livrenfe_new(void){
 int connect(){
 	char *path = get_livrenfepath();
 	if(access(path, F_OK) != -1){
-		char *p = malloc(sizeof(char) * (strlen(path) + strlen(LIVRENFE_DB)));
+		char *p = malloc(sizeof(char) * (strlen(path) + strlen(LIVRENFE_DB) + 2));
 		strcpy(p, path);
-		strcat(p, "/livrenfe.db");
+		strcat(p, LIVRENFE_DB);
 		if(access(p, F_OK) == -1){
 			if(init_db(path)){
 				fprintf(stderr, "livrenfe: couldn't create database %s\n", path);
@@ -117,7 +117,7 @@ int init(char *path){
 }
 
 int init_db(char *path){
-	strcat(path, "/livrenfe.db");
+	strcat(path, LIVRENFE_DB);
 	fprintf(stdout, "livrenfe: creating database...\n\t%s\n", path);
 	FILE *fp = fopen(path, "wb");
 	if(fp == NULL){
@@ -136,7 +136,7 @@ int init_db(char *path){
 
 char *get_livrenfepath(){
 	char *home_path = getenv("HOME");
-	char *livrenfe_path = malloc(sizeof(char) * (strlen(home_path)));
+	char *livrenfe_path = malloc(sizeof(char) * (strlen(home_path) + strlen(LIVRENFE_FOLDER_NAME) + strlen(LIVRENFE_DB) + 3));
 	strcpy(livrenfe_path, home_path);
 	strcat(livrenfe_path, LIVRENFE_FOLDER_NAME);
 	return livrenfe_path;
