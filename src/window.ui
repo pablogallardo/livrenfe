@@ -34,7 +34,6 @@
 				</child>
 				<child>
 					<object class="GtkTreeView" id="treeview">
-						<property name="model">liststore1</property>
 						<child>
 							<object class="GtkTreeViewColumn" id="test-column">
 								<property name="title">Test</property>

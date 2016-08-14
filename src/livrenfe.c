@@ -24,10 +24,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <dirent.h>
 #include <sys/stat.h>
-#include <sys/types.h>
 #include <gtk/gtk.h>
 
 static int init(char *);
