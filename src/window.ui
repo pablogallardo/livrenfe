@@ -45,11 +45,6 @@
 								</child>
 							</object>
 						</child>
-						<child internal-child="selection">
-							<object class="GtkTreeSelection" id="selection">
-								<signal name="changed" handler="on_treeview_selection_changed"/>
-							</object>
-						</child>
 					</object>
 				</child>
 				<child>

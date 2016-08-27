@@ -52,27 +52,8 @@ static void livrenfe_activate(GApplication *app){
 	gtk_window_present(GTK_WINDOW(win));
 }
 
-static void livrenfe_open(GApplication *app, GFile **files, gint n_files,
-	       	const gchar *hint){
-	GList *windows;
-	LivrenfeWindow *win;
-	int i;
-
-	windows = gtk_application_get_windows(GTK_APPLICATION(app));
-	if(windows)
-		win = LIVRENFE_WINDOW(windows->data);
-	else
-		win = livrenfe_window_new(LIVRENFE_APP(app));
-
-	for(i = 0; i < n_files; i++)
-		livrenfe_window_open(win, files[i]);
-
-	gtk_window_present(GTK_WINDOW(win));
-}
-
 static void livrenfe_class_init(LivrenfeClass *class){
 	G_APPLICATION_CLASS(class)->activate = livrenfe_activate;
-	G_APPLICATION_CLASS(class)->open = livrenfe_open;
 }
 
 Livrenfe *livrenfe_new(void){

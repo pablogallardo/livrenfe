@@ -22,6 +22,7 @@
 
 struct _LivrenfeWindow{
 	GtkApplicationWindow parent;
+	GtkTreeView *treeview;
 };
 
 struct _LivrenfeWindowClass{
@@ -37,11 +38,10 @@ static void livrenfe_window_init(LivrenfeWindow *win){
 static void livrenfe_window_class_init(LivrenfeWindowClass *class){
 	gtk_widget_class_set_template_from_resource(GTK_WIDGET_CLASS (class),
 			"/br/com/lapagina/livrenfe/window.ui");
+	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
+		       	treeview);
 }
 
 LivrenfeWindow *livrenfe_window_new(Livrenfe *app){
 	return g_object_new(LIVRENFE_WINDOW_TYPE, "application", app, NULL);
-}
-
-void livrenfe_window_open(LivrenfeWindow *win, GFile *file){
 }
