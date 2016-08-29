@@ -33,5 +33,6 @@ GType livrenfe_window_get_type (void);
 LivrenfeWindow *livrenfe_window_new (Livrenfe *app);
 void livrenfe_window_open (LivrenfeWindow *win, GFile *file);
 
+void list_nfe(LivrenfeWindow *win, GtkListStore *ls);
 
 #endif

@@ -42,6 +42,19 @@ static void livrenfe_window_class_init(LivrenfeWindowClass *class){
 		       	treeview);
 }
 
+void list_nfe(LivrenfeWindow *win, GtkListStore *ls){
+	GtkCellRenderer *renderer;
+	GtkTreeViewColumn *column;
+
+	renderer = gtk_cell_renderer_text_new ();
+	column = gtk_tree_view_column_new_with_attributes ("NFE",
+							   renderer,
+							   "text", 1,
+							   NULL);
+	gtk_tree_view_set_model(win->treeview, GTK_TREE_MODEL (ls));
+	gtk_tree_view_append_column (GTK_TREE_VIEW (win->treeview), column);
+}
+
 LivrenfeWindow *livrenfe_window_new(Livrenfe *app){
 	return g_object_new(LIVRENFE_WINDOW_TYPE, "application", app, NULL);
 }

@@ -46,13 +46,15 @@ GtkListStore *get_list_nfe(){
 
 	do{
 		res = sqlite3_step(stmt);
-		if(res == SQLITE_ROW || res == SQLITE_DONE){
+		if(res == SQLITE_ROW){
 			int id_nfe = sqlite3_column_int(stmt, 0);
 			int dh_emis = sqlite3_column_int(stmt, 1);
 
 			gtk_list_store_append(list_store, &iter);
 			gtk_list_store_set(list_store, &iter, ID_NFE, id_nfe, 
 					DH_EMIS, dh_emis, -1);
+		} else if(res == SQLITE_DONE){
+			break;
 		} else {
 			return NULL;
 		}

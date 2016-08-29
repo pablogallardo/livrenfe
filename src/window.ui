@@ -34,17 +34,7 @@
 				</child>
 				<child>
 					<object class="GtkTreeView" id="treeview">
-						<child>
-							<object class="GtkTreeViewColumn" id="test-column">
-								<property name="title">Test</property>
-								<child>
-									<object class="GtkCellRendererText" id="test-renderer"/>
-									<attributes>
-										<attribute name="text">1</attribute>
-									</attributes>
-								</child>
-							</object>
-						</child>
+						<property name="visible">True</property>
 					</object>
 				</child>
 				<child>

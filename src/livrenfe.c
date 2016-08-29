@@ -47,8 +47,9 @@ static void livrenfe_init(Livrenfe *app){
 
 static void livrenfe_activate(GApplication *app){
 	LivrenfeWindow *win;
-
 	win = livrenfe_window_new(LIVRENFE_APP (app));
+	GtkListStore *ls = get_list_nfe();
+	list_nfe(win, ls);
 	gtk_window_present(GTK_WINDOW(win));
 }
 
