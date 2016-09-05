@@ -2,5 +2,6 @@
 <gresources>
 	<gresource prefix="/br/com/lapagina/livrenfe">
     <file preprocess="xml-stripblanks">window.ui</file>
+    <file preprocess="xml-stripblanks">nfe_manager.ui</file>
   </gresource>
 </gresources>

@@ -17,21 +17,20 @@
  *
  */
 
-#ifndef	LIVRENFE_WINDOW_H
-#define	LIVRENFE_WINDOW_H
+#ifndef	NFE_MANAGER_H
+#define	NFE_MANAGER_H
 
 #include "livrenfe.h"
+#include "lnfe_window.h"
 #include <gtk/gtk.h>
 
-#define LIVRENFE_WINDOW_TYPE	(livrenfe_window_get_type())
-#define	LIVRENFE_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), LIVRENFE_WINDOW_TYPE, LivrenfeWindow))
+#define NFE_MANAGER_TYPE	(nfe_manager_get_type())
+#define	NFE_MANAGER(obj)	(G_TYPE_CHECK_INSTANCE_CAST((obj), NFE_MANAGER_TYPE, NFEManager))
 
-typedef struct _LivrenfeWindow LivrenfeWindow;
-typedef struct _LivrenfeWindowClass LivrenfeWindowClass;
+typedef struct _NFEManager NFEManager;
+typedef struct _NFEManagerClass NFEManagerClass;
 
-GType livrenfe_window_get_type (void);
-LivrenfeWindow *livrenfe_window_new (Livrenfe *app);
-
-void list_nfe(LivrenfeWindow *win, GtkListStore *ls);
+GType nfe_manager_get_type(void);
+NFEManager *nfe_manager_new(LivrenfeWindow *win);
 
 #endif

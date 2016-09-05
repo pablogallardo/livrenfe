@@ -51,7 +51,7 @@
 						<property name="halign">GTK_ALIGN_CENTER</property>
 						<property name="spacing">10</property>
 						<child>
-							<object class="GtkButton">
+							<object class="GtkButton" id="new_nfe">
 								<property name="visible">True</property>
 								<property name="label">Nova NFE</property>
 							</object>

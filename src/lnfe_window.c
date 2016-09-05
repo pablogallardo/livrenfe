@@ -18,11 +18,13 @@
  */
 
 #include "lnfe_window.h"
+#include "nfe_manager.h"
 #include <gtk/gtk.h>
 
 struct _LivrenfeWindow{
 	GtkApplicationWindow parent;
 	GtkTreeView *treeview;
+	GtkButton *new_nfe;
 };
 
 struct _LivrenfeWindowClass{
@@ -35,26 +37,38 @@ static void livrenfe_window_init(LivrenfeWindow *win){
 	gtk_widget_init_template(GTK_WIDGET(win));
 }
 
+static void nfe_manager_activate(GtkButton *b, gpointer win){
+	NFEManager *nman;
+
+	nman = nfe_manager_new(LIVRENFE_WINDOW(win));
+	gtk_window_present(GTK_WINDOW(nman));
+}
+
 static void livrenfe_window_class_init(LivrenfeWindowClass *class){
 	gtk_widget_class_set_template_from_resource(GTK_WIDGET_CLASS (class),
 			"/br/com/lapagina/livrenfe/window.ui");
 	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
 		       	treeview);
+	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
+		       	new_nfe);
 }
 
 void list_nfe(LivrenfeWindow *win, GtkListStore *ls){
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
 
-	renderer = gtk_cell_renderer_text_new ();
+	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes ("NFE",
 							   renderer,
 							   "text", 1,
 							   NULL);
 	gtk_tree_view_set_model(win->treeview, GTK_TREE_MODEL (ls));
 	gtk_tree_view_append_column (GTK_TREE_VIEW (win->treeview), column);
+	g_signal_connect(win->new_nfe, "clicked", G_CALLBACK(nfe_manager_activate),
+			win);
 }
 
 LivrenfeWindow *livrenfe_window_new(Livrenfe *app){
 	return g_object_new(LIVRENFE_WINDOW_TYPE, "application", app, NULL);
 }
+
