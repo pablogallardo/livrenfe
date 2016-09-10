@@ -19,6 +19,7 @@
 
 #include "lnfe_window.h"
 #include "nfe_manager.h"
+#include "item_manager.h"
 #include <gtk/gtk.h>
 
 struct _NFEManager{
@@ -32,17 +33,25 @@ struct _NFEManagerClass{
 typedef struct _NFEManagerPrivate NFEManagerPrivate;
 
 struct _NFEManagerPrivate{
-	GSettings *settings;
+	GtkButton *novo_item;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(NFEManager, nfe_manager, GTK_TYPE_DIALOG)
 
+static void item_manager_activate(GtkButton *b, gpointer win){
+	ItemManager *iman;
+
+	iman = item_manager_new(NFE_MANAGER(win));
+	gtk_window_present(GTK_WINDOW(iman));
+}
 
 static void nfe_manager_init(NFEManager *nman){
 	NFEManagerPrivate *priv;
 
 	priv = nfe_manager_get_instance_private(nman);
 	gtk_widget_init_template(GTK_WIDGET(nman));
+	g_signal_connect(priv->novo_item, "clicked", G_CALLBACK(item_manager_activate),
+			nman);
 }
 
 
@@ -58,6 +67,8 @@ static void nfe_manager_class_init(NFEManagerClass *class){
 
 	gtk_widget_class_set_template_from_resource(GTK_WIDGET_CLASS(class),
                                                "/br/com/lapagina/livrenfe/nfe_manager.ui");
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	novo_item);
 }
 
 NFEManager *nfe_manager_new(LivrenfeWindow *win){

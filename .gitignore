@@ -6,6 +6,7 @@ Makefile
 *.status
 *.o
 *~
+\#*\#
 stamp-h1
 .deps
 config.h

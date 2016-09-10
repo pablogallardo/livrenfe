@@ -101,7 +101,8 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_livrenfe_OBJECTS = main.$(OBJEXT) db.$(OBJEXT) db_create.$(OBJEXT) \
 	db_init.$(OBJEXT) livrenfe.$(OBJEXT) lnfe_window.$(OBJEXT) \
-	resources.$(OBJEXT) db_nfe.$(OBJEXT) nfe_manager.$(OBJEXT)
+	resources.$(OBJEXT) db_nfe.$(OBJEXT) nfe_manager.$(OBJEXT) \
+	item_manager.$(OBJEXT)
 livrenfe_OBJECTS = $(am_livrenfe_OBJECTS)
 livrenfe_LDADD = $(LDADD)
 AM_V_P = $(am__v_P_@AM_V@)
@@ -250,7 +251,7 @@ top_srcdir = @top_srcdir@
 AM_CFLAGS = `pkg-config --cflags gtk+-3.0`
 AM_LDFLAGS = -lsqlite3 `pkg-config --libs gtk+-3.0`
 livrenfe_SOURCES = main.c db.c db_create.c db_init.c livrenfe.c lnfe_window.c resources.c \
-		   db_nfe.c nfe_manager.c
+		   db_nfe.c nfe_manager.c item_manager.c
 
 all: all-am
 
@@ -342,6 +343,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/db_create.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/db_init.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/db_nfe.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/item_manager.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/livrenfe.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lnfe_window.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
@@ -569,7 +571,7 @@ uninstall-am: uninstall-binPROGRAMS
 .PRECIOUS: Makefile
 
 
-resources.c: livrenfe.gresource.xml window.ui nfe_manager.ui
+resources.c: livrenfe.gresource.xml window.ui nfe_manager.ui item_manager.ui
 	glib-compile-resources --target=$@ --generate-source $<
 
 clean-local:
