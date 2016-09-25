@@ -53,8 +53,8 @@ typedef struct {
 	time_t dh_saida;
 	enum t_tipo {tipo_entrada=0,tipo_saida=1} tipo;
 	enum t_local_destino {dest_interna=1,dest_interestadual=2,dest_exterior=3} local_destino;
-	enum t_tipo_impressao {imp_none=0,imp_ret=1,imp_pai=2,imp_simp=3,imp_nfce=4,imp_nfce_msg=5}
-		tipo_impressao;
+	enum t_tipo_impresao {imp_none=0,imp_ret=1,imp_pai=2,imp_simp=3,imp_nfce=4,imp_nfce_msg=5}
+		tipo_impresao;
 	enum t_tipo_emissao {te_normal=1, te_fs=2, te_scan=3, te_dpec=4, te_fsda=5, te_svcan=6, 
 		te_svcrs=7, te_offline_nfce=9} tipo_emissao;
 	enum t_tipo_ambiente {producao=1, homologacao=2} tipo_ambiente;

@@ -19,8 +19,11 @@
 
 #include "db_interface.h"
 #include "db.h"
+#include "utils.h"
+#include "livrenfe.h"
 #include <gtk/gtk.h>
 #include <sqlite3.h>
+#include <stdio.h>
 
 GtkListStore *get_list_nfe(){
 	sqlite3 *db;
@@ -66,4 +69,27 @@ GtkListStore *get_list_nfe(){
 	}
 	
 	return list_store;
+}
+
+int register_nfe(t_nfe *nfe){
+	t_idnfe idnfe = nfe->idnfe;
+	char *sql;
+	char *err;
+       	sprintf(sql, "INSERT INTO nfe (id_municipio, nap_op, ind_pag, mod_nfe,\
+		serie, num_nf, dh_emis, dh_saida, tipo, local_destino,\
+		tipo_impressao, tipo_ambiente, finalidade, consumidor_final,\
+		presencial, versao, div, chave, id_emitente, id_destinatario,\
+		q_itens, total, id_transportadora) VALUES \
+		(%d, %s, %d, %s, %s, %s, %s, %s, %s, %s , %s, %s, %s, %s, %s, \
+		 %s, %s, %s, %s, %s , %s, %s, %s)",
+	idnfe.municipio.codigo, idnfe.nat_op, idnfe.ind_pag, idnfe.serie,
+	idnfe.num_nf, timetostr(idnfe.dh_emis), timetostr(idnfe.dh_saida), idnfe.tipo,
+	idnfe.local_destino, idnfe.tipo_impresao, idnfe.tipo_ambiente, idnfe.finalidade, idnfe.consumidor_final, idnfe.presencial,
+	idnfe.versao, idnfe.div, idnfe.chave, nfe->emitente.id, nfe->destinatario.id, nfe->q_itens, nfe->total, "NULL");
+	db_exec(sql, &err);
+	if(err){
+		fprintf(stderr, "livrenfe: Error - %s", err);
+		return -1;
+	}
+	return 0;
 }

@@ -34,6 +34,7 @@ typedef struct _NFEManagerPrivate NFEManagerPrivate;
 
 struct _NFEManagerPrivate{
 	GtkButton *novo_item;
+	GtkButton *salvar_nfe;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(NFEManager, nfe_manager, GTK_TYPE_DIALOG)
