@@ -106,7 +106,7 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="emissao">
+                  <object class="GtkEntry" id="dh_emis">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -127,7 +127,7 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="saida">
+                  <object class="GtkEntry" id="dh_saida">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -169,7 +169,7 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="natop">
+                  <object class="GtkEntry" id="nat_op">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -573,7 +573,7 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
           </packing>
         </child>
         <child>
-          <object class="GtkButton">
+          <object class="GtkButton" id="save_nfe">
             <property name="label" translatable="yes">Salvar</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
