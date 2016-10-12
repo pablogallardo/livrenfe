@@ -23,9 +23,10 @@
 /**
  * Erro na geração de XML
  */
-#define	EXML	1;	
-#define	ESQL	2;	
-#define	EFOL	3;
-#define	EFOP	4;
+#define	EXML		1;	
+#define	ESQL		2;	
+#define	EFOL		3;
+#define	EFOP		4;
+#define ENOCRYPTOLIB	5;
 
 #endif

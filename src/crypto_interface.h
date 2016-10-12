@@ -20,10 +20,10 @@
 #ifndef	CRYPTO_I_H
 #define	CRYPTO_I_H
 
-extern int encrypt(char *in, char **out);
+extern int encrypt(char *in, char **out, char *password);
 
-extern int decrypt(char *in, char **out);
+extern int decrypt(char *in, char **out, char *password);
 
-extern int sign(char *in, char **out);
+extern int sign(char *in, char **out, char *password);
 
 #endif
