@@ -30,10 +30,10 @@
 #include <openssl/rsa.h>
 
 
-static EVP_PKEY *get_public_key(char *passowrd){
+static EVP_PKEY *get_public_key(char *passowrd, PKCS11_SLOT **slot, PKCS11_CERT **c, unsigned int *nc){
 
 	PKCS11_CTX *ctx;
-	PKCS11_SLOT *slots, *slot;
+	PKCS11_SLOT *slots;
 	PKCS11_CERT *certs;
 	
 	PKCS11_KEY *authkey;
@@ -45,7 +45,7 @@ static EVP_PKEY *get_public_key(char *passowrd){
 	ctx = PKCS11_CTX_new();
 
 	/* load pkcs #11 module */
-	rc = PKCS11_CTX_load(ctx, argv[1]);
+	rc = PKCS11_CTX_load(ctx, "/usr/lib/libaetpkss.so.3");
 	if (rc) {
 		fprintf(stderr, "loading pkcs11 engine failed: %s\n",
 			ERR_reason_error_string(ERR_get_error()));
@@ -57,17 +57,47 @@ static EVP_PKEY *get_public_key(char *passowrd){
 	if (rc < 0) {
 		fprintf(stderr, "no slots available\n");
 		rc = 2;
-		goto noslots;
+		return -NOSLOT;
 	}
 	/* get first slot with a token */
 	slot = PKCS11_find_token(ctx, slots, nslots);
 	if (slot == NULL || slot->token == NULL) {
 		fprintf(stderr, "no token available\n");
 		rc = 3;
-		goto notoken;
+		return -NOTOKEN;
 	}
 
+	/* check if user is logged in */
+	rc = PKCS11_is_logged_in(slot, 0, &logged_in);
+	if (rc != 0) {
+		fprintf(stderr, "PKCS11_is_logged_in failed\n");
+		return -ELIBP11;
+	}
+
+	/* perform pkcs #11 login */
+	rc = PKCS11_login(slot, 0, password);
+	memset(password, 0, strlen(password));
+	if (rc != 0) {
+		fprintf(stderr, "PKCS11_login failed\n");
+		return -ELIBP11;
+	}
+
+	/* check if user is logged in */
+	rc = PKCS11_is_logged_in(slot, 0, &logged_in);
+	if (rc != 0) {
+		fprintf(stderr, "PKCS11_is_logged_in failed\n");
+		return -ELIBP11;
+	}
+	if (!logged_in) {
+		fprintf(stderr, "PKCS11_is_logged_in says user is not logged in, expected to be logged in\n");
+		return -ELIBP11;
+	}
+
+	c = &certs;
+	nc = &ncerts; 
+	return 0;
 }
 
 int encrypt(char *in, char **out, char *password){
+	return 0;
 }

@@ -28,5 +28,8 @@
 #define	EFOL		3;
 #define	EFOP		4;
 #define ENOCRYPTOLIB	5;
+#define ENOTOKEN	6;
+#define ENOSLOT		7;
+#define ELIBP11		8;
 
 #endif
