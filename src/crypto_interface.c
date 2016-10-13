@@ -30,7 +30,7 @@
 #include <openssl/rsa.h>
 
 
-static EVP_PKEY *get_public_key(char *passowrd, PKCS11_SLOT **slot, PKCS11_CERT **c, unsigned int *nc){
+static EVP_PKEY *smartcard_login(char *passowrd, PKCS11_SLOT **slot, PKCS11_CERT **c, unsigned int *nc){
 
 	PKCS11_CTX *ctx;
 	PKCS11_SLOT *slots;
