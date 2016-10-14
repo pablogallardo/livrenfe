@@ -38,14 +38,14 @@ CREATE TABLE enderecos (id_endereco integer, rua varchar(200), \
 	CONSTRAINT endereco_pk PRIMARY KEY (id_endereco),\
 	CONSTRAINT endereco_municipio_fk FOREIGN KEY (id_municipio)\
 	REFERENCES municipios(id_municipio));\
-CREATE TABLE emitentes (id_emitente varchar(20), nome varchar(100),\
+CREATE TABLE emitentes (id_emitente integer, nome varchar(100),\
 	inscricao_estadual varchar(20), id_endereco integer,\
-	crt char(1),\
+	crt char(1), cnpj varchar(14),\
 	CONSTRAINT emitente_pk PRIMARY KEY (id_emitente),\
 	CONSTRAINT emitente_endereco_fk FOREIGN KEY (id_endereco)\
 	REFERENCES enderecos(id_endereco));\
-CREATE TABLE destinatarios (id_destinatario varchar(20), nome varchar(200),\
-	id_endereco integer, tipo_ie char(1),\
+CREATE TABLE destinatarios (id_destinatario integer, nome varchar(200),\
+	id_endereco integer, tipo_ie char(1), cnpj varchar(14),\
 	CONSTRAINT destinatario_pk PRIMARY KEY (id_destinatario),\
 	CONSTRAINT destinatario_endereco_fk FOREIGN KEY (id_endereco)\
 	REFERENCES enderecos(id_endereco));\
@@ -61,7 +61,7 @@ CREATE TABLE nfe (id_nfe integer, id_municipio varchar(8),\
 	local_destino char(1), tipo_impressao char(1), tipo_emissao char(1),\
 	tipo_ambiente char(1), finalidade char(1), consumidor_final char(1),\
 	presencial char(1), versao varchar(10), div char(1), chave varchar(20),\
-	id_emitente varchar(20), id_destinatario varchar(20), q_itens integer,\
+	id_emitente integer, id_destinatario integer, q_itens integer,\
 	total real, id_transportadora varchar(20),\
 	CONSTRAINT nfe_pk PRIMARY KEY (id_nfe),\
 	CONSTRAINT nfe_municipio_fk FOREIGN KEY (id_municipio)\
@@ -5652,7 +5652,9 @@ const char *insert_sql = "INSERT INTO paises (id_pais, nome) VALUES (1, 'Brasil'
 		    INSERT INTO municipios (id_municipio, id_uf, nome, id_pais) VALUES ('5222054', 'GO', 'Vicentinópolis', 1);\
 		    INSERT INTO municipios (id_municipio, id_uf, nome, id_pais) VALUES ('5222203', 'GO', 'Vila Boa', 1);\
 		    INSERT INTO municipios (id_municipio, id_uf, nome, id_pais) VALUES ('5222302', 'GO', 'Vila Propício', 1);\
-		    INSERT INTO municipios (id_municipio, id_uf, nome, id_pais) VALUES ('5300108', 'DF', 'Brasília', 1);";
+		    INSERT INTO municipios (id_municipio, id_uf, nome, id_pais) VALUES ('5300108', 'DF', 'Brasília', 1);\
+		    INSERT INTO uf (id_uf, nome, cod_ibge) SELECT DISTINCT id_uf, id_uf, substr(id_municipio,1,2)\
+		    	FROM municipios;";
 
 int create_db(){
 	int rc;
