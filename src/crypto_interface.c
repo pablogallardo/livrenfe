@@ -30,17 +30,13 @@
 #include <openssl/rsa.h>
 
 
-static EVP_PKEY *smartcard_login(char *passowrd, PKCS11_SLOT **slot, PKCS11_CERT **c, unsigned int *nc){
+static int smartcard_login(char *password, PKCS11_SLOT **s, unsigned int *nc){
 
 	PKCS11_CTX *ctx;
-	PKCS11_SLOT *slots;
-	PKCS11_CERT *certs;
+	PKCS11_SLOT *slots, *slot;
 	
-	PKCS11_KEY *authkey;
-	PKCS11_CERT *authcert;
-	EVP_PKEY *pubkey = NULL;
-	int rc = 0, fd, logged_in, len;
-	unsigned int nslots, ncerts, siglen;
+	int rc = 0, logged_in;
+	unsigned int nslots;
 
 	ctx = PKCS11_CTX_new();
 
@@ -50,21 +46,21 @@ static EVP_PKEY *smartcard_login(char *passowrd, PKCS11_SLOT **slot, PKCS11_CERT
 		fprintf(stderr, "loading pkcs11 engine failed: %s\n",
 			ERR_reason_error_string(ERR_get_error()));
 		rc = 1;
-		return -NOCRYPTOLIB;
+		return -ENOCRYPTOLIB;
 	}
 	/* get information on all slots */
 	rc = PKCS11_enumerate_slots(ctx, &slots, &nslots);
 	if (rc < 0) {
 		fprintf(stderr, "no slots available\n");
 		rc = 2;
-		return -NOSLOT;
+		return -ENOSLOT;
 	}
 	/* get first slot with a token */
 	slot = PKCS11_find_token(ctx, slots, nslots);
 	if (slot == NULL || slot->token == NULL) {
 		fprintf(stderr, "no token available\n");
 		rc = 3;
-		return -NOTOKEN;
+		return -ENOTOKEN;
 	}
 
 	/* check if user is logged in */
@@ -92,9 +88,7 @@ static EVP_PKEY *smartcard_login(char *passowrd, PKCS11_SLOT **slot, PKCS11_CERT
 		fprintf(stderr, "PKCS11_is_logged_in says user is not logged in, expected to be logged in\n");
 		return -ELIBP11;
 	}
-
-	c = &certs;
-	nc = &ncerts; 
+	s = &slot;
 	return 0;
 }
 
