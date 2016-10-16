@@ -36,13 +36,19 @@ GtkListStore *get_list_nfe(){
 
 	enum{
 		ID_NFE,
+		N_NFE,
+		SERIE,
 		DH_EMIS,
+		DESTINATARIO,
 		N_COLS
 	};
 
-	list_store = gtk_list_store_new(N_COLS, G_TYPE_INT, G_TYPE_INT);
+	list_store = gtk_list_store_new(N_COLS, G_TYPE_INT, G_TYPE_INT,
+			G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING);
 
-	char *sql = "SELECT id_nfe, dh_emis FROM nfe";
+	char *sql = "SELECT id_nfe, num_nf, serie, dh_emis, \
+			cnpj || ' - ' || nome as destinatario \
+	       		FROM nfe JOIN destinatarios USING (id_destinatario);";
 	if(db_select(sql, &err, &db, &stmt)){
 		return NULL;
 	}
@@ -51,11 +57,15 @@ GtkListStore *get_list_nfe(){
 		res = sqlite3_step(stmt);
 		if(res == SQLITE_ROW){
 			int id_nfe = sqlite3_column_int(stmt, 0);
-			int dh_emis = sqlite3_column_int(stmt, 1);
+			int n_nfe = sqlite3_column_int(stmt, 1);
+			int serie = sqlite3_column_int(stmt, 2);
+			const unsigned char *dh_emis = sqlite3_column_text(stmt, 3);
+			const unsigned char *destinatario = sqlite3_column_text(stmt, 4);
 
 			gtk_list_store_append(list_store, &iter);
 			gtk_list_store_set(list_store, &iter, ID_NFE, id_nfe, 
-					DH_EMIS, dh_emis, -1);
+					N_NFE, n_nfe, SERIE, serie,
+					DH_EMIS, dh_emis, DESTINATARIO, destinatario, -1);
 		} else if(res == SQLITE_DONE){
 			break;
 		} else {
