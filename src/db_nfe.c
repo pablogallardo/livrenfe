@@ -24,14 +24,14 @@
 #include <gtk/gtk.h>
 #include <sqlite3.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 GtkListStore *get_list_nfe(){
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	char *err;
-	int rc, res;
+	int rc;
 	GtkListStore *list_store;
-	GtkTreePath * path;
 	GtkTreeIter iter;
 
 	enum{
@@ -54,8 +54,8 @@ GtkListStore *get_list_nfe(){
 	}
 
 	do{
-		res = sqlite3_step(stmt);
-		if(res == SQLITE_ROW){
+		rc = sqlite3_step(stmt);
+		if(rc == SQLITE_ROW){
 			int id_nfe = sqlite3_column_int(stmt, 0);
 			int n_nfe = sqlite3_column_int(stmt, 1);
 			int serie = sqlite3_column_int(stmt, 2);
@@ -66,12 +66,12 @@ GtkListStore *get_list_nfe(){
 			gtk_list_store_set(list_store, &iter, ID_NFE, id_nfe, 
 					N_NFE, n_nfe, SERIE, serie,
 					DH_EMIS, dh_emis, DESTINATARIO, destinatario, -1);
-		} else if(res == SQLITE_DONE){
+		} else if(rc == SQLITE_DONE){
 			break;
 		} else {
 			return NULL;
 		}
-	} while(res == SQLITE_ROW);
+	} while(rc == SQLITE_ROW);
 
 	if(db_close(db, stmt, &err)){
 		fprintf(stderr, "livrenfe: SQL Error: %s\n", err);
@@ -102,4 +102,96 @@ int register_nfe(t_nfe *nfe){
 		return -1;
 	}
 	return 0;
+}
+
+GtkListStore *db_list_uf(){
+	sqlite3 *db;
+	sqlite3_stmt *stmt;
+	char *err;
+	int rc;
+	GtkListStore *list_store;
+	GtkTreeIter iter;
+
+	enum{
+		ID_UF,
+		UF,
+		N_COLS
+	};
+
+	list_store = gtk_list_store_new(N_COLS, G_TYPE_STRING, G_TYPE_STRING);
+
+	char *sql = "SELECT id_uf, nome FROM uf;";
+	if(db_select(sql, &err, &db, &stmt)){
+		return NULL;
+	}
+
+	do{
+		rc = sqlite3_step(stmt);
+		if(rc == SQLITE_ROW){
+			const unsigned char *id_uf = sqlite3_column_text(stmt, ID_UF);
+			const unsigned char *uf = sqlite3_column_text(stmt, UF);
+
+			gtk_list_store_append(list_store, &iter);
+			gtk_list_store_set(list_store, &iter, ID_UF, id_uf, 
+					UF, uf, -1);
+		} else if(rc == SQLITE_DONE){
+			break;
+		} else {
+			return NULL;
+		}
+	} while(rc == SQLITE_ROW);
+
+	if(db_close(db, stmt, &err)){
+		fprintf(stderr, "livrenfe: SQL Error: %s\n", err);
+		return NULL;
+	}
+	
+	return list_store;
+}
+
+GtkListStore *db_list_municipios(char *uf){
+	sqlite3 *db;
+	sqlite3_stmt *stmt;
+	char *err;
+	int rc;
+	GtkListStore *list_store;
+	GtkTreeIter iter;
+
+	enum{
+		ID_MUNICIPIO,
+		MUNICIPIO,
+		N_COLS
+	};
+
+	list_store = gtk_list_store_new(N_COLS, G_TYPE_INT, G_TYPE_STRING);
+
+	char *sql = malloc(100);
+       	sprintf(sql, "SELECT id_municipio, nome FROM municipios WHERE id_uf = '%s';",
+			uf);
+	if(db_select(sql, &err, &db, &stmt)){
+		return NULL;
+	}
+
+	do{
+		rc = sqlite3_step(stmt);
+		if(rc == SQLITE_ROW){
+			int id_municipio = sqlite3_column_int(stmt, ID_MUNICIPIO);
+			const unsigned char *municipio = sqlite3_column_text(stmt, MUNICIPIO);
+
+			gtk_list_store_append(list_store, &iter);
+			gtk_list_store_set(list_store, &iter, ID_MUNICIPIO, id_municipio, 
+					MUNICIPIO, municipio, -1);
+		} else if(rc == SQLITE_DONE){
+			break;
+		} else {
+			return NULL;
+		}
+	} while(rc == SQLITE_ROW);
+
+	if(db_close(db, stmt, &err)){
+		fprintf(stderr, "livrenfe: SQL Error: %s\n", err);
+		return NULL;
+	}
+	
+	return list_store;
 }

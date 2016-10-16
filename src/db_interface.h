@@ -45,4 +45,14 @@ extern void set_db(char *);
  */
 extern GtkListStore *get_list_nfe();
 
+/**
+ * Get UF list
+ */
+extern GtkListStore *db_list_uf();
+
+/**
+ * Get Municipios from UF
+ */
+extern GtkListStore *db_list_municipios(char *);
+
 #endif

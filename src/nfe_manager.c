@@ -20,6 +20,7 @@
 #include "lnfe_window.h"
 #include "nfe_manager.h"
 #include "item_manager.h"
+#include "db_interface.h"
 #include <gtk/gtk.h>
 
 struct _NFEManager{
@@ -35,9 +36,35 @@ typedef struct _NFEManagerPrivate NFEManagerPrivate;
 struct _NFEManagerPrivate{
 	GtkButton *novo_item;
 	GtkButton *save_nfe;
+	GtkComboBox *uf;
+	GtkComboBox *municipio;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(NFEManager, nfe_manager, GTK_TYPE_DIALOG)
+
+static void list_uf(NFEManagerPrivate *priv){
+	GtkCellRenderer *r_uf;
+
+	r_uf = gtk_cell_renderer_text_new();
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(priv->uf), r_uf, TRUE);
+	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(priv->uf),
+				r_uf, "text", 1, NULL);
+	gtk_combo_box_set_model(priv->uf, GTK_TREE_MODEL(db_list_uf()));
+	gtk_combo_box_set_id_column(priv->uf, 0);
+}
+
+static void list_municipios(GtkComboBox *uf, NFEManagerPrivate *priv){
+	GtkCellRenderer *r_mun;
+
+	gtk_cell_layout_clear(GTK_CELL_LAYOUT(priv->municipio));
+	r_mun = gtk_cell_renderer_text_new();
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(priv->municipio), r_mun, TRUE);
+	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(priv->municipio),
+				r_mun, "text", 1, NULL);
+	char *active_uf = gtk_combo_box_get_active_id(uf);
+	gtk_combo_box_set_model(priv->municipio, GTK_TREE_MODEL(db_list_municipios(active_uf)));
+	gtk_combo_box_set_id_column(priv->municipio, 0);
+}
 
 static void item_manager_activate(GtkButton *b, gpointer win){
 	ItemManager *iman;
@@ -53,6 +80,8 @@ static void nfe_manager_init(NFEManager *nman){
 	gtk_widget_init_template(GTK_WIDGET(nman));
 	g_signal_connect(priv->novo_item, "clicked", G_CALLBACK(item_manager_activate),
 			nman);
+	g_signal_connect(G_OBJECT(priv->uf), "changed", G_CALLBACK(list_municipios), priv);
+	list_uf(priv);
 }
 
 
@@ -70,6 +99,10 @@ static void nfe_manager_class_init(NFEManagerClass *class){
                                                "/br/com/lapagina/livrenfe/nfe_manager.ui");
 	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
 		       	novo_item);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	uf);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	municipio);
 }
 
 NFEManager *nfe_manager_new(LivrenfeWindow *win){
