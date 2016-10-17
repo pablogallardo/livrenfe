@@ -38,32 +38,34 @@ struct _NFEManagerPrivate{
 	GtkButton *save_nfe;
 	GtkComboBox *uf;
 	GtkComboBox *municipio;
+	GtkComboBox *uf_destinatario;
+	GtkComboBox *municipio_destinatario;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(NFEManager, nfe_manager, GTK_TYPE_DIALOG)
 
-static void list_uf(NFEManagerPrivate *priv){
+static void list_uf(GtkComboBox *uf){
 	GtkCellRenderer *r_uf;
 
 	r_uf = gtk_cell_renderer_text_new();
-	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(priv->uf), r_uf, TRUE);
-	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(priv->uf),
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(uf), r_uf, TRUE);
+	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(uf),
 				r_uf, "text", 1, NULL);
-	gtk_combo_box_set_model(priv->uf, GTK_TREE_MODEL(db_list_uf()));
-	gtk_combo_box_set_id_column(priv->uf, 0);
+	gtk_combo_box_set_model(uf, GTK_TREE_MODEL(db_list_uf()));
+	gtk_combo_box_set_id_column(uf, 0);
 }
 
-static void list_municipios(GtkComboBox *uf, NFEManagerPrivate *priv){
+static void list_municipios(GtkComboBox *uf, GtkComboBox *municipio){
 	GtkCellRenderer *r_mun;
 
-	gtk_cell_layout_clear(GTK_CELL_LAYOUT(priv->municipio));
+	gtk_cell_layout_clear(GTK_CELL_LAYOUT(municipio));
 	r_mun = gtk_cell_renderer_text_new();
-	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(priv->municipio), r_mun, TRUE);
-	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(priv->municipio),
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(municipio), r_mun, TRUE);
+	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(municipio),
 				r_mun, "text", 1, NULL);
 	char *active_uf = gtk_combo_box_get_active_id(uf);
-	gtk_combo_box_set_model(priv->municipio, GTK_TREE_MODEL(db_list_municipios(active_uf)));
-	gtk_combo_box_set_id_column(priv->municipio, 0);
+	gtk_combo_box_set_model(municipio, GTK_TREE_MODEL(db_list_municipios(active_uf)));
+	gtk_combo_box_set_id_column(municipio, 0);
 }
 
 static void item_manager_activate(GtkButton *b, gpointer win){
@@ -80,8 +82,11 @@ static void nfe_manager_init(NFEManager *nman){
 	gtk_widget_init_template(GTK_WIDGET(nman));
 	g_signal_connect(priv->novo_item, "clicked", G_CALLBACK(item_manager_activate),
 			nman);
-	g_signal_connect(G_OBJECT(priv->uf), "changed", G_CALLBACK(list_municipios), priv);
-	list_uf(priv);
+	g_signal_connect(G_OBJECT(priv->uf), "changed", G_CALLBACK(list_municipios), priv->municipio);
+	g_signal_connect(G_OBJECT(priv->uf_destinatario), "changed", G_CALLBACK(list_municipios),
+		priv->municipio_destinatario);
+	list_uf(priv->uf);
+	list_uf(priv->uf_destinatario);
 }
 
 
@@ -103,6 +108,10 @@ static void nfe_manager_class_init(NFEManagerClass *class){
 		       	uf);
 	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
 		       	municipio);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	uf_destinatario);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	municipio_destinatario);
 }
 
 NFEManager *nfe_manager_new(LivrenfeWindow *win){
