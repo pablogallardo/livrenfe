@@ -46,23 +46,23 @@ typedef struct {
 	unsigned int id_nfe;
 	char *nat_op;
 	int ind_pag;
-	enum t_mod {mod_nfe=55, mod_nfce=65} mod;
+	enum t_mod {MOD_NFE=55, MOD_NFCE=65} mod;
 	int serie;
 	unsigned int num_nf;
 	time_t dh_emis;
 	time_t dh_saida;
-	enum t_tipo {tipo_entrada=0,tipo_saida=1} tipo;
-	enum t_local_destino {dest_interna=1,dest_interestadual=2,dest_exterior=3} local_destino;
-	enum t_tipo_impresao {imp_none=0,imp_ret=1,imp_pai=2,imp_simp=3,imp_nfce=4,imp_nfce_msg=5}
+	enum t_tipo {TIPO_ENTRADA=0,TIPO_SAIDA=1} tipo;
+	enum t_local_destino {DEST_INTERNA=1,DEST_INTERESTADUAL=2,DEST_EXTERIOR=3} local_destino;
+	enum t_tipo_impresao {IMP_NONE=0,IMP_RET=1,IMP_PAI=2,IMP_SIMP=3,IMP_NFCE=4,IMP_NFCE_MSG=5}
 		tipo_impresao;
-	enum t_tipo_emissao {te_normal=1, te_fs=2, te_scan=3, te_dpec=4, te_fsda=5, te_svcan=6, 
-		te_svcrs=7, te_offline_nfce=9} tipo_emissao;
-	enum t_tipo_ambiente {producao=1, homologacao=2} tipo_ambiente;
-	enum t_finalidade {fin_normal=1, fin_complementar=2, fin_ajuste=3, fin_retorno=4}
+	enum t_tipo_emissao {TE_NORMAL=1, TE_FS=2, TE_SCAN=3, TE_DPEC=4, TE_FSDA=5, TE_SVCAN=6, 
+		TE_SVCRS=7, TE_OFFLINE_NFCE=9} tipo_emissao;
+	enum t_tipo_ambiente {PRODUCAO=1, HOMOLOGACAO=2} tipo_ambiente;
+	enum t_finalidade {FIN_NORMAL=1, FIN_COMPLEMENTAR=2, FIN_AJUSTE=3, FIN_RETORNO=4}
 	finalidade;
-	enum t_consumidor_final {false=0, true=1} consumidor_final;
-	enum t_presencial {pre_na=0, pre_presencial=1, pre_internet=2, pre_teleatendimento=3,
-		pre_nfce_ed=4, pre_outro=5} presencial;
+	enum t_consumidor_final {FALSE=0, TRUE=1} consumidor_final;
+	enum t_presencial {PRE_NA=0, PRE_PRESENCIAL=1, PRE_INTERNET=2, PRE_TELEATENDIMENTO=3,
+		PRE_NFCE_ED=4, PRE_OUTRO=5} presencial;
 	const char *versao;
 	char div;
 	char *chave;
@@ -97,7 +97,7 @@ typedef struct {
 	char *nome;
 	char *inscricao_estadual;
 	t_endereco endereco;
-	enum t_crt {crt_snac=1, crt_snac_exc=2, crt_normal=3} crt;
+	enum t_crt {CRT_SNAC=1, CRT_SNAC_EXC=2, CRT_NORMAL=3} crt;
 } t_emitente;
 
 /*
@@ -107,7 +107,7 @@ typedef struct {
 	char *id;
 	char *nome;
 	t_endereco endereco;
-	enum t_tipo_ie {cont_av=1, cont_is=2, nao_cont=3} tipo_ie;
+	enum t_tipo_ie {CONT_AV=1, CONT_IS=2, NAO_CONT=3} tipo_ie;
 } t_destinatario;
 
 /*
@@ -127,7 +127,7 @@ typedef struct {
  * ICMS tax
  */
 typedef struct {
-	enum t_origem {nacional=0, e_id=1, e_ai=2} origem;
+	enum t_origem {NACIONAL=0, E_ID=1, E_AI=2} origem;
 	unsigned int tipo;
 	float aliquota;
 	float valor;
@@ -173,7 +173,7 @@ typedef struct {
  * Transportation information
  */
 typedef struct {
-	enum t_modfrete {frete_emitente=0, frete_destinatario=1, frete_terceiros=2, frete_sem=9}
+	enum t_modfrete {FRETE_EMITENTE=0, FRETE_DESTINATARIO=1, FRETE_TERCEIROS=2, FRETE_SEM=9}
 		modfrete;
 } t_transp;
 
