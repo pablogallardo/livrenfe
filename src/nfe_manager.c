@@ -21,7 +21,10 @@
 #include "nfe_manager.h"
 #include "item_manager.h"
 #include "db_interface.h"
+#include "livrenfe.h"
 #include <gtk/gtk.h>
+#include <string.h>
+#include <stdlib.h>
 
 struct _NFEManager{
 	GtkDialog parent;
@@ -40,9 +43,39 @@ struct _NFEManagerPrivate{
 	GtkComboBox *municipio;
 	GtkComboBox *uf_destinatario;
 	GtkComboBox *municipio_destinatario;
+	GtkComboBoxText *forma_pagamento;
+	GtkComboBoxText *t_doc;
+	GtkComboBoxText *tipo_contribuinte;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(NFEManager, nfe_manager, GTK_TYPE_DIALOG)
+
+static void list_forma_pagamento(GtkComboBoxText *fp){
+	char *a;
+	a = malloc(20);
+	sprintf(a, "%d", A_VISTA);
+	gtk_combo_box_text_append(fp, a, "A vista");
+	sprintf(a, "%d", A_PRAZO);
+	gtk_combo_box_text_append(fp, a, "A prazo");
+	sprintf(a, "%d", OUTRO);
+	gtk_combo_box_text_append(fp, a, "Outro");
+}
+
+static void list_tipo_contribuinte(GtkComboBoxText *t){
+	char *a;
+	a = malloc(20);
+	sprintf(a, "%d", CONT_AV);
+	gtk_combo_box_text_append(t, a, "Contribuinte ICMS");
+	sprintf(a, "%d", CONT_IS);
+	gtk_combo_box_text_append(t, a, "Contribuinte isento");
+	sprintf(a, "%d", NAO_CONT);
+	gtk_combo_box_text_append(t, a, "Não contribuinte");
+}
+
+static void list_tipo_doc(GtkComboBoxText *t){
+	gtk_combo_box_text_append(t, "CNPJ", "CNPJ");
+	gtk_combo_box_text_append(t, "CPF", "CPF");
+}
 
 static void list_uf(GtkComboBox *uf){
 	GtkCellRenderer *r_uf;
@@ -87,6 +120,9 @@ static void nfe_manager_init(NFEManager *nman){
 		priv->municipio_destinatario);
 	list_uf(priv->uf);
 	list_uf(priv->uf_destinatario);
+	list_forma_pagamento(priv->forma_pagamento);
+	list_tipo_doc(priv->t_doc);
+	list_tipo_contribuinte(priv->tipo_contribuinte);
 }
 
 
@@ -112,6 +148,12 @@ static void nfe_manager_class_init(NFEManagerClass *class){
 		       	uf_destinatario);
 	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
 		       	municipio_destinatario);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	forma_pagamento);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	t_doc);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	tipo_contribuinte);
 }
 
 NFEManager *nfe_manager_new(LivrenfeWindow *win){

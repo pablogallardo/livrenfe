@@ -159,9 +159,10 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="forma_pagamento">
+                  <object class="GtkComboBoxText" id="forma_pagamento">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="button_sensitivity">on</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -367,7 +368,7 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="tipo_contribuinte">
+                  <object class="GtkComboBoxText" id="tipo_contribuinte">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -377,7 +378,7 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="t_doc">
+                  <object class="GtkComboBoxText" id="t_doc">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>

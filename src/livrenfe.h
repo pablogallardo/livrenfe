@@ -45,7 +45,7 @@ typedef struct {
 	t_municipio municipio;
 	unsigned int id_nfe;
 	char *nat_op;
-	int ind_pag;
+	enum t_ind_pag {A_VISTA, A_PRAZO, OUTRO} ind_pag;
 	enum t_mod {MOD_NFE=55, MOD_NFCE=65} mod;
 	int serie;
 	unsigned int num_nf;
@@ -60,7 +60,7 @@ typedef struct {
 	enum t_tipo_ambiente {PRODUCAO=1, HOMOLOGACAO=2} tipo_ambiente;
 	enum t_finalidade {FIN_NORMAL=1, FIN_COMPLEMENTAR=2, FIN_AJUSTE=3, FIN_RETORNO=4}
 	finalidade;
-	enum t_consumidor_final {FALSE=0, TRUE=1} consumidor_final;
+	enum t_consumidor_final {NAO=0, SIM=1} consumidor_final;
 	enum t_presencial {PRE_NA=0, PRE_PRESENCIAL=1, PRE_INTERNET=2, PRE_TELEATENDIMENTO=3,
 		PRE_NFCE_ED=4, PRE_OUTRO=5} presencial;
 	const char *versao;
@@ -107,7 +107,7 @@ typedef struct {
 	char *id;
 	char *nome;
 	t_endereco endereco;
-	enum t_tipo_ie {CONT_AV=1, CONT_IS=2, NAO_CONT=3} tipo_ie;
+	enum t_tipo_ie {CONT_AV=1, CONT_IS=2, NAO_CONT=9} tipo_ie;
 } t_destinatario;
 
 /*
