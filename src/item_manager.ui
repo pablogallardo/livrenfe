@@ -64,7 +64,7 @@
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Codigo</property>
+                    <property name="label" translatable="yes">Código</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -72,7 +72,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="codigo">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -93,7 +93,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="ncm">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -106,7 +106,7 @@
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Descricao</property>
+                    <property name="label" translatable="yes">Descrição</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -114,7 +114,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="descricao">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -136,7 +136,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="cfop">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -146,7 +146,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="unidade">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -178,7 +178,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="quantidade">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -188,7 +188,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="valor">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -234,7 +234,7 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Regime</property>
+                        <property name="label" translatable="yes">Régime</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -253,7 +253,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="regime">
+                      <object class="GtkComboBoxText" id="icms_regime">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -263,7 +263,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="situacao_tributaria">
+                      <object class="GtkComboBoxText" id="icms_situacao_tributaria">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -284,7 +284,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="origem">
+                      <object class="GtkComboBoxText" id="icms_origem">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -317,7 +317,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry">
+                      <object class="GtkEntry" id="icms_aliquota">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                       </object>
@@ -327,7 +327,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry">
+                      <object class="GtkEntry" id="icms_credito_aproveitado">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                       </object>
@@ -366,7 +366,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox">
+                      <object class="GtkComboBoxText" id="cofins_situacao_tributaria">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -408,7 +408,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox">
+                      <object class="GtkComboBoxText" id="pis_situacao_tributaria">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
