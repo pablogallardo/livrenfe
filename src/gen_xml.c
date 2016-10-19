@@ -23,17 +23,17 @@
 #include <string.h>
 #include <libxml/xmlwriter.h>
 
-int gen_inf_nfe(xmlTextWriterPtr, t_nfe *);
-int _gen_ide(xmlTextWriterPtr, t_nfe *);
-int _gen_emit(xmlTextWriterPtr, t_nfe *);
-int _gen_dest(xmlTextWriterPtr, t_nfe *);
-int _gen_det(xmlTextWriterPtr, t_item *);
-int _gen_prod(xmlTextWriterPtr, t_produto *);
-int _gen_imposto(xmlTextWriterPtr, t_imposto *, float *);
+int gen_inf_nfe(xmlTextWriterPtr, NFE *);
+int _gen_ide(xmlTextWriterPtr, NFE *);
+int _gen_emit(xmlTextWriterPtr, NFE *);
+int _gen_dest(xmlTextWriterPtr, NFE *);
+int _gen_det(xmlTextWriterPtr, ITEM *);
+int _gen_prod(xmlTextWriterPtr, PRODUTO *);
+int _gen_imposto(xmlTextWriterPtr, IMPOSTO *, float *);
 int _gen_total(xmlTextWriterPtr, float *);
 int is_cpf(char *);
 
-char *generate_xml(t_nfe *nfe) {
+char *generate_xml(NFE *nfe) {
 
 	int rc;
 	xmlTextWriterPtr writer;
@@ -54,7 +54,7 @@ char *generate_xml(t_nfe *nfe) {
 	return buf->content;
 }
 
-int gen_inf_nfe(xmlTextWriterPtr writer, t_nfe *nfe){
+int gen_inf_nfe(xmlTextWriterPtr writer, NFE *nfe){
 
 	int rc;
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "nfeProc");
@@ -94,7 +94,7 @@ int gen_inf_nfe(xmlTextWriterPtr writer, t_nfe *nfe){
 	if (rc < 0)
 		return -EXML;
 
-	t_item *item = nfe->itens;
+	ITEM *item = nfe->itens;
 	float valor = 0;
 	for (int i = 0; i > nfe->q_itens; i++){
 		rc = _gen_det(writer, &item[i]);
@@ -134,7 +134,7 @@ int gen_inf_nfe(xmlTextWriterPtr writer, t_nfe *nfe){
 	return 0;
 }
 
-int _gen_ide(xmlTextWriterPtr writer, t_nfe *nfe){
+int _gen_ide(xmlTextWriterPtr writer, NFE *nfe){
 
 	int rc;
 
@@ -234,7 +234,7 @@ int _gen_ide(xmlTextWriterPtr writer, t_nfe *nfe){
 	return 0;
 }
 
-int _gen_emit(xmlTextWriterPtr writer, t_nfe *nfe){
+int _gen_emit(xmlTextWriterPtr writer, NFE *nfe){
 
 	int rc;
 
@@ -319,7 +319,7 @@ int _gen_emit(xmlTextWriterPtr writer, t_nfe *nfe){
 	return 0;
 }
 
-int _gen_dest(xmlTextWriterPtr writer, t_nfe *nfe){
+int _gen_dest(xmlTextWriterPtr writer, NFE *nfe){
 
 	int rc;
 
@@ -393,7 +393,7 @@ int _gen_dest(xmlTextWriterPtr writer, t_nfe *nfe){
 	return 0;
 }
 
-int _gen_det(xmlTextWriterPtr writer, t_item *item){
+int _gen_det(xmlTextWriterPtr writer, ITEM *item){
 	int rc;
 
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "det");
@@ -420,7 +420,7 @@ int _gen_det(xmlTextWriterPtr writer, t_item *item){
 	return 0;
 }
 
-int _gen_prod(xmlTextWriterPtr writer, t_produto *p){
+int _gen_prod(xmlTextWriterPtr writer, PRODUTO *p){
 
 	int rc;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cProd",
@@ -489,7 +489,7 @@ int _gen_prod(xmlTextWriterPtr writer, t_produto *p){
 	return 0;
 }
 
-int _gen_imposto(xmlTextWriterPtr writer, t_imposto *i, float *v){
+int _gen_imposto(xmlTextWriterPtr writer, IMPOSTO *i, float *v){
 
 	int rc;
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "imposto");

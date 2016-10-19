@@ -36,13 +36,13 @@ typedef struct {
 	char *municipio;
 	unsigned int codigo;
 	unsigned int cod_uf;
-} t_municipio;
+} MUNICIPIO;
 
 /*
  * NFE identification
  */
 typedef struct {
-	t_municipio municipio;
+	MUNICIPIO municipio;
 	unsigned int id_nfe;
 	char *nat_op;
 	enum t_ind_pag {A_VISTA, A_PRAZO, OUTRO} ind_pag;
@@ -66,7 +66,7 @@ typedef struct {
 	const char *versao;
 	char div;
 	char *chave;
-} t_idnfe;
+} IDNFE;
 
 /*
  * Country information
@@ -74,7 +74,7 @@ typedef struct {
 typedef struct {
 	unsigned int codigo;
 	char *nome;
-} t_pais;
+} PAIS;
 
 /*
  * Address information
@@ -84,10 +84,10 @@ typedef struct {
 	unsigned int num;
 	char **complemento;
 	char *bairro;
-	t_municipio municipio;
+	MUNICIPIO municipio;
 	unsigned int cep;
-	t_pais pais;
-} t_endereco;
+	PAIS pais;
+} ENDERECO;
 
 /*
  * Issuer information
@@ -96,9 +96,9 @@ typedef struct {
 	char *id;
 	char *nome;
 	char *inscricao_estadual;
-	t_endereco endereco;
+	ENDERECO endereco;
 	enum t_crt {CRT_SNAC=1, CRT_SNAC_EXC=2, CRT_NORMAL=3} crt;
-} t_emitente;
+} EMITENTE;
 
 /*
  * Recipient information
@@ -106,9 +106,9 @@ typedef struct {
 typedef struct {
 	char *id;
 	char *nome;
-	t_endereco endereco;
+	ENDERECO endereco;
 	enum t_tipo_ie {CONT_AV=1, CONT_IS=2, NAO_CONT=9} tipo_ie;
-} t_destinatario;
+} DESTINATARIO;
 
 /*
  * Product information
@@ -121,7 +121,7 @@ typedef struct {
 	char *unidade_comercial;
 	float quantidade;
 	float valor;
-} t_produto;
+} PRODUTO;
 
 /*
  * ICMS tax
@@ -131,7 +131,7 @@ typedef struct {
 	unsigned int tipo;
 	float aliquota;
 	float valor;
-} t_icms;
+} ICMS;
 
 /*
  * PIS tax
@@ -140,7 +140,7 @@ typedef struct {
 	float aliquota;
 	unsigned int quantidade;
 	char *nt;
-} t_pis;
+} PIS;
 
 /* 
  * COFINS tax
@@ -149,25 +149,25 @@ typedef struct {
 	float aliquota;
 	unsigned int quantidade;
 	char *nt;
-} t_cofins;
+} COFINS;
 
 /*
  * Tax information
  */
 typedef struct {
-	t_icms *icms;
-	t_pis *pis;
-	t_cofins *cofins;
-} t_imposto;
+	ICMS *icms;
+	PIS *pis;
+	COFINS *cofins;
+} IMPOSTO;
 
 /*
  * Items
  */
 typedef struct {
-	t_produto produto;
-	t_imposto imposto;
+	PRODUTO produto;
+	IMPOSTO imposto;
 	unsigned int ordem;
-} t_item;
+} ITEM;
 
 /*
  * Transportation information
@@ -175,7 +175,7 @@ typedef struct {
 typedef struct {
 	enum t_modfrete {FRETE_EMITENTE=0, FRETE_DESTINATARIO=1, FRETE_TERCEIROS=2, FRETE_SEM=9}
 		modfrete;
-} t_transp;
+} TRANSP;
 
 /* 
  * SEFAZ record information
@@ -184,21 +184,21 @@ typedef struct {
 	char *dh_recib;
 	unsigned long long numero;
 	int cod_status;
-} t_protocolo;
+} PROTOCOLO;
 
 /*
  * Complete NFE information
  */
 typedef struct {
-	t_idnfe idnfe;
-	t_emitente emitente;
-	t_destinatario destinatario;
-	t_item *itens;
+	IDNFE idnfe;
+	EMITENTE emitente;
+	DESTINATARIO destinatario;
+	ITEM *itens;
 	unsigned int q_itens;
 	float total;
-	t_transp transp;
-	t_protocolo *protocolo;
-} t_nfe;
+	TRANSP transp;
+	PROTOCOLO *protocolo;
+} NFE;
 
 #define LIVRENFE_TYPE	(livrenfe_get_type())
 #define	LIVRENFE_APP(obj)	(G_TYPE_CHECK_INSTANCE_CAST ((obj), LIVRENFE_TYPE, Livrenfe))

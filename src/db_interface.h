@@ -33,7 +33,7 @@ extern int create_db();
 /**
  * Materialize NFE
  */
-extern int register_nfe(t_nfe *);
+extern int register_nfe(NFE *);
 
 /**
  * Set db path

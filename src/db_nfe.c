@@ -81,8 +81,8 @@ GtkListStore *get_list_nfe(){
 	return list_store;
 }
 
-int register_nfe(t_nfe *nfe){
-	t_idnfe idnfe = nfe->idnfe;
+int register_nfe(NFE *nfe){
+	IDNFE idnfe = nfe->idnfe;
 	char *sql;
 	char *err;
        	sprintf(sql, "INSERT INTO nfe (id_municipio, nap_op, ind_pag, mod_nfe,\
