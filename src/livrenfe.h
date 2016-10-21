@@ -82,7 +82,7 @@ typedef struct {
 typedef struct {
 	char *rua;
 	unsigned int num;
-	char **complemento;
+	char *complemento;
 	char *bairro;
 	MUNICIPIO municipio;
 	unsigned int cep;
@@ -119,7 +119,6 @@ typedef struct {
 	unsigned int ncm;
 	unsigned int cfop;
 	char *unidade_comercial;
-	float quantidade;
 	float valor;
 } PRODUTO;
 
@@ -167,6 +166,8 @@ typedef struct {
 	PRODUTO produto;
 	IMPOSTO imposto;
 	unsigned int ordem;
+	float quantidade;
+	float valor;
 } ITEM;
 
 /*
