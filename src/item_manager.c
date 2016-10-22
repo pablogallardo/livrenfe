@@ -38,6 +38,17 @@ struct _ItemManagerPrivate{
 	GtkComboBoxText *icms_origem;
 	GtkComboBoxText *cofins_situacao_tributaria;
 	GtkComboBoxText *pis_situacao_tributaria;
+	GtkEntry *codigo;
+	GtkEntry *ncm;
+	GtkEntry *descricao;
+	GtkEntry *cfop;
+	GtkEntry *unidade;
+	GtkEntry *quantidade;
+	GtkEntry *valor;
+	GtkEntry *icms_aliquota;
+	GtkEntry *icms_credito_aproveitado;
+	GtkButton *ok_btn;
+	GtkButton *cancel_btn;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(ItemManager, item_manager, GTK_TYPE_DIALOG)
@@ -102,6 +113,28 @@ static void item_manager_class_init(ItemManagerClass *class){
 		       	cofins_situacao_tributaria);
 	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), ItemManager,
 		       	pis_situacao_tributaria);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), ItemManager,
+		       	ok_btn);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), ItemManager,
+		       	cancel_btn);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), ItemManager,
+		       	codigo);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), ItemManager,
+		       	ncm);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), ItemManager,
+		       	descricao);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), ItemManager,
+		       	cfop);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), ItemManager,
+		       	unidade);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), ItemManager,
+		       	quantidade);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), ItemManager,
+		       	valor);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), ItemManager,
+		       	icms_aliquota);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), ItemManager,
+		       	icms_credito_aproveitado);
 }
 
 ItemManager *item_manager_new(NFEManager *win){
