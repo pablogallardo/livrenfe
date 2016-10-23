@@ -168,6 +168,7 @@ typedef struct {
 	unsigned int ordem;
 	float quantidade;
 	float valor;
+	ITEM *pointer; //next item
 } ITEM;
 
 /*

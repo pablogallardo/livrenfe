@@ -37,3 +37,5 @@ extern IMPOSTO *new_imposto(ICMS *i, PIS *p, COFINS *c);
 
 extern DESTINATARIO *new_destinatario(char *rua, int num, char *complemento, 
 		char *bairro, MUNICIPIO *m, unsigned int cep, PAIS *p);
+
+extern int add_item(NFE *nfe, ITEM *i);

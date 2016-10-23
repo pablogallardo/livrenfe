@@ -36,6 +36,7 @@ NFE *new_nfe(unsigned int num, int serie, time_t dh_emis, time_t dh_saida,
 	
 	NFE *n = malloc(sizeof(NFE));
 	n->idnfe = id;
+	n->q_itens = 0;
 	n->destinatario = dest;
 }
 
@@ -58,6 +59,7 @@ ITEM *new_item(PRODUTO *p, IMPOSTO *i, float valor, float quantidade, unsigned i
 	i->valor = valor;
 	i->ordem = ordem;
 	i->quantidade = quantidade;
+	i->pointer = NULL;
 	return i;
 }
 
@@ -89,4 +91,18 @@ DESTINATARIO *new_destinatario(char *rua, int num, char *complemento,
 	e->cep = cep;
 	e->pais = p;
 	return e;
+}
+
+int add_item(NFE *nfe, ITEM *item){
+	ITEM i;
+	nfe->q_itens++;
+	if(i = nfe->item == NULL){
+		nfe->item = item;
+		return 0;
+	}
+	while(i != NULL){
+		i = i->pointer;
+	}
+	i->pointer = item;
+	return 0;
 }
