@@ -42,7 +42,7 @@ typedef struct {
  * NFE identification
  */
 typedef struct {
-	MUNICIPIO municipio;
+	MUNICIPIO *municipio;
 	unsigned int id_nfe;
 	char *nat_op;
 	enum t_ind_pag {A_VISTA, A_PRAZO, OUTRO} ind_pag;
@@ -84,9 +84,9 @@ typedef struct {
 	unsigned int num;
 	char *complemento;
 	char *bairro;
-	MUNICIPIO municipio;
+	MUNICIPIO *municipio;
 	unsigned int cep;
-	PAIS pais;
+	PAIS *pais;
 } ENDERECO;
 
 /*
@@ -96,7 +96,7 @@ typedef struct {
 	char *id;
 	char *nome;
 	char *inscricao_estadual;
-	ENDERECO endereco;
+	ENDERECO *endereco;
 	enum t_crt {CRT_SNAC=1, CRT_SNAC_EXC=2, CRT_NORMAL=3} crt;
 } EMITENTE;
 
@@ -106,7 +106,7 @@ typedef struct {
 typedef struct {
 	char *id;
 	char *nome;
-	ENDERECO endereco;
+	ENDERECO *endereco;
 	enum t_tipo_ie {CONT_AV=1, CONT_IS=2, NAO_CONT=9} tipo_ie;
 } DESTINATARIO;
 
@@ -165,8 +165,8 @@ typedef struct ITEM ITEM;
  * Items
  */
 struct ITEM {
-	PRODUTO produto;
-	IMPOSTO imposto;
+	PRODUTO *produto;
+	IMPOSTO *imposto;
 	unsigned int ordem;
 	float quantidade;
 	float valor;
@@ -194,13 +194,13 @@ typedef struct {
  * Complete NFE information
  */
 typedef struct {
-	IDNFE idnfe;
-	EMITENTE emitente;
-	DESTINATARIO destinatario;
+	IDNFE *idnfe;
+	EMITENTE *emitente;
+	DESTINATARIO *destinatario;
 	ITEM *itens;
 	unsigned int q_itens;
 	float total;
-	TRANSP transp;
+	TRANSP *transp;
 	PROTOCOLO *protocolo;
 } NFE;
 

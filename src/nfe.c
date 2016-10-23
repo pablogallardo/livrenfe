@@ -23,7 +23,7 @@
 #include <stdlib.h>
 
 NFE *new_nfe(unsigned int num, int serie, time_t dh_emis, time_t dh_saida,
-		int ind_pag, char *nat_op, MUNICIPIO munic, DESTINATARIO dest,
+		int ind_pag, char *nat_op, MUNICIPIO *munic, DESTINATARIO *dest,
 	       	int orig, ITEM *i){
 	IDNFE *id = malloc(sizeof(IDNFE));
 	id->num_nf = num;
@@ -52,10 +52,10 @@ PRODUTO *new_produto(int codigo, char *desc, unsigned int ncm, unsigned int cfop
 	return p;
 }
 
-ITEM *new_item(PRODUTO *p, IMPOSTO *i, float valor, float quantidade, unsigned int ordem){
+ITEM *new_item(PRODUTO *p, IMPOSTO *imp, float valor, float quantidade, unsigned int ordem){
 	ITEM *i = malloc(sizeof(ITEM));
 	i->produto = p;
-	i->imposto = i;
+	i->imposto = imp;
 	i->valor = valor;
 	i->ordem = ordem;
 	i->quantidade = quantidade;
@@ -84,20 +84,21 @@ DESTINATARIO *new_destinatario(char *rua, int num, char *complemento,
 		char *bairro, MUNICIPIO *m, unsigned int cep, PAIS *p){
 	ENDERECO *e = malloc(sizeof(ENDERECO));
 	e->rua = rua;
-	e->num = nul;
+	e->num = num;
 	e->complemento = complemento;
 	e->bairro = bairro;
 	e->municipio = m;
 	e->cep = cep;
 	e->pais = p;
-	return e;
+	DESTINATARIO *d = malloc(sizeof(DESTINATARIO));
+	return d;
 }
 
 int add_item(NFE *nfe, ITEM *item){
-	ITEM i;
+	ITEM *i;
 	nfe->q_itens++;
-	if(i = nfe->item == NULL){
-		nfe->item = item;
+	if((i = nfe->itens) == NULL){
+		nfe->itens = item;
 		return 0;
 	}
 	while(i != NULL){
@@ -106,3 +107,4 @@ int add_item(NFE *nfe, ITEM *item){
 	i->pointer = item;
 	return 0;
 }
+

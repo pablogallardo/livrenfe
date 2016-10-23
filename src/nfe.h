@@ -20,12 +20,11 @@
 #include "livrenfe.h"
 #include <time.h>
 
-extern NFE *new_nfe(int num, int serie, time_t dh_emis, time_t dh_saida,
-		int f_pag, char *nat_op, MUNICIPIO munic, DESTINATARIO dest, int orig, 
+extern NFE *new_nfe(unsigned int num, int serie, time_t dh_emis, time_t dh_saida,
+		int ind_pag, char *nat_op, MUNICIPIO *munic, DESTINATARIO *dest, int orig, 
 		ITEM *i);
 
-extern PRODUTO *new_produto(int codigo, char *desc, unsigned int ncm, unsigned int cfop,
-		char *unidade_comercial, float valor);
+extern PRODUTO *new_produto(int codigo, char *desc, unsigned int ncm, unsigned int cfop, char *unidade_comercial, float valor);
 
 extern ITEM *new_item(PRODUTO *p, IMPOSTO *i, float valor, float quantidade, 
 		unsigned int ordem);
@@ -39,3 +38,5 @@ extern DESTINATARIO *new_destinatario(char *rua, int num, char *complemento,
 		char *bairro, MUNICIPIO *m, unsigned int cep, PAIS *p);
 
 extern int add_item(NFE *nfe, ITEM *i);
+
+extern int rm_item(NFE *nfe, ITEM *i);
