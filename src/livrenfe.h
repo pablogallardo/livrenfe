@@ -159,17 +159,19 @@ typedef struct {
 	COFINS *cofins;
 } IMPOSTO;
 
+typedef struct ITEM ITEM;
+
 /*
  * Items
  */
-typedef struct {
+struct ITEM {
 	PRODUTO produto;
 	IMPOSTO imposto;
 	unsigned int ordem;
 	float quantidade;
 	float valor;
 	ITEM *pointer; //next item
-} ITEM;
+};
 
 /*
  * Transportation information
