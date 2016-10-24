@@ -33,4 +33,9 @@ typedef struct _ItemManagerClass ItemManagerClass;
 GType item_manager_get_type(void);
 ItemManager *item_manager_new(NFEManager *win);
 
+struct _ItemManager{
+	GtkDialog parent;
+	NFE *nfe;
+};
+
 #endif

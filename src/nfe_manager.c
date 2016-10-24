@@ -21,6 +21,7 @@
 #include "nfe_manager.h"
 #include "item_manager.h"
 #include "db_interface.h"
+#include "nfe.h"
 #include "livrenfe.h"
 #include <gtk/gtk.h>
 #include <string.h>
@@ -28,6 +29,7 @@
 
 struct _NFEManager{
 	GtkDialog parent;
+	NFE *nfe;
 };
 
 struct _NFEManagerClass{
@@ -105,6 +107,11 @@ static void item_manager_activate(GtkButton *b, gpointer win){
 	ItemManager *iman;
 
 	iman = item_manager_new(NFE_MANAGER(win));
+	NFE *n = malloc(sizeof(NFE));
+	n->q_itens;
+	n->itens = NULL;
+	(NFE_MANAGER(win))->nfe = n;
+	iman->nfe = n;
 	gtk_window_present(GTK_WINDOW(iman));
 }
 
@@ -157,5 +164,5 @@ static void nfe_manager_class_init(NFEManagerClass *class){
 }
 
 NFEManager *nfe_manager_new(LivrenfeWindow *win){
-	return g_object_new (NFE_MANAGER_TYPE, "transient-for", win, "use-header-bar", TRUE, NULL);
+	return g_object_new (NFE_MANAGER_TYPE, "transient-for", win, "use-header-bar", FALSE, "skip-taskbar-hint", TRUE, NULL);
 }

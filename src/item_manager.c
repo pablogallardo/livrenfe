@@ -19,12 +19,10 @@
 
 #include "item_manager.h"
 #include "nfe_manager.h"
+#include "nfe.h"
 #include <gtk/gtk.h>
 #include <stdlib.h>
 
-struct _ItemManager{
-	GtkDialog parent;
-};
 
 struct _ItemManagerClass{
 	GtkDialogClass parent_class;
@@ -52,6 +50,32 @@ struct _ItemManagerPrivate{
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(ItemManager, item_manager, GTK_TYPE_DIALOG)
+
+static void item_manager_dispose(GObject *object){
+	ItemManagerPrivate *priv;
+
+	priv = item_manager_get_instance_private(ITEM_MANAGER(object));
+	G_OBJECT_CLASS(item_manager_parent_class)->dispose(object);
+}
+
+static void set_item(GtkButton *b, GtkWidget *iman){
+	ItemManagerPrivate *priv = item_manager_get_instance_private(ITEM_MANAGER(iman));
+	PRODUTO *p = new_produto(atoi(gtk_entry_get_text(priv->codigo)),
+			gtk_entry_get_text(priv->descricao),
+			atoi(gtk_entry_get_text(priv->ncm)),
+			atoi(gtk_entry_get_text(priv->cfop)),
+			gtk_entry_get_text(priv->unidade),
+			atof(gtk_entry_get_text(priv->valor)));
+	ICMS *i = new_icms(1, 1, atof(gtk_entry_get_text(priv->icms_aliquota)),
+			atof(gtk_entry_get_text(priv->icms_credito_aproveitado)));
+	IMPOSTO *imp = new_imposto(i, NULL, NULL);
+	ITEM *item = new_item(p,
+		       	imp, atof(gtk_entry_get_text(priv->valor)),
+			atof(gtk_entry_get_text(priv->quantidade)),
+		       	++(ITEM_MANAGER(iman))->nfe->q_itens);
+	add_item((ITEM_MANAGER(iman))->nfe, item);
+	gtk_widget_destroy(iman);
+}
 
 static void list_icms_regime(GtkComboBoxText *c){
 	gtk_combo_box_text_append(c, "1", "Simples Nacional");
@@ -88,15 +112,11 @@ static void item_manager_init(ItemManager *iman){
 	list_icms_st(priv->icms_situacao_tributaria);
 	list_cofins_st(priv->cofins_situacao_tributaria);
 	list_cofins_st(priv->pis_situacao_tributaria);
+	g_signal_connect(priv->ok_btn, "clicked", G_CALLBACK(set_item),
+			iman);
 }
 
 
-static void item_manager_dispose(GObject *object){
-	ItemManagerPrivate *priv;
-
-	priv = item_manager_get_instance_private(ITEM_MANAGER(object));
-	G_OBJECT_CLASS(item_manager_parent_class)->dispose(object);
-}
 
 static void item_manager_class_init(ItemManagerClass *class){
 	G_OBJECT_CLASS (class)->dispose = item_manager_dispose;
@@ -138,5 +158,5 @@ static void item_manager_class_init(ItemManagerClass *class){
 }
 
 ItemManager *item_manager_new(NFEManager *win){
-	return g_object_new (ITEM_MANAGER_TYPE, "transient-for", win, "use-header-bar", TRUE, NULL);
+	return g_object_new (ITEM_MANAGER_TYPE, "transient-for", win, "use-header-bar", FALSE, "skip-taskbar-hint", TRUE, NULL);
 }

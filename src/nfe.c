@@ -101,7 +101,7 @@ int add_item(NFE *nfe, ITEM *item){
 		nfe->itens = item;
 		return 0;
 	}
-	while(i != NULL){
+	while(i->pointer != NULL){
 		i = i->pointer;
 	}
 	i->pointer = item;
