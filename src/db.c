@@ -87,13 +87,11 @@ int db_close(sqlite3 *db, sqlite3_stmt *stmt, char **err){
 	return 0;
 }
 
-int db_last_insert_id(){
+int last_insert_id(){
 	sqlite3 *db;
 	int rc;
 	rc = sqlite3_open(db_file, &db);
 	if(rc)
 		return -ESQL;
-	rc = sqlite3_last_insert_rowid(db);
-	sqlite3_close_v2(db);
-	return rc;
+	return sqlite3_last_insert_rowid(db);
 }
