@@ -93,5 +93,7 @@ int last_insert_id(){
 	rc = sqlite3_open(db_file, &db);
 	if(rc)
 		return -ESQL;
-	return sqlite3_last_insert_rowid(db);
+	rc = sqlite3_last_insert_rowid(db);
+	sqlite3_close_v2(db);
+	return rc;
 }
