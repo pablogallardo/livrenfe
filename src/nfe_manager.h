@@ -30,6 +30,11 @@
 typedef struct _NFEManager NFEManager;
 typedef struct _NFEManagerClass NFEManagerClass;
 
+struct _NFEManager{
+	GtkDialog parent;
+	NFE *nfe;
+};
+
 GType nfe_manager_get_type(void);
 NFEManager *nfe_manager_new(LivrenfeWindow *win);
 

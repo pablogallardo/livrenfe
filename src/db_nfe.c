@@ -83,23 +83,68 @@ GtkListStore *get_list_nfe(){
 
 int register_nfe(NFE *nfe){
 	IDNFE *idnfe = nfe->idnfe;
-	char *sql;
-	char *err;
+	DESTINATARIO *d = nfe->destinatario;
+	ENDERECO *ed = d->endereco;
+	char *sql, *err;
+	int last_id, id_nf;
+       	sprintf(sql, "INSERT INTO destinatarios (nome, tipo_ie, cnpj, rua, complemento,\
+		bairro, id_municipio, cep) VALUES ('%s', '%s', '%s', '%s', '%s', '%s',\
+		'%s', '%s')", d->nome, d->tipo_ie, d->cnpj, ed->rua, ed->complemento,
+		ed->bairro, ed->municipio->codigo, ed->cep);
+	db_exec(sql, &err);
+	if(err){
+		fprintf(stderr, "livrenfe: Error - %s", err);
+		return -1;
+	}
+	last_id = db_last_insert_id();
        	sprintf(sql, "INSERT INTO nfe (id_municipio, nap_op, ind_pag, mod_nfe,\
 		serie, num_nf, dh_emis, dh_saida, tipo, local_destino,\
 		tipo_impressao, tipo_ambiente, finalidade, consumidor_final,\
 		presencial, versao, div, chave, id_emitente, id_destinatario,\
 		q_itens, total, id_transportadora) VALUES \
-		(%d, %s, %d, %s, %s, %s, %s, %s, %s, %s , %s, %s, %s, %s, %s, \
-		 %s, %s, %s, %s, %s , %s, %s, %s)",
-	idnfe->municipio->codigo, idnfe->nat_op, idnfe->ind_pag, idnfe->serie,
-	idnfe->num_nf, timetostr(idnfe->dh_emis), timetostr(idnfe->dh_saida), idnfe->tipo,
-	idnfe->local_destino, idnfe->tipo_impresao, idnfe->tipo_ambiente, idnfe->finalidade, idnfe->consumidor_final, idnfe->presencial,
-	idnfe->versao, idnfe->div, idnfe->chave, nfe->emitente->id, nfe->destinatario->id, nfe->q_itens, nfe->total, "NULL");
+		(%d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s' , '%s', '%s',\
+		 '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s' , '%s', '%s', '%s')",
+		idnfe->municipio->codigo, idnfe->nat_op, idnfe->ind_pag, idnfe->serie,
+		idnfe->num_nf, timetostr(idnfe->dh_emis), timetostr(idnfe->dh_saida), idnfe->tipo,
+		idnfe->local_destino, idnfe->tipo_impresao, idnfe->tipo_ambiente, idnfe->finalidade, idnfe->consumidor_final, idnfe->presencial,
+		idnfe->versao, idnfe->div, idnfe->chave, nfe->emitente->id, last_id, nfe->q_itens, nfe->total, "NULL");
 	db_exec(sql, &err);
 	if(err){
 		fprintf(stderr, "livrenfe: Error - %s", err);
 		return -1;
+	}
+	last_id = db_last_insert_id();
+	id_nf = last_id;
+	ITEM *item = nfe->itens;
+	for(int i = 0; i < nfe->q_itens; i++){
+		PRODUTO *p = item->produto;
+		IMPOSTO *imp = item->imposto;
+		ICMS *icms = imp->icms;
+		PIS *pis = imp->pis;
+		COFINS *cofins = imp->cofins;
+		sprintf(sql, "INSERT INTO  produtos (id_produto, descricao, ncm, cfop, unidade,\
+			valor_real) VALUES (%d, '%s', '%s', %d, '%s', %f)",
+		       p->codigo, p->descricao, p->ncm, p->cfop, p->unidade_comercial,
+		       p->valor);
+		db_exec(sql, &err);
+		if(err){
+			fprintf(stderr, "livrenfe: Error - %s", err);
+			return -1;
+		}
+		last_id = db_last_insert_id();
+		sprintf(sql, "INSERT INTO  nfe_itens (id_nfe, ordem, id_produto, icms_origem,\
+		       	icms_tipo, icms_aliquota, icms_valor, pis_aliquota, pis_quantidade,\
+			pis_nt, cofins_aliquota, cofins_quantidade, cofins_nt)\
+			VALUES (%d, %d, %d, %d, %d, %f, %f, %f, %f, %f, %f, %f, %f)i",
+			id_nf, i, last_id, icms->origem, icms->tipo, icms->aliquota, icms->valor,
+			pis->aliquota, pis->quantidade, pis->nt, cofins->aliquota,
+			cofins->quantidade, cofins->nt);
+		db_exec(sql, &err);
+		if(err){
+			fprintf(stderr, "livrenfe: Error - %s", err);
+			return -1;
+		}
+
 	}
 	return 0;
 }

@@ -19,6 +19,8 @@
 
 #include "lnfe_window.h"
 #include "nfe_manager.h"
+#include "livrenfe.h"
+#include <stdlib.h>
 #include <gtk/gtk.h>
 
 struct _LivrenfeWindow{
@@ -41,6 +43,7 @@ static void nfe_manager_activate(GtkButton *b, gpointer win){
 	NFEManager *nman;
 
 	nman = nfe_manager_new(LIVRENFE_WINDOW(win));
+	nman->nfe = malloc(sizeof(NFE));
 	gtk_window_present(GTK_WINDOW(nman));
 }
 

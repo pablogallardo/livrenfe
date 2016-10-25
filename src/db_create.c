@@ -32,23 +32,20 @@ CREATE TABLE municipios (id_municipio varchar(7), id_uf varchar(2), nome varchar
 	REFERENCES uf(id_uf),\
 	CONSTRAINT municipio_pais_uf FOREIGN KEY (id_pais)\
 	REFERENCES paises(id_pais));\
-CREATE TABLE enderecos (id_endereco integer, rua varchar(200), \
-	complemento varchar(200), bairro varchar(200), id_municipio varchar(7),\
-       	cep varchar(9),\
-	CONSTRAINT endereco_pk PRIMARY KEY (id_endereco),\
-	CONSTRAINT endereco_municipio_fk FOREIGN KEY (id_municipio)\
-	REFERENCES municipios(id_municipio));\
 CREATE TABLE emitentes (id_emitente integer, nome varchar(100),\
-	inscricao_estadual varchar(20), id_endereco integer,\
-	crt char(1), cnpj varchar(14),\
+	inscricao_estadual varchar(20), \
+	crt char(1), cnpj varchar(14), rua varchar(200), complemento varchar(200),\
+	bairro varchar(200), id_municipio varchar(7), cep varchar(9),\
 	CONSTRAINT emitente_pk PRIMARY KEY (id_emitente),\
-	CONSTRAINT emitente_endereco_fk FOREIGN KEY (id_endereco)\
-	REFERENCES enderecos(id_endereco));\
+	CONSTRAINT emitente_munic_fk FOREIGN KEY (id_municipio)\
+		REFERENCES municipios(id_municipio));\
 CREATE TABLE destinatarios (id_destinatario integer, nome varchar(200),\
-	id_endereco integer, tipo_ie char(1), cnpj varchar(14),\
+	tipo_ie char(1), cnpj varchar(14), rua varchar(200),\
+	complemento varchar(200), bairro varchar(200), id_municipio varchar(7),\
+	cep varchar(9),\
 	CONSTRAINT destinatario_pk PRIMARY KEY (id_destinatario),\
-	CONSTRAINT destinatario_endereco_fk FOREIGN KEY (id_endereco)\
-	REFERENCES enderecos(id_endereco));\
+	CONSTRAINT destinatario_munic_fk FOREIGN KEY (id_municipio)\
+		REFERENCES municipios(id_municipio));\
 CREATE TABLE produtos (id_produto integer, descricao varchar(200), ncm integer,\
 	cfop integer, unidade varchar(10), quantidade real, valor real,\
 	CONSTRAINT produto_pk PRIMARY KEY (id_produto));\

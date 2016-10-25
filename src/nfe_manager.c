@@ -27,10 +27,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-struct _NFEManager{
-	GtkDialog parent;
-	NFE *nfe;
-};
 
 struct _NFEManagerClass{
 	GtkDialogClass parent_class;
@@ -107,12 +103,14 @@ static void item_manager_activate(GtkButton *b, gpointer win){
 	ItemManager *iman;
 
 	iman = item_manager_new(NFE_MANAGER(win));
-	NFE *n = malloc(sizeof(NFE));
-	n->q_itens;
-	n->itens = NULL;
-	(NFE_MANAGER(win))->nfe = n;
-	iman->nfe = n;
+	(NFE_MANAGER(win))->nfe->q_itens = 0;
+	(NFE_MANAGER(win))->nfe->itens = NULL;
+	iman->nfe = (NFE_MANAGER(win))->nfe;
 	gtk_window_present(GTK_WINDOW(iman));
+}
+
+static void save_nfe(GtkButton *b, GtkWidget *nfe){
+	gtk_widget_destroy(nfe);
 }
 
 static void nfe_manager_init(NFEManager *nman){
@@ -121,6 +119,8 @@ static void nfe_manager_init(NFEManager *nman){
 	priv = nfe_manager_get_instance_private(nman);
 	gtk_widget_init_template(GTK_WIDGET(nman));
 	g_signal_connect(priv->novo_item, "clicked", G_CALLBACK(item_manager_activate),
+			nman);
+	g_signal_connect(priv->save_nfe, "clicked", G_CALLBACK(save_nfe),
 			nman);
 	g_signal_connect(G_OBJECT(priv->uf), "changed", G_CALLBACK(list_municipios), priv->municipio);
 	g_signal_connect(G_OBJECT(priv->uf_destinatario), "changed", G_CALLBACK(list_municipios),
@@ -147,6 +147,8 @@ static void nfe_manager_class_init(NFEManagerClass *class){
                                                "/br/com/lapagina/livrenfe/nfe_manager.ui");
 	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
 		       	novo_item);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	save_nfe);
 	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
 		       	uf);
 	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,

@@ -98,6 +98,7 @@ typedef struct {
 	char *inscricao_estadual;
 	ENDERECO *endereco;
 	enum t_crt {CRT_SNAC=1, CRT_SNAC_EXC=2, CRT_NORMAL=3} crt;
+	char *cnpj;
 } EMITENTE;
 
 /*
@@ -108,6 +109,7 @@ typedef struct {
 	char *nome;
 	ENDERECO *endereco;
 	enum t_tipo_ie {CONT_AV=1, CONT_IS=2, NAO_CONT=9} tipo_ie;
+	char *cnpj;
 } DESTINATARIO;
 
 /*

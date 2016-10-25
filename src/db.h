@@ -53,6 +53,11 @@ extern int db_select(const char *, char **, sqlite3 **db, sqlite3_stmt **stmt);
 extern int db_close(sqlite3 *, sqlite3_stmt *, char **);
 
 /**
+ * Get last inserted rowid on DB
+ */
+extern int db_last_insert_id();
+
+/**
  * Path to DB file
  */
 extern const char *db_file;
