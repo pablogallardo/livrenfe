@@ -400,7 +400,7 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="lagradouro">
+                  <object class="GtkEntry" id="logradouro">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -587,6 +587,9 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
           </packing>
         </child>
       </object>
+    </child>
+    <child>
+      <placeholder/>
     </child>
   </template>
 </interface>

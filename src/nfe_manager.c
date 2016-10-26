@@ -44,6 +44,19 @@ struct _NFEManagerPrivate{
 	GtkComboBoxText *forma_pagamento;
 	GtkComboBoxText *t_doc;
 	GtkComboBoxText *tipo_contribuinte;
+	GtkEntry *num;
+	GtkEntry *serie;
+	GtkEntry *dh_emis;
+	GtkEntry *dh_saida;
+	GtkEntry *nat_op;
+	GtkEntry *doc;
+	GtkEntry *razao_social;
+	GtkEntry *ie;
+	GtkEntry *logradouro;
+	GtkEntry *numero_endereco;
+	GtkEntry *complemento;
+	GtkEntry *bairro;
+	GtkEntry *cep;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(NFEManager, nfe_manager, GTK_TYPE_DIALOG)
@@ -163,6 +176,32 @@ static void nfe_manager_class_init(NFEManagerClass *class){
 		       	t_doc);
 	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
 		       	tipo_contribuinte);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	num);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	serie);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	dh_emis);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	dh_saida);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	nat_op);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	doc);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	razao_social);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	ie);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	logradouro);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	numero_endereco);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	complemento);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	bairro);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	cep);
 }
 
 NFEManager *nfe_manager_new(LivrenfeWindow *win){
