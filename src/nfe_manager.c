@@ -41,9 +41,9 @@ struct _NFEManagerPrivate{
 	GtkComboBox *municipio;
 	GtkComboBox *uf_destinatario;
 	GtkComboBox *municipio_destinatario;
-	GtkComboBoxText *forma_pagamento;
+	GtkComboBox *forma_pagamento;
 	GtkComboBoxText *t_doc;
-	GtkComboBoxText *tipo_contribuinte;
+	GtkComboBox *tipo_contribuinte;
 	GtkEntry *num;
 	GtkEntry *serie;
 	GtkEntry *dh_emis;
@@ -61,26 +61,66 @@ struct _NFEManagerPrivate{
 
 G_DEFINE_TYPE_WITH_PRIVATE(NFEManager, nfe_manager, GTK_TYPE_DIALOG)
 
-static void list_forma_pagamento(GtkComboBoxText *fp){
-	char *a;
-	a = malloc(20);
-	sprintf(a, "%d", A_VISTA);
-	gtk_combo_box_text_append(fp, a, "A vista");
-	sprintf(a, "%d", A_PRAZO);
-	gtk_combo_box_text_append(fp, a, "A prazo");
-	sprintf(a, "%d", OUTRO);
-	gtk_combo_box_text_append(fp, a, "Outro");
+static void list_forma_pagamento(GtkComboBox *fp){
+	GtkListStore *list_store;
+	GtkTreeIter iter;
+
+	enum{
+		ID,
+		TEXT,
+		N_COLS
+	};
+
+	list_store = gtk_list_store_new(N_COLS, G_TYPE_INT, G_TYPE_STRING);
+	gtk_list_store_append(list_store, &iter);
+	gtk_list_store_set(list_store, &iter, ID, A_VISTA, 
+			TEXT, "A vista", -1);
+	gtk_list_store_append(list_store, &iter);
+	gtk_list_store_set(list_store, &iter, ID, A_PRAZO, 
+			TEXT, "A prazo", -1);
+	gtk_list_store_append(list_store, &iter);
+	gtk_list_store_set(list_store, &iter, ID, OUTRO, 
+			TEXT, "Outro", -1);
+
+	GtkCellRenderer *r_fp;
+
+	r_fp = gtk_cell_renderer_text_new();
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(fp), r_fp, TRUE);
+	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(fp),
+				r_fp, "text", TEXT, NULL);
+	gtk_combo_box_set_model(fp, GTK_TREE_MODEL(list_store));
+	gtk_combo_box_set_id_column(fp, ID);
 }
 
-static void list_tipo_contribuinte(GtkComboBoxText *t){
-	char *a;
-	a = malloc(20);
-	sprintf(a, "%d", CONT_AV);
-	gtk_combo_box_text_append(t, a, "Contribuinte ICMS");
-	sprintf(a, "%d", CONT_IS);
-	gtk_combo_box_text_append(t, a, "Contribuinte isento");
-	sprintf(a, "%d", NAO_CONT);
-	gtk_combo_box_text_append(t, a, "Não contribuinte");
+static void list_tipo_contribuinte(GtkComboBox *t){
+	GtkListStore *list_store;
+	GtkTreeIter iter;
+
+	enum{
+		ID,
+		TEXT,
+		N_COLS
+	};
+
+	list_store = gtk_list_store_new(N_COLS, G_TYPE_INT, G_TYPE_STRING);
+	gtk_list_store_append(list_store, &iter);
+	gtk_list_store_set(list_store, &iter, ID, CONT_AV, 
+			TEXT, "Contrinuinte ICMS", -1);
+	gtk_list_store_append(list_store, &iter);
+	gtk_list_store_set(list_store, &iter, ID, CONT_IS, 
+			TEXT, "Contribuinte isento", -1);
+	gtk_list_store_append(list_store, &iter);
+	gtk_list_store_set(list_store, &iter, ID, NAO_CONT, 
+			TEXT, "Não contribuinte", -1);
+
+	GtkCellRenderer *r;
+
+	r = gtk_cell_renderer_text_new();
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(t), r, TRUE);
+	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(t),
+				r, "text", TEXT, NULL);
+	gtk_combo_box_set_model(t, GTK_TREE_MODEL(list_store));
+	gtk_combo_box_set_id_column(t, ID);
 }
 
 static void list_tipo_doc(GtkComboBoxText *t){
@@ -122,8 +162,10 @@ static void item_manager_activate(GtkButton *b, gpointer win){
 	gtk_window_present(GTK_WINDOW(iman));
 }
 
-static void save_nfe(GtkButton *b, GtkWidget *nfe){
-	gtk_widget_destroy(nfe);
+static void save_nfe(GtkButton *b, GtkWidget *win){
+	NFE *nfe = (NFE_MANAGER(win))->nfe;
+	IDNFE *idnfe = nfe->idnfe;
+	gtk_widget_destroy(win);
 }
 
 static void nfe_manager_init(NFEManager *nman){
