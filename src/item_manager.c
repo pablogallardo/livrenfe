@@ -31,11 +31,11 @@ struct _ItemManagerClass{
 typedef struct _ItemManagerPrivate ItemManagerPrivate;
 
 struct _ItemManagerPrivate{
-	GtkComboBoxText *icms_regime;
-	GtkComboBoxText *icms_situacao_tributaria;
-	GtkComboBoxText *icms_origem;
-	GtkComboBoxText *cofins_situacao_tributaria;
-	GtkComboBoxText *pis_situacao_tributaria;
+	GtkComboBox *icms_regime;
+	GtkComboBox *icms_situacao_tributaria;
+	GtkComboBox *icms_origem;
+	GtkComboBox *cofins_situacao_tributaria;
+	GtkComboBox *pis_situacao_tributaria;
 	GtkEntry *codigo;
 	GtkEntry *ncm;
 	GtkEntry *descricao;
@@ -77,29 +77,116 @@ static void set_item(GtkButton *b, GtkWidget *iman){
 	gtk_widget_destroy(iman);
 }
 
-static void list_icms_regime(GtkComboBoxText *c){
-	gtk_combo_box_text_append(c, "1", "Simples Nacional");
-	gtk_combo_box_text_append(c, "2", "Simples Nacional – excesso de sublimite de receita bruta");
-	gtk_combo_box_text_append(c, "3", "Regime Normal");
+static void list_icms_regime(GtkComboBox *t){
+	GtkListStore *list_store;
+	GtkTreeIter iter;
+
+	enum{
+		ID,
+		TEXT,
+		N_COLS
+	};
+
+	list_store = gtk_list_store_new(N_COLS, G_TYPE_INT, G_TYPE_STRING);
+	gtk_list_store_append(list_store, &iter);
+	gtk_list_store_set(list_store, &iter, ID, 1, 
+			TEXT, "Simples Nacional", -1);
+	gtk_list_store_append(list_store, &iter);
+	gtk_list_store_set(list_store, &iter, ID, 2, 
+			TEXT, "Simples Nacional - excesso de sublimite de receita bruta", -1);
+	gtk_list_store_append(list_store, &iter);
+	gtk_list_store_set(list_store, &iter, ID, 3, 
+			TEXT, "Regime Normal", -1);
+
+	GtkCellRenderer *r;
+
+	r = gtk_cell_renderer_text_new();
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(t), r, TRUE);
+	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(t),
+				r, "text", TEXT, NULL);
+	gtk_combo_box_set_model(t, GTK_TREE_MODEL(list_store));
+	gtk_combo_box_set_id_column(t, ID);
 }
 
-static void list_icms_st(GtkComboBoxText *c){
-	gtk_combo_box_text_append(c, "101", "101 - Tributada pelo Simples Nacional com permissão de crédito");
+static void list_icms_st(GtkComboBox *t){
+	GtkListStore *list_store;
+	GtkTreeIter iter;
+
+	enum{
+		ID,
+		TEXT,
+		N_COLS
+	};
+
+	list_store = gtk_list_store_new(N_COLS, G_TYPE_INT, G_TYPE_STRING);
+	gtk_list_store_append(list_store, &iter);
+	gtk_list_store_set(list_store, &iter, ID, 101, 
+			TEXT, "Tributada pelo Simples Nacional com permissão de crédito", -1);
+
+	GtkCellRenderer *r;
+
+	r = gtk_cell_renderer_text_new();
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(t), r, TRUE);
+	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(t),
+				r, "text", TEXT, NULL);
+	gtk_combo_box_set_model(t, GTK_TREE_MODEL(list_store));
+	gtk_combo_box_set_id_column(t, ID);
 }
 
-static void list_icms_origem(GtkComboBoxText *fp){
-	char *a;
-	a = malloc(20);
-	sprintf(a, "%d", NACIONAL);
-	gtk_combo_box_text_append(fp, a, "Nacional");
-	sprintf(a, "%d", E_ID);
-	gtk_combo_box_text_append(fp, a, "Estrangeira - Importação direta");
-	sprintf(a, "%d", E_AI);
-	gtk_combo_box_text_append(fp, a, "Estrangeira - Adquirida no mercado interno");
+static void list_icms_origem(GtkComboBox *t){
+	GtkListStore *list_store;
+	GtkTreeIter iter;
+
+	enum{
+		ID,
+		TEXT,
+		N_COLS
+	};
+
+	list_store = gtk_list_store_new(N_COLS, G_TYPE_INT, G_TYPE_STRING);
+	gtk_list_store_append(list_store, &iter);
+	gtk_list_store_set(list_store, &iter, ID, NACIONAL, 
+			TEXT, "Nacional", -1);
+	gtk_list_store_append(list_store, &iter);
+	gtk_list_store_set(list_store, &iter, ID, E_ID, 
+			TEXT, "Estrangeira - Importação direta", -1);
+	gtk_list_store_append(list_store, &iter);
+	gtk_list_store_set(list_store, &iter, ID, E_AI, 
+			TEXT, "Estrangeira - Adquirida no mercado interno", -1);
+
+	GtkCellRenderer *r;
+
+	r = gtk_cell_renderer_text_new();
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(t), r, TRUE);
+	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(t),
+				r, "text", TEXT, NULL);
+	gtk_combo_box_set_model(t, GTK_TREE_MODEL(list_store));
+	gtk_combo_box_set_id_column(t, ID);
 }
 
-static void list_cofins_st(GtkComboBoxText *c){
-	gtk_combo_box_text_append(c, "08", "Operação sem incidência da contribuição");
+static void list_cofins_st(GtkComboBox *t){
+	GtkListStore *list_store;
+	GtkTreeIter iter;
+
+	enum{
+		ID,
+		TEXT,
+		N_COLS
+	};
+
+	list_store = gtk_list_store_new(N_COLS, G_TYPE_INT, G_TYPE_STRING);
+	gtk_list_store_append(list_store, &iter);
+	gtk_list_store_set(list_store, &iter, ID, 8, 
+			TEXT, "Operação sem incidência da contribuição", -1);
+
+	GtkCellRenderer *r;
+
+	r = gtk_cell_renderer_text_new();
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(t), r, TRUE);
+	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(t),
+				r, "text", TEXT, NULL);
+	gtk_combo_box_set_model(t, GTK_TREE_MODEL(list_store));
+	gtk_combo_box_set_id_column(t, ID);
 }
 
 static void item_manager_init(ItemManager *iman){

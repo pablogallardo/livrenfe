@@ -253,7 +253,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBoxText" id="icms_regime">
+                      <object class="GtkComboBox" id="icms_regime">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -263,7 +263,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBoxText" id="icms_situacao_tributaria">
+                      <object class="GtkComboBox" id="icms_situacao_tributaria">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -284,7 +284,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBoxText" id="icms_origem">
+                      <object class="GtkComboBox" id="icms_origem">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -366,7 +366,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBoxText" id="cofins_situacao_tributaria">
+                      <object class="GtkComboBox" id="cofins_situacao_tributaria">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -408,7 +408,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBoxText" id="pis_situacao_tributaria">
+                      <object class="GtkComboBox" id="pis_situacao_tributaria">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
