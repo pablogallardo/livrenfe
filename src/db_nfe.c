@@ -116,7 +116,8 @@ int register_nfe(NFE *nfe){
 	last_id = db_last_insert_id();
 	id_nf = last_id;
 	ITEM *item = nfe->itens;
-	for(int i = 0; i < nfe->q_itens; i++){
+	int i;
+	for(i = 0; i < nfe->q_itens; i++){
 		PRODUTO *p = item->produto;
 		IMPOSTO *imp = item->imposto;
 		ICMS *icms = imp->icms;
