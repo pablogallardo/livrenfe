@@ -163,8 +163,17 @@ static void item_manager_activate(GtkButton *b, gpointer win){
 }
 
 static void save_nfe(GtkButton *b, GtkWidget *win){
+	NFEManagerPrivate *priv;
+
+	priv = nfe_manager_get_instance_private(NFE_MANAGER(win));
 	NFE *nfe = (NFE_MANAGER(win))->nfe;
 	IDNFE *idnfe = nfe->idnfe;
+	DESTINATARIO *destinatario = nfe->destinatario;
+	idnfe->nat_op = gtk_entry_get_text(priv->nat_op);
+	idnfe->ind_pag = atoi(gtk_combo_box_get_active_id(priv->forma_pagamento));
+	idnfe->mod = MOD_NFE;
+	idnfe->serie = atoi(gtk_entry_get_text(priv->serie));
+	idnfe->num_nf = atoi(gtk_entry_get_text(priv->num));
 	gtk_widget_destroy(win);
 }
 
