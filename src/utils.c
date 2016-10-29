@@ -20,16 +20,25 @@
 #include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
+#define _XOPEN_SOURCE
 #include <time.h>
 
 char *timetostr(time_t t){
 	char *buffer;
 	buffer = malloc(sizeof(char) * 11);
-	struct tm* tm_info;
+	struct tm *tm_info;
 
-	tm_info = localtime(&t);
+	tm_info = localtime(t);
 
-	strftime(buffer, 11, "%Y-%m-%d", tm_info);
+	strftime(buffer, 11, "%Y-%m-%d %H:%M:%S", tm_info);
 
 	return buffer;
+}
+
+time_t strtotime(char *s){
+	struct tm *mytm;
+	time_t t;
+	strptime(s, "%d/%m/%Y %H:%M:%S", mytm);
+	t = mktime(mytm);
+	return &t;
 }

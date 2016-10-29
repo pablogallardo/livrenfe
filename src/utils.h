@@ -22,6 +22,8 @@
 
 #include <time.h>
 
-extern char *timetostr(time_t t);
+extern char *timetostr(time_t);
+
+extern time_t strtotime(char *);
 
 #endif

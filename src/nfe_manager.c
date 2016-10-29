@@ -23,6 +23,7 @@
 #include "db_interface.h"
 #include "nfe.h"
 #include "livrenfe.h"
+#include "utils.h"
 #include <gtk/gtk.h>
 #include <string.h>
 #include <stdlib.h>
