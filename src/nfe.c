@@ -21,28 +21,140 @@
 #include "livrenfe.h"
 #include <time.h>
 #include <stdlib.h>
+#include <string.h>
 
-NFE *new_nfe(unsigned int num, int serie, time_t dh_emis, time_t dh_saida,
-		int ind_pag, char *nat_op, MUNICIPIO *munic, DESTINATARIO *dest,
-	       	int orig, ITEM *i){
-	IDNFE *id = malloc(sizeof(IDNFE));
-	id->num_nf = num;
-	id->serie = serie;
-	id->dh_emis = dh_emis;
-	id->dh_saida = dh_saida;
-	id->ind_pag = ind_pag;
-	id->nat_op = nat_op;
-	id->municipio = munic;
-	
-	NFE *n = malloc(sizeof(NFE));
-	n->idnfe = id;
-	n->q_itens = 0;
-	n->destinatario = dest;
+
+static MUNICIPIO *new_municipio(){
+	MUNICIPIO m = {};
+	MUNICIPIO *p = malloc(sizeof(MUNICIPIO));
+	memcpy(p, &m, sizeof(MUNICIPIO));
+	return p;
 }
 
-PRODUTO *new_produto(int codigo, char *desc, unsigned int ncm, unsigned int cfop,
-		char *unidade_comercial, float valor){
+static IDNFE *new_idnfe(){
+	IDNFE i = {
+		.municipio = new_municipio()
+	};
+	IDNFE *p = malloc(sizeof(IDNFE));
+	memcpy(p, &i, sizeof(IDNFE));
+	return p;
+}
+
+static PAIS *new_pais(){
+	PAIS m = {};
+	PAIS *p = malloc(sizeof(PAIS));
+	memcpy(p, &m, sizeof(PAIS));
+	return p;
+}
+
+
+static ENDERECO *new_endereco(){
+	ENDERECO e = {
+		.pais = new_pais(),
+		.municipio = new_municipio()
+	};
+	ENDERECO *p = malloc(sizeof(ENDERECO));
+	memcpy(p, &e, sizeof(ENDERECO));
+	return p;
+}
+
+static EMITENTE *new_emitente(){
+	EMITENTE e = {
+		.endereco = new_endereco()
+	};
+	EMITENTE *p = malloc(sizeof(EMITENTE));
+	memcpy(p, &e, sizeof(EMITENTE));
+	return p;
+}
+
+static DESTINATARIO *new_destinatario(){
+	DESTINATARIO d = {
+		.endereco = new_endereco()
+	};
+	DESTINATARIO *p = malloc(sizeof(DESTINATARIO));
+	memcpy(p, &d, sizeof(DESTINATARIO));
+	return p;
+}
+
+static PRODUTO *new_produto(){
+	PRODUTO m = {};
 	PRODUTO *p = malloc(sizeof(PRODUTO));
+	memcpy(p, &m, sizeof(PRODUTO));
+	return p;
+}
+
+static ICMS *new_icms(){
+	ICMS m = {};
+	ICMS *p = malloc(sizeof(ICMS));
+	memcpy(p, &m, sizeof(ICMS));
+	return p;
+}
+
+static PIS *new_pis(){
+	PIS m = {};
+	PIS *p = malloc(sizeof(PIS));
+	memcpy(p, &m, sizeof(PIS));
+	return p;
+}
+
+static COFINS *new_cofins(){
+	COFINS m = {};
+	COFINS *p = malloc(sizeof(COFINS));
+	memcpy(p, &m, sizeof(COFINS));
+	return p;
+}
+
+static IMPOSTO *new_imposto(){
+	IMPOSTO m = {
+		.icms = new_icms(),
+		.pis = new_pis(),
+		.cofins = new_cofins()
+	};
+	IMPOSTO *p = malloc(sizeof(IMPOSTO));
+	memcpy(p, &m, sizeof(IMPOSTO));
+	return p;
+}
+
+static TRANSP *new_transp(){
+	TRANSP m = {};
+	TRANSP *p = malloc(sizeof(TRANSP));
+	memcpy(p, &m, sizeof(TRANSP));
+	return p;
+}
+
+static PROTOCOLO *new_protocolo(){
+	PROTOCOLO m = {};
+	PROTOCOLO *p = malloc(sizeof(PROTOCOLO));
+	memcpy(p, &m, sizeof(PROTOCOLO));
+	return p;
+}
+
+ITEM *new_item(){
+	ITEM m = {
+		.produto = new_produto(),
+		.imposto = new_imposto()
+	};
+	ITEM *p = malloc(sizeof(ITEM));
+	memcpy(p, &m, sizeof(ITEM));
+	return p;
+}
+		
+NFE *new_nfe(){
+	NFE n = {
+		.idnfe = new_idnfe(),
+		.emitente = new_emitente(),
+		.destinatario = new_destinatario(),
+		.itens = new_item(),
+		.transp = new_transp(),
+		.protocolo = new_protocolo()
+	};
+	NFE *p = malloc(sizeof(NFE));
+	memcpy(p, &n, sizeof(NFE));
+	return p;
+}
+
+PRODUTO *inst_produto(int codigo, char *desc, unsigned int ncm, unsigned int cfop,
+		char *unidade_comercial, float valor, PRODUTO *p){
 	p->codigo = codigo;
 	p->descricao = desc;
 	p->ncm = ncm;
@@ -52,10 +164,8 @@ PRODUTO *new_produto(int codigo, char *desc, unsigned int ncm, unsigned int cfop
 	return p;
 }
 
-ITEM *new_item(PRODUTO *p, IMPOSTO *imp, float valor, float quantidade, unsigned int ordem){
-	ITEM *i = malloc(sizeof(ITEM));
-	i->produto = p;
-	i->imposto = imp;
+ITEM *inst_item(float valor, float quantidade,
+	       	unsigned int ordem, ITEM *i){
 	i->valor = valor;
 	i->ordem = ordem;
 	i->quantidade = quantidade;
@@ -63,8 +173,8 @@ ITEM *new_item(PRODUTO *p, IMPOSTO *imp, float valor, float quantidade, unsigned
 	return i;
 }
 
-ICMS *new_icms(int origem, unsigned int tipo, float aliquota, float valor){
-	ICMS *i = malloc(sizeof(ICMS));	
+ICMS *inst_icms(int origem, unsigned int tipo, float aliquota, float valor,
+		ICMS *i){
 	i->origem = origem;
 	i->tipo = tipo;
 	i->aliquota = aliquota;
@@ -72,17 +182,17 @@ ICMS *new_icms(int origem, unsigned int tipo, float aliquota, float valor){
 	return i;
 }
 
-IMPOSTO *new_imposto(ICMS *i, PIS *p, COFINS *c){
-	IMPOSTO *imp = malloc(sizeof(IMPOSTO));
+IMPOSTO *inst_imposto(ICMS *i, PIS *p, COFINS *c, IMPOSTO *imp){
 	imp->icms = i;
 	imp->pis = p;
 	imp->cofins = c;
 	return imp;
 }
 
-DESTINATARIO *new_destinatario(char *rua, int num, char *complemento, 
-		char *bairro, MUNICIPIO *m, unsigned int cep, PAIS *p){
-	ENDERECO *e = malloc(sizeof(ENDERECO));
+DESTINATARIO *inst_destinatario(char *rua, int num, char *complemento, 
+		char *bairro, MUNICIPIO *m, unsigned int cep, PAIS *p,
+		DESTINATARIO *d){
+	ENDERECO *e = d->endereco;
 	e->rua = rua;
 	e->num = num;
 	e->complemento = complemento;
@@ -90,7 +200,6 @@ DESTINATARIO *new_destinatario(char *rua, int num, char *complemento,
 	e->municipio = m;
 	e->cep = cep;
 	e->pais = p;
-	DESTINATARIO *d = malloc(sizeof(DESTINATARIO));
 	return d;
 }
 

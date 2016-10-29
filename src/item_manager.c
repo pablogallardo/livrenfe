@@ -60,19 +60,20 @@ static void item_manager_dispose(GObject *object){
 
 static void set_item(GtkButton *b, GtkWidget *iman){
 	ItemManagerPrivate *priv = item_manager_get_instance_private(ITEM_MANAGER(iman));
-	PRODUTO *p = new_produto(atoi(gtk_entry_get_text(priv->codigo)),
-			gtk_entry_get_text(priv->descricao),
-			atoi(gtk_entry_get_text(priv->ncm)),
-			atoi(gtk_entry_get_text(priv->cfop)),
-			gtk_entry_get_text(priv->unidade),
-			atof(gtk_entry_get_text(priv->valor)));
-	ICMS *i = new_icms(1, 1, atof(gtk_entry_get_text(priv->icms_aliquota)),
-			atof(gtk_entry_get_text(priv->icms_credito_aproveitado)));
-	IMPOSTO *imp = new_imposto(i, NULL, NULL);
-	ITEM *item = new_item(p,
-		       	imp, atof(gtk_entry_get_text(priv->valor)),
-			atof(gtk_entry_get_text(priv->quantidade)),
-		       	++(ITEM_MANAGER(iman))->nfe->q_itens);
+	ITEM *item = new_item();
+	inst_produto(atoi(gtk_entry_get_text(priv->codigo)),
+		gtk_entry_get_text(priv->descricao),
+		atoi(gtk_entry_get_text(priv->ncm)),
+		atoi(gtk_entry_get_text(priv->cfop)),
+		gtk_entry_get_text(priv->unidade),
+		atof(gtk_entry_get_text(priv->valor)),
+		item->produto);
+	inst_icms(1, 1, atof(gtk_entry_get_text(priv->icms_aliquota)),
+		atof(gtk_entry_get_text(priv->icms_credito_aproveitado)),
+		item->imposto->icms);
+	inst_item(atof(gtk_entry_get_text(priv->valor)),
+		atof(gtk_entry_get_text(priv->quantidade)),
+		++(ITEM_MANAGER(iman))->nfe->q_itens, item);
 	add_item((ITEM_MANAGER(iman))->nfe, item);
 	gtk_widget_destroy(iman);
 }

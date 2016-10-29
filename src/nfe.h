@@ -20,22 +20,22 @@
 #include "livrenfe.h"
 #include <time.h>
 
-extern NFE *new_nfe(unsigned int num, int serie, time_t dh_emis, time_t dh_saida,
-		int ind_pag, char *nat_op, MUNICIPIO *munic, DESTINATARIO *dest, int orig, 
-		ITEM *i);
+extern NFE *new_nfe();
 
-extern PRODUTO *new_produto(int codigo, char *desc, unsigned int ncm, unsigned int cfop, char *unidade_comercial, float valor);
+extern ITEM *new_item();
 
-extern ITEM *new_item(PRODUTO *p, IMPOSTO *i, float valor, float quantidade, 
-		unsigned int ordem);
+extern PRODUTO *inst_produto(int codigo, char *desc, unsigned int ncm, unsigned int cfop, char *unidade_comercial, float valor, PRODUTO *p);
 
-extern ICMS *new_icms(int origem, unsigned int tipo, float aliquota,
-		float valor);
+extern ITEM *inst_item(float valor, float quantidade, 
+		unsigned int ordem, ITEM *);
 
-extern IMPOSTO *new_imposto(ICMS *i, PIS *p, COFINS *c);
+extern ICMS *inst_icms(int origem, unsigned int tipo, float aliquota,
+		float valor, ICMS *);
 
-extern DESTINATARIO *new_destinatario(char *rua, int num, char *complemento, 
-		char *bairro, MUNICIPIO *m, unsigned int cep, PAIS *p);
+extern IMPOSTO *inst_imposto(ICMS *i, PIS *p, COFINS *c, IMPOSTO *);
+
+extern DESTINATARIO *inst_destinatario(char *rua, int num, char *complemento, 
+		char *bairro, MUNICIPIO *m, unsigned int cep, PAIS *p, DESTINATARIO *);
 
 extern int add_item(NFE *nfe, ITEM *i);
 

@@ -166,15 +166,34 @@ static void item_manager_activate(GtkButton *b, gpointer win){
 static void save_nfe(GtkButton *b, GtkWidget *win){
 	NFEManagerPrivate *priv;
 
-	priv = nfe_manager_get_instance_private(NFE_MANAGER(win));
+	priv = nfe_manager_get_instance_private(win);
 	NFE *nfe = (NFE_MANAGER(win))->nfe;
 	IDNFE *idnfe = nfe->idnfe;
 	DESTINATARIO *destinatario = nfe->destinatario;
+	ENDERECO *endereco = destinatario->endereco;
+	idnfe->serie = atoi(gtk_entry_get_text(priv->serie));
+	idnfe->num_nf = atoi(gtk_entry_get_text(priv->num));
 	idnfe->nat_op = gtk_entry_get_text(priv->nat_op);
 	idnfe->ind_pag = atoi(gtk_combo_box_get_active_id(priv->forma_pagamento));
 	idnfe->mod = MOD_NFE;
-	idnfe->serie = atoi(gtk_entry_get_text(priv->serie));
-	idnfe->num_nf = atoi(gtk_entry_get_text(priv->num));
+	idnfe->dh_emis = strtotime(gtk_entry_get_text(priv->dh_emis));
+	idnfe->dh_saida = strtotime(gtk_entry_get_text(priv->dh_saida));
+	idnfe->municipio->cod_uf = atoi(gtk_combo_box_get_active_id(priv->uf));
+	idnfe->municipio->codigo = atoi(gtk_combo_box_get_active_id(priv->municipio));
+
+	destinatario->tipo_doc = gtk_combo_box_text_get_active_text(priv->t_doc);
+	destinatario->cnpj = gtk_entry_get_text(priv->doc);
+	destinatario->nome = gtk_entry_get_text(priv->razao_social);
+	destinatario->tipo_ie = atoi(gtk_combo_box_get_active_id(priv->tipo_contribuinte));
+	destinatario->inscricao_estadual= gtk_entry_get_text(priv->ie);
+
+	endereco->rua = gtk_entry_get_text(priv->logradouro);
+	endereco->num = atoi(gtk_entry_get_text(priv->numero_endereco));
+	endereco->complemento = gtk_entry_get_text(priv->complemento);
+	endereco->bairro = gtk_entry_get_text(priv->bairro);
+	endereco->cep = gtk_entry_get_text(priv->cep);
+	endereco->municipio->cod_uf = atoi(gtk_combo_box_get_active_id(priv->uf_destinatario));
+	endereco->municipio->codigo = atoi(gtk_combo_box_get_active_id(priv->municipio_destinatario));
 	gtk_widget_destroy(win);
 }
 

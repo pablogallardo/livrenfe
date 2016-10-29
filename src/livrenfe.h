@@ -110,6 +110,8 @@ typedef struct {
 	ENDERECO *endereco;
 	enum t_tipo_ie {CONT_AV=1, CONT_IS=2, NAO_CONT=9} tipo_ie;
 	char *cnpj;
+	char *tipo_doc;
+	char *inscricao_estadual;
 } DESTINATARIO;
 
 /*
