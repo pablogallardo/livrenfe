@@ -20,6 +20,7 @@
 #include "item_manager.h"
 #include "nfe_manager.h"
 #include "nfe.h"
+#include "utils.h"
 #include <gtk/gtk.h>
 #include <stdlib.h>
 
@@ -88,7 +89,7 @@ static void list_icms_regime(GtkComboBox *t){
 		N_COLS
 	};
 
-	list_store = gtk_list_store_new(N_COLS, G_TYPE_INT, G_TYPE_STRING);
+	list_store = gtk_list_store_new(N_COLS, G_TYPE_STRING, G_TYPE_STRING);
 	gtk_list_store_append(list_store, &iter);
 	gtk_list_store_set(list_store, &iter, ID, 1, 
 			TEXT, "Simples Nacional", -1);
@@ -119,9 +120,9 @@ static void list_icms_st(GtkComboBox *t){
 		N_COLS
 	};
 
-	list_store = gtk_list_store_new(N_COLS, G_TYPE_INT, G_TYPE_STRING);
+	list_store = gtk_list_store_new(N_COLS, G_TYPE_STRING, G_TYPE_STRING);
 	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, ID, 101, 
+	gtk_list_store_set(list_store, &iter, ID, "101", 
 			TEXT, "Tributada pelo Simples Nacional com permissão de crédito", -1);
 
 	GtkCellRenderer *r;
@@ -144,15 +145,15 @@ static void list_icms_origem(GtkComboBox *t){
 		N_COLS
 	};
 
-	list_store = gtk_list_store_new(N_COLS, G_TYPE_INT, G_TYPE_STRING);
+	list_store = gtk_list_store_new(N_COLS, G_TYPE_STRING, G_TYPE_STRING);
 	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, ID, NACIONAL, 
+	gtk_list_store_set(list_store, &iter, ID, itoa(NACIONAL), 
 			TEXT, "Nacional", -1);
 	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, ID, E_ID, 
+	gtk_list_store_set(list_store, &iter, ID, itoa(E_ID), 
 			TEXT, "Estrangeira - Importação direta", -1);
 	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, ID, E_AI, 
+	gtk_list_store_set(list_store, &iter, ID, itoa(E_AI), 
 			TEXT, "Estrangeira - Adquirida no mercado interno", -1);
 
 	GtkCellRenderer *r;
@@ -175,9 +176,9 @@ static void list_cofins_st(GtkComboBox *t){
 		N_COLS
 	};
 
-	list_store = gtk_list_store_new(N_COLS, G_TYPE_INT, G_TYPE_STRING);
+	list_store = gtk_list_store_new(N_COLS, G_TYPE_STRING, G_TYPE_STRING);
 	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, ID, 8, 
+	gtk_list_store_set(list_store, &iter, ID, "8", 
 			TEXT, "Operação sem incidência da contribuição", -1);
 
 	GtkCellRenderer *r;

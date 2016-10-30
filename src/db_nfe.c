@@ -86,28 +86,31 @@ int register_nfe(NFE *nfe){
 	DESTINATARIO *d = nfe->destinatario;
 	ENDERECO *ed = d->endereco;
 	char *sql, *err;
+	sql = malloc(400);
+	err = NULL;
 	int last_id, id_nf;
-       	sprintf(sql, "INSERT INTO destinatarios (nome, tipo_ie, cnpj, rua, complemento,\
-		bairro, id_municipio, cep) VALUES ('%s', '%s', '%s', '%s', '%s', '%s',\
-		'%s', '%s')", d->nome, d->tipo_ie, d->cnpj, ed->rua, ed->complemento,
+       	sprintf(sql, "INSERT INTO destinatarios (nome, tipo_ie, cnpj, rua, complemento, \
+		bairro, id_municipio, cep) VALUES ('%s', '%d', '%s', '%s', '%s', '%s', \
+		'%d', '%d');", d->nome, d->tipo_ie, d->cnpj, ed->rua, ed->complemento,
 		ed->bairro, ed->municipio->codigo, ed->cep);
 	db_exec(sql, &err);
 	if(err){
-		fprintf(stderr, "livrenfe: Error - %s", err);
+		fprintf(stderr, "livrenfe: Error: %s", err);
 		return -1;
 	}
 	last_id = db_last_insert_id();
-       	sprintf(sql, "INSERT INTO nfe (id_municipio, nap_op, ind_pag, mod_nfe,\
-		serie, num_nf, dh_emis, dh_saida, tipo, local_destino,\
-		tipo_impressao, tipo_ambiente, finalidade, consumidor_final,\
-		presencial, versao, div, chave, id_emitente, id_destinatario,\
-		q_itens, total, id_transportadora) VALUES \
-		(%d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s' , '%s', '%s',\
-		 '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s' , '%s', '%s', '%s')",
+       	sprintf(sql, "INSERT INTO nfe (id_municipio, nat_op, ind_pag, mod_nfe, \
+		serie, num_nf, dh_emis, dh_saida, tipo, local_destino, \
+		tipo_impressao, tipo_ambiente, finalidade, consumidor_final, \
+		presencial, versao, div, chave, id_emitente, id_destinatario, \
+		q_itens, total, id_transportadora) VALUES  \
+		(%d, '%s', %d, '%d', '%d', '%d', %lu, %lu, '%d', '%d' , '%d', '%d', \
+		 '%d', '%d', '%d', '%s', '%d', '%s', '%d', '%d' , '%d', 0.0, NULL);",
 		idnfe->municipio->codigo, idnfe->nat_op, idnfe->ind_pag, idnfe->serie,
-		idnfe->num_nf, timetostr(idnfe->dh_emis), timetostr(idnfe->dh_saida), idnfe->tipo,
+		idnfe->num_nf, (unsigned long)idnfe->dh_emis, (unsigned long)idnfe->dh_saida, idnfe->tipo,
 		idnfe->local_destino, idnfe->tipo_impresao, idnfe->tipo_ambiente, idnfe->finalidade, idnfe->consumidor_final, idnfe->presencial,
-		idnfe->versao, idnfe->div, idnfe->chave, nfe->emitente->id, last_id, nfe->q_itens, nfe->total, "NULL");
+		idnfe->versao, idnfe->div, idnfe->chave, nfe->emitente->id, last_id, nfe->q_itens);
+	       	//,nfe->total);
 	db_exec(sql, &err);
 	if(err){
 		fprintf(stderr, "livrenfe: Error - %s", err);
@@ -124,7 +127,7 @@ int register_nfe(NFE *nfe){
 		PIS *pis = imp->pis;
 		COFINS *cofins = imp->cofins;
 		sprintf(sql, "INSERT INTO  produtos (id_produto, descricao, ncm, cfop, unidade,\
-			valor_real) VALUES (%d, '%s', '%s', %d, '%s', %f)",
+			valor_real) VALUES (%d, '%s', '%s', %d, '%s', %f);",
 		       p->codigo, p->descricao, p->ncm, p->cfop, p->unidade_comercial,
 		       p->valor);
 		db_exec(sql, &err);
@@ -136,7 +139,7 @@ int register_nfe(NFE *nfe){
 		sprintf(sql, "INSERT INTO  nfe_itens (id_nfe, ordem, id_produto, icms_origem,\
 		       	icms_tipo, icms_aliquota, icms_valor, pis_aliquota, pis_quantidade,\
 			pis_nt, cofins_aliquota, cofins_quantidade, cofins_nt)\
-			VALUES (%d, %d, %d, %d, %d, %f, %f, %f, %f, %f, %f, %f, %f)i",
+			VALUES (%d, %d, %d, %d, %d, %f, %f, %f, %f, %f, %f, %f, %f);",
 			id_nf, i, last_id, icms->origem, icms->tipo, icms->aliquota, icms->valor,
 			pis->aliquota, pis->quantidade, pis->nt, cofins->aliquota,
 			cofins->quantidade, cofins->nt);
@@ -209,7 +212,7 @@ GtkListStore *db_list_municipios(char *uf){
 		N_COLS
 	};
 
-	list_store = gtk_list_store_new(N_COLS, G_TYPE_INT, G_TYPE_STRING);
+	list_store = gtk_list_store_new(N_COLS, G_TYPE_STRING, G_TYPE_STRING);
 
 	char *sql = malloc(100);
        	sprintf(sql, "SELECT id_municipio, nome FROM municipios WHERE id_uf = '%s';",
@@ -221,7 +224,7 @@ GtkListStore *db_list_municipios(char *uf){
 	do{
 		rc = sqlite3_step(stmt);
 		if(rc == SQLITE_ROW){
-			int id_municipio = sqlite3_column_int(stmt, ID_MUNICIPIO);
+			const unsigned char *id_municipio = sqlite3_column_text(stmt, ID_MUNICIPIO);
 			const unsigned char *municipio = sqlite3_column_text(stmt, MUNICIPIO);
 
 			gtk_list_store_append(list_store, &iter);

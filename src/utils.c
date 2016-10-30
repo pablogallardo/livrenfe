@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #define _XOPEN_SOURCE
 #include <time.h>
+#include <string.h>
 
 char *timetostr(time_t t){
 	char *buffer;
@@ -36,9 +37,15 @@ char *timetostr(time_t t){
 }
 
 time_t strtotime(char *s){
-	struct tm *mytm;
+	struct tm mytm;
 	time_t t;
-	strptime(s, "%d/%m/%Y %H:%M:%S", mytm);
-	t = mktime(mytm);
-	return &t;
+	strptime(s, "%d/%m/%Y %H:%M:%S", &mytm);
+	t = mktime(&mytm);
+	return t;
+}
+
+char *itoa(int i){
+	char *s = malloc(10);
+	sprintf(s, "%d", i);
+	return s;
 }

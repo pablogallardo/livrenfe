@@ -21,15 +21,18 @@
 #include "errno.h"
 #include <sqlite3.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 const char *db_file = NULL;
 
 int db_exec(const char *sql, char **err){
+	fprintf(stdout, "%s\n", sql);
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int rc;
 	const char *tail_sql;
+	char *e = (char*)malloc(sizeof(char) * 200);
 
 	rc = sqlite3_open(db_file, &db);
 	if(rc)
@@ -38,20 +41,23 @@ int db_exec(const char *sql, char **err){
 	do{
 		rc = sqlite3_prepare_v2(db, sql, -1, &stmt, &tail_sql);
 		if(rc != SQLITE_OK){
-			strcpy(*err, sqlite3_errmsg(db));
+			strcpy(e, sqlite3_errmsg(db));
+			err = &e;
 			return -ESQL;
 		}
 		rc = sqlite3_step(stmt);
 		if(rc != SQLITE_DONE){
 			if(rc == SQLITE_ERROR){
-				strcpy(*err, sqlite3_errmsg(db));
+				strcpy(e, sqlite3_errmsg(db));
+				err = &e;
 				return -ESQL;
 			}
 			break;
 		}
 		rc = sqlite3_finalize(stmt);
 		if(rc != SQLITE_OK){
-			strcpy(*err, sqlite3_errmsg(db));
+			strcpy(e, sqlite3_errmsg(db));
+			err = &e;
 			return -ESQL;
 		}
 		sql = tail_sql;

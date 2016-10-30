@@ -72,15 +72,15 @@ static void list_forma_pagamento(GtkComboBox *fp){
 		N_COLS
 	};
 
-	list_store = gtk_list_store_new(N_COLS, G_TYPE_INT, G_TYPE_STRING);
+	list_store = gtk_list_store_new(N_COLS, G_TYPE_STRING, G_TYPE_STRING);
 	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, ID, A_VISTA, 
+	gtk_list_store_set(list_store, &iter, ID, itoa(A_VISTA), 
 			TEXT, "A vista", -1);
 	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, ID, A_PRAZO, 
+	gtk_list_store_set(list_store, &iter, ID, itoa(A_PRAZO), 
 			TEXT, "A prazo", -1);
 	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, ID, OUTRO, 
+	gtk_list_store_set(list_store, &iter, ID, itoa(OUTRO), 
 			TEXT, "Outro", -1);
 
 	GtkCellRenderer *r_fp;
@@ -103,15 +103,15 @@ static void list_tipo_contribuinte(GtkComboBox *t){
 		N_COLS
 	};
 
-	list_store = gtk_list_store_new(N_COLS, G_TYPE_INT, G_TYPE_STRING);
+	list_store = gtk_list_store_new(N_COLS, G_TYPE_STRING, G_TYPE_STRING);
 	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, ID, CONT_AV, 
+	gtk_list_store_set(list_store, &iter, ID, itoa(CONT_AV), 
 			TEXT, "Contrinuinte ICMS", -1);
 	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, ID, CONT_IS, 
+	gtk_list_store_set(list_store, &iter, ID, itoa(CONT_IS), 
 			TEXT, "Contribuinte isento", -1);
 	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, ID, NAO_CONT, 
+	gtk_list_store_set(list_store, &iter, ID, itoa(NAO_CONT), 
 			TEXT, "Não contribuinte", -1);
 
 	GtkCellRenderer *r;
@@ -194,6 +194,7 @@ static void save_nfe(GtkButton *b, GtkWidget *win){
 	endereco->cep = gtk_entry_get_text(priv->cep);
 	endereco->municipio->cod_uf = atoi(gtk_combo_box_get_active_id(priv->uf_destinatario));
 	endereco->municipio->codigo = atoi(gtk_combo_box_get_active_id(priv->municipio_destinatario));
+	register_nfe(nfe);
 	gtk_widget_destroy(win);
 }
 
