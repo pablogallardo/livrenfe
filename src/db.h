@@ -38,28 +38,28 @@ extern int db_exec(const char *, char **);
  * args:
  * 	1st: IN: sql statement
  *	2nd: OUT: errmsg
- *	3rd: OUT: db object
- *	4st: OUT: stmt object
+ *	3rd: OUT: stmt object
  */
-extern int db_select(const char *, char **, sqlite3 **db, sqlite3_stmt **stmt);
+extern int db_select(const char *, char **, sqlite3_stmt **stmt);
 
 /**
  * Close DB connection after db_select()
  * args:
- *	1st: IN: db object
- *	2nd: IN: stmt object
- *	3rd: OUT: errmsg
+ *	1st: IN: stmt object
+ *	2nd: OUT: errmsg
  */
-extern int db_close(sqlite3 *, sqlite3_stmt *, char **);
+extern int db_close(sqlite3_stmt *, char **);
 
 /**
  * Get last inserted rowid on DB
  */
-extern int last_insert_id();
+extern int db_last_insert_id();
 
 /**
  * Path to DB file
  */
 extern const char *db_file;
+
+extern sqlite3 *db;
 
 #endif

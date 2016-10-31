@@ -38,7 +38,7 @@ extern int register_nfe(NFE *);
 /**
  * Set db path
  */
-extern void set_db(char *);
+extern int set_db(char *);
 
 /**
  * Get opened NFEs for GTKTreeView

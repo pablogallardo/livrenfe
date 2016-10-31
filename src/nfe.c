@@ -145,7 +145,7 @@ NFE *new_nfe(){
 		.emitente = new_emitente(),
 		.destinatario = new_destinatario(),
 		.itens = new_item(),
-		.transp = new_transp(),
+		//.transp = new_transp(),
 		.protocolo = new_protocolo()
 	};
 	NFE *p = malloc(sizeof(NFE));

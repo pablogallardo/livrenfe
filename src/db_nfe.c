@@ -27,7 +27,6 @@
 #include <stdlib.h>
 
 GtkListStore *get_list_nfe(){
-	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	char *err;
 	int rc;
@@ -49,7 +48,7 @@ GtkListStore *get_list_nfe(){
 	char *sql = "SELECT id_nfe, num_nf, serie, dh_emis, \
 			cnpj || ' - ' || nome as destinatario \
 	       		FROM nfe JOIN destinatarios USING (id_destinatario);";
-	if(db_select(sql, &err, &db, &stmt)){
+	if(db_select(sql, &err, &stmt)){
 		return NULL;
 	}
 
@@ -73,10 +72,6 @@ GtkListStore *get_list_nfe(){
 		}
 	} while(rc == SQLITE_ROW);
 
-	if(db_close(db, stmt, &err)){
-		fprintf(stderr, "livrenfe: SQL Error: %s\n", err);
-		return NULL;
-	}
 	
 	return list_store;
 }
@@ -99,18 +94,18 @@ int register_nfe(NFE *nfe){
 		return -1;
 	}
 	last_id = db_last_insert_id();
-       	sprintf(sql, "INSERT INTO nfe (id_municipio, nat_op, ind_pag, mod_nfe, \
+       	sql = sqlite3_mprintf("INSERT INTO nfe (id_municipio, nat_op, ind_pag, mod_nfe, \
 		serie, num_nf, dh_emis, dh_saida, tipo, local_destino, \
 		tipo_impressao, tipo_ambiente, finalidade, consumidor_final, \
 		presencial, versao, div, chave, id_emitente, id_destinatario, \
 		q_itens, total, id_transportadora) VALUES  \
-		(%d, '%s', %d, '%d', '%d', '%d', %lu, %lu, '%d', '%d' , '%d', '%d', \
-		 '%d', '%d', '%d', '%s', '%d', '%s', '%d', '%d' , '%d', 0.0, NULL);",
-		idnfe->municipio->codigo, idnfe->nat_op, idnfe->ind_pag, idnfe->serie,
+		(%d, %Q, %d, '%d', '%d', '%d', %lu, %lu, '%d', '%d' , '%d', '%d', \
+		 '%d', '%d', '%d', '%s', '%d', %Q, '%d', '%d' , '%d', %f, %Q);",
+		idnfe->municipio->codigo, idnfe->nat_op, idnfe->ind_pag, idnfe->mod, idnfe->serie,
 		idnfe->num_nf, (unsigned long)idnfe->dh_emis, (unsigned long)idnfe->dh_saida, idnfe->tipo,
 		idnfe->local_destino, idnfe->tipo_impresao, idnfe->tipo_ambiente, idnfe->finalidade, idnfe->consumidor_final, idnfe->presencial,
-		idnfe->versao, idnfe->div, idnfe->chave, nfe->emitente->id, last_id, nfe->q_itens);
-	       	//,nfe->total);
+		idnfe->versao, idnfe->div, idnfe->chave, nfe->emitente->id, last_id, nfe->q_itens,
+		nfe->total, nfe->transp);
 	db_exec(sql, &err);
 	if(err){
 		fprintf(stderr, "livrenfe: Error - %s", err);
@@ -154,7 +149,6 @@ int register_nfe(NFE *nfe){
 }
 
 GtkListStore *db_list_uf(){
-	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	char *err;
 	int rc;
@@ -170,7 +164,7 @@ GtkListStore *db_list_uf(){
 	list_store = gtk_list_store_new(N_COLS, G_TYPE_STRING, G_TYPE_STRING);
 
 	char *sql = "SELECT id_uf, nome FROM uf;";
-	if(db_select(sql, &err, &db, &stmt)){
+	if(db_select(sql, &err, &stmt)){
 		return NULL;
 	}
 
@@ -190,16 +184,11 @@ GtkListStore *db_list_uf(){
 		}
 	} while(rc == SQLITE_ROW);
 
-	if(db_close(db, stmt, &err)){
-		fprintf(stderr, "livrenfe: SQL Error: %s\n", err);
-		return NULL;
-	}
 	
 	return list_store;
 }
 
 GtkListStore *db_list_municipios(char *uf){
-	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	char *err;
 	int rc;
@@ -217,7 +206,7 @@ GtkListStore *db_list_municipios(char *uf){
 	char *sql = malloc(100);
        	sprintf(sql, "SELECT id_municipio, nome FROM municipios WHERE id_uf = '%s';",
 			uf);
-	if(db_select(sql, &err, &db, &stmt)){
+	if(db_select(sql, &err, &stmt)){
 		return NULL;
 	}
 
@@ -237,10 +226,6 @@ GtkListStore *db_list_municipios(char *uf){
 		}
 	} while(rc == SQLITE_ROW);
 
-	if(db_close(db, stmt, &err)){
-		fprintf(stderr, "livrenfe: SQL Error: %s\n", err);
-		return NULL;
-	}
 	
 	return list_store;
 }

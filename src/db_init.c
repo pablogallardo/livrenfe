@@ -19,7 +19,16 @@
 
 #include "db_interface.h"
 #include "db.h"
+#include "errno.h"
+#include <sqlite3.h>
 
-void set_db(char *path){
+int set_db(char *path){
+	int rc = 0;
+	sqlite3 *d;
 	db_file = path;
+	rc = sqlite3_open(db_file, &d);
+	if(rc)
+		return -ESQL;
+	db = d;
+	return rc;
 }
