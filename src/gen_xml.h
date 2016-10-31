@@ -35,6 +35,6 @@
  * This function generate a basic XML for the NFE WITHOUT signature and
  * SEFAZ response (protocolo).
  */
-extern char *generate_xml(t_nfe *);
+extern char *generate_xml(NFE *);
 
 #endif

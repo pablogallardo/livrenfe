@@ -102,7 +102,8 @@ PROGRAMS = $(bin_PROGRAMS)
 am_livrenfe_OBJECTS = main.$(OBJEXT) db.$(OBJEXT) db_create.$(OBJEXT) \
 	db_init.$(OBJEXT) livrenfe.$(OBJEXT) lnfe_window.$(OBJEXT) \
 	resources.$(OBJEXT) db_nfe.$(OBJEXT) nfe_manager.$(OBJEXT) \
-	item_manager.$(OBJEXT) utils.$(OBJEXT) nfe.$(OBJEXT)
+	item_manager.$(OBJEXT) utils.$(OBJEXT) nfe.$(OBJEXT) \
+	gen_xml.$(OBJEXT)
 livrenfe_OBJECTS = $(am_livrenfe_OBJECTS)
 livrenfe_LDADD = $(LDADD)
 AM_V_P = $(am__v_P_@AM_V@)
@@ -248,10 +249,10 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-AM_CFLAGS = `pkg-config --cflags gtk+-3.0`
-AM_LDFLAGS = -lsqlite3 `pkg-config --libs gtk+-3.0`
+AM_CFLAGS = `pkg-config --cflags gtk+-3.0` `xml2-config --cflags`
+AM_LDFLAGS = -lsqlite3 `xml2-config --libs` `pkg-config --libs gtk+-3.0`
 livrenfe_SOURCES = main.c db.c db_create.c db_init.c livrenfe.c lnfe_window.c resources.c \
-		   db_nfe.c nfe_manager.c item_manager.c utils.c nfe.c
+		   db_nfe.c nfe_manager.c item_manager.c utils.c nfe.c gen_xml.c
 
 all: all-am
 
@@ -343,6 +344,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/db_create.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/db_init.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/db_nfe.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gen_xml.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/item_manager.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/livrenfe.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lnfe_window.Po@am__quote@

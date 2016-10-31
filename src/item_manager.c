@@ -91,13 +91,13 @@ static void list_icms_regime(GtkComboBox *t){
 
 	list_store = gtk_list_store_new(N_COLS, G_TYPE_STRING, G_TYPE_STRING);
 	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, ID, 1, 
+	gtk_list_store_set(list_store, &iter, ID, "1", 
 			TEXT, "Simples Nacional", -1);
 	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, ID, 2, 
+	gtk_list_store_set(list_store, &iter, ID, "2", 
 			TEXT, "Simples Nacional - excesso de sublimite de receita bruta", -1);
 	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, ID, 3, 
+	gtk_list_store_set(list_store, &iter, ID, "3", 
 			TEXT, "Regime Normal", -1);
 
 	GtkCellRenderer *r;

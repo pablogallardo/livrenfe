@@ -23,6 +23,7 @@
 #include "db_interface.h"
 #include "nfe.h"
 #include "livrenfe.h"
+#include "gen_xml.h"
 #include "utils.h"
 #include <gtk/gtk.h>
 #include <string.h>
@@ -195,6 +196,7 @@ static void save_nfe(GtkButton *b, GtkWidget *win){
 	endereco->municipio->cod_uf = atoi(gtk_combo_box_get_active_id(priv->uf_destinatario));
 	endereco->municipio->codigo = atoi(gtk_combo_box_get_active_id(priv->municipio_destinatario));
 	register_nfe(nfe);
+	printf("%s", generate_xml(nfe));
 	gtk_widget_destroy(win);
 }
 
