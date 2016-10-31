@@ -45,7 +45,7 @@ GtkListStore *get_list_nfe(){
 	list_store = gtk_list_store_new(N_COLS, G_TYPE_INT, G_TYPE_INT,
 			G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING);
 
-	char *sql = "SELECT id_nfe, num_nf, serie, dh_emis, \
+	char *sql = "SELECT id_nfe, num_nf, serie, strftime('%d/%m/%Y %H:%M:%S', dh_emis, 'unixepoch', 'localtime'), \
 			cnpj || ' - ' || nome as destinatario \
 	       		FROM nfe JOIN destinatarios USING (id_destinatario);";
 	if(db_select(sql, &err, &stmt)){
