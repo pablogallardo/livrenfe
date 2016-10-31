@@ -32,6 +32,6 @@ typedef struct _LivrenfeWindowClass LivrenfeWindowClass;
 GType livrenfe_window_get_type (void);
 LivrenfeWindow *livrenfe_window_new (Livrenfe *app);
 
-void list_nfe(LivrenfeWindow *win, GtkListStore *ls);
+void list_nfe(LivrenfeWindow *win);
 
 #endif

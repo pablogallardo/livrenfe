@@ -21,6 +21,7 @@
 #include "nfe_manager.h"
 #include "livrenfe.h"
 #include "nfe.h"
+#include "db_interface.h"
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include <string.h>
@@ -39,6 +40,8 @@ G_DEFINE_TYPE(LivrenfeWindow, livrenfe_window, GTK_TYPE_APPLICATION_WINDOW);
 
 static void livrenfe_window_init(LivrenfeWindow *win){
 	gtk_widget_init_template(GTK_WIDGET(win));
+	g_signal_connect(win, "focus", G_CALLBACK(list_nfe),
+			NULL);
 }
 
 static void nfe_manager_activate(GtkButton *b, gpointer win){
@@ -58,7 +61,7 @@ static void livrenfe_window_class_init(LivrenfeWindowClass *class){
 		       	new_nfe);
 }
 
-void list_nfe(LivrenfeWindow *win, GtkListStore *ls){
+void list_nfe(LivrenfeWindow *win){
 	GtkCellRenderer *r_num_nfe;
 	GtkCellRenderer *r_serie;
 	GtkCellRenderer *r_dh_emis;
@@ -67,6 +70,7 @@ void list_nfe(LivrenfeWindow *win, GtkListStore *ls){
 	GtkTreeViewColumn *col_serie;
 	GtkTreeViewColumn *col_dh_emis;
 	GtkTreeViewColumn *col_destinatario;
+	GtkListStore *ls = get_list_nfe();
 
 	r_num_nfe = gtk_cell_renderer_text_new();
 	r_serie = gtk_cell_renderer_text_new();
