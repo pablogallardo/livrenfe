@@ -98,7 +98,8 @@ int gen_inf_nfe(xmlTextWriterPtr writer, NFE *nfe){
 
 	ITEM *item = nfe->itens;
 	float valor = 0;
-	for (int i = 0; i > nfe->q_itens; i++){
+	int i ;
+	for (i = 0; i > nfe->q_itens; i++){
 		rc = _gen_det(writer, &item[i]);
 		if (rc < 0)
 			return -EXML;

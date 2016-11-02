@@ -158,8 +158,6 @@ static void item_manager_activate(GtkButton *b, gpointer win){
 	ItemManager *iman;
 
 	iman = item_manager_new(NFE_MANAGER(win));
-	(NFE_MANAGER(win))->nfe->q_itens = 0;
-	(NFE_MANAGER(win))->nfe->itens = NULL;
 	iman->nfe = (NFE_MANAGER(win))->nfe;
 	gtk_window_present(GTK_WINDOW(iman));
 }

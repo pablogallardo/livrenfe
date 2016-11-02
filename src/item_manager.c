@@ -62,6 +62,7 @@ static void item_manager_dispose(GObject *object){
 static void set_item(GtkButton *b, GtkWidget *iman){
 	ItemManagerPrivate *priv = item_manager_get_instance_private(ITEM_MANAGER(iman));
 	ITEM *item = new_item();
+	NFE *nfe = (ITEM_MANAGER(iman))->nfe;
 	inst_produto(atoi(gtk_entry_get_text(priv->codigo)),
 		gtk_entry_get_text(priv->descricao),
 		atoi(gtk_entry_get_text(priv->ncm)),
@@ -74,8 +75,8 @@ static void set_item(GtkButton *b, GtkWidget *iman){
 		item->imposto->icms);
 	inst_item(atof(gtk_entry_get_text(priv->valor)),
 		atof(gtk_entry_get_text(priv->quantidade)),
-		++(ITEM_MANAGER(iman))->nfe->q_itens, item);
-	add_item((ITEM_MANAGER(iman))->nfe, item);
+		(ITEM_MANAGER(iman))->nfe->q_itens + 1, item);
+	add_item(nfe, item);
 	gtk_widget_destroy(iman);
 }
 

@@ -144,7 +144,7 @@ NFE *new_nfe(){
 		.idnfe = new_idnfe(),
 		.emitente = new_emitente(),
 		.destinatario = new_destinatario(),
-		.itens = new_item(),
+		//.itens = new_item(),
 		//.transp = new_transp(),
 		.protocolo = new_protocolo()
 	};
@@ -156,10 +156,17 @@ NFE *new_nfe(){
 PRODUTO *inst_produto(int codigo, char *desc, unsigned int ncm, unsigned int cfop,
 		char *unidade_comercial, float valor, PRODUTO *p){
 	p->codigo = codigo;
-	p->descricao = desc;
+	if(desc != NULL){
+		p->descricao =  malloc(sizeof(char) * strlen(desc));
+		strcpy(p->descricao, desc);
+	}
 	p->ncm = ncm;
 	p->cfop = cfop;
 	p->unidade_comercial = unidade_comercial;
+	if(unidade_comercial != NULL){
+		p->unidade_comercial =  malloc(sizeof(char) * strlen(unidade_comercial));
+		strcpy(p->unidade_comercial, unidade_comercial);
+	}
 	p->valor = valor;
 	return p;
 }

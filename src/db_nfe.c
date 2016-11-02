@@ -84,8 +84,8 @@ int register_nfe(NFE *nfe){
 	sql = malloc(400);
 	err = NULL;
 	int last_id, id_nf;
-       	sprintf(sql, "INSERT INTO destinatarios (nome, tipo_ie, cnpj, rua, complemento, \
-		bairro, id_municipio, cep) VALUES ('%s', '%d', '%s', '%s', '%s', '%s', \
+       	sql = sqlite3_mprintf("INSERT INTO destinatarios (nome, tipo_ie, cnpj, rua, complemento, \
+		bairro, id_municipio, cep) VALUES (%Q, '%d', %Q, %Q, %Q, %Q, \
 		'%d', '%d');", d->nome, d->tipo_ie, d->cnpj, ed->rua, ed->complemento,
 		ed->bairro, ed->municipio->codigo, ed->cep);
 	db_exec(sql, &err);
@@ -114,15 +114,14 @@ int register_nfe(NFE *nfe){
 	last_id = db_last_insert_id();
 	id_nf = last_id;
 	ITEM *item = nfe->itens;
-	int i;
-	for(i = 0; i < nfe->q_itens; i++){
+	while(item != NULL){
 		PRODUTO *p = item->produto;
 		IMPOSTO *imp = item->imposto;
 		ICMS *icms = imp->icms;
 		PIS *pis = imp->pis;
 		COFINS *cofins = imp->cofins;
-		sprintf(sql, "INSERT INTO  produtos (id_produto, descricao, ncm, cfop, unidade,\
-			valor_real) VALUES (%d, '%s', '%s', %d, '%s', %f);",
+		sql = sqlite3_mprintf("INSERT INTO  produtos (id_produto, descricao, ncm, cfop, unidade,\
+			valor_real) VALUES (%d, %Q, %d, %d, %Q, %f);",
 		       p->codigo, p->descricao, p->ncm, p->cfop, p->unidade_comercial,
 		       p->valor);
 		db_exec(sql, &err);
@@ -131,11 +130,11 @@ int register_nfe(NFE *nfe){
 			return -1;
 		}
 		last_id = db_last_insert_id();
-		sprintf(sql, "INSERT INTO  nfe_itens (id_nfe, ordem, id_produto, icms_origem,\
+		sql = sqlite3_mprintf("INSERT INTO  nfe_itens (id_nfe, ordem, id_produto, icms_origem,\
 		       	icms_tipo, icms_aliquota, icms_valor, pis_aliquota, pis_quantidade,\
 			pis_nt, cofins_aliquota, cofins_quantidade, cofins_nt)\
 			VALUES (%d, %d, %d, %d, %d, %f, %f, %f, %f, %f, %f, %f, %f);",
-			id_nf, i, last_id, icms->origem, icms->tipo, icms->aliquota, icms->valor,
+			id_nf, item->ordem, last_id, icms->origem, icms->tipo, icms->aliquota, icms->valor,
 			pis->aliquota, pis->quantidade, pis->nt, cofins->aliquota,
 			cofins->quantidade, cofins->nt);
 		db_exec(sql, &err);
@@ -143,7 +142,7 @@ int register_nfe(NFE *nfe){
 			fprintf(stderr, "livrenfe: Error - %s", err);
 			return -1;
 		}
-
+		item = item->pointer;
 	}
 	return 0;
 }
