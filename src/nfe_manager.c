@@ -95,6 +95,34 @@ static void list_forma_pagamento(GtkComboBox *fp){
 	gtk_combo_box_set_id_column(fp, ID);
 }
 
+static GtkListStore *get_item_list(NFE *nfe){
+	GtkListStore *list_store;
+	GtkTreeIter iter;
+	ITEM *i;
+
+	enum{
+		ID_PRODUTO,
+		DESCRICAO,
+		QTD,
+		VALOR,
+		N_COLS
+	};
+
+	list_store = gtk_list_store_new(N_COLS, G_TYPE_INT, G_TYPE_STRING,
+		G_TYPE_FLOAT, G_TYPE_FLOAT);
+	i = nfe->itens;
+	while(i){
+		gtk_list_store_append(list_store, &iter);
+		gtk_list_store_set(list_store, &iter, ID_PRODUTO, i->produto->codigo, 
+				DESCRICAO, i->produto->descricao,
+				QTD, i->quantidade,
+				VALOR, i->valor, -1);
+		
+		i = i->pointer;
+	}
+	return list_store;
+}
+
 static void list_tipo_contribuinte(GtkComboBox *t){
 	GtkListStore *list_store;
 	GtkTreeIter iter;
