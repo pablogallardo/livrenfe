@@ -38,12 +38,6 @@ struct _LivrenfeWindowClass{
 
 G_DEFINE_TYPE(LivrenfeWindow, livrenfe_window, GTK_TYPE_APPLICATION_WINDOW);
 
-static void livrenfe_window_init(LivrenfeWindow *win){
-	gtk_widget_init_template(GTK_WIDGET(win));
-	g_signal_connect(win, "focus", G_CALLBACK(list_nfe),
-			NULL);
-}
-
 static void nfe_manager_activate(GtkButton *b, gpointer win){
 	NFEManager *nman;
 
@@ -51,6 +45,15 @@ static void nfe_manager_activate(GtkButton *b, gpointer win){
 	nman->nfe = new_nfe();
 	gtk_window_present(GTK_WINDOW(nman));
 }
+
+static void livrenfe_window_init(LivrenfeWindow *win){
+	gtk_widget_init_template(GTK_WIDGET(win));
+	g_signal_connect(win, "visibility-notify-event", G_CALLBACK(list_nfe),
+			NULL);
+	g_signal_connect((LIVRENFE_WINDOW(win))->new_nfe, "clicked", G_CALLBACK(nfe_manager_activate),
+			win);
+}
+
 
 static void livrenfe_window_class_init(LivrenfeWindowClass *class){
 	gtk_widget_class_set_template_from_resource(GTK_WIDGET_CLASS (class),
@@ -85,12 +88,12 @@ void list_nfe(LivrenfeWindow *win){
 	col_destinatario = gtk_tree_view_column_new_with_attributes ("Destinatário",
 		       	r_destinatario, "text", 4, NULL);
 	gtk_tree_view_set_model(win->treeview, GTK_TREE_MODEL (ls));
-	gtk_tree_view_append_column (GTK_TREE_VIEW (win->treeview), col_num_nfe);
-	gtk_tree_view_append_column (GTK_TREE_VIEW (win->treeview), col_serie);
-	gtk_tree_view_append_column (GTK_TREE_VIEW (win->treeview), col_dh_emis);
-	gtk_tree_view_append_column (GTK_TREE_VIEW (win->treeview), col_destinatario);
-	g_signal_connect(win->new_nfe, "clicked", G_CALLBACK(nfe_manager_activate),
-			win);
+	if(!gtk_tree_view_get_n_columns(win->treeview)){
+		gtk_tree_view_append_column (GTK_TREE_VIEW (win->treeview), col_num_nfe);
+		gtk_tree_view_append_column (GTK_TREE_VIEW (win->treeview), col_serie);
+		gtk_tree_view_append_column (GTK_TREE_VIEW (win->treeview), col_dh_emis);
+		gtk_tree_view_append_column (GTK_TREE_VIEW (win->treeview), col_destinatario);
+	}
 }
 
 LivrenfeWindow *livrenfe_window_new(Livrenfe *app){
