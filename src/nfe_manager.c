@@ -59,6 +59,7 @@ struct _NFEManagerPrivate{
 	GtkEntry *complemento;
 	GtkEntry *bairro;
 	GtkEntry *cep;
+	GtkTreeView *treeview;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(NFEManager, nfe_manager, GTK_TYPE_DIALOG)
@@ -274,6 +275,8 @@ static void nfe_manager_class_init(NFEManagerClass *class){
 		       	bairro);
 	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
 		       	cep);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	treeview);
 }
 
 NFEManager *nfe_manager_new(LivrenfeWindow *win){
