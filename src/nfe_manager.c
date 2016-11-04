@@ -100,13 +100,7 @@ static GtkListStore *get_item_list(NFE *nfe){
 	GtkTreeIter iter;
 	ITEM *i;
 
-	enum{
-		ID_PRODUTO,
-		DESCRICAO,
-		QTD,
-		VALOR,
-		N_COLS
-	};
+	enum{ ID_PRODUTO, DESCRICAO, QTD, VALOR, N_COLS };
 
 	list_store = gtk_list_store_new(N_COLS, G_TYPE_INT, G_TYPE_STRING,
 		G_TYPE_FLOAT, G_TYPE_FLOAT);
@@ -122,6 +116,7 @@ static GtkListStore *get_item_list(NFE *nfe){
 	}
 	return list_store;
 }
+
 
 static void list_tipo_contribuinte(GtkComboBox *t){
 	GtkListStore *list_store;
@@ -183,12 +178,50 @@ static void list_municipios(GtkComboBox *uf, GtkComboBox *municipio){
 	gtk_combo_box_set_id_column(municipio, 0);
 }
 
+static void list_items(gpointer p, NFEManager *win){
+	NFEManagerPrivate *priv;
+	GtkListStore *l;
+
+	priv = nfe_manager_get_instance_private(win);
+	NFE *nfe = (NFE_MANAGER(win))->nfe;
+	l = get_item_list(nfe);	
+	GtkCellRenderer *r_id_prod;
+	GtkCellRenderer *r_desc;
+	GtkCellRenderer *r_qtd;
+	GtkCellRenderer *r_valor;
+	GtkTreeViewColumn *col_id_prod;
+	GtkTreeViewColumn *col_desc;
+	GtkTreeViewColumn *col_qtd;
+	GtkTreeViewColumn *col_valor;
+
+	r_id_prod = gtk_cell_renderer_text_new();
+	r_desc = gtk_cell_renderer_text_new();
+	r_qtd = gtk_cell_renderer_text_new();
+	r_valor = gtk_cell_renderer_text_new();
+	col_id_prod = gtk_tree_view_column_new_with_attributes ("ID", r_id_prod,
+		       	"text", 0, NULL);
+	col_desc = gtk_tree_view_column_new_with_attributes ("Descrição", r_desc, 
+			"text", 1, NULL);
+	col_qtd = gtk_tree_view_column_new_with_attributes ("Quantidade", r_qtd,
+		       	"text", 2, NULL);
+	col_valor = gtk_tree_view_column_new_with_attributes ("Valor",
+		       	r_valor, "text", 3, NULL);
+	gtk_tree_view_set_model(priv->treeview, GTK_TREE_MODEL (l));
+	if(!gtk_tree_view_get_n_columns(priv->treeview)){
+		gtk_tree_view_append_column (GTK_TREE_VIEW (priv->treeview), col_id_prod);
+		gtk_tree_view_append_column (GTK_TREE_VIEW (priv->treeview), col_desc);
+		gtk_tree_view_append_column (GTK_TREE_VIEW (priv->treeview), col_qtd);
+		gtk_tree_view_append_column (GTK_TREE_VIEW (priv->treeview), col_valor);
+	}
+}
+
 static void item_manager_activate(GtkButton *b, gpointer win){
 	ItemManager *iman;
 
 	iman = item_manager_new(NFE_MANAGER(win));
 	iman->nfe = (NFE_MANAGER(win))->nfe;
 	gtk_window_present(GTK_WINDOW(iman));
+	g_signal_connect(iman, "destroy", G_CALLBACK(list_items), win);
 }
 
 static void save_nfe(GtkButton *b, GtkWidget *win){
@@ -232,6 +265,7 @@ static void nfe_manager_init(NFEManager *nman){
 
 	priv = nfe_manager_get_instance_private(nman);
 	gtk_widget_init_template(GTK_WIDGET(nman));
+	g_signal_connect(nman, "show", G_CALLBACK(list_items), nman);
 	g_signal_connect(priv->novo_item, "clicked", G_CALLBACK(item_manager_activate),
 			nman);
 	g_signal_connect(priv->save_nfe, "clicked", G_CALLBACK(save_nfe),
