@@ -20,6 +20,7 @@
 #include "db_interface.h"
 #include "db.h"
 #include "utils.h"
+#include "nfe.h"
 #include "livrenfe.h"
 #include <gtk/gtk.h>
 #include <sqlite3.h>
@@ -227,4 +228,31 @@ GtkListStore *db_list_municipios(char *uf){
 
 	
 	return list_store;
+}
+
+NFE *get_nfe(int id){
+	NFE *nfe = new_nfe();
+	sqlite3_stmt *stmt;
+	char *err;
+	int rc;
+
+	char *sql = sqlite3_mprintf("SELECT n.id_nfe, m.id_municipio, m.nome, u.id_uf, u.nome, \
+		n.nat_op, n.ind_pag, n.mod_nfe, n.serie, n.num_nf, n.dh_emis, n.dh_saida, \
+		n.tipo, n.local_destino, n.tipo_impressao, n.tipo_emissao, n.tipo_ambiente, \
+		n.finalidade, n.consumidor_final, n.presencial, n.versao, n.div, n.chave, \
+		n.q_itens, n.total, e.id_emitente, e.nome, e.inscricao_estadual, \
+		e.crt, e.cnpj, e.rua, e.complemento, e.bairro, e.id_municipio, m_e.nome, \
+		u_e.id_uf, u_e.nome, u_e.cep, d.id_destinatario, d.nome, d.tipo_ie, \
+		d.cnpj, d.rua, d.complemento, d.bairro, m_d.id_municipio, m_d.nome, \
+		u_d.id_uf, u_d.nome, d.cep \
+		FROM nfe n INNER JOIN municipios m ON m.id_municipio = n.id_municipio \
+		INNER JOIN uf u ON u.id_uf = m.id_uf \
+		INNER JOIN emitentes e ON e.id_emitente = n.id_emitente \
+		INNER JOIN uf u_e u_e.id_uf = e.id_uf \
+		INNER JOIN municipios m_e m_e.id_municipio = e.id_municipio \
+		INNER JOIN destinatarios d ON d.id_destinatario = n.id_destinatario \ 
+		INNER JOIN uf u_d ON u_d.id_uf = d.id_uf \
+		INNER JOIN municipios m_d ON m_d.id_municipio = d.id_municipio \
+		WHERE id_nfe = %d", id);
+	return NULL;
 }

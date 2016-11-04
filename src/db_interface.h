@@ -55,4 +55,9 @@ extern GtkListStore *db_list_uf();
  */
 extern GtkListStore *db_list_municipios(char *);
 
+/**
+ * Get NFE from DB
+ */
+extern NFE *get_nfe(int);
+
 #endif
