@@ -164,7 +164,7 @@ GtkListStore *db_list_uf(){
 
 	list_store = gtk_list_store_new(N_COLS, G_TYPE_STRING, G_TYPE_STRING);
 
-	char *sql = "SELECT id_uf, nome FROM uf;";
+	char *sql = "SELECT cod_ibge, nome FROM uf;";
 	if(db_select(sql, &err, &stmt)){
 		return NULL;
 	}
@@ -205,7 +205,8 @@ GtkListStore *db_list_municipios(char *uf){
 	list_store = gtk_list_store_new(N_COLS, G_TYPE_STRING, G_TYPE_STRING);
 
 	char *sql = malloc(100);
-       	sprintf(sql, "SELECT id_municipio, nome FROM municipios WHERE id_uf = '%s';",
+       	sprintf(sql, "SELECT m.id_municipio, m.nome FROM municipios m\
+		JOIN uf u using(id_uf) WHERE u.cod_ibge = '%s';",
 			uf);
 	if(db_select(sql, &err, &stmt)){
 		return NULL;

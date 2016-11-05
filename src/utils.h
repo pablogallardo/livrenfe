@@ -30,6 +30,6 @@ extern char *itoa(int);
 
 extern char *strrev(char *);
 
-extern char *timef(time_t t, char *format);
+extern char *timef(time_t t, char *format, int chars);
 
 #endif

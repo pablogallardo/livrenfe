@@ -226,28 +226,32 @@ int add_item(NFE *nfe, ITEM *item){
 	return 0;
 }
 
+static char get_dv(char *base){
+	int i, j, div, sum = 0;
+	int m[8] = {2,3,4,5,6,7,8,9};
+	char *baserev = strrev(base);
+	for(i = 0, j = 8; i < strlen(baserev); i++, j++){
+		sum += (baserev[i] - '0') * m[j%8];
+	}
+	div = 11 - (sum % 11);
+	div = div == 1? 0:div;
+	free(baserev);
+	return *itoa(div);
+}
+
 void set_chave(NFE *nfe){
 	int i, j, div, sum = 0;
-	char *base;
-	sprintf(base, "%02d%s%14d%02d%03d%09d%s%08d",
+	char *base = malloc(sizeof(char) * 60);
+	sprintf(base, "%02d%s%s%02d%03d%09d%d%08d",
 		nfe->idnfe->municipio->cod_uf,
-		timef(nfe->idnfe->dh_emis, "%Y%m"),
+		timef(nfe->idnfe->dh_emis, "%Y%m", 6),
 		nfe->emitente->cnpj,
 		nfe->idnfe->mod,
 		nfe->idnfe->serie,
 		nfe->idnfe->num_nf,
 		nfe->idnfe->tipo_emissao,
 		nfe->idnfe->id_nfe);
-	int m[7] = {2,3,4,5,6,7,8,9};
-	char *baserev = strrev(base);
-	for(i = 0, j = 7; i < strlen(baserev); i++, j++){
-		sum += (baserev[i] - '0') * m[j%7];
-	}
-	div = 11 - (sum % 11);
-	div = div == 1? 0:div;
-	nfe->idnfe->div = itoa(div);
-	nfe->idnfe->chave = malloc(sizeof(char) * (strlen(base) + 1));
-	strcat(nfe->idnfe->chave, base);
-	strcat(nfe->idnfe->chave, &(nfe->idnfe->div));
+	nfe->idnfe->div = get_dv(base);
+	nfe->idnfe->chave = malloc(sizeof(char) * (strlen(base) + 2));
+	sprintf(nfe->idnfe->chave, "%s%c", base , nfe->idnfe->div);
 }
-
