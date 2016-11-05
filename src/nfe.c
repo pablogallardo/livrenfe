@@ -19,6 +19,8 @@
 
 #include "nfe.h"
 #include "livrenfe.h"
+#include "utils.h"
+#define _XOPEN_SOURCE
 #include <time.h>
 #include <stdlib.h>
 #include <string.h>
@@ -222,5 +224,30 @@ int add_item(NFE *nfe, ITEM *item){
 	}
 	i->pointer = item;
 	return 0;
+}
+
+void set_chave(NFE *nfe){
+	int i, j, div, sum = 0;
+	char *base;
+	sprintf(base, "%02d%s%14d%02d%03d%09d%s%08d",
+		nfe->idnfe->municipio->cod_uf,
+		timef(nfe->idnfe->dh_emis, "%Y%m"),
+		nfe->emitente->cnpj,
+		nfe->idnfe->mod,
+		nfe->idnfe->serie,
+		nfe->idnfe->num_nf,
+		nfe->idnfe->tipo_emissao,
+		nfe->idnfe->id_nfe);
+	int m[7] = {2,3,4,5,6,7,8,9};
+	char *baserev = strrev(base);
+	for(i = 0, j = 7; i < strlen(baserev); i++, j++){
+		sum += (baserev[i] - '0') * m[j%7];
+	}
+	div = 11 - (sum % 11);
+	div = div == 1? 0:div;
+	nfe->idnfe->div = itoa(div);
+	nfe->idnfe->chave = malloc(sizeof(char) * (strlen(base) + 1));
+	strcat(nfe->idnfe->chave, base);
+	strcat(nfe->idnfe->chave, &(nfe->idnfe->div));
 }
 

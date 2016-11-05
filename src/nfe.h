@@ -40,3 +40,5 @@ extern DESTINATARIO *inst_destinatario(char *rua, int num, char *complemento,
 extern int add_item(NFE *nfe, ITEM *i);
 
 extern int rm_item(NFE *nfe, ITEM *i);
+
+extern void set_chave(NFE *nfe);

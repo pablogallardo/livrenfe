@@ -49,3 +49,26 @@ char *itoa(int i){
 	sprintf(s, "%d", i);
 	return s;
 }
+
+char *strrev(char *s){
+	if(!s)
+		return NULL;
+	int i, j;
+	char *rev = malloc(sizeof(char) * strlen(s));
+	for(i = 0, j = strlen(s) - 1; i < strlen(s); i++, j--){
+		rev[j] = s[i];	
+	}
+	return rev;
+}
+
+char *timef(time_t t, char *format){
+	char *buffer;
+	buffer = malloc(sizeof(char) * 11);
+	struct tm *tm_info;
+
+	tm_info = localtime(t);
+
+	strftime(buffer, 11, format, tm_info);
+
+	return buffer;
+}

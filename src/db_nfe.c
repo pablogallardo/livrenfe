@@ -78,6 +78,7 @@ GtkListStore *get_list_nfe(){
 }
 
 int register_nfe(NFE *nfe){
+	set_chave(nfe);
 	IDNFE *idnfe = nfe->idnfe;
 	DESTINATARIO *d = nfe->destinatario;
 	ENDERECO *ed = d->endereco;
