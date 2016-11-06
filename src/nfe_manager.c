@@ -238,7 +238,8 @@ static void save_nfe(GtkButton *b, GtkWidget *win){
 	idnfe->ind_pag = atoi(gtk_combo_box_get_active_id(priv->forma_pagamento));
 	idnfe->mod = MOD_NFE;
 	idnfe->dh_emis = strtotime(gtk_entry_get_text(priv->dh_emis));
-	idnfe->dh_saida = strtotime(gtk_entry_get_text(priv->dh_saida));
+	time_t saida = strtotime(gtk_entry_get_text(priv->dh_saida));
+	idnfe->dh_saida = saida == -1? NULL:&saida;
 	idnfe->municipio->cod_uf = atoi(gtk_combo_box_get_active_id(priv->uf));
 	idnfe->municipio->codigo = atoi(gtk_combo_box_get_active_id(priv->municipio));
 

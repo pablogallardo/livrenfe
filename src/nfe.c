@@ -35,7 +35,8 @@ static MUNICIPIO *new_municipio(){
 
 static IDNFE *new_idnfe(){
 	IDNFE i = {
-		.municipio = new_municipio()
+		.municipio = new_municipio(),
+		.dh_saida = malloc(sizeof(time_t))
 	};
 	IDNFE *p = malloc(sizeof(IDNFE));
 	memcpy(p, &i, sizeof(IDNFE));
