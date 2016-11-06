@@ -20,10 +20,14 @@
 #ifndef	CRYPTO_I_H
 #define	CRYPTO_I_H
 
+#include <openssl/rsa.h>
+
 extern int encrypt(char *in, char **out, char *password);
 
 extern int decrypt(char *in, char **out, char *password);
 
 extern int sign(char *in, char **out, char *password);
+
+extern EVP_PKEY *get_private_key(char *password);
 
 #endif
