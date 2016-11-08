@@ -33,7 +33,7 @@
 static int smartcard_login(char *password, PKCS11_SLOT **s, unsigned int *nc){
 
 	PKCS11_CTX *ctx;
-	PKCS11_SLOT *slots, *slot;
+	PKCS11_SLOT *slots;
 	
 	int rc = 0, logged_in;
 	unsigned int nslots;
@@ -56,30 +56,30 @@ static int smartcard_login(char *password, PKCS11_SLOT **s, unsigned int *nc){
 		return -ENOSLOT;
 	}
 	/* get first slot with a token */
-	slot = PKCS11_find_token(ctx, slots, nslots);
-	if (slot == NULL || slot->token == NULL) {
+	*s = PKCS11_find_token(ctx, slots, nslots);
+	if (*s == NULL || (*s)->token == NULL) {
 		fprintf(stderr, "no token available\n");
 		rc = 3;
 		return -ENOTOKEN;
 	}
 
 	/* check if user is logged in */
-	rc = PKCS11_is_logged_in(slot, 0, &logged_in);
+	rc = PKCS11_is_logged_in(*s, 0, &logged_in);
 	if (rc != 0) {
 		fprintf(stderr, "PKCS11_is_logged_in failed\n");
 		return -ELIBP11;
 	}
 
 	/* perform pkcs #11 login */
-	rc = PKCS11_login(slot, 0, password);
-	memset(password, 0, strlen(password));
+	rc = PKCS11_login(*s, 0, password);
+	//memset(password, 0, strlen(password));
 	if (rc != 0) {
 		fprintf(stderr, "PKCS11_login failed\n");
 		return -ELIBP11;
 	}
 
 	/* check if user is logged in */
-	rc = PKCS11_is_logged_in(slot, 0, &logged_in);
+	rc = PKCS11_is_logged_in(*s, 0, &logged_in);
 	if (rc != 0) {
 		fprintf(stderr, "PKCS11_is_logged_in failed\n");
 		return -ELIBP11;
@@ -88,7 +88,6 @@ static int smartcard_login(char *password, PKCS11_SLOT **s, unsigned int *nc){
 		fprintf(stderr, "PKCS11_is_logged_in says user is not logged in, expected to be logged in\n");
 		return -ELIBP11;
 	}
-	s = &slot;
 	return 0;
 }
 
