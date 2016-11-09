@@ -28,6 +28,7 @@
 #include <string.h>
 #include <libp11.h>
 #include <openssl/rsa.h>
+#include <openssl/x509.h>
 
 
 static int smartcard_login(char *password, PKCS11_SLOT **s, unsigned int *nc){
@@ -95,7 +96,7 @@ int encrypt(char *in, char **out, char *password){
 	return 0;
 }
 
-EVP_PKEY *get_private_key(char *password){
+int get_private_key(EVP_PKEY **k, X509 **c, char *password){
 	unsigned int ncerts;
 	int rc;
 	PKCS11_SLOT *slot;
@@ -117,10 +118,12 @@ EVP_PKEY *get_private_key(char *password){
 		return NULL;
 	}
 	authcert=&certs[3];
+	*c = authcert->x509;
 	authkey = PKCS11_find_key(authcert);
 	if (authkey == NULL) {
 		fprintf(stderr, "no key matching certificate available\n");
 		return NULL;
 	}
-	return PKCS11_get_private_key(authkey);
+	*k = PKCS11_get_private_key(authkey);
+	return 0;
 }

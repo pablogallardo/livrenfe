@@ -33,21 +33,32 @@
 #include <xmlsec/xmltree.h>
 #include <xmlsec/xmldsig.h>
 #include <xmlsec/crypto.h>
+#include <openssl/rsa.h>
+#include <openssl/x509.h>
 
-static xmlSecKeyPtr load_key(const char *pwd) {
+xmlSecKeyPtr load_key(const char *pwd) {
 
 	xmlSecKeyPtr key = NULL;
 	xmlSecKeyDataPtr data;
-	EVP_PKEY* pKey = NULL;
+	EVP_PKEY *pKey;
+	RSA *rsa;
+	X509 *x509 = NULL;
 	int ret;
 
-	pKey = get_private_key(pwd);
+	get_private_key(&pKey, &x509, pwd);
+	fprintf(stdout, "%d\n", x509);
+	if(pKey == NULL)
+		return NULL;
 
 	data = xmlSecOpenSSLEvpKeyAdopt(pKey);
 	if(data == NULL) {
 		EVP_PKEY_free(pKey);
 		return NULL;    
 	}    
+	rsa = EVP_PKEY_get1_RSA(pKey);
+	xmlSecOpenSSLKeyDataX509AdoptCert(data, x509);
+	//xmlSecOpenSSLKeyDataRsaAdoptRsa(data, rsa);
+	//xmlSecOpenSSLKeyDataRsaAdoptEvp(data, pKey);
 
 	key = xmlSecKeyCreate();
 	if(key == NULL) {
@@ -64,50 +75,164 @@ static xmlSecKeyPtr load_key(const char *pwd) {
 	return key;
 }
 
-int sign_file(const char* tmpl_file, char *password) {
-    xmlDocPtr doc = NULL;
-    xmlNodePtr node = NULL;
+int sign_file(const char* xml_file, char *password) {
+#ifndef XMLSEC_NO_XSLT
+    xsltSecurityPrefsPtr xsltSecPrefs = NULL;
+#endif /* XMLSEC_NO_XSLT */
+
+
+    /* Init libxml and libxslt libraries */
+    xmlInitParser();
+    LIBXML_TEST_VERSION
+    xmlLoadExtDtdDefaultValue = XML_DETECT_IDS | XML_COMPLETE_ATTRS;
+    xmlSubstituteEntitiesDefault(1);
+#ifndef XMLSEC_NO_XSLT
+    xmlIndentTreeOutput = 1; 
+#endif /* XMLSEC_NO_XSLT */
+
+    /* Init libxslt */
+#ifndef XMLSEC_NO_XSLT
+    /* disable everything */
+    xsltSecPrefs = xsltNewSecurityPrefs(); 
+    xsltSetSecurityPrefs(xsltSecPrefs,  XSLT_SECPREF_READ_FILE,        xsltSecurityForbid);
+    xsltSetSecurityPrefs(xsltSecPrefs,  XSLT_SECPREF_WRITE_FILE,       xsltSecurityForbid);
+    xsltSetSecurityPrefs(xsltSecPrefs,  XSLT_SECPREF_CREATE_DIRECTORY, xsltSecurityForbid);
+    xsltSetSecurityPrefs(xsltSecPrefs,  XSLT_SECPREF_READ_NETWORK,     xsltSecurityForbid);
+    xsltSetSecurityPrefs(xsltSecPrefs,  XSLT_SECPREF_WRITE_NETWORK,    xsltSecurityForbid);
+    xsltSetDefaultSecurityPrefs(xsltSecPrefs); 
+#endif /* XMLSEC_NO_XSLT */
+                
+    /* Init xmlsec library */
+    if(xmlSecInit() < 0) {
+        fprintf(stderr, "Error: xmlsec initialization failed.\n");
+        return(-1);
+    }
+
+    /* Check loaded library version */
+    if(xmlSecCheckVersion() != 1) {
+        fprintf(stderr, "Error: loaded xmlsec library version is not compatible.\n");
+        return(-1);
+    }
+
+    /* Load default crypto engine if we are supporting dynamic
+     * loading for xmlsec-crypto libraries. Use the crypto library
+     * name ("openssl", "nss", etc.) to load corresponding 
+     * xmlsec-crypto library.
+     */
+#ifdef XMLSEC_CRYPTO_DYNAMIC_LOADING
+    if(xmlSecCryptoDLLoadLibrary(NULL) < 0) {
+        fprintf(stderr, "Error: unable to load default xmlsec-crypto library. Make sure\n"
+                        "that you have it installed and check shared libraries path\n"
+                        "(LD_LIBRARY_PATH) envornment variable.\n");
+        return(-1);     
+    }
+#endif /* XMLSEC_CRYPTO_DYNAMIC_LOADING */
+
+    /* Init crypto library */
+    if(xmlSecCryptoAppInit(NULL) < 0) {
+        fprintf(stderr, "Error: crypto initialization failed.\n");
+        return(-1);
+    }
+
+    /* Init xmlsec-crypto library */
+    if(xmlSecCryptoInit() < 0) {
+        fprintf(stderr, "Error: xmlsec-crypto initialization failed.\n");
+        return(-1);
+    }
+	xmlDocPtr doc = NULL;
+    xmlNodePtr signNode = NULL;
+    xmlNodePtr refNode = NULL;
+    xmlNodePtr keyInfoNode = NULL;
+    xmlNodePtr x509DataNode = NULL;
     xmlSecDSigCtxPtr dsigCtx = NULL;
     int res = -1;
     
-    /* load template */
-    doc = xmlParseFile(tmpl_file);
+
+    /* load doc file */
+    doc = xmlParseFile(xml_file);
     if ((doc == NULL) || (xmlDocGetRootElement(doc) == NULL)){
-	fprintf(stderr, "Error: unable to parse file \"%s\"\n", tmpl_file);
-	goto done;	
+        fprintf(stderr, "Error: unable to parse file \"%s\"\n", xml_file);
+        goto done;      
     }
     
-    /* find start node */
-    node = xmlSecFindNode(xmlDocGetRootElement(doc), xmlSecNodeSignature, xmlSecDSigNs);
-    if(node == NULL) {
-	fprintf(stderr, "Error: start node not found in \"%s\"\n", tmpl_file);
-	goto done;	
+    /* create signature template for RSA-SHA1 enveloped signature */
+    signNode = xmlSecTmplSignatureCreate(doc, xmlSecTransformExclC14NId,
+                                         xmlSecTransformRsaSha1Id, NULL);
+    if(signNode == NULL) {
+        fprintf(stderr, "Error: failed to create signature template\n");
+        goto done;              
     }
 
-    /* create signature context, we don't need keys manager in this example */
+    /* add <dsig:Signature/> node to the doc */
+    xmlAddChild(xmlDocGetRootElement(doc), signNode);
+    
+    /* add reference */
+    refNode = xmlSecTmplSignatureAddReference(signNode, xmlSecTransformSha1Id,
+                                        NULL, NULL, NULL);
+    if(refNode == NULL) {
+        fprintf(stderr, "Error: failed to add reference to signature template\n");
+        goto done;              
+    }
+
+    /* add enveloped transform */
+    if(xmlSecTmplReferenceAddTransform(refNode, xmlSecTransformEnvelopedId) == NULL) {
+        fprintf(stderr, "Error: failed to add enveloped transform to reference\n");
+        goto done;              
+    }
+    
+    /* add <dsig:KeyInfo/> and <dsig:X509Data/> */
+    keyInfoNode = xmlSecTmplSignatureEnsureKeyInfo(signNode, NULL);
+    if(keyInfoNode == NULL) {
+        fprintf(stderr, "Error: failed to add key info\n");
+        goto done;              
+    }
+    
+    x509DataNode = xmlSecTmplKeyInfoAddX509Data(keyInfoNode);
+    if(x509DataNode == NULL) {
+        fprintf(stderr, "Error: failed to add X509Data node\n");
+        goto done;              
+    }
+
+    if(xmlSecTmplX509DataAddSubjectName(x509DataNode) == NULL) {
+        fprintf(stderr, "Error: failed to add X509SubjectName node\n");
+        goto done;
+    }
+
+    if(xmlSecTmplX509DataAddCertificate(x509DataNode) == NULL) {
+        fprintf(stderr, "Error: failed to add X509Certificate node\n");
+        goto done;
+    }
+
+    /* create signature context */
     dsigCtx = xmlSecDSigCtxCreate(NULL);
     if(dsigCtx == NULL) {
         fprintf(stderr,"Error: failed to create signature context\n");
-	goto done;
+        goto done;
     }
 
-    /* load private key, assuming that there is not password */
+    /* load private key */
     dsigCtx->signKey = load_key(password);
     if(dsigCtx->signKey == NULL) {
-        fprintf(stderr,"Error: failed to load private pem key from smartcard\n");
+        fprintf(stderr,"Error: failed to load private key from smartcard\n");
 	goto done;
     }
-
-    /* set key name to the file name 
-    if(xmlSecKeySetName(dsigCtx->signKey, key_file) < 0) {
-    	fprintf(stderr,"Error: failed to set key name for key from \"%s\"\n", key_file);
-	goto done;
+    
+    /* load certificate and add to the key 
+    if(xmlSecCryptoAppKeyCertLoad(dsigCtx->signKey, cert_file, xmlSecKeyDataFormatPem) < 0) {
+        fprintf(stderr,"Error: failed to load pem certificate \"%s\"\n", cert_file);
+        goto done;
     }*/
 
+    /* set key name to the file name, this is just an example! 
+    if(xmlSecKeySetName(dsigCtx->signKey, key_file) < 0) {
+        fprintf(stderr,"Error: failed to set key name for key from \"%s\"\n", key_file);
+        goto done;
+    } */
+
     /* sign the template */
-    if(xmlSecDSigCtxSign(dsigCtx, node) < 0) {
+    if(xmlSecDSigCtxSign(dsigCtx, signNode) < 0) {
         fprintf(stderr,"Error: signature failed\n");
-	goto done;
+        goto done;
     }
         
     /* print signed document to stdout */

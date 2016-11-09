@@ -18,12 +18,16 @@
  */
 
 #include "livrenfe.h"
+#include "sign.h"
 #include <stdio.h>
 #include <gtk/gtk.h>
 
 
 int main(int argc, char **argv) {
-	fprintf(stdout, "LivreNFE version %s\n", VERSION_NAME);
-	return g_application_run(G_APPLICATION(livrenfe_new()), argc, argv);
+	//fprintf(stdout, "LivreNFE version %s\n", VERSION_NAME);
+	char *p = "";
+	char *f = "_xml.xml";
+	sign_file(f, p);
+	//return g_application_run(G_APPLICATION(livrenfe_new()), argc, argv);
 }
 
