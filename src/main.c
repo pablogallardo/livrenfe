@@ -25,7 +25,7 @@
 
 int main(int argc, char **argv) {
 	//fprintf(stdout, "LivreNFE version %s\n", VERSION_NAME);
-	char *p = "";
+	char *p = "paris05";
 	char *f = "_xml.xml";
 	sign_file(f, p);
 	//return g_application_run(G_APPLICATION(livrenfe_new()), argc, argv);

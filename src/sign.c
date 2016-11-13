@@ -40,14 +40,13 @@ xmlSecKeyPtr load_key(const char *pwd) {
 
 	xmlSecKeyPtr key = NULL;
 	xmlSecKeyDataPtr data;
+	xmlSecKeyDataPtr dataX509;
 	EVP_PKEY *pKey;
-	RSA *rsa;
 	X509 *x509 = NULL;
 	int ret;
 
 	get_private_key(&pKey, &x509, pwd);
-	fprintf(stdout, "%d\n", x509);
-	if(pKey == NULL)
+	if(pKey == NULL || x509 == NULL)
 		return NULL;
 
 	data = xmlSecOpenSSLEvpKeyAdopt(pKey);
@@ -55,10 +54,8 @@ xmlSecKeyPtr load_key(const char *pwd) {
 		EVP_PKEY_free(pKey);
 		return NULL;    
 	}    
-	rsa = EVP_PKEY_get1_RSA(pKey);
-	xmlSecOpenSSLKeyDataX509AdoptCert(data, x509);
-	//xmlSecOpenSSLKeyDataRsaAdoptRsa(data, rsa);
-	//xmlSecOpenSSLKeyDataRsaAdoptEvp(data, pKey);
+	dataX509 = xmlSecKeyDataCreate(xmlSecOpenSSLKeyDataX509Id);
+	xmlSecOpenSSLKeyDataX509AdoptCert(dataX509, x509);
 
 	key = xmlSecKeyCreate();
 	if(key == NULL) {
@@ -72,6 +69,7 @@ xmlSecKeyPtr load_key(const char *pwd) {
 		xmlSecKeyDataDestroy(data);
 		return NULL;
 	}
+	xmlSecKeyAdoptData(key, dataX509);
 	return key;
 }
 
@@ -156,7 +154,7 @@ int sign_file(const char* xml_file, char *password) {
     }
     
     /* create signature template for RSA-SHA1 enveloped signature */
-    signNode = xmlSecTmplSignatureCreate(doc, xmlSecTransformExclC14NId,
+    signNode = xmlSecTmplSignatureCreate(doc, xmlSecTransformInclC14NId,
                                          xmlSecTransformRsaSha1Id, NULL);
     if(signNode == NULL) {
         fprintf(stderr, "Error: failed to create signature template\n");
@@ -179,6 +177,10 @@ int sign_file(const char* xml_file, char *password) {
         fprintf(stderr, "Error: failed to add enveloped transform to reference\n");
         goto done;              
     }
+    if(xmlSecTmplReferenceAddTransform(refNode, xmlSecTransformInclC14NId) == NULL) {
+        fprintf(stderr, "Error: failed to add enveloped transform to reference\n");
+        goto done;              
+    }
     
     /* add <dsig:KeyInfo/> and <dsig:X509Data/> */
     keyInfoNode = xmlSecTmplSignatureEnsureKeyInfo(signNode, NULL);
@@ -193,10 +195,10 @@ int sign_file(const char* xml_file, char *password) {
         goto done;              
     }
 
-    if(xmlSecTmplX509DataAddSubjectName(x509DataNode) == NULL) {
+    /*if(xmlSecTmplX509DataAddSubjectName(x509DataNode) == NULL) {
         fprintf(stderr, "Error: failed to add X509SubjectName node\n");
         goto done;
-    }
+    }*/
 
     if(xmlSecTmplX509DataAddCertificate(x509DataNode) == NULL) {
         fprintf(stderr, "Error: failed to add X509Certificate node\n");

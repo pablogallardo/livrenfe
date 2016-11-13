@@ -118,7 +118,7 @@ int get_private_key(EVP_PKEY **k, X509 **c, char *password){
 		return NULL;
 	}
 	authcert=&certs[3];
-	*c = authcert->x509;
+	*c = X509_dup(authcert->x509);
 	authkey = PKCS11_find_key(authcert);
 	if (authkey == NULL) {
 		fprintf(stderr, "no key matching certificate available\n");
