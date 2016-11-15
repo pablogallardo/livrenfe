@@ -195,11 +195,6 @@ int sign_file(const char* xml_file, char *password) {
         goto done;              
     }
 
-    /*if(xmlSecTmplX509DataAddSubjectName(x509DataNode) == NULL) {
-        fprintf(stderr, "Error: failed to add X509SubjectName node\n");
-        goto done;
-    }*/
-
     if(xmlSecTmplX509DataAddCertificate(x509DataNode) == NULL) {
         fprintf(stderr, "Error: failed to add X509Certificate node\n");
         goto done;
@@ -219,18 +214,6 @@ int sign_file(const char* xml_file, char *password) {
 	goto done;
     }
     
-    /* load certificate and add to the key 
-    if(xmlSecCryptoAppKeyCertLoad(dsigCtx->signKey, cert_file, xmlSecKeyDataFormatPem) < 0) {
-        fprintf(stderr,"Error: failed to load pem certificate \"%s\"\n", cert_file);
-        goto done;
-    }*/
-
-    /* set key name to the file name, this is just an example! 
-    if(xmlSecKeySetName(dsigCtx->signKey, key_file) < 0) {
-        fprintf(stderr,"Error: failed to set key name for key from \"%s\"\n", key_file);
-        goto done;
-    } */
-
     /* sign the template */
     if(xmlSecDSigCtxSign(dsigCtx, signNode) < 0) {
         fprintf(stderr,"Error: signature failed\n");

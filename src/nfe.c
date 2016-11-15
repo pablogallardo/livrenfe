@@ -216,6 +216,7 @@ DESTINATARIO *inst_destinatario(char *rua, int num, char *complemento,
 int add_item(NFE *nfe, ITEM *item){
 	ITEM *i;
 	nfe->q_itens++;
+	item->ordem = nfe->q_itens;
 	if((i = nfe->itens) == NULL){
 		nfe->itens = item;
 		return 0;

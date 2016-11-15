@@ -99,11 +99,12 @@ int gen_inf_nfe(xmlTextWriterPtr writer, NFE *nfe){
 	ITEM *item = nfe->itens;
 	float valor = 0;
 	int i ;
-	for (i = 0; i > nfe->q_itens; i++){
-		rc = _gen_det(writer, &item[i]);
+	for (i = 0; i < nfe->q_itens; i++){
+		rc = _gen_det(writer, item);
 		if (rc < 0)
 			return -EXML;
-		valor += nfe->itens[i].produto->valor;
+		valor += nfe->itens->produto->valor;
+		item = item->pointer;
 	}
 
 	rc = _gen_total(writer, valor);
@@ -402,8 +403,8 @@ int _gen_det(xmlTextWriterPtr writer, ITEM *item){
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "det");
 	if (rc < 0)
 		return -EXML;
-	char *ordem;
-	snprintf(ordem, 2, "%d", item->ordem);
+	char *ordem = malloc(sizeof(char) * 2);
+	sprintf(ordem, "%d", item->ordem);
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "det",
 			BAD_CAST ordem);
 	if (rc < 0)
@@ -426,6 +427,9 @@ int _gen_det(xmlTextWriterPtr writer, ITEM *item){
 int _gen_prod(xmlTextWriterPtr writer, ITEM *i){
 	PRODUTO *p = i->produto;
 	int rc;
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "prod");
+	if (rc < 0)
+		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cProd",
 			"%d", p->codigo);
 	if (rc < 0)
