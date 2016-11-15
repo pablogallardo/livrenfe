@@ -17,13 +17,11 @@
  *
  */
 
+#ifndef	SEND_NFE_H
+#define	SEND_NFE_H
+
 #include "livrenfe.h"
-#include <stdio.h>
-#include <gtk/gtk.h>
 
+extern int send_nfe(NFE *);
 
-int main(int argc, char **argv) {
-	fprintf(stdout, "LivreNFE version %s\n", VERSION_NAME);
-	return g_application_run(G_APPLICATION(livrenfe_new()), argc, argv);
-}
-
+#endif

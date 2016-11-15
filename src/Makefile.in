@@ -94,7 +94,8 @@ am_livrenfe_OBJECTS = main.$(OBJEXT) db.$(OBJEXT) db_create.$(OBJEXT) \
 	db_init.$(OBJEXT) livrenfe.$(OBJEXT) lnfe_window.$(OBJEXT) \
 	resources.$(OBJEXT) db_nfe.$(OBJEXT) nfe_manager.$(OBJEXT) \
 	item_manager.$(OBJEXT) utils.$(OBJEXT) nfe.$(OBJEXT) \
-	gen_xml.$(OBJEXT) crypto_interface.$(OBJEXT) sign.$(OBJEXT)
+	gen_xml.$(OBJEXT) crypto_interface.$(OBJEXT) sign.$(OBJEXT) \
+	send_nfe.$(OBJEXT)
 livrenfe_OBJECTS = $(am_livrenfe_OBJECTS)
 livrenfe_LDADD = $(LDADD)
 AM_V_P = $(am__v_P_@AM_V@)
@@ -239,11 +240,16 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-AM_CFLAGS = `pkg-config --cflags gtk+-3.0` `xml2-config --cflags` `pkg-config --cflags xmlsec1-openssl`
-AM_LDFLAGS = -L/usr/local/lib -lsqlite3 -lssl -lcrypto -lp11 `xml2-config --libs` `pkg-config --libs gtk+-3.0` `pkg-config --libs xmlsec1-openssl`
-livrenfe_SOURCES = main.c db.c db_create.c db_init.c livrenfe.c lnfe_window.c resources.c \
-		   db_nfe.c nfe_manager.c item_manager.c utils.c nfe.c gen_xml.c \
-		   crypto_interface.c sign.c
+AM_CFLAGS = `pkg-config --cflags gtk+-3.0` `xml2-config --cflags` \
+	`pkg-config --cflags xmlsec1-openssl` `curl-config --cflags`
+
+AM_LDFLAGS = -L/usr/local/lib -lsqlite3 -lssl -lcrypto -lp11 \
+	`xml2-config --libs` `pkg-config --libs gtk+-3.0` \
+	`pkg-config --libs xmlsec1-openssl` `curl-config --libs`
+
+livrenfe_SOURCES = main.c db.c db_create.c db_init.c livrenfe.c lnfe_window.c \
+		   resources.c  db_nfe.c nfe_manager.c item_manager.c utils.c \
+		   nfe.c gen_xml.c crypto_interface.c sign.c send_nfe.c
 
 all: all-am
 
@@ -345,6 +351,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nfe.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nfe_manager.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/resources.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/send_nfe.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sign.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/utils.Po@am__quote@
 
