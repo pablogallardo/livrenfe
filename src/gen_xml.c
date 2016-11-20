@@ -196,7 +196,7 @@ int _gen_ide(xmlTextWriterPtr writer, NFE *nfe){
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "tpImp",	
-			"%d", nfe->idnfe->tipo_impresao);
+			"%d", nfe->idnfe->tipo_impressao);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "tpEmis",

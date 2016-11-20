@@ -147,8 +147,6 @@ NFE *new_nfe(){
 		.idnfe = new_idnfe(),
 		.emitente = new_emitente(),
 		.destinatario = new_destinatario(),
-		//.itens = new_item(),
-		//.transp = new_transp(),
 		.protocolo = new_protocolo()
 	};
 	NFE *p = malloc(sizeof(NFE));
@@ -199,19 +197,6 @@ IMPOSTO *inst_imposto(ICMS *i, PIS *p, COFINS *c, IMPOSTO *imp){
 	return imp;
 }
 
-DESTINATARIO *inst_destinatario(char *rua, int num, char *complemento, 
-		char *bairro, MUNICIPIO *m, unsigned int cep, PAIS *p,
-		DESTINATARIO *d){
-	ENDERECO *e = d->endereco;
-	e->rua = rua;
-	e->num = num;
-	e->complemento = complemento;
-	e->bairro = bairro;
-	e->municipio = m;
-	e->cep = cep;
-	e->pais = p;
-	return d;
-}
 
 int add_item(NFE *nfe, ITEM *item){
 	ITEM *i;
@@ -252,8 +237,105 @@ void set_chave(NFE *nfe){
 		nfe->idnfe->serie,
 		nfe->idnfe->num_nf,
 		nfe->idnfe->tipo_emissao,
-		nfe->idnfe->id_nfe);
+		nfe->idnfe->cod_nfe);
 	nfe->idnfe->div = get_dv(base);
 	nfe->idnfe->chave = malloc(sizeof(char) * (strlen(base) + 2));
 	sprintf(nfe->idnfe->chave, "%s%c", base , nfe->idnfe->div);
+}
+
+static inst_municipio(char *uf, char *nome, unsigned int codigo,
+		unsigned int cod_uf, MUNICIPIO *m){
+	m->uf = uf;		
+	m->municipio = nome;
+	m->codigo = codigo;
+	m->cod_uf = cod_uf;
+	return 0;
+}
+
+static inst_endereco(char *rua, unsigned int num, char *complemento,
+		char *bairro, unsigned int cep, ENDERECO *e){
+	e->rua = rua;
+	e->num = num;
+	e->complemento = complemento;
+	e->bairro = bairro;
+	e->cep = cep;
+	return 0;
+}
+
+static inst_emitente(char *id, char *nome, char *ie, int crt, char *cnpj,
+		char *rua, unsigned int num, char *complemento,
+		char *bairro, char *uf, char *nome_mun, unsigned int codigo,
+		unsigned int cod_uf, unsigned int cep, EMITENTE *e){
+	e->id = id;
+	e->nome = nome;
+	e->inscricao_estadual = ie;
+	e->crt = crt;
+	e->cnpj = cnpj;
+	inst_endereco(rua, num, complemento, bairro, cep, e->endereco);
+	inst_municipio(uf, nome_mun, codigo, cod_uf, e->endereco->municipio);
+	return 0;
+}
+
+static inst_destinatario(char *id, char *nome, int t_ie, char *tipo_doc, char *ie,
+		char *cnpj, char *rua, unsigned int num, char *complemento,
+		char *bairro, char *uf, char *nome_mun, unsigned int codigo,
+		unsigned int cod_uf, unsigned int cep, DESTINATARIO *d){
+	d->id = id;
+	d->nome = nome;
+	d->tipo_ie = t_ie;
+	d->cnpj = cnpj;
+	d->tipo_doc = tipo_doc;
+	d->inscricao_estadual = ie;
+	inst_endereco(rua, num, complemento, bairro, cep, d->endereco);
+	inst_municipio(uf, nome_mun, codigo, cod_uf, d->endereco->municipio);
+	return 0;
+}
+
+int inst_nfe(int id_nfe, int id_mun, int id_uf, int ind_pag, int mod_nfe,
+		int serie, int num_nf, int tipo, int local_destino, 
+		int tipo_impressao, int tipo_emissao, int tipo_ambiente, 
+		int finalidade, int consumidor_final, int presencial, int q_itens,
+		int id_emit, char *ie_emit, int crt_emit, int id_mun_emit,
+		int id_uf_emit, int cep_emit, int num_e_emit, int id_dest, 
+		int t_ie_dest, int id_mun_dest, int id_uf_dest, int num_e_dest,
+		int cod_nfe, int cep_dest, float dh_emis, float *dh_saida, float total,
+		char *nome_mun, char *uf, char *nat_op, char *versao, 
+		char *nome_emit, char *cnpj_emit, char *rua_emit,
+		char *comp_emit, char *bairro_emit, char *mun_emit, char *uf_emit,
+		char *nome_dest, char *cnpj_dest, char *rua_dest, 
+		char *comp_dest, char *bairro_dest, char *mun_dest,
+		char *uf_dest, char *chave, char div, char *ie_dest,
+		char *tipo_doc_dest, NFE *nfe){
+	IDNFE *idnfe = nfe->idnfe;
+	idnfe->id_nfe = id_nfe;
+	idnfe->nat_op = nat_op;
+	idnfe->ind_pag = ind_pag;
+	idnfe->mod = mod_nfe;
+	idnfe->serie = serie;
+	idnfe->num_nf = num_nf;
+	idnfe->dh_emis = dh_emis;
+	idnfe->dh_saida = dh_saida;
+	idnfe->tipo = tipo;
+	idnfe->local_destino = local_destino;
+	idnfe->tipo_impressao = tipo_impressao;
+	idnfe->tipo_emissao = tipo_emissao;
+	idnfe->tipo_ambiente = tipo_ambiente;
+	idnfe->finalidade = finalidade;
+	idnfe->consumidor_final = consumidor_final;
+	idnfe->presencial = presencial;
+	idnfe->versao = versao;
+	idnfe->div = div;
+	idnfe->chave = chave;
+	idnfe->cod_nfe = cod_nfe;
+	inst_municipio(uf, nome_mun, id_mun, id_uf, idnfe->municipio);
+	inst_emitente(id_emit, nome_emit, ie_emit, crt_emit, 
+		cnpj_emit, rua_emit, num_e_emit, comp_emit, bairro_emit, uf_emit,
+		uf_emit, id_mun_emit, id_uf_emit, cep_emit, nfe->emitente);
+	inst_destinatario(id_dest, nome_dest, t_ie_dest,
+		tipo_doc_dest, ie_dest, cnpj_dest, rua_dest, num_e_dest,
+		comp_dest, bairro_dest, 
+		uf_dest, mun_dest, id_mun_dest, id_uf_dest, cep_dest, 
+		nfe->destinatario);
+
+	return 0;
 }

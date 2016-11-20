@@ -53,8 +53,8 @@ typedef struct {
 	time_t *dh_saida;
 	enum t_tipo {TIPO_ENTRADA=0,TIPO_SAIDA=1} tipo;
 	enum t_local_destino {DEST_INTERNA=1,DEST_INTERESTADUAL=2,DEST_EXTERIOR=3} local_destino;
-	enum t_tipo_impresao {IMP_NONE=0,IMP_RET=1,IMP_PAI=2,IMP_SIMP=3,IMP_NFCE=4,IMP_NFCE_MSG=5}
-		tipo_impresao;
+	enum t_tipo_impressao {IMP_NONE=0,IMP_RET=1,IMP_PAI=2,IMP_SIMP=3,IMP_NFCE=4,IMP_NFCE_MSG=5}
+		tipo_impressao;
 	enum t_tipo_emissao {TE_NORMAL=1, TE_FS=2, TE_SCAN=3, TE_DPEC=4, TE_FSDA=5, TE_SVCAN=6, 
 		TE_SVCRS=7, TE_OFFLINE_NFCE=9} tipo_emissao;
 	enum t_tipo_ambiente {PRODUCAO=1, HOMOLOGACAO=2} tipo_ambiente;
@@ -66,6 +66,7 @@ typedef struct {
 	const char *versao;
 	char div;
 	char *chave;
+	int cod_nfe;
 } IDNFE;
 
 /*
