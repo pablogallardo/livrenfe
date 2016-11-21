@@ -48,7 +48,7 @@ CREATE TABLE destinatarios (id_destinatario integer, nome varchar(200),\
 	CONSTRAINT destinatario_munic_fk FOREIGN KEY (id_municipio)\
 		REFERENCES municipios(id_municipio));\
 CREATE TABLE produtos (id_produto integer, descricao varchar(200), ncm integer,\
-	cfop integer, unidade varchar(10), quantidade real, valor real,\
+	cfop integer, unidade varchar(10), valor real,\
 	CONSTRAINT produto_pk PRIMARY KEY (id_produto));\
 CREATE TABLE transportadoras (id_transportadora varchar(20), modfrete char(1), \
 	nome varchar(200),\
@@ -78,7 +78,7 @@ CREATE TABLE protocolos (id_protocolo integer, numero varchar(20), \
 CREATE TABLE nfe_itens (id_nfe integer, ordem integer, id_produto integer, icms_origem char(1),\
 	icms_tipo integer, icms_aliquota real, icms_valor real, pis_aliquota real,\
 	pis_quantidade integer, pis_nt varchar(40), cofins_aliquota real,\
-	cofins_quantidade integer, cofins_nt varchar(40),\
+	cofins_quantidade integer, cofins_nt varchar(40), qtd integer,\
 	CONSTRAINT itens_pk PRIMARY KEY (id_nfe, ordem),\
 	CONSTRAINT itens_nfe_fk FOREIGN KEY (id_nfe)\
 	REFERENCES nfe(id_nfe),\

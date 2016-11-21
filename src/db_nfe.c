@@ -232,8 +232,42 @@ GtkListStore *db_list_municipios(char *uf){
 	return list_store;
 }
 
+static int get_itens(NFE *n){
+	sqlite3_stmt *stmt;
+	char *err;
+	int rc;
+
+	enum{
+		ID_NFE, ID_MUN, MUN, ID_UF, UF, NAT_OP, IND_PAG, MOD_NFE,
+		IE_DEST, TIPO_DOC_DEST, N_COLS
+	};
+
+	char *sql = sqlite3_mprintf("SELECT ni.id_nfe, ni.ordem, ni.id_produto,\
+		ni.icms_origem, ni.icms_tipo, ni.icms_aliquota, ni.icms_valor,\
+		ni.pis_aliquota, ni.pis_quantidade, ni.pis_nt, ni.cofins_aliquota,\
+		ni.cofins_quantidade, ni.cofins_nt, ni.qtd, p.descricao, p.ncm, p.cfop,\
+		p.unidade, p.valor
+		FROM produtos p INNER JOIN nfe_itens ni\
+			ON ni.id_produto = p.id_produto\
+		WHERE ni.id_nfe = %d", id);
+	if(db_select(sql, &err, &stmt)){
+		return NULL;
+	}
+
+	do{
+		NFE *nfe = new_nfe();
+		rc = sqlite3_step(stmt);
+		if(rc == SQLITE_ROW){
+			int id_nfe, id_mun, id_uf, ind_pag, mod_nfe, serie,
+			float dh_emis, *dh_saida, total;
+			char *nome_mun, *uf, *nat_op, *versao,  *nome_emit, 
+
+			id_nfe = sqlite3_column_int(stmt, ID_NFE);
+		}
+	} while(0);
+}
+
 NFE *get_nfe(int id){
-	NFE *nfe = new_nfe();
 	sqlite3_stmt *stmt;
 	char *err;
 	int rc;
@@ -269,12 +303,13 @@ NFE *get_nfe(int id){
 		INNER JOIN destinatarios d ON d.id_destinatario = n.id_destinatario \ 
 		INNER JOIN uf u_d ON u_d.id_uf = d.id_uf \
 		INNER JOIN municipios m_d ON m_d.id_municipio = d.id_municipio \
-		WHERE id_nfe = %d", id);
+		WHERE n.id_nfe = %d", id);
 	if(db_select(sql, &err, &stmt)){
 		return NULL;
 	}
 
 	do{
+		NFE *nfe = new_nfe();
 		rc = sqlite3_step(stmt);
 		if(rc == SQLITE_ROW){
 			int id_nfe, id_mun, id_uf, ind_pag, mod_nfe, serie,
