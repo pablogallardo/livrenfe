@@ -24,19 +24,19 @@ extern NFE *new_nfe();
 
 extern ITEM *new_item();
 
-extern ITEM *inst_item(float valor, float quantidade, 
-		unsigned int ordem, ITEM *);
-
-extern ICMS *inst_icms(int origem, unsigned int tipo, float aliquota,
-		float valor, ICMS *);
-
-extern IMPOSTO *inst_imposto(ICMS *i, PIS *p, COFINS *c, IMPOSTO *);
-
 extern int add_item(NFE *nfe, ITEM *i);
 
 extern int rm_item(NFE *nfe, ITEM *i);
 
 extern void set_chave(NFE *nfe);
+
+extern int inst_item(float valor, float quantidade, 
+		unsigned int ordem, int id_produto, int icms_origem,
+		int icms_tipo, int pis_quantidade, int pis_nt,
+		int cofins_quantidade, int cofins_nt, int ncm, int cfop,
+		float icms_aliquota, float icms_valor, float pis_aliquota,
+		float cofins_aliquota, char *descricao, char *unidade,
+		ITEM *);
 
 extern int inst_nfe(int id_nfe, int id_mun, int id_uf, int ind_pag, int mod_nfe,
 		int serie, int num_nf, int tipo, int local_destino, 
