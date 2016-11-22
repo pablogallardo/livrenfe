@@ -24,8 +24,6 @@ extern NFE *new_nfe();
 
 extern ITEM *new_item();
 
-extern PRODUTO *inst_produto(int codigo, char *desc, unsigned int ncm, unsigned int cfop, char *unidade_comercial, float valor, PRODUTO *p);
-
 extern ITEM *inst_item(float valor, float quantidade, 
 		unsigned int ordem, ITEM *);
 
@@ -54,4 +52,4 @@ extern int inst_nfe(int id_nfe, int id_mun, int id_uf, int ind_pag, int mod_nfe,
 		char *nome_dest, char *cnpj_dest, char *rua_dest, 
 		char *comp_dest, char *bairro_dest, char *mun_dest,
 		char *uf_dest, char *chave, char div, char *ie_dest,
-		char *tipo_doc_dest, NFE *nfe);
+		char *tipo_doc_dest, nfe *nfe);

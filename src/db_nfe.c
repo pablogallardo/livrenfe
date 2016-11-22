@@ -22,6 +22,7 @@
 #include "utils.h"
 #include "nfe.h"
 #include "livrenfe.h"
+#include "errno.h"
 #include <gtk/gtk.h>
 #include <sqlite3.h>
 #include <stdio.h>
@@ -238,39 +239,86 @@ static int get_itens(NFE *n){
 	int rc;
 
 	enum{
-		ID_NFE, ID_MUN, MUN, ID_UF, UF, NAT_OP, IND_PAG, MOD_NFE,
-		IE_DEST, TIPO_DOC_DEST, N_COLS
+		ID_NFE, ORDEM, ID_PRODUTO, ICMS_ORIGEM, ICMS_TIPO, ICMS_ALIQ,
+		ICMS_VALOR, PIS_ALIQ, PIS_QTD, PIS_NT, COFINS_ALIQ,
+		COFINS_QTD, COFINS_NT, QTD, DESC, NCM, CFOP, UNIDADE, VALOR,
+		N_COLS
 	};
 
 	char *sql = sqlite3_mprintf("SELECT ni.id_nfe, ni.ordem, ni.id_produto,\
 		ni.icms_origem, ni.icms_tipo, ni.icms_aliquota, ni.icms_valor,\
 		ni.pis_aliquota, ni.pis_quantidade, ni.pis_nt, ni.cofins_aliquota,\
 		ni.cofins_quantidade, ni.cofins_nt, ni.qtd, p.descricao, p.ncm, p.cfop,\
-		p.unidade, p.valor
+		p.unidade, p.valor\
 		FROM produtos p INNER JOIN nfe_itens ni\
 			ON ni.id_produto = p.id_produto\
-		WHERE ni.id_nfe = %d", id);
+		WHERE ni.id_nfe = %d", n->idnfe->id_nfe);
 	if(db_select(sql, &err, &stmt)){
-		return NULL;
+		return -ESQL;
 	}
 
 	do{
-		NFE *nfe = new_nfe();
+		ITEM *i = new_item();
 		rc = sqlite3_step(stmt);
 		if(rc == SQLITE_ROW){
-			int id_nfe, id_mun, id_uf, ind_pag, mod_nfe, serie,
-			float dh_emis, *dh_saida, total;
-			char *nome_mun, *uf, *nat_op, *versao,  *nome_emit, 
+			int id_nfe, ordem, id_produto, icms_origem, icms_tipo,
+				pis_quantidade, pis_nt, cofins_quantidade,
+				cofins_nt, quantidade, ncm, cfop;
+			float icms_aliquota, icms_valor, pis_aliquota,
+				cofins_aliquota, valor;
+			char *descricao, *unidade; 
 
 			id_nfe = sqlite3_column_int(stmt, ID_NFE);
+			ordem = sqlite3_column_int(stmt, ORDEM);
+			id_produto = sqlite3_column_int(stmt, ID_PRODUTO);
+			icms_origem = sqlite3_column_int(stmt, ICMS_ORIGEM);
+			icms_tipo = sqlite3_column_int(stmt, ICMS_TIPO);
+			pis_quantidade = sqlite3_column_int(stmt, PIS_QTD);
+			pis_nt = sqlite3_column_int(stmt, PIS_NT);
+			cofins_quantidade = sqlite3_column_int(stmt, COFINS_QTD);
+			cofins_nt = sqlite3_column_int(stmt, COFINS_NT);
+			quantidade = sqlite3_column_int(stmt, QTD);
+			ncm = sqlite3_column_int(stmt, NCM);
+			cfop = sqlite3_column_int(stmt, CFOP);
+
+			icms_aliquota = sqlite3_column_double(stmt, ICMS_ALIQ);
+			icms_valor = sqlite3_column_double(stmt, ICMS_VALOR);
+			pis_aliquota = sqlite3_column_double(stmt, PIS_ALIQ);
+			pis_quantidade= sqlite3_column_double(stmt, PIS_QTD);
+			cofins_aliquota = sqlite3_column_double(stmt, COFINS_ALIQ);
+			valor = sqlite3_column_double(stmt, VALOR);
+
+			descricao = sqlite3_column_text(stmt, DESC);
+			unidade = sqlite3_column_text(stmt, UNIDADE);
+		} else if(rc == SQLITE_DONE){
+			break;
+		} else {
+			return -ESQL;
 		}
-	} while(0);
+	} while(rc == SQLITE_ROW);
+	return 0;
 }
 
 NFE *get_nfe(int id){
 	sqlite3_stmt *stmt;
 	char *err;
 	int rc;
+	NFE *nfe;
+	int id_nfe, id_mun, id_uf, ind_pag, mod_nfe, serie,
+		num_nf, tipo, local_destino, tipo_impressao,
+		tipo_emissao, tipo_ambiente, finalidade, 
+		consumidor_final, presencial, q_itens,
+		id_emit, crt_emit, id_mun_emit,
+		id_uf_emit, cep_emit, id_dest, t_ie_dest,
+		id_mun_dest, id_uf_dest, cod_nfe,
+		num_e_emit, num_e_dest, cep_dest;
+	float dh_emis, *dh_saida, total;
+	char *nome_mun, *uf, *nat_op, *versao,  *nome_emit, 
+		*cnpj_emit, *rua_emit, *comp_emit, *bairro_emit,
+		*mun_emit, *uf_emit, *nome_dest, *cnpj_dest,
+		*rua_dest, *comp_dest,*bairro_dest, *mun_dest,
+		*uf_dest, *chave, div, *ie_emit, *ie_dest,
+		*tipo_doc_dest;
 
 	enum{
 		ID_NFE, ID_MUN, MUN, ID_UF, UF, NAT_OP, IND_PAG, MOD_NFE,
@@ -282,7 +330,7 @@ NFE *get_nfe(int id){
 		ID_UF_EMIT, UF_EMIT, CEP_EMIT, ID_DEST, NOME_DEST, T_IE_DEST, 
 		CNPJ_DEST, RUA_DEST, COMP_DEST, BAIRRO_DEST, ID_MUN_DEST, 
 		MUN_DEST, ID_UF_DEST, UF_DEST, COD_NFE, NUM_E_EMIT, NUM_E_DEST,
-		IE_DEST, TIPO_DOC_DEST, N_COLS
+		IE_DEST, TIPO_DOC_DEST, CEP_DEST, N_COLS
 	};
 
 	char *sql = sqlite3_mprintf("SELECT n.id_nfe, m.id_municipio, m.nome, u.id_uf, u.nome, \
@@ -294,7 +342,7 @@ NFE *get_nfe(int id){
 		u_e.id_uf, u_e.nome, u_e.cep, d.id_destinatario, d.nome, d.tipo_ie, \
 		d.cnpj, d.rua, d.complemento, d.bairro, m_d.id_municipio, m_d.nome, \
 		u_d.id_uf, u_d.nome, d.cep, n.cod_nfe, e.numero, d.numero, \
-		d.inscricao_estadual, d.tipo_doc\
+		d.inscricao_estadual, d.tipo_doc, d.cep_dest\
 		FROM nfe n INNER JOIN municipios m ON m.id_municipio = n.id_municipio \
 		INNER JOIN uf u ON u.id_uf = m.id_uf \
 		INNER JOIN emitentes e ON e.id_emitente = n.id_emitente \
@@ -309,24 +357,9 @@ NFE *get_nfe(int id){
 	}
 
 	do{
-		NFE *nfe = new_nfe();
+		nfe = new_nfe();
 		rc = sqlite3_step(stmt);
 		if(rc == SQLITE_ROW){
-			int id_nfe, id_mun, id_uf, ind_pag, mod_nfe, serie,
-				num_nf, tipo, local_destino, tipo_impressao,
-				tipo_emissao, tipo_ambiente, finalidade, 
-				consumidor_final, presencial, q_itens,
-				id_emit, crt_emit, id_mun_emit,
-				id_uf_emit, cep_emit, id_dest, t_ie_dest,
-				id_mun_dest, id_uf_dest, cod_nfe,
-				num_e_emit, num_e_dest;
-			float dh_emis, *dh_saida, total;
-			char *nome_mun, *uf, *nat_op, *versao,  *nome_emit, 
-				*cnpj_emit, *rua_emit, *comp_emit, *bairro_emit,
-				*mun_emit, *uf_emit, *nome_dest, *cnpj_dest,
-				*rua_dest, *comp_dest,*bairro_dest, *mun_dest,
-				*uf_dest, *chave, div, *ie_emit, *ie_dest,
-				*tipo_doc_dest;
 
 			id_nfe = sqlite3_column_int(stmt, ID_NFE);
 			id_mun = sqlite3_column_int(stmt, ID_MUN);
@@ -351,6 +384,7 @@ NFE *get_nfe(int id){
 			id_mun_emit = sqlite3_column_int(stmt, ID_MUN_EMIT);
 			id_uf_emit = sqlite3_column_int(stmt, ID_UF_EMIT);
 			cep_emit = sqlite3_column_int(stmt, CEP_EMIT);
+			cep_dest = sqlite3_column_int(stmt, CEP_DEST);
 			id_dest = sqlite3_column_int(stmt, ID_DEST);
 			t_ie_dest = sqlite3_column_int(stmt, T_IE_DEST);
 			id_mun_dest = sqlite3_column_int(stmt, ID_MUN_DEST);
@@ -393,5 +427,21 @@ NFE *get_nfe(int id){
 			return NULL;
 		}
 	} while(rc == SQLITE_ROW);
-	return NULL;
+	inst_nfe(id_nfe, id_mun, id_uf, ind_pag, mod_nfe,
+		serie, num_nf, tipo, local_destino, 
+		tipo_impressao, tipo_emissao, tipo_ambiente, 
+		finalidade, consumidor_final, presencial, q_itens,
+		id_emit, ie_emit, crt_emit, id_mun_emit,
+		id_uf_emit, cep_emit, num_e_emit, id_dest, 
+		t_ie_dest, id_mun_dest, id_uf_dest, num_e_dest,
+		cod_nfe, cep_dest, dh_emis, dh_saida, total,
+		nome_mun, uf, nat_op, versao, 
+		nome_emit, cnpj_emit, rua_emit,
+		comp_emit, bairro_emit, mun_emit, uf_emit,
+		nome_dest, cnpj_dest, rua_dest, 
+		comp_dest, bairro_dest, mun_dest,
+		uf_dest, chave, div, ie_dest,
+		tipo_doc_dest, nfe);
+	get_itens(nfe);
+	return nfe;
 }
