@@ -73,9 +73,9 @@ static void set_item(GtkButton *b, GtkWidget *iman){
 	inst_icms(1, 1, atof(gtk_entry_get_text(priv->icms_aliquota)),
 		atof(gtk_entry_get_text(priv->icms_credito_aproveitado)),
 		item->imposto->icms);
-	inst_item(atof(gtk_entry_get_text(priv->valor)),
-		atof(gtk_entry_get_text(priv->quantidade)),
-		(ITEM_MANAGER(iman))->nfe->q_itens + 1, item);
+	item->valor = atof(gtk_entry_get_text(priv->valor));
+	item->quantidade = atof(gtk_entry_get_text(priv->quantidade));
+	item->ordem = (ITEM_MANAGER(iman))->nfe->q_itens + 1; 
 	add_item(nfe, item);
 	gtk_widget_destroy(iman);
 }

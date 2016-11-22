@@ -250,7 +250,7 @@ static int get_itens(NFE *n){
 		ni.pis_aliquota, ni.pis_quantidade, ni.pis_nt, ni.cofins_aliquota,\
 		ni.cofins_quantidade, ni.cofins_nt, ni.qtd, p.descricao, p.ncm, p.cfop,\
 		p.unidade, p.valor\
-		FROM produtos p INNER JOIN nfe_itens ni\
+		FROM produtos p LEFT JOIN nfe_itens ni\
 			ON ni.id_produto = p.id_produto\
 		WHERE ni.id_nfe = %d", n->idnfe->id_nfe);
 	if(db_select(sql, &err, &stmt)){
@@ -263,9 +263,9 @@ static int get_itens(NFE *n){
 		if(rc == SQLITE_ROW){
 			int id_nfe, ordem, id_produto, icms_origem, icms_tipo,
 				pis_quantidade, pis_nt, cofins_quantidade,
-				cofins_nt, quantidade, ncm, cfop;
+				cofins_nt, ncm, cfop;
 			float icms_aliquota, icms_valor, pis_aliquota,
-				cofins_aliquota, valor;
+				cofins_aliquota, valor, quantidade;
 			char *descricao, *unidade; 
 
 			id_nfe = sqlite3_column_int(stmt, ID_NFE);
@@ -277,7 +277,6 @@ static int get_itens(NFE *n){
 			pis_nt = sqlite3_column_int(stmt, PIS_NT);
 			cofins_quantidade = sqlite3_column_int(stmt, COFINS_QTD);
 			cofins_nt = sqlite3_column_int(stmt, COFINS_NT);
-			quantidade = sqlite3_column_int(stmt, QTD);
 			ncm = sqlite3_column_int(stmt, NCM);
 			cfop = sqlite3_column_int(stmt, CFOP);
 
@@ -287,9 +286,18 @@ static int get_itens(NFE *n){
 			pis_quantidade= sqlite3_column_double(stmt, PIS_QTD);
 			cofins_aliquota = sqlite3_column_double(stmt, COFINS_ALIQ);
 			valor = sqlite3_column_double(stmt, VALOR);
+			quantidade = sqlite3_column_double(stmt, QTD);
 
 			descricao = sqlite3_column_text(stmt, DESC);
 			unidade = sqlite3_column_text(stmt, UNIDADE);
+
+			inst_item(valor, quantidade, 
+				ordem, id_produto, icms_origem,
+				icms_tipo, pis_quantidade, pis_nt,
+				cofins_quantidade, cofins_nt, ncm, cfop,
+				icms_aliquota, icms_valor, pis_aliquota,
+				cofins_aliquota, descricao, unidade, i);
+			add_item(n, i);
 		} else if(rc == SQLITE_DONE){
 			break;
 		} else {
@@ -312,7 +320,7 @@ NFE *get_nfe(int id){
 		id_uf_emit, cep_emit, id_dest, t_ie_dest,
 		id_mun_dest, id_uf_dest, cod_nfe,
 		num_e_emit, num_e_dest, cep_dest;
-	float dh_emis, *dh_saida, total;
+	float dh_emis, dh_saida, total;
 	char *nome_mun, *uf, *nat_op, *versao,  *nome_emit, 
 		*cnpj_emit, *rua_emit, *comp_emit, *bairro_emit,
 		*mun_emit, *uf_emit, *nome_dest, *cnpj_dest,
@@ -333,33 +341,33 @@ NFE *get_nfe(int id){
 		IE_DEST, TIPO_DOC_DEST, CEP_DEST, N_COLS
 	};
 
-	char *sql = sqlite3_mprintf("SELECT n.id_nfe, m.id_municipio, m.nome, u.id_uf, u.nome, \
+	char *sql = sqlite3_mprintf("SELECT n.id_nfe, m.id_municipio, m.nome, u.cod_ibge, u.nome, \
 		n.nat_op, n.ind_pag, n.mod_nfe, n.serie, n.num_nf, n.dh_emis, n.dh_saida, \
 		n.tipo, n.local_destino, n.tipo_impressao, n.tipo_emissao, n.tipo_ambiente, \
 		n.finalidade, n.consumidor_final, n.presencial, n.versao, n.div, n.chave, \
 		n.q_itens, n.total, e.id_emitente, e.nome, e.inscricao_estadual, \
 		e.crt, e.cnpj, e.rua, e.complemento, e.bairro, e.id_municipio, m_e.nome, \
-		u_e.id_uf, u_e.nome, u_e.cep, d.id_destinatario, d.nome, d.tipo_ie, \
+		u_e.cod_ibge, u_e.nome, e.cep, d.id_destinatario, d.nome, d.tipo_ie, \
 		d.cnpj, d.rua, d.complemento, d.bairro, m_d.id_municipio, m_d.nome, \
-		u_d.id_uf, u_d.nome, d.cep, n.cod_nfe, e.numero, d.numero, \
-		d.inscricao_estadual, d.tipo_doc, d.cep_dest\
-		FROM nfe n INNER JOIN municipios m ON m.id_municipio = n.id_municipio \
-		INNER JOIN uf u ON u.id_uf = m.id_uf \
-		INNER JOIN emitentes e ON e.id_emitente = n.id_emitente \
-		INNER JOIN uf u_e u_e.id_uf = e.id_uf \
-		INNER JOIN municipios m_e m_e.id_municipio = e.id_municipio \
-		INNER JOIN destinatarios d ON d.id_destinatario = n.id_destinatario \ 
-		INNER JOIN uf u_d ON u_d.id_uf = d.id_uf \
-		INNER JOIN municipios m_d ON m_d.id_municipio = d.id_municipio \
+		u_d.cod_ibge, u_d.nome, d.cep, n.cod_nfe, e.numero, d.numero, \
+		d.inscricao_estadual, d.tipo_doc, d.cep\
+		FROM nfe n LEFT JOIN municipios m ON m.id_municipio = n.id_municipio \
+		LEFT JOIN uf u ON u.id_uf = m.id_uf \
+		LEFT JOIN emitentes e ON e.id_emitente = n.id_emitente \
+		LEFT JOIN municipios m_e ON m_e.id_municipio = e.id_municipio \
+		LEFT JOIN uf u_e ON u_e.id_uf = m_e.id_uf \
+		LEFT JOIN destinatarios d ON d.id_destinatario = n.id_destinatario \ 
+		LEFT JOIN municipios m_d ON m_d.id_municipio = d.id_municipio \
+		LEFT JOIN uf u_d ON u_d.id_uf = m_d.id_uf \
 		WHERE n.id_nfe = %d", id);
 	if(db_select(sql, &err, &stmt)){
 		return NULL;
 	}
 
 	do{
-		nfe = new_nfe();
 		rc = sqlite3_step(stmt);
 		if(rc == SQLITE_ROW){
+			nfe = new_nfe();
 
 			id_nfe = sqlite3_column_int(stmt, ID_NFE);
 			id_mun = sqlite3_column_int(stmt, ID_MUN);
@@ -395,7 +403,7 @@ NFE *get_nfe(int id){
 			tipo_doc_dest = sqlite3_column_int(stmt, TIPO_DOC_DEST);
 
 			dh_emis = sqlite3_column_double(stmt, DH_EMIS);
-			*dh_saida = sqlite3_column_double(stmt, DH_SAIDA);
+			dh_saida = sqlite3_column_double(stmt, DH_SAIDA);
 			total = sqlite3_column_double(stmt, TOTAL);
 
 			nome_mun = sqlite3_column_text(stmt, MUN); 
@@ -434,7 +442,7 @@ NFE *get_nfe(int id){
 		id_emit, ie_emit, crt_emit, id_mun_emit,
 		id_uf_emit, cep_emit, num_e_emit, id_dest, 
 		t_ie_dest, id_mun_dest, id_uf_dest, num_e_dest,
-		cod_nfe, cep_dest, dh_emis, dh_saida, total,
+		cod_nfe, cep_dest, dh_emis, &dh_saida, total,
 		nome_mun, uf, nat_op, versao, 
 		nome_emit, cnpj_emit, rua_emit,
 		comp_emit, bairro_emit, mun_emit, uf_emit,

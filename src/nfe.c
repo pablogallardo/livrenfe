@@ -154,7 +154,7 @@ NFE *new_nfe(){
 	return p;
 }
 
-static int inst_produto(int codigo, char *desc, unsigned int ncm, unsigned int cfop,
+int inst_produto(int codigo, char *desc, unsigned int ncm, unsigned int cfop,
 		char *unidade_comercial, float valor, PRODUTO *p){
 	p->codigo = codigo;
 	if(desc != NULL){
@@ -169,23 +169,23 @@ static int inst_produto(int codigo, char *desc, unsigned int ncm, unsigned int c
 		strcpy(p->unidade_comercial, unidade_comercial);
 	}
 	p->valor = valor;
-	return p;
+	return 0;
 }
 
-static int inst_icms(int origem, unsigned int tipo, float aliquota, float valor,
+int inst_icms(int origem, unsigned int tipo, float aliquota, float valor,
 		ICMS *i){
 	i->origem = origem;
 	i->tipo = tipo;
 	i->aliquota = aliquota;
 	i->valor = valor;
-	return i;
+	return 0;
 }
 
 static int inst_imposto(ICMS *i, PIS *p, COFINS *c, IMPOSTO *imp){
 	imp->icms = i;
 	imp->pis = p;
 	imp->cofins = c;
-	return imp;
+	return 0;
 }
 
 int inst_item(float valor, float quantidade, 
@@ -195,11 +195,13 @@ int inst_item(float valor, float quantidade,
 		float icms_aliquota, float icms_valor, float pis_aliquota,
 		float cofins_aliquota, char *descricao, char *unidade,
 		ITEM *i){
-	i->valor = valor;
+	inst_produto(id_produto, descricao, ncm, cfop, unidade, valor,
+		i->produto);
+	inst_icms(ordem, icms_tipo, icms_aliquota, icms_valor,i->imposto->icms);
 	i->ordem = ordem;
 	i->quantidade = quantidade;
-	i->pointer = NULL;
-	return i;
+	i->valor;
+	return 0;
 }
 
 int add_item(NFE *nfe, ITEM *item){

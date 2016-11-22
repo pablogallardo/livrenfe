@@ -30,6 +30,12 @@ extern int rm_item(NFE *nfe, ITEM *i);
 
 extern void set_chave(NFE *nfe);
 
+extern int inst_produto(int codigo, char *desc, unsigned int ncm, unsigned int cfop,
+		char *unidade_comercial, float valor, PRODUTO *p);
+
+extern int inst_icms(int origem, unsigned int tipo, float aliquota, float valor,
+		ICMS *i);
+
 extern int inst_item(float valor, float quantidade, 
 		unsigned int ordem, int id_produto, int icms_origem,
 		int icms_tipo, int pis_quantidade, int pis_nt,
@@ -52,4 +58,4 @@ extern int inst_nfe(int id_nfe, int id_mun, int id_uf, int ind_pag, int mod_nfe,
 		char *nome_dest, char *cnpj_dest, char *rua_dest, 
 		char *comp_dest, char *bairro_dest, char *mun_dest,
 		char *uf_dest, char *chave, char div, char *ie_dest,
-		char *tipo_doc_dest, nfe *nfe);
+		char *tipo_doc_dest, NFE *nfe);

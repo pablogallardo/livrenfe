@@ -35,15 +35,15 @@ CREATE TABLE municipios (id_municipio varchar(7), id_uf varchar(2), nome varchar
 CREATE TABLE emitentes (id_emitente integer, nome varchar(100),\
 	inscricao_estadual varchar(20), \
 	crt char(1), cnpj varchar(14), rua varchar(200), complemento varchar(200),\
-	bairro varchar(200), id_municipio varchar(7), cep varchar(9), integer numero, \
+	bairro varchar(200), id_municipio varchar(7), cep varchar(9), numero integer, \
 	CONSTRAINT emitente_pk PRIMARY KEY (id_emitente),\
 	CONSTRAINT emitente_munic_fk FOREIGN KEY (id_municipio)\
 		REFERENCES municipios(id_municipio));\
 CREATE TABLE destinatarios (id_destinatario integer, nome varchar(200),\
 	tipo_ie char(1), cnpj varchar(14), rua varchar(200),\
 	complemento varchar(200), bairro varchar(200), id_municipio varchar(7),\
-	cep varchar(9), integer numero, varchar(20) inscricao_estadual,\
-	varchar(4) tipo_doc,\
+	cep varchar(9), numero integer, inscricao_estadual varchar(20),\
+	tipo_doc varchar(4),\
 	CONSTRAINT destinatario_pk PRIMARY KEY (id_destinatario),\
 	CONSTRAINT destinatario_munic_fk FOREIGN KEY (id_municipio)\
 		REFERENCES municipios(id_municipio));\
@@ -60,7 +60,7 @@ CREATE TABLE nfe (id_nfe integer, id_municipio varchar(8),\
 	tipo_ambiente char(1), finalidade char(1), consumidor_final char(1),\
 	presencial char(1), versao varchar(10), div char(1), chave varchar(20),\
 	id_emitente integer, id_destinatario integer, q_itens integer,\
-	total real, id_transportadora varchar(20), cod_nfe integer DEFAULT ABS(RANDOM() % 99999999),\
+	total real, id_transportadora varchar(20), cod_nfe integer,\
 	CONSTRAINT nfe_pk PRIMARY KEY (id_nfe),\
 	CONSTRAINT nfe_municipio_fk FOREIGN KEY (id_municipio)\
 	REFERENCES municipios(id_municipio),\
