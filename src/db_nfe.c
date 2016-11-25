@@ -27,6 +27,7 @@
 #include <sqlite3.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 GtkListStore *get_list_nfe(){
 	sqlite3_stmt *stmt;
@@ -288,8 +289,8 @@ static int get_itens(NFE *n){
 			valor = sqlite3_column_double(stmt, VALOR);
 			quantidade = sqlite3_column_double(stmt, QTD);
 
-			descricao = sqlite3_column_text(stmt, DESC);
-			unidade = sqlite3_column_text(stmt, UNIDADE);
+			descricao = strdup(sqlite3_column_text(stmt, DESC));
+			unidade = strdup(sqlite3_column_text(stmt, UNIDADE));
 
 			inst_item(valor, quantidade, 
 				ordem, id_produto, icms_origem,
@@ -406,28 +407,28 @@ NFE *get_nfe(int id){
 			dh_saida = sqlite3_column_double(stmt, DH_SAIDA);
 			total = sqlite3_column_double(stmt, TOTAL);
 
-			nome_mun = sqlite3_column_text(stmt, MUN); 
-			uf = sqlite3_column_text(stmt, UF); 
-			nat_op = sqlite3_column_text(stmt, NAT_OP); 
-			versao = sqlite3_column_text(stmt, VERSAO); 
-			nome_emit = sqlite3_column_text(stmt, NOME_EMIT); 
-			cnpj_emit = sqlite3_column_text(stmt, CNPJ_EMIT); 
-			rua_emit = sqlite3_column_text(stmt, RUA_EMIT); 
-			comp_emit = sqlite3_column_text(stmt, COMP_EMIT); 
-			bairro_emit = sqlite3_column_text(stmt, BAIRRO_EMIT); 
-			mun_emit = sqlite3_column_text(stmt, MUN_EMIT); 
-			uf_emit = sqlite3_column_text(stmt, UF_EMIT); 
-			ie_emit = sqlite3_column_text(stmt, IE_EMIT);
-			ie_dest = sqlite3_column_text(stmt, IE_DEST);
-			nome_dest = sqlite3_column_text(stmt, NOME_DEST); 
-			cnpj_dest = sqlite3_column_text(stmt, CNPJ_DEST); 
-			rua_dest = sqlite3_column_text(stmt, RUA_DEST); 
-			comp_dest = sqlite3_column_text(stmt, COMP_DEST); 
-			bairro_dest = sqlite3_column_text(stmt, BAIRRO_DEST); 
-			mun_dest = sqlite3_column_text(stmt, MUN_DEST); 
-			uf_dest = sqlite3_column_text(stmt, UF_DEST); 
-			chave = sqlite3_column_text(stmt, CHAVE); 
-			char *aux = sqlite3_column_text(stmt, DIV); 
+			nome_mun = strdup(sqlite3_column_text(stmt, MUN)); 
+			uf = strdup(sqlite3_column_text(stmt, UF)); 
+			nat_op = strdup(sqlite3_column_text(stmt, NAT_OP)); 
+			versao = strdup(sqlite3_column_text(stmt, VERSAO)); 
+			nome_emit = strdup(sqlite3_column_text(stmt, NOME_EMIT)); 
+			cnpj_emit = strdup(sqlite3_column_text(stmt, CNPJ_EMIT)); 
+			rua_emit = strdup(sqlite3_column_text(stmt, RUA_EMIT)); 
+			comp_emit = strdup(sqlite3_column_text(stmt, COMP_EMIT)); 
+			bairro_emit = strdup(sqlite3_column_text(stmt, BAIRRO_EMIT)); 
+			mun_emit = strdup(sqlite3_column_text(stmt, MUN_EMIT)); 
+			uf_emit = strdup(sqlite3_column_text(stmt, UF_EMIT)); 
+			ie_emit = strdup(sqlite3_column_text(stmt, IE_EMIT));
+			ie_dest = strdup(sqlite3_column_text(stmt, IE_DEST));
+			nome_dest = strdup(sqlite3_column_text(stmt, NOME_DEST)); 
+			cnpj_dest = strdup(sqlite3_column_text(stmt, CNPJ_DEST)); 
+			rua_dest = strdup(sqlite3_column_text(stmt, RUA_DEST)); 
+			comp_dest = strdup(sqlite3_column_text(stmt, COMP_DEST)); 
+			bairro_dest = strdup(sqlite3_column_text(stmt, BAIRRO_DEST)); 
+			mun_dest = strdup(sqlite3_column_text(stmt, MUN_DEST)); 
+			uf_dest = strdup(sqlite3_column_text(stmt, UF_DEST)); 
+			chave = strdup(sqlite3_column_text(stmt, CHAVE)); 
+			char *aux = strdup(sqlite3_column_text(stmt, DIV)); 
 			div = aux[0];
 		} else if(rc == SQLITE_DONE){
 			break;
