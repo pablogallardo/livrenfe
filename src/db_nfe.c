@@ -104,11 +104,11 @@ int register_nfe(NFE *nfe){
 		presencial, versao, div, chave, id_emitente, id_destinatario, \
 		q_itens, total, id_transportadora) VALUES  \
 		(%d, %Q, %d, '%d', '%d', '%d', %lu, %Q, '%d', '%d' , '%d', '%d', \
-		 '%d', '%d', '%d', '%s', '%d', %Q, '%d', '%d' , '%d', %f, %Q);",
+		 '%d', '%d', '%d', '%s', '%d', %Q, '%d', '1' , '%d', %f, %Q);",
 		idnfe->municipio->codigo, idnfe->nat_op, idnfe->ind_pag, idnfe->mod, idnfe->serie,
 		idnfe->num_nf, (unsigned long)idnfe->dh_emis, idnfe->dh_saida == NULL? NULL:itoa(*idnfe->dh_saida), idnfe->tipo,
 		idnfe->local_destino, idnfe->tipo_impressao, idnfe->tipo_ambiente, idnfe->finalidade, idnfe->consumidor_final, idnfe->presencial,
-		idnfe->versao, idnfe->div, idnfe->chave, nfe->emitente->id, last_id, nfe->q_itens,
+		idnfe->versao, idnfe->div, idnfe->chave, last_id, nfe->q_itens,
 		nfe->total, nfe->transp);
 	db_exec(sql, &err);
 	if(err){
@@ -412,13 +412,13 @@ NFE *get_nfe(int id){
 			uf = strdup(sqlite3_column_text(stmt, UF)); 
 			nat_op = strdup(sqlite3_column_text(stmt, NAT_OP)); 
 			versao = strdup(sqlite3_column_text(stmt, VERSAO)); 
-			//nome_emit = strdup(sqlite3_column_text(stmt, NOME_EMIT)); 
-			//cnpj_emit = strdup(sqlite3_column_text(stmt, CNPJ_EMIT)); 
-			//rua_emit = strdup(sqlite3_column_text(stmt, RUA_EMIT)); 
-			//comp_emit = strdup(sqlite3_column_text(stmt, COMP_EMIT)); 
-			//bairro_emit = strdup(sqlite3_column_text(stmt, BAIRRO_EMIT)); 
-			//mun_emit = strdup(sqlite3_column_text(stmt, MUN_EMIT)); 
-			//uf_emit = strdup(sqlite3_column_text(stmt, UF_EMIT)); 
+			nome_emit = strdup(sqlite3_column_text(stmt, NOME_EMIT)); 
+			cnpj_emit = strdup(sqlite3_column_text(stmt, CNPJ_EMIT)); 
+			rua_emit = strdup(sqlite3_column_text(stmt, RUA_EMIT)); 
+			comp_emit = strdup(sqlite3_column_text(stmt, COMP_EMIT)); 
+			bairro_emit = strdup(sqlite3_column_text(stmt, BAIRRO_EMIT)); 
+			mun_emit = strdup(sqlite3_column_text(stmt, MUN_EMIT)); 
+			uf_emit = strdup(sqlite3_column_text(stmt, UF_EMIT)); 
 			//ie_emit = strdup(sqlite3_column_text(stmt, IE_EMIT));
 			//ie_dest = strdup(sqlite3_column_text(stmt, IE_DEST));
 			nome_dest = strdup(sqlite3_column_text(stmt, NOME_DEST)); 
@@ -454,4 +454,48 @@ NFE *get_nfe(int id){
 		tipo_doc_dest, nfe);
 	get_itens(nfe);
 	return nfe;
+}
+
+EMITENTE *get_emitente(int id){
+	EMITENTE *e = new_emitente();
+	char *err = NULL;
+	sqlite3_stmt *stmt;
+	enum{
+		ID_EMIT, NOME, IE, CRT, CNPJ, RUA, BAIRRO, ID_MUN, CEP,
+		NUM, MUN, ID_UF, UF
+	};
+	int crt, num, id_uf, id_mun, cep, rc;
+	char *nome, *ie, *cnpj, *rua, *bairro, *mun, *uf, *comp;
+	char *sql = sqlite3_mprintf("SELECT e.id_emitente, e.nome,\
+		e.inscricao_estadual, e.crt, e.cnpj, e.rua, e.bairro,\
+		e.id_municipio, e.cep, e.numero, m.nome, u.cod_ibge, u.nome,\
+		FROM emitentes e LEFT JOIN municipios m \
+			ON m.id_municipio = e.id_municipio\
+		LEFT JOIN uf u ON u.id_uf = m.id_uf\
+		WHERE e.id_emitente = %d", id);
+	if(db_select(sql, &err, &stmt)){
+		return NULL;
+	}
+
+	rc = sqlite3_step(stmt);
+	if(rc != SQLITE_ROW)
+		return NULL;
+	crt = sqlite3_column_int(stmt, CRT);
+	num = sqlite3_column_int(stmt, NUM);
+	id_uf = sqlite3_column_int(stmt, ID_UF);
+	id_mun = sqlite3_column_int(stmt, ID_MUN);
+	cep = sqlite3_column_int(stmt, CEP);
+
+	nome = strdup(sqlite3_column_text(stmt, NOME));
+	ie = strdup(sqlite3_column_text(stmt, IE));
+	cnpj = strdup(sqlite3_column_text(stmt, CNPJ));
+	rua = strdup(sqlite3_column_text(stmt, RUA));
+	bairro = strdup(sqlite3_column_text(stmt, BAIRRO));
+	mun = strdup(sqlite3_column_text(stmt, MUN));
+	uf = strdup(sqlite3_column_text(stmt, UF));
+	comp = NULL;
+	inst_emitente(id, nome, ie, crt, cnpj, rua, num, comp,
+		bairro, uf, mun, id_mun, id_uf, cep, e);
+	return e;
+
 }

@@ -61,7 +61,7 @@ static ENDERECO *new_endereco(){
 	return p;
 }
 
-static EMITENTE *new_emitente(){
+EMITENTE *new_emitente(){
 	EMITENTE e = {
 		.endereco = new_endereco()
 	};
@@ -249,7 +249,7 @@ void set_chave(NFE *nfe){
 	sprintf(nfe->idnfe->chave, "%s%c", base , nfe->idnfe->div);
 }
 
-static inst_municipio(char *uf, char *nome, unsigned int codigo,
+static int inst_municipio(char *uf, char *nome, unsigned int codigo,
 		unsigned int cod_uf, MUNICIPIO *m){
 	m->uf = uf;		
 	m->municipio = nome;
@@ -258,7 +258,7 @@ static inst_municipio(char *uf, char *nome, unsigned int codigo,
 	return 0;
 }
 
-static inst_endereco(char *rua, unsigned int num, char *complemento,
+static int inst_endereco(char *rua, unsigned int num, char *complemento,
 		char *bairro, unsigned int cep, ENDERECO *e){
 	e->rua = rua;
 	e->num = num;
@@ -268,7 +268,7 @@ static inst_endereco(char *rua, unsigned int num, char *complemento,
 	return 0;
 }
 
-static inst_emitente(char *id, char *nome, char *ie, int crt, char *cnpj,
+int inst_emitente(char *id, char *nome, char *ie, int crt, char *cnpj,
 		char *rua, unsigned int num, char *complemento,
 		char *bairro, char *uf, char *nome_mun, unsigned int codigo,
 		unsigned int cod_uf, unsigned int cep, EMITENTE *e){
@@ -282,7 +282,7 @@ static inst_emitente(char *id, char *nome, char *ie, int crt, char *cnpj,
 	return 0;
 }
 
-static inst_destinatario(char *id, char *nome, int t_ie, char *tipo_doc, char *ie,
+static int inst_destinatario(char *id, char *nome, int t_ie, char *tipo_doc, char *ie,
 		char *cnpj, char *rua, unsigned int num, char *complemento,
 		char *bairro, char *uf, char *nome_mun, unsigned int codigo,
 		unsigned int cod_uf, unsigned int cep, DESTINATARIO *d){
