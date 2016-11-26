@@ -125,7 +125,7 @@ int register_nfe(NFE *nfe){
 		PIS *pis = imp->pis;
 		COFINS *cofins = imp->cofins;
 		sql = sqlite3_mprintf("INSERT INTO  produtos (id_produto, descricao, ncm, cfop, unidade,\
-			valor_real) VALUES (%d, %Q, %d, %d, %Q, %f);",
+			valor) VALUES (%d, %Q, %d, %d, %Q, %f);",
 		       p->codigo, p->descricao, p->ncm, p->cfop, p->unidade_comercial,
 		       p->valor);
 		db_exec(sql, &err);
@@ -254,6 +254,7 @@ static int get_itens(NFE *n){
 		FROM produtos p LEFT JOIN nfe_itens ni\
 			ON ni.id_produto = p.id_produto\
 		WHERE ni.id_nfe = %d", n->idnfe->id_nfe);
+	fprintf(stderr, "%s", sql);
 	if(db_select(sql, &err, &stmt)){
 		return -ESQL;
 	}
@@ -411,15 +412,15 @@ NFE *get_nfe(int id){
 			uf = strdup(sqlite3_column_text(stmt, UF)); 
 			nat_op = strdup(sqlite3_column_text(stmt, NAT_OP)); 
 			versao = strdup(sqlite3_column_text(stmt, VERSAO)); 
-			nome_emit = strdup(sqlite3_column_text(stmt, NOME_EMIT)); 
-			cnpj_emit = strdup(sqlite3_column_text(stmt, CNPJ_EMIT)); 
-			rua_emit = strdup(sqlite3_column_text(stmt, RUA_EMIT)); 
-			comp_emit = strdup(sqlite3_column_text(stmt, COMP_EMIT)); 
-			bairro_emit = strdup(sqlite3_column_text(stmt, BAIRRO_EMIT)); 
-			mun_emit = strdup(sqlite3_column_text(stmt, MUN_EMIT)); 
-			uf_emit = strdup(sqlite3_column_text(stmt, UF_EMIT)); 
-			ie_emit = strdup(sqlite3_column_text(stmt, IE_EMIT));
-			ie_dest = strdup(sqlite3_column_text(stmt, IE_DEST));
+			//nome_emit = strdup(sqlite3_column_text(stmt, NOME_EMIT)); 
+			//cnpj_emit = strdup(sqlite3_column_text(stmt, CNPJ_EMIT)); 
+			//rua_emit = strdup(sqlite3_column_text(stmt, RUA_EMIT)); 
+			//comp_emit = strdup(sqlite3_column_text(stmt, COMP_EMIT)); 
+			//bairro_emit = strdup(sqlite3_column_text(stmt, BAIRRO_EMIT)); 
+			//mun_emit = strdup(sqlite3_column_text(stmt, MUN_EMIT)); 
+			//uf_emit = strdup(sqlite3_column_text(stmt, UF_EMIT)); 
+			//ie_emit = strdup(sqlite3_column_text(stmt, IE_EMIT));
+			//ie_dest = strdup(sqlite3_column_text(stmt, IE_DEST));
 			nome_dest = strdup(sqlite3_column_text(stmt, NOME_DEST)); 
 			cnpj_dest = strdup(sqlite3_column_text(stmt, CNPJ_DEST)); 
 			rua_dest = strdup(sqlite3_column_text(stmt, RUA_DEST)); 
