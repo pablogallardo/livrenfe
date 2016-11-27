@@ -181,6 +181,7 @@ static void list_municipios(GtkComboBox *uf, GtkComboBox *municipio){
 static void list_items(gpointer p, NFEManager *win){
 	NFEManagerPrivate *priv;
 	GtkListStore *l;
+	fprintf(stdout, "%s\n", generate_xml(get_nfe(3)));
 
 	priv = nfe_manager_get_instance_private(win);
 	NFE *nfe = (NFE_MANAGER(win))->nfe;

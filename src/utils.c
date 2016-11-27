@@ -69,7 +69,7 @@ char *timef(time_t t, char *format, int chars){
 
 	tm_info = localtime(&t);
 
-	strftime(buffer, chars, format, tm_info);
+	strftime(buffer, ++chars, format, tm_info);
 
 	return buffer;
 }

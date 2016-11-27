@@ -60,4 +60,9 @@ extern GtkListStore *db_list_municipios(char *);
  */
 extern NFE *get_nfe(int);
 
+/**
+ * Get ISSUER from DB
+ */
+EMITENTE *get_emitente(int id);
+
 #endif

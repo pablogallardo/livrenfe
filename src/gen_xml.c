@@ -70,13 +70,11 @@ int gen_inf_nfe(xmlTextWriterPtr writer, NFE *nfe){
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "infNFe");
 	if (rc < 0)
 		return -EXML;
-	//char *id = malloc(strlen(nfe->idnfe->chave) + strlen(ID_PREFIX));
-	char *id = malloc(20);
+	char *id = malloc(strlen(nfe->idnfe->chave) + strlen(ID_PREFIX) + 1);
 	strcpy(id, ID_PREFIX);
-	//strcat(id, nfe->idnfe->chave);
+	strcat(id, nfe->idnfe->chave);
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "Id",
-			//BAD_CAST nfe->idnfe->chave);
-			BAD_CAST "chave");
+			BAD_CAST id);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "versao",
@@ -248,10 +246,10 @@ int _gen_emit(xmlTextWriterPtr writer, NFE *nfe){
 
 	if (is_cpf(nfe->emitente->id))
 		rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "CPF",
-				"%s", nfe->emitente->id);
+				"%s", nfe->emitente->cnpj);
 	else
 		rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "CNPJ",
-				"%s", nfe->emitente->id);
+				"%s", nfe->emitente->cnpj);
 	if (rc < 0)
 		return -EXML;
 
@@ -336,7 +334,7 @@ int _gen_dest(xmlTextWriterPtr writer, NFE *nfe){
 				"%s", nfe->destinatario->id);
 	else
 		rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "CNPJ",
-				"%s", nfe->destinatario->id);
+				"%s", nfe->destinatario->cnpj);
 	if (rc < 0)
 		return -EXML;
 

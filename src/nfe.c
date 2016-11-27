@@ -19,6 +19,7 @@
 
 #include "nfe.h"
 #include "livrenfe.h"
+#include "db_interface.h"
 #include "utils.h"
 #define _XOPEN_SOURCE
 #include <time.h>
@@ -145,7 +146,7 @@ ITEM *new_item(){
 NFE *new_nfe(){
 	NFE n = {
 		.idnfe = new_idnfe(),
-		.emitente = new_emitente(),
+		.emitente = get_emitente(1),
 		.destinatario = new_destinatario(),
 		.protocolo = new_protocolo()
 	};
@@ -200,7 +201,7 @@ int inst_item(float valor, float quantidade,
 	inst_icms(ordem, icms_tipo, icms_aliquota, icms_valor,i->imposto->icms);
 	i->ordem = ordem;
 	i->quantidade = quantidade;
-	i->valor;
+	i->valor = valor;
 	return 0;
 }
 
@@ -237,7 +238,7 @@ void set_chave(NFE *nfe){
 	char *base = malloc(sizeof(char) * 60);
 	sprintf(base, "%02d%s%s%02d%03d%09d%d%08d",
 		nfe->idnfe->municipio->cod_uf,
-		timef(nfe->idnfe->dh_emis, "%Y%m", 6),
+		timef(nfe->idnfe->dh_emis, "%y%m", 4),
 		nfe->emitente->cnpj,
 		nfe->idnfe->mod,
 		nfe->idnfe->serie,
