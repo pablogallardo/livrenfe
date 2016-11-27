@@ -37,7 +37,9 @@ static MUNICIPIO *new_municipio(){
 static IDNFE *new_idnfe(){
 	IDNFE i = {
 		.municipio = new_municipio(),
-		.dh_saida = malloc(sizeof(time_t))
+		.dh_saida = malloc(sizeof(time_t)),
+		.cod_nfe = rand() % 99999999,
+		.tipo_emissao = TE_NORMAL
 	};
 	IDNFE *p = malloc(sizeof(IDNFE));
 	memcpy(p, &i, sizeof(IDNFE));

@@ -104,13 +104,14 @@ int register_nfe(NFE *nfe){
 		presencial, versao, div, chave, id_emitente, id_destinatario, \
 		q_itens, total, id_transportadora, cod_nfe, tipo_emissao) VALUES  \
 		(%d, %Q, %d, '%d', '%d', '%d', %lu, %Q, '%d', '%d' , '%d', '%d', \
-		 '%d', '%d', '%d', '%s', '%d', %Q, '1', '%d' , '%d', %f, %Q,\
-		 ABS(RANDOM() %% 99999999), 1);",
+		 '%d', '%d', '%d', '%s', '%d', %Q, %d, '%d' , '%d', %f, %Q,\
+		 %d, %d);",
 		idnfe->municipio->codigo, idnfe->nat_op, idnfe->ind_pag, idnfe->mod, idnfe->serie,
 		idnfe->num_nf, (unsigned long)idnfe->dh_emis, idnfe->dh_saida == NULL? NULL:itoa(*idnfe->dh_saida), idnfe->tipo,
 		idnfe->local_destino, idnfe->tipo_impressao, idnfe->tipo_ambiente, idnfe->finalidade, idnfe->consumidor_final, idnfe->presencial,
-		VERSION_NAME, idnfe->div, idnfe->chave, last_id, nfe->q_itens,
-		nfe->total, nfe->transp);
+		VERSION_NAME, idnfe->div, idnfe->chave, nfe->emitente->id, 
+		last_id, nfe->q_itens, nfe->total, nfe->transp, idnfe->cod_nfe, 
+		idnfe->tipo_emissao);
 	db_exec(sql, &err);
 	if(err){
 		fprintf(stderr, "livrenfe: Error - %s", err);

@@ -148,7 +148,7 @@ int _gen_ide(xmlTextWriterPtr writer, NFE *nfe){
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cNF",
-			"%d", nfe->idnfe->id_nfe);
+			"%d", nfe->idnfe->cod_nfe);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "natOp",
