@@ -457,9 +457,7 @@ NFE *get_nfe(int id){
 		uf_dest, chave, div, ie_dest,
 		tipo_doc_dest, nfe);
 	get_itens(nfe);
-	return nfe;
-}
-
+	return nfe; } 
 EMITENTE *get_emitente(int id){
 	EMITENTE *e = new_emitente();
 	char *err;
