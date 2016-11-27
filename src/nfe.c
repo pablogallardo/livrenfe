@@ -210,7 +210,7 @@ int inst_item(float valor, float quantidade,
 int add_item(NFE *nfe, ITEM *item){
 	ITEM *i;
 	nfe->q_itens++;
-	nfe->total += i->valor * i->quantidade;
+	nfe->total += item->valor * item->quantidade;
 	item->ordem = nfe->q_itens;
 	if((i = nfe->itens) == NULL){
 		nfe->itens = item;
