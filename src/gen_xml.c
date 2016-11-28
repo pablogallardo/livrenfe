@@ -31,27 +31,33 @@ int _gen_det(xmlTextWriterPtr, ITEM *);
 int _gen_prod(xmlTextWriterPtr, ITEM *);
 int _gen_imposto(xmlTextWriterPtr, IMPOSTO *, float);
 int _gen_total(xmlTextWriterPtr, float );
+static int _soap_header(xmlTextWriterPtr);
 int is_cpf(char *);
 
 char *generate_xml(NFE *nfe) {
 
 	int rc;
 	xmlTextWriterPtr writer;
-	xmlBufferPtr buf;
+	xmlDocPtr doc;
+	xmlChar *xmlbuf;
+	int buffersize;
 
-	buf = xmlBufferCreate();
-	if (buf == NULL) 
-		return NULL;
-
-	writer = xmlNewTextWriterMemory(buf, 0);
+	writer = xmlNewTextWriterDoc(&doc, 0);
 	if (writer == NULL)
 		return NULL;
+	xmlTextWriterStartDocument(writer, NULL, "UTF-8", NULL);
 
 	rc = gen_inf_nfe(writer, nfe);
 	if (rc < 0)
 		return NULL;
 	xmlTextWriterEndDocument(writer);
-	return buf->content;
+	xmlDocDumpFormatMemory(doc, &xmlbuf, &buffersize, 0); 
+	return xmlbuf;
+}
+
+int _soap_header(xmlTextWriterPtr writer){
+	int rc;
+
 }
 
 int gen_inf_nfe(xmlTextWriterPtr writer, NFE *nfe){
