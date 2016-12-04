@@ -73,7 +73,7 @@ xmlSecKeyPtr load_key(const char *pwd) {
 	return key;
 }
 
-int sign_file(const char* xml_file, char *password) {
+int sign_file(xmlDocPtr doc, char *password) {
 #ifndef XMLSEC_NO_XSLT
     xsltSecurityPrefsPtr xsltSecPrefs = NULL;
 #endif /* XMLSEC_NO_XSLT */
@@ -137,21 +137,12 @@ int sign_file(const char* xml_file, char *password) {
         fprintf(stderr, "Error: xmlsec-crypto initialization failed.\n");
         return(-1);
     }
-	xmlDocPtr doc = NULL;
     xmlNodePtr signNode = NULL;
     xmlNodePtr refNode = NULL;
     xmlNodePtr keyInfoNode = NULL;
     xmlNodePtr x509DataNode = NULL;
     xmlSecDSigCtxPtr dsigCtx = NULL;
     int res = -1;
-    
-
-    /* load doc file */
-    doc = xmlParseFile(xml_file);
-    if ((doc == NULL) || (xmlDocGetRootElement(doc) == NULL)){
-        fprintf(stderr, "Error: unable to parse file \"%s\"\n", xml_file);
-        goto done;      
-    }
     
     /* create signature template for RSA-SHA1 enveloped signature */
     signNode = xmlSecTmplSignatureCreate(doc, xmlSecTransformInclC14NId,

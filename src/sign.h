@@ -20,6 +20,8 @@
 #ifndef SIGN_H
 #define SIGN_H
 
-extern int sign_file(const char* tmpl_file, char *password);
+#include <libxml/tree.h>
+
+extern int sign_file(xmlDocPtr, char *password);
 
 #endif

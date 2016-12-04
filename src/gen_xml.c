@@ -31,7 +31,7 @@ int _gen_det(xmlTextWriterPtr, ITEM *);
 int _gen_prod(xmlTextWriterPtr, ITEM *);
 int _gen_imposto(xmlTextWriterPtr, IMPOSTO *, float);
 int _gen_total(xmlTextWriterPtr, float );
-static int _soap_header(xmlTextWriterPtr);
+static int soap_header(xmlTextWriterPtr, NFE *);
 int is_cpf(char *);
 
 char *generate_xml(NFE *nfe) {
@@ -55,8 +55,66 @@ char *generate_xml(NFE *nfe) {
 	return xmlbuf;
 }
 
-int _soap_header(xmlTextWriterPtr writer){
+int soap_header(xmlTextWriterPtr writer, NFE *nfe){
 	int rc;
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "soap12:Envelope");
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns:xsi",
+			BAD_CAST "http://www.w3.org/2001/XMLSchema-instance");
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns:xsd",
+			BAD_CAST "http://www.w3.org/2001/XMLSchema");
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns:soap12",
+			BAD_CAST "http://www.w3.org/2003/05/soap-envelope");
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "soap12:Header");
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "nfeCabecMsg");
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
+			BAD_CAST "http://www.portalfiscal.inf.br/sce/wsdl/NfeAutorizacao");
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "versaoDados",
+			"%s", NFE_VERSAO);
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterEndElement(writer);
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterEndElement(writer);
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "soap12:Body");
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "nfeDadosMsg");
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
+			BAD_CAST "http://www.portalfiscal.inf.br/sce/wsdl/NfeAutorizacao");
+	if (rc < 0)
+		return -EXML;
+	rc = gen_inf_nfe(writer, nfe);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterEndElement(writer);
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterEndElement(writer);
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterEndElement(writer);
+	if (rc < 0)
+		return -EXML;
+	return 0;
 
 }
 
@@ -67,10 +125,18 @@ int gen_inf_nfe(xmlTextWriterPtr writer, NFE *nfe){
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "versao",
-			BAD_CAST NFE_VERSAO);	
+			BAD_CAST NFE_VERSAO);
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
+			BAD_CAST "http://www.portalfiscal.inf.br/nfe");	
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "NFe");
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
+			BAD_CAST "http://www.portalfiscal.inf.br/nfe");	
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "infNFe");
