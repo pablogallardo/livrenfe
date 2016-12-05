@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <openssl/x509.h>
 #include <openssl/rsa.h>
+#include <libxml/xmlwriter.h>
 
 static size_t writefunction(void *ptr, size_t size,
 		size_t nmemb, void *stream){
@@ -60,20 +61,93 @@ CURLcode sslctx_function(CURL *curl, void *sslctx, void *parm){
 	return CURLE_OK;
 }
 
+static int format_soap(NFE *nfe){
+	int rc, buffersize;
+	xmlTextWriterPtr writer;
+	xmlDocPtr doc;
+	xmlChar *xmlbuf;
+
+	writer = xmlNewTextWriterDoc(&doc, 0);
+	if (writer == NULL)
+		return NULL;
+	xmlTextWriterStartDocument(writer, NULL, "UTF-8", NULL);
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "soap12:Envelope");
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns:xsi",
+			BAD_CAST "http://www.w3.org/2001/XMLSchema-instance");
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns:xsd",
+			BAD_CAST "http://www.w3.org/2001/XMLSchema");
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns:soap12",
+			BAD_CAST "http://www.w3.org/2003/05/soap-envelope");
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "soap12:Header");
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "nfeCabecMsg");
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
+			BAD_CAST "http://www.portalfiscal.inf.br/sce/wsdl/NfeAutorizacao");
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "versaoDados",
+			"%s", NFE_VERSAO);
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterEndElement(writer);
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterEndElement(writer);
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "soap12:Body");
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "nfeDadosMsg");
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
+			BAD_CAST "http://www.portalfiscal.inf.br/sce/wsdl/NfeAutorizacao");
+	if (rc < 0)
+		return -EXML;
+	/* INSERT NFE HERE */
+	rc = xmlTextWriterEndElement(writer);
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterEndElement(writer);
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterEndElement(writer);
+	if (rc < 0)
+		return -EXML;
+
+	if (rc < 0)
+		return NULL;
+	xmlTextWriterEndDocument(writer);
+}
 
 int send_nfe(NFE *nfe){
 	CURL *ch;
 	CURLcode rv;
 	rv = curl_global_init(CURL_GLOBAL_ALL);
 	ch = curl_easy_init();
+	struct curl_slist *header = NULL;
+	header = curl_slist_append(header, "Content-type: text/xml");
 	rv = curl_easy_setopt(ch, CURLOPT_VERBOSE, 0L);
-	rv = curl_easy_setopt(ch, CURLOPT_HEADER, 0L);
+	rv = curl_easy_setopt(ch, CURLOPT_HEADER, header);
 	rv = curl_easy_setopt(ch, CURLOPT_NOPROGRESS, 1L);
 	rv = curl_easy_setopt(ch, CURLOPT_NOSIGNAL, 1L);
 	rv = curl_easy_setopt(ch, CURLOPT_WRITEFUNCTION, writefunction);
 	rv = curl_easy_setopt(ch, CURLOPT_WRITEDATA, stdout);
 	rv = curl_easy_setopt(ch, CURLOPT_HEADERFUNCTION, writefunction);
 	rv = curl_easy_setopt(ch, CURLOPT_HEADERDATA, stderr);
+	rv = curl_easy_setopt(ch, CURLOPT_POSTFIELDS, "");
 
 	/* both VERIFYPEER and VERIFYHOST are set to 0 in this case because there is
 	   no CA certificate*/ 

@@ -35,11 +35,11 @@ static int soap_header(xmlTextWriterPtr, NFE *);
 int is_cpf(char *);
 
 char *generate_xml(NFE *nfe) {
-
 	int rc;
 	xmlTextWriterPtr writer;
 	xmlDocPtr doc;
 	xmlChar *xmlbuf;
+	xmlBufferPtr *buf = xmlBufferCreate();
 	int buffersize;
 
 	writer = xmlNewTextWriterDoc(&doc, 0);
@@ -51,8 +51,9 @@ char *generate_xml(NFE *nfe) {
 	if (rc < 0)
 		return NULL;
 	xmlTextWriterEndDocument(writer);
-	xmlDocDumpFormatMemory(doc, &xmlbuf, &buffersize, 0); 
-	return xmlbuf;
+	xmlNodeDump(buf, NULL, xmlDocGetRootElement(), 0, 0);
+	//xmlDocDumpFormatMemory(doc, &xmlbuf, &buffersize, 0); 
+	return buf->content;
 }
 
 int soap_header(xmlTextWriterPtr writer, NFE *nfe){
