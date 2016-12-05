@@ -22,6 +22,6 @@
 
 #include <libxml/tree.h>
 
-extern int sign_file(xmlDocPtr, char *password);
+extern int sign_xml(xmlDocPtr, char *password, char*id);
 
 #endif

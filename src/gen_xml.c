@@ -18,6 +18,7 @@
  */
 
 #include "gen_xml.h"
+#include "sign.h"
 #include "errno.h"
 #include <stdio.h>
 #include <string.h>
@@ -31,7 +32,6 @@ int _gen_det(xmlTextWriterPtr, ITEM *);
 int _gen_prod(xmlTextWriterPtr, ITEM *);
 int _gen_imposto(xmlTextWriterPtr, IMPOSTO *, float);
 int _gen_total(xmlTextWriterPtr, float );
-static int soap_header(xmlTextWriterPtr, NFE *);
 int is_cpf(char *);
 
 char *generate_xml(NFE *nfe) {
@@ -39,7 +39,7 @@ char *generate_xml(NFE *nfe) {
 	xmlTextWriterPtr writer;
 	xmlDocPtr doc;
 	xmlChar *xmlbuf;
-	xmlBufferPtr *buf = xmlBufferCreate();
+	xmlBufferPtr buf = xmlBufferCreate();
 	int buffersize;
 
 	writer = xmlNewTextWriterDoc(&doc, 0);
@@ -51,78 +51,20 @@ char *generate_xml(NFE *nfe) {
 	if (rc < 0)
 		return NULL;
 	xmlTextWriterEndDocument(writer);
-	xmlNodeDump(buf, NULL, xmlDocGetRootElement(), 0, 0);
-	//xmlDocDumpFormatMemory(doc, &xmlbuf, &buffersize, 0); 
+	char *URI = malloc(sizeof(char) * strlen(nfe->idnfe->chave) +
+		strlen(ID_PREFIX) + 1);
+	strcpy(URI, ID_PREFIX);
+	strcat(URI, nfe->idnfe->chave);
+	sign_xml(doc, "", URI);
+	xmlNodeDump(buf, NULL, xmlDocGetRootElement(doc), 0, 0);
 	return buf->content;
 }
 
-int soap_header(xmlTextWriterPtr writer, NFE *nfe){
-	int rc;
-	rc = xmlTextWriterStartElement(writer, BAD_CAST "soap12:Envelope");
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns:xsi",
-			BAD_CAST "http://www.w3.org/2001/XMLSchema-instance");
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns:xsd",
-			BAD_CAST "http://www.w3.org/2001/XMLSchema");
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns:soap12",
-			BAD_CAST "http://www.w3.org/2003/05/soap-envelope");
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterStartElement(writer, BAD_CAST "soap12:Header");
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterStartElement(writer, BAD_CAST "nfeCabecMsg");
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
-			BAD_CAST "http://www.portalfiscal.inf.br/sce/wsdl/NfeAutorizacao");
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "versaoDados",
-			"%s", NFE_VERSAO);
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterEndElement(writer);
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterEndElement(writer);
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterStartElement(writer, BAD_CAST "soap12:Body");
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterStartElement(writer, BAD_CAST "nfeDadosMsg");
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
-			BAD_CAST "http://www.portalfiscal.inf.br/sce/wsdl/NfeAutorizacao");
-	if (rc < 0)
-		return -EXML;
-	rc = gen_inf_nfe(writer, nfe);
-	if (rc < 0)
-		return NULL;
-	rc = xmlTextWriterEndElement(writer);
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterEndElement(writer);
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterEndElement(writer);
-	if (rc < 0)
-		return -EXML;
-	return 0;
-
-}
 
 int gen_inf_nfe(xmlTextWriterPtr writer, NFE *nfe){
 
 	int rc;
-	rc = xmlTextWriterStartElement(writer, BAD_CAST "nfeProc");
+	/*rc = xmlTextWriterStartElement(writer, BAD_CAST "nfeProc");
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "versao",
@@ -132,7 +74,7 @@ int gen_inf_nfe(xmlTextWriterPtr writer, NFE *nfe){
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
 			BAD_CAST "http://www.portalfiscal.inf.br/nfe");	
 	if (rc < 0)
-		return -EXML;
+		return -EXML;*/
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "NFe");
 	if (rc < 0)
 		return -EXML;
@@ -198,9 +140,9 @@ int gen_inf_nfe(xmlTextWriterPtr writer, NFE *nfe){
 	if (rc < 0)
 		return -EXML;
 
-	rc = xmlTextWriterEndElement(writer);
+	/*rc = xmlTextWriterEndElement(writer);
 	if (rc < 0)
-		return -EXML;
+		return -EXML;*/
 
 	//rc = xmlTextWriterEndElement(writer);
 	//if (rc < 0)

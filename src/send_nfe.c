@@ -19,6 +19,8 @@
 
 #include "send_nfe.h"
 #include "livrenfe.h"
+#include "errno.h"
+#include "gen_xml.h"
 #include "crypto_interface.h"
 #include <curl/curl.h>
 #include <openssl/evp.h>
@@ -61,7 +63,7 @@ CURLcode sslctx_function(CURL *curl, void *sslctx, void *parm){
 	return CURLE_OK;
 }
 
-static int format_soap(NFE *nfe){
+static char *format_soap(NFE *nfe){
 	int rc, buffersize;
 	xmlTextWriterPtr writer;
 	xmlDocPtr doc;
@@ -116,7 +118,9 @@ static int format_soap(NFE *nfe){
 			BAD_CAST "http://www.portalfiscal.inf.br/sce/wsdl/NfeAutorizacao");
 	if (rc < 0)
 		return -EXML;
-	/* INSERT NFE HERE */
+	rc = xmlTextWriterWriteString(writer, generate_xml(nfe));
+	if (rc < 0)
+		return -EXML;
 	rc = xmlTextWriterEndElement(writer);
 	if (rc < 0)
 		return -EXML;
@@ -130,6 +134,8 @@ static int format_soap(NFE *nfe){
 	if (rc < 0)
 		return NULL;
 	xmlTextWriterEndDocument(writer);
+	xmlDocDumpMemory(doc, &xmlbuf, &buffersize);
+	return xmlbuf;
 }
 
 int send_nfe(NFE *nfe){

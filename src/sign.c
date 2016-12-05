@@ -73,7 +73,7 @@ xmlSecKeyPtr load_key(const char *pwd) {
 	return key;
 }
 
-int sign_file(xmlDocPtr doc, char *password) {
+int sign_xml(xmlDocPtr doc, char *password, char *id) {
 #ifndef XMLSEC_NO_XSLT
     xsltSecurityPrefsPtr xsltSecPrefs = NULL;
 #endif /* XMLSEC_NO_XSLT */
@@ -157,7 +157,7 @@ int sign_file(xmlDocPtr doc, char *password) {
     
     /* add reference */
     refNode = xmlSecTmplSignatureAddReference(signNode, xmlSecTransformSha1Id,
-                                        NULL, NULL, NULL);
+                                        id, NULL, NULL);
     if(refNode == NULL) {
         fprintf(stderr, "Error: failed to add reference to signature template\n");
         goto done;              
@@ -211,9 +211,6 @@ int sign_file(xmlDocPtr doc, char *password) {
         goto done;
     }
         
-    /* print signed document to stdout */
-    xmlDocDump(stdout, doc);
-    
     /* success */
     res = 0;
 
@@ -223,8 +220,5 @@ done:
 	xmlSecDSigCtxDestroy(dsigCtx);
     }
     
-    if(doc != NULL) {
-	xmlFreeDoc(doc); 
-    }
     return(res);
 }
