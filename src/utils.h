@@ -32,4 +32,6 @@ extern char *strrev(char *);
 
 extern char *timef(time_t t, char *format, int chars);
 
+extern char *str_replace(char *search , char *replace , char *subject);
+
 #endif
