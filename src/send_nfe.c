@@ -118,7 +118,7 @@ static char *format_soap(NFE *nfe){
 			BAD_CAST "http://www.portalfiscal.inf.br/sce/wsdl/NfeAutorizacao");
 	if (rc < 0)
 		return -EXML;
-	rc = xmlTextWriterWriteString(writer, generate_xml(nfe));
+	rc = xmlTextWriterWriteRaw(writer, BAD_CAST generate_xml(nfe));
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterEndElement(writer);
@@ -145,7 +145,7 @@ int send_nfe(NFE *nfe){
 	ch = curl_easy_init();
 	struct curl_slist *header = NULL;
 	header = curl_slist_append(header, "Content-type: text/xml");
-	rv = curl_easy_setopt(ch, CURLOPT_VERBOSE, 0L);
+	rv = curl_easy_setopt(ch, CURLOPT_VERBOSE, 1L);
 	rv = curl_easy_setopt(ch, CURLOPT_HEADER, header);
 	rv = curl_easy_setopt(ch, CURLOPT_NOPROGRESS, 1L);
 	rv = curl_easy_setopt(ch, CURLOPT_NOSIGNAL, 1L);
@@ -153,7 +153,9 @@ int send_nfe(NFE *nfe){
 	rv = curl_easy_setopt(ch, CURLOPT_WRITEDATA, stdout);
 	rv = curl_easy_setopt(ch, CURLOPT_HEADERFUNCTION, writefunction);
 	rv = curl_easy_setopt(ch, CURLOPT_HEADERDATA, stderr);
-	rv = curl_easy_setopt(ch, CURLOPT_POSTFIELDS, "");
+	char *test = format_soap(nfe);
+	fprintf(stdout, test);
+	rv = curl_easy_setopt(ch, CURLOPT_POSTFIELDS, test);
 
 	/* both VERIFYPEER and VERIFYHOST are set to 0 in this case because there is
 	   no CA certificate*/ 
@@ -161,7 +163,7 @@ int send_nfe(NFE *nfe){
 	rv = curl_easy_setopt(ch, CURLOPT_SSL_VERIFYPEER, 0L);
 	rv = curl_easy_setopt(ch, CURLOPT_SSL_VERIFYHOST, 0L);
 	rv = curl_easy_setopt(ch, CURLOPT_URL, 
-		"https://homologacao.nfe.fazenda.sp.gov.br/ws/nfestatusservico2.asmx");
+		"https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeautorizacao.asmx");
 	rv = curl_easy_setopt(ch, CURLOPT_SSL_CTX_FUNCTION, *sslctx_function);
 	rv = curl_easy_perform(ch);
 	if(rv==CURLE_OK) {

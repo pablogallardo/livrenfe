@@ -84,8 +84,9 @@ int sign_xml(xmlDocPtr doc, char *password, char *id) {
     LIBXML_TEST_VERSION
     xmlLoadExtDtdDefaultValue = XML_DETECT_IDS | XML_COMPLETE_ATTRS;
     xmlSubstituteEntitiesDefault(1);
+    xmlKeepBlanksDefault(0);
 #ifndef XMLSEC_NO_XSLT
-    xmlIndentTreeOutput = 1; 
+    xmlIndentTreeOutput = 0; 
 #endif /* XMLSEC_NO_XSLT */
 
     /* Init libxslt */

@@ -407,6 +407,7 @@ NFE *get_nfe(int id){
 			num_e_emit = sqlite3_column_int(stmt, NUM_E_EMIT);
 			num_e_dest = sqlite3_column_int(stmt, NUM_E_DEST);
 			tipo_doc_dest = sqlite3_column_int(stmt, TIPO_DOC_DEST);
+			div = sqlite3_column_int(stmt, DIV); 
 
 			dh_emis = sqlite3_column_double(stmt, DH_EMIS);
 			dh_saida = sqlite3_column_double(stmt, DH_SAIDA);
@@ -433,8 +434,6 @@ NFE *get_nfe(int id){
 			mun_dest = strdup(sqlite3_column_text(stmt, MUN_DEST)); 
 			uf_dest = strdup(sqlite3_column_text(stmt, UF_DEST)); 
 			chave = strdup(sqlite3_column_text(stmt, CHAVE)); 
-			char *aux = strdup(sqlite3_column_text(stmt, DIV)); 
-			div = aux[0];
 		} else if(rc == SQLITE_DONE){
 			break;
 		} else {
