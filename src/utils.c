@@ -91,7 +91,7 @@ char *str_replace(char *search , char *replace , char *subject){
     //Final size
     c = ( strlen(replace) - search_size )*c + strlen(subject);
     //New subject with new size
-    new_subject = malloc( c );
+    new_subject = malloc( 99999999);
     //Set it to blank
     strcpy(new_subject , "");
     //The start position

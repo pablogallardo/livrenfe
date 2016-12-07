@@ -19,11 +19,13 @@
 
 #include "sign.h"
 #include "crypto_interface.h"
+#include "utils.h"
 #include <stdlib.h>
 #include <string.h>
 #include <libxml/tree.h>
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
+#include <libxml/valid.h>
 #ifndef XMLSEC_NO_XSLT
 #include <libxslt/xslt.h>
 #include <libxslt/security.h>
@@ -155,10 +157,14 @@ int sign_xml(xmlDocPtr doc, char *password, char *id) {
 
     /* add <dsig:Signature/> node to the doc */
     xmlAddChild(xmlDocGetRootElement(doc), signNode);
+    xmlAttrPtr attr = xmlHasProp(doc->children->children, "Id");
+    if(attr){
+	xmlAddID(NULL, doc, str_replace("#", "" ,id), attr);
+    }
     
     /* add reference */
     refNode = xmlSecTmplSignatureAddReference(signNode, xmlSecTransformSha1Id,
-                                        id, NULL, NULL);
+                                        NULL, id, NULL);
     if(refNode == NULL) {
         fprintf(stderr, "Error: failed to add reference to signature template\n");
         goto done;              

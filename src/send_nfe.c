@@ -102,6 +102,10 @@ static char *format_soap(NFE *nfe){
 			"%s", NFE_VERSAO);
 	if (rc < 0)
 		return -EXML;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cUF",
+			"%d", nfe->idnfe->municipio->cod_uf);
+	if (rc < 0)
+		return -EXML;
 	rc = xmlTextWriterEndElement(writer);
 	if (rc < 0)
 		return -EXML;
@@ -115,7 +119,7 @@ static char *format_soap(NFE *nfe){
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
-			BAD_CAST "http://www.portalfiscal.inf.br/sce/wsdl/NfeAutorizacao");
+			BAD_CAST "http://www.portalfiscal.inf.br/nfe/wsdl/NfeAutorizacao");
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteRaw(writer, BAD_CAST generate_xml(nfe));
@@ -135,7 +139,8 @@ static char *format_soap(NFE *nfe){
 		return NULL;
 	xmlTextWriterEndDocument(writer);
 	xmlDocDumpMemory(doc, &xmlbuf, &buffersize);
-	return xmlbuf;
+	char *xml = str_replace(">\n<","><", xmlbuf);
+	return xml;
 }
 
 int send_nfe(NFE *nfe){
@@ -144,7 +149,7 @@ int send_nfe(NFE *nfe){
 	rv = curl_global_init(CURL_GLOBAL_ALL);
 	ch = curl_easy_init();
 	struct curl_slist *header = NULL;
-	header = curl_slist_append(header, "Content-type: text/xml");
+	header = curl_slist_append(header, "Content-type: application/soap+xml");
 	rv = curl_easy_setopt(ch, CURLOPT_VERBOSE, 1L);
 	rv = curl_easy_setopt(ch, CURLOPT_HEADER, header);
 	rv = curl_easy_setopt(ch, CURLOPT_NOPROGRESS, 1L);

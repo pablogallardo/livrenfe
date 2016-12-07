@@ -52,8 +52,9 @@ char *generate_xml(NFE *nfe) {
 		return NULL;
 	xmlTextWriterEndDocument(writer);
 	char *URI = malloc(sizeof(char) * strlen(nfe->idnfe->chave) +
-		strlen(ID_PREFIX) + 1);
-	strcpy(URI, ID_PREFIX);
+		strlen(ID_PREFIX) + 2);
+	strcpy(URI, "#");
+	strcat(URI, ID_PREFIX);
 	strcat(URI, nfe->idnfe->chave);
 	sign_xml(doc, "", URI);
 	xmlNodeDump(buf, NULL, xmlDocGetRootElement(doc), 0, 0);
