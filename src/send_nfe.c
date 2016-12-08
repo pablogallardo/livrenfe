@@ -149,7 +149,7 @@ int send_nfe(NFE *nfe){
 	rv = curl_global_init(CURL_GLOBAL_ALL);
 	ch = curl_easy_init();
 	struct curl_slist *header = NULL;
-	header = curl_slist_append(header, "Content-type: application/soap+xml; harset=UTF-8");
+	header = curl_slist_append(header, "Content-type: application/soap+xml; charset=UTF-8");
 	//header = curl_slist_append(header, "charset=utf-8");
 	rv = curl_easy_setopt(ch, CURLOPT_VERBOSE, 1L);
 	rv = curl_easy_setopt(ch, CURLOPT_HTTPHEADER, header);
