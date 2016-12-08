@@ -149,14 +149,15 @@ int send_nfe(NFE *nfe){
 	rv = curl_global_init(CURL_GLOBAL_ALL);
 	ch = curl_easy_init();
 	struct curl_slist *header = NULL;
-	header = curl_slist_append(header, "Content-type: application/soap+xml");
+	header = curl_slist_append(header, "Content-type: application/soap+xml; harset=UTF-8");
+	//header = curl_slist_append(header, "charset=utf-8");
 	rv = curl_easy_setopt(ch, CURLOPT_VERBOSE, 1L);
-	rv = curl_easy_setopt(ch, CURLOPT_HEADER, header);
+	rv = curl_easy_setopt(ch, CURLOPT_HTTPHEADER, header);
 	rv = curl_easy_setopt(ch, CURLOPT_NOPROGRESS, 1L);
 	rv = curl_easy_setopt(ch, CURLOPT_NOSIGNAL, 1L);
 	rv = curl_easy_setopt(ch, CURLOPT_WRITEFUNCTION, writefunction);
 	rv = curl_easy_setopt(ch, CURLOPT_WRITEDATA, stdout);
-	rv = curl_easy_setopt(ch, CURLOPT_HEADERFUNCTION, writefunction);
+	//rv = curl_easy_setopt(ch, CURLOPT_HEADERFUNCTION, writefunction);
 	rv = curl_easy_setopt(ch, CURLOPT_HEADERDATA, stderr);
 	char *test = format_soap(nfe);
 	fprintf(stdout, test);
