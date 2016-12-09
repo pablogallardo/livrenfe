@@ -34,13 +34,27 @@ int _gen_imposto(xmlTextWriterPtr, IMPOSTO *, float);
 int _gen_total(xmlTextWriterPtr, float );
 int is_cpf(char *);
 
+char *gen_cons_status(char *status){
+	int rc;
+	xmlTextWriterPtr writer;
+	xmlDocPtr doc;
+	xmlBufferPtr buf = xmlBufferCreate();
+	
+	writer = xmlNewTextWriterDoc(&doc, 0);
+	if (writer == NULL)
+		return NULL;
+	xmlTextWriterStartDocument(writer, NULL, "UTF-8", NULL);
+	//TODO: ConsStatusServico
+	xmlTextWriterEndDocument(writer);
+	xmlNodeDump(buf, NULL, xmlDocGetRootElement(doc), 0, 0);
+	return buf->content;
+}
+
 char *generate_xml(NFE *nfe) {
 	int rc;
 	xmlTextWriterPtr writer;
 	xmlDocPtr doc;
-	xmlChar *xmlbuf;
 	xmlBufferPtr buf = xmlBufferCreate();
-	int buffersize;
 
 	writer = xmlNewTextWriterDoc(&doc, 0);
 	if (writer == NULL)

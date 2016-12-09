@@ -37,4 +37,14 @@
  */
 extern char *generate_xml(NFE *);
 
+/**
+ * XML for consulting service status
+ */
+extern char *gen_cons_status(char *status);
+
+/**
+ * XML for  consulting NFE status
+ */
+extern char *gen_cons_nfe(int recibo);
+
 #endif

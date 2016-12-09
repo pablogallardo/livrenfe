@@ -75,65 +75,75 @@ static char *format_soap(NFE *nfe){
 	xmlTextWriterStartDocument(writer, NULL, "UTF-8", NULL);
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "soap12:Envelope");
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns:xsi",
 			BAD_CAST "http://www.w3.org/2001/XMLSchema-instance");
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns:xsd",
 			BAD_CAST "http://www.w3.org/2001/XMLSchema");
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns:soap12",
 			BAD_CAST "http://www.w3.org/2003/05/soap-envelope");
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "soap12:Header");
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "nfeCabecMsg");
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
-			BAD_CAST "http://www.portalfiscal.inf.br/sce/wsdl/NfeAutorizacao");
+		BAD_CAST "http://www.portalfiscal.inf.br/sce/wsdl/NfeAutorizacao");
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "versaoDados",
 			"%s", NFE_VERSAO);
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cUF",
-			"%d", nfe->idnfe->municipio->cod_uf);
+			"%d", nfe->emitente->endereco->municipio->cod_uf);
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 	rc = xmlTextWriterEndElement(writer);
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 	rc = xmlTextWriterEndElement(writer);
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "soap12:Body");
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "nfeDadosMsg");
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
 			BAD_CAST "http://www.portalfiscal.inf.br/nfe/wsdl/NfeAutorizacao");
 	if (rc < 0)
-		return -EXML;
+		return NULL;
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "enviNFE");
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
+			BAD_CAST "http://www.portalfiscal.inf.br/nfe");
+	if (rc < 0)
+		return NULL;
 	rc = xmlTextWriterWriteRaw(writer, BAD_CAST generate_xml(nfe));
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 	rc = xmlTextWriterEndElement(writer);
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 	rc = xmlTextWriterEndElement(writer);
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 	rc = xmlTextWriterEndElement(writer);
 	if (rc < 0)
-		return -EXML;
+		return NULL;
+	rc = xmlTextWriterEndElement(writer);
+	if (rc < 0)
+		return NULL;
 
 	if (rc < 0)
 		return NULL;
@@ -150,14 +160,12 @@ int send_nfe(NFE *nfe){
 	ch = curl_easy_init();
 	struct curl_slist *header = NULL;
 	header = curl_slist_append(header, "Content-type: application/soap+xml; charset=UTF-8");
-	//header = curl_slist_append(header, "charset=utf-8");
 	rv = curl_easy_setopt(ch, CURLOPT_VERBOSE, 1L);
 	rv = curl_easy_setopt(ch, CURLOPT_HTTPHEADER, header);
 	rv = curl_easy_setopt(ch, CURLOPT_NOPROGRESS, 1L);
 	rv = curl_easy_setopt(ch, CURLOPT_NOSIGNAL, 1L);
 	rv = curl_easy_setopt(ch, CURLOPT_WRITEFUNCTION, writefunction);
 	rv = curl_easy_setopt(ch, CURLOPT_WRITEDATA, stdout);
-	//rv = curl_easy_setopt(ch, CURLOPT_HEADERFUNCTION, writefunction);
 	rv = curl_easy_setopt(ch, CURLOPT_HEADERDATA, stderr);
 	char *test = format_soap(nfe);
 	fprintf(stdout, test);
