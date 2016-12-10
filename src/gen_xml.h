@@ -40,7 +40,7 @@ extern char *generate_xml(NFE *);
 /**
  * XML for consulting service status
  */
-extern char *gen_cons_status(char *status);
+extern char *gen_cons_status(int ambiente, int cuf);
 
 /**
  * XML for  consulting NFE status

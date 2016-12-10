@@ -17,11 +17,14 @@
  *
  */
 
-#ifndef	SEND_NFE_H
-#define	SEND_NFE_H
+#ifndef	SEND_H
+#define	SEND_H
 
 #include "livrenfe.h"
 
-extern int send_nfe(NFE *);
+/**
+ * Send request to SEFAZ
+ */
+extern int send_sefaz(char *service, int ambiente, int cuf, char *xml);
 
 #endif
