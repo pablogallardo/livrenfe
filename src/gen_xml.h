@@ -45,6 +45,6 @@ extern char *gen_cons_status(int ambiente, int cuf);
 /**
  * XML for  consulting NFE status
  */
-extern char *gen_cons_nfe(int recibo);
+extern char *gen_cons_nfe(LOTE *, int ambiente);
 
 #endif

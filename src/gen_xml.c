@@ -75,6 +75,43 @@ char *gen_cons_status(int ambiente, int cuf){
 	return buf->content;
 }
 
+char *gen_cons_nfe(LOTE *lote, int ambiente){
+	int rc;
+	xmlTextWriterPtr writer;
+	xmlDocPtr doc;
+	xmlBufferPtr buf = xmlBufferCreate();
+	
+	writer = xmlNewTextWriterDoc(&doc, 0);
+	if (writer == NULL)
+		return NULL;
+	xmlTextWriterStartDocument(writer, NULL, "utf-8", NULL);
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "consReciNFe");
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
+			BAD_CAST "http://www.portalfiscal.inf.br/nfe");
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "versao",
+			BAD_CAST NFE_VERSAO);
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "tpAmb",
+			"%d", ambiente);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "nRec",
+			"%d", lote->recibo);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterEndElement(writer);
+	if (rc < 0)
+		return NULL;
+	xmlTextWriterEndDocument(writer);
+	xmlNodeDump(buf, NULL, xmlDocGetRootElement(doc), 0, 0);
+	return buf->content;
+}
+
 char *generate_xml(NFE *nfe) {
 	int rc;
 	xmlTextWriterPtr writer;
