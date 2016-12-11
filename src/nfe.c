@@ -135,6 +135,13 @@ static PROTOCOLO *new_protocolo(){
 	return p;
 }
 
+static LOTE_ITEM *new_lote_item(){
+	LOTE_ITEM m = {};
+	LOTE_ITEM *l = malloc(sizeof(LOTE_ITEM));
+	memcpy(l, &m, sizeof(LOTE_ITEM));
+	return l;
+}
+
 ITEM *new_item(){
 	ITEM m = {
 		.produto = new_produto(),
@@ -155,6 +162,13 @@ NFE *new_nfe(){
 	NFE *p = malloc(sizeof(NFE));
 	memcpy(p, &n, sizeof(NFE));
 	return p;
+}
+
+LOTE *new_lote(){
+	LOTE m = {};
+	LOTE *l = malloc(sizeof(LOTE));
+	memcpy(l, &m, sizeof(LOTE));
+	return l;
 }
 
 int inst_produto(int codigo, char *desc, unsigned int ncm, unsigned int cfop,
@@ -220,6 +234,22 @@ int add_item(NFE *nfe, ITEM *item){
 		i = i->pointer;
 	}
 	i->pointer = item;
+	return 0;
+}
+
+int add_nfe(LOTE *lote, NFE *nfe){
+	LOTE_ITEM *i = new_lote_item();
+	LOTE_ITEM *aux;
+	i->nfe = nfe;
+	lote->qtd++;
+	if((aux = lote->nfes) == NULL){
+		lote->nfes= i;
+		return 0;
+	}
+	while(aux->next != NULL){
+		aux = aux->next;
+	}
+	aux->next = i;
 	return 0;
 }
 

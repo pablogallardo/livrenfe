@@ -182,7 +182,8 @@ struct ITEM {
  * Transportation information
  */
 typedef struct {
-	enum t_modfrete {FRETE_EMITENTE=0, FRETE_DESTINATARIO=1, FRETE_TERCEIROS=2, FRETE_SEM=9}
+	enum t_modfrete {FRETE_EMITENTE=0, FRETE_DESTINATARIO=1, 
+		FRETE_TERCEIROS=2, FRETE_SEM=9}
 		modfrete;
 } TRANSP;
 
@@ -208,6 +209,26 @@ typedef struct {
 	TRANSP *transp;
 	PROTOCOLO *protocolo;
 } NFE;
+
+typedef struct LOTE_ITEM LOTE_ITEM;
+
+/**
+ * List items
+ */
+struct LOTE_ITEM{
+	NFE *nfe;
+	LOTE_ITEM *next;
+};
+
+/**
+ * NFE Lote
+ */
+typedef struct {
+	unsigned int recibo;
+	unsigned int qtd;
+	LOTE_ITEM *nfes;
+} LOTE;
+
 
 #define LIVRENFE_TYPE	(livrenfe_get_type())
 #define	LIVRENFE_APP(obj)	(G_TYPE_CHECK_INSTANCE_CAST ((obj), LIVRENFE_TYPE, Livrenfe))

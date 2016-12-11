@@ -22,6 +22,8 @@
 
 extern NFE *new_nfe();
 
+extern LOTE *new_lote();
+
 extern ITEM *new_item();
 
 extern EMITENTE *new_emitente();
