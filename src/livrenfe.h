@@ -224,6 +224,7 @@ struct LOTE_ITEM{
  * NFE Lote
  */
 typedef struct {
+	unsigned int id;
 	unsigned int recibo;
 	unsigned int qtd;
 	LOTE_ITEM *nfes;

@@ -157,7 +157,7 @@ int sign_xml(xmlDocPtr doc, char *password, char *id) {
 
     /* add <dsig:Signature/> node to the doc */
     xmlAddChild(xmlDocGetRootElement(doc), signNode);
-    xmlAttrPtr attr = xmlHasProp(doc->children->children, "Id");
+    xmlAttrPtr attr = xmlHasProp(doc->children, "Id");
     if(attr){
 	xmlAddID(NULL, doc, str_replace("#", "" ,id), attr);
     }

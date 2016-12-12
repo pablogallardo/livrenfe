@@ -112,6 +112,50 @@ char *gen_cons_nfe(LOTE *lote, int ambiente){
 	return buf->content;
 }
 
+char *gen_lote_xml(LOTE *lote){
+	int rc;
+	xmlTextWriterPtr writer;
+	xmlDocPtr doc;
+	xmlBufferPtr buf = xmlBufferCreate();
+
+	writer = xmlNewTextWriterDoc(&doc, 0);
+	if (writer == NULL)
+		return NULL;
+	xmlTextWriterStartDocument(writer, NULL, "UTF-8", NULL);
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "enviNFE");
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
+			BAD_CAST "http://www.portalfiscal.inf.br/nfe");
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "idLote",
+			"%d", lote->id);
+	if (rc < 0)
+		return NULL;
+	int indSinc = lote->qtd == 1? 1 : 0;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "indSinc",
+			"%d", indSinc);
+	if (rc < 0)
+		return NULL;
+	int i;
+	LOTE_ITEM *it = lote->nfes;
+	for (i = 0; i < lote->qtd; i++){
+		char *xml;
+		xml = generate_xml(it->nfe);
+		rc = xmlTextWriterWriteRaw(writer, BAD_CAST xml);
+		if (rc < 0)
+			return NULL;
+		it = it->next;
+	}
+	rc = xmlTextWriterEndElement(writer);
+	if (rc < 0)
+		return NULL;
+	xmlTextWriterEndDocument(writer);
+	xmlNodeDump(buf, NULL, xmlDocGetRootElement(doc), 0, 0);
+	return buf->content;
+}
+
 char *generate_xml(NFE *nfe) {
 	int rc;
 	xmlTextWriterPtr writer;
@@ -138,26 +182,7 @@ char *generate_xml(NFE *nfe) {
 
 
 int gen_inf_nfe(xmlTextWriterPtr writer, NFE *nfe){
-
 	int rc;
-	/*rc = xmlTextWriterStartElement(writer, BAD_CAST "nfeProc");
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "versao",
-			BAD_CAST NFE_VERSAO);
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
-			BAD_CAST "http://www.portalfiscal.inf.br/nfe");	
-	if (rc < 0)
-		return -EXML;*/
-	rc = xmlTextWriterStartElement(writer, BAD_CAST "enviNFE");
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
-			BAD_CAST "http://www.portalfiscal.inf.br/nfe");
-	if (rc < 0)
-		return -EXML;
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "NFe");
 	if (rc < 0)
 		return -EXML;
@@ -214,10 +239,6 @@ int gen_inf_nfe(xmlTextWriterPtr writer, NFE *nfe){
 	//		"%d", nfe->transp->modfrete);
 	//if (rc < 0)
 	//	return -EXML;
-
-	rc = xmlTextWriterEndElement(writer);
-	if (rc < 0)
-		return -EXML;
 
 	rc = xmlTextWriterEndElement(writer);
 	if (rc < 0)
