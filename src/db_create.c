@@ -53,6 +53,8 @@ CREATE TABLE produtos (id_produto integer, descricao varchar(200), ncm integer,\
 CREATE TABLE transportadoras (id_transportadora varchar(20), modfrete char(1), \
 	nome varchar(200),\
 	CONSTRAINT transportadora_pk PRIMARY KEY (id_transportadora));\
+CREATE TABLE lote (id_lote integer, recibo integer,\
+	CONSTRAINT lote_pk PRIMARY KEY (id_lote));\
 CREATE TABLE nfe (id_nfe integer, id_municipio varchar(8),\
 	nat_op varchar(20), ind_pag integer, mod_nfe char(2),\
 	serie varchar(10), num_nf integer, dh_emis datetime, dh_saida datetime, tipo char(1),\
@@ -61,6 +63,7 @@ CREATE TABLE nfe (id_nfe integer, id_municipio varchar(8),\
 	presencial char(1), versao varchar(10), div char(1), chave varchar(20),\
 	id_emitente integer, id_destinatario integer, q_itens integer,\
 	total real, id_transportadora varchar(20), cod_nfe integer,\
+	id_lote integer, protocolo integer, xml text,\
 	CONSTRAINT nfe_pk PRIMARY KEY (id_nfe),\
 	CONSTRAINT nfe_municipio_fk FOREIGN KEY (id_municipio)\
 	REFERENCES municipios(id_municipio),\
@@ -69,7 +72,9 @@ CREATE TABLE nfe (id_nfe integer, id_municipio varchar(8),\
 	CONSTRAINT nfe_destinatario_fk FOREIGN KEY (id_destinatario)\
 	REFERENCES destinatarios(id_destinatario),\
 	CONSTRAINT nfe_transportadora_fk FOREIGN KEY (id_transportadora)\
-	REFERENCES transportadoras(id_transportadora));\
+	REFERENCES transportadoras(id_transportadora),\
+	CONSTRAINT nfe_lote_fk FOREIGN KEY (id_lote)\
+	REFERENCES lote(id_lote));\
 CREATE TABLE protocolos (id_protocolo integer, numero varchar(20), \
 	dh_recib datetime, id_nfe integer,\
 	CONSTRAINT protocolo_pk PRIMARY KEY (id_protocolo),\
@@ -83,7 +88,12 @@ CREATE TABLE nfe_itens (id_nfe integer, ordem integer, id_produto integer, icms_
 	CONSTRAINT itens_nfe_fk FOREIGN KEY (id_nfe)\
 	REFERENCES nfe(id_nfe),\
 	CONSTRAINT itens_produto_fk FOREIGN KEY (id_produto)\
-	REFERENCES produtos(id_produto));";
+	REFERENCES produtos(id_produto));\
+CREATE TABLE prefs (id integer, cert_pass varchar(200), ambiente integer,\
+	CONSTRAINT pref_pk PRIMARY KEY (id));\
+CREATE TABLE urls (id_url integer, service varchar(200), url_prod varchar(255),\
+	url_cert varchar(255),\
+	CONSTRAINT url_pk PRIMARY KEY (id_url));";
 
 const char *insert_sql = "INSERT INTO paises (id_pais, nome) VALUES (1, 'Brasil');\
 		    INSERT INTO municipios (id_municipio, id_uf, nome, id_pais) VALUES ('1100015', 'RO', 'Alta Floresta D''Oeste', 1);\
@@ -5652,7 +5662,15 @@ const char *insert_sql = "INSERT INTO paises (id_pais, nome) VALUES (1, 'Brasil'
 		    INSERT INTO municipios (id_municipio, id_uf, nome, id_pais) VALUES ('5222302', 'GO', 'Vila Propício', 1);\
 		    INSERT INTO municipios (id_municipio, id_uf, nome, id_pais) VALUES ('5300108', 'DF', 'Brasília', 1);\
 		    INSERT INTO uf (id_uf, nome, cod_ibge) SELECT DISTINCT id_uf, id_uf, substr(id_municipio,1,2)\
-		    	FROM municipios;";
+		    	FROM municipios;\
+		    INSERT INTO urls (service, url_prod, url_cert)\
+		    	VALUES ('RecepcaoEvento', 'https://nfe.fazenda.sp.gov.br/ws/recepcaoevento.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/recepcaoevento.asmx'),\
+			('NfeConsultaCadastro', 'https://nfe.fazenda.sp.gov.br/ws/cadconsultacadastro2.asmx', '	https://homologacao.nfe.fazenda.sp.gov.br/ws/cadconsultacadastro2.asmx'),\
+			('NfeInutilizacao', 'https://nfe.fazenda.sp.gov.br/ws/nfeinutilizacao2.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeinutilizacao2.asmx'),\
+			('NfeConsultaProtocolo', 'https://nfe.fazenda.sp.gov.br/ws/nfeconsulta2.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeconsulta2.asmx'),\
+			('NfeStatusServico', 'https://nfe.fazenda.sp.gov.br/ws/nfestatusservico2.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfestatusservico2.asmx'),\
+			('NFeAutorizacao', 'https://nfe.fazenda.sp.gov.br/ws/nfeautorizacao.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeautorizacao.asmx'),\
+			('NFeRetAutorizacao', 'https://nfe.fazenda.sp.gov.br/ws/cadconsultacadastro2.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nferetautorizacao.asmx');";
 
 int create_db(){
 	int rc;

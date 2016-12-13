@@ -20,6 +20,8 @@
 #ifndef	XML_H
 #define	XML_H
 
+#include <libxml/parser.h>
+
 /**
  * Get single element from XML
  */

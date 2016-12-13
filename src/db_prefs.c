@@ -17,57 +17,9 @@
  *
  */
 
-#ifndef	DBI_H
-#define	DBI_H
+#include "db_interface.h"
+#include "db.h"
 
-#define DB_VERSION	1
-
-#include "livrenfe.h"
-#include <gtk/gtk.h>
-
-/**
- * Creates an empty app DB
- */
-extern int create_db();
-
-/**
- * Materialize NFE
- */
-extern int register_nfe(NFE *);
-
-/**
- * Set db path
- */
-extern int set_db(char *);
-
-/**
- * Get opened NFEs for GTKTreeView
- */
-extern GtkListStore *get_list_nfe();
-
-/**
- * Get UF list
- */
-extern GtkListStore *db_list_uf();
-
-/**
- * Get Municipios from UF
- */
-extern GtkListStore *db_list_municipios(char *);
-
-/**
- * Get NFE from DB
- */
-extern NFE *get_nfe(int);
-
-/**
- * Get ISSUER from DB
- */
-extern EMITENTE *get_emitente(int id);
-
-/**
- * Get WebService URL
- */
-extern char *get_ws_url(char *service);
-
-#endif
+extern char *get_ws_url(char *service){
+	return NULL;
+}
