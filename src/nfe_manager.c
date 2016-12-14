@@ -280,7 +280,7 @@ static void nfe_manager_init(NFEManager *nman){
 	list_tipo_contribuinte(priv->tipo_contribuinte);
 
 	//TEST
-	send_sefaz("NfeStatusServico2", 2, 35, gen_cons_status(2, 35));
+	send_sefaz("NfeStatusServico", 2, 35, gen_cons_status(2, 35));
 }
 
 

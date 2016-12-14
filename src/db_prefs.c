@@ -19,7 +19,28 @@
 
 #include "db_interface.h"
 #include "db.h"
+#include <sqlite3.h>
+#include <string.h>
 
-extern char *get_ws_url(char *service){
-	return NULL;
+char *get_ws_url(char *service, int ambiente, char **url_header, 
+		char **url_body){
+	sqlite3_stmt *stmt;
+	char *err, *url, *s;
+	err = malloc(sizeof(char) * 200);
+	int rc;
+	s = ambiente == 1? "url_prod" : "url_cert";
+
+	char *sql = sqlite3_mprintf("SELECT %s, url_header, url_body FROM urls \
+		WHERE service = %Q", s, service);
+	if(db_select(sql, &err, &stmt)){
+	fprintf(stdout, "SQL: %s\n", err);
+		return NULL;
+	}
+	rc = sqlite3_step(stmt);
+	if(rc == SQLITE_ROW){
+		url = strdup(sqlite3_column_text(stmt, 0));
+		*url_header = strdup(sqlite3_column_text(stmt, 1));
+		*url_body = strdup(sqlite3_column_text(stmt, 2));
+	}
+	return url;
 }

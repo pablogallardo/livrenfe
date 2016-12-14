@@ -92,7 +92,7 @@ CREATE TABLE nfe_itens (id_nfe integer, ordem integer, id_produto integer, icms_
 CREATE TABLE prefs (id integer, cert_pass varchar(200), ambiente integer,\
 	CONSTRAINT pref_pk PRIMARY KEY (id));\
 CREATE TABLE urls (id_url integer, service varchar(200), url_prod varchar(255),\
-	url_cert varchar(255),\
+	url_cert varchar(255), url_header varchar(255), url_body varchar(255),\
 	CONSTRAINT url_pk PRIMARY KEY (id_url));";
 
 const char *insert_sql = "INSERT INTO paises (id_pais, nome) VALUES (1, 'Brasil');\

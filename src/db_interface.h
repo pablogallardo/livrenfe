@@ -68,6 +68,7 @@ extern EMITENTE *get_emitente(int id);
 /**
  * Get WebService URL
  */
-extern char *get_ws_url(char *service);
+extern char *get_ws_url(char *service, int ambiente, char **url_header,
+	char **url_body);
 
 #endif
