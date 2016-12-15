@@ -278,9 +278,6 @@ static void nfe_manager_init(NFEManager *nman){
 	list_forma_pagamento(priv->forma_pagamento);
 	list_tipo_doc(priv->t_doc);
 	list_tipo_contribuinte(priv->tipo_contribuinte);
-
-	//TEST
-	send_sefaz("NfeStatusServico", 2, 35, gen_cons_status(2, 35));
 }
 
 

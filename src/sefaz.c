@@ -17,15 +17,29 @@
  *
  */
 
-#ifndef	XML_H
-#define	XML_H
-
+#include "sefaz.h"
+#include "livrenfe.h"
+#include "send.h"
+#include "xml.h"
+#include "gen_xml.h"
+#include "errno.h"
 #include <libxml/parser.h>
+#include <string.h>
 
-/**
- * Get single element from XML
- */
-extern char *get_xml_element(xmlDocPtr doc, char *element);
+int get_status_servico(int ambiente, int cuf){
+	char *respose, *status;
+	int cStat;
+	xmlDocPtr doc;
+	response = send_sefaz("NfeStatusServico", 2, 35, 
+		gen_cons_status(2, 35));
+	doc = xmlReadMemory(response, strlen(response), "noname.xml", NULL, 0);
+	status = get_xml_element(doc, "cStat");
+	//TODO if statuc == NULL
+	cStat = atoi(status);
+	return cStat;
+}
 
-
-#endif
+int send_lote(LOTE *, int ambiente){
+	//TODO
+	return 0;	
+}

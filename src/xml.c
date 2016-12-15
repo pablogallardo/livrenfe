@@ -17,15 +17,51 @@
  *
  */
 
-#ifndef	XML_H
-#define	XML_H
-
+#include "xml.h"
 #include <libxml/parser.h>
+#include <libxml/xpath.h>
+#include <string.h>
+#include <stdlib.h>
 
-/**
- * Get single element from XML
- */
-extern char *get_xml_element(xmlDocPtr doc, char *element);
+static xmlXPathObjectPtr getnodeset(xmlDocPtr doc, xmlChar *xpath){
+	xmlXPathContextPtr context;
+	xmlXPathObjectPtr result;
 
+	context = xmlXPathNewContext(doc);
+	if (context == NULL) {
+		printf("Error in xmlXPathNewContext\n");
+		return NULL;
+	}
+	result = xmlXPathEvalExpression(xpath, context);
+	xmlXPathFreeContext(context);
+	if (result == NULL) {
+		printf("Error in xmlXPathEvalExpression\n");
+		return NULL;
+	}
+	if(xmlXPathNodeSetIsEmpty(result->nodesetval)){
+		xmlXPathFreeObject(result);
+                printf("No result\n");
+		return NULL;
+	}
+	return result;
+}
 
-#endif
+char *get_xml_element(xmlDocPtr doc, char *element){
+	char *xpath = malloc(sizeof(char) * strlen(element) + 3);
+	xmlNodeSetPtr nodeset;
+	xmlXPathObjectPtr result;
+	strcpy(xpath, "//");
+	strcat(xpath, element);
+	xmlChar *content;
+
+	result = getnodeset(doc, xpath);
+	if(result) {
+		nodeset = result->nodesetval;
+		content = xmlNodeListGetString(doc, 
+			nodeset->nodeTab[0]->xmlChildrenNode, 1);
+	}
+	free(xpath);
+	xmlFreeDoc(doc);
+	xmlCleanupParser();
+	return content;
+}

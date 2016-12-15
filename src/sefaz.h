@@ -17,15 +17,17 @@
  *
  */
 
-#ifndef	XML_H
-#define	XML_H
+#ifndef	SEFAZ_H
+#define	SEFAZ_H
 
-#include <libxml/parser.h>
+#include "livrenfe.h"
 
-/**
- * Get single element from XML
- */
-extern char *get_xml_element(xmlDocPtr doc, char *element);
+extern int get_status_servico(int ambiente, int cuf);
 
+extern int send_lote(LOTE *, int ambiente);
+
+extern int cons_lote(LOTE *, int ambiente);
+
+extern int canc_nfe(NFE *, int ambiente);
 
 #endif
