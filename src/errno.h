@@ -31,5 +31,6 @@
 #define ENOTOKEN	6;
 #define ENOSLOT		7;
 #define ELIBP11		8;
+#define ESEFAZ		9;
 
 #endif

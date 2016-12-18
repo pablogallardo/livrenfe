@@ -32,6 +32,8 @@ static xmlXPathObjectPtr getnodeset(xmlDocPtr doc, xmlChar *xpath){
 		printf("Error in xmlXPathNewContext\n");
 		return NULL;
 	}
+	xmlXPathRegisterNs(context, BAD_CAST "nfe", 
+		BAD_CAST "http://www.portalfiscal.inf.br/nfe");
 	result = xmlXPathEvalExpression(xpath, context);
 	xmlXPathFreeContext(context);
 	if (result == NULL) {
@@ -47,10 +49,11 @@ static xmlXPathObjectPtr getnodeset(xmlDocPtr doc, xmlChar *xpath){
 }
 
 char *get_xml_element(xmlDocPtr doc, char *element){
-	char *xpath = malloc(sizeof(char) * strlen(element) + 3);
+	xmlChar *xpath = malloc(sizeof(xmlChar) * strlen(element) + 3);
 	xmlNodeSetPtr nodeset;
 	xmlXPathObjectPtr result;
 	strcpy(xpath, "//");
+	strcat(xpath, "nfe:");
 	strcat(xpath, element);
 	xmlChar *content;
 

@@ -27,19 +27,22 @@
 #include <string.h>
 
 int get_status_servico(int ambiente, int cuf){
-	char *respose, *status;
+	char *response, *status;
 	int cStat;
 	xmlDocPtr doc;
 	response = send_sefaz("NfeStatusServico", 2, 35, 
 		gen_cons_status(2, 35));
+	fprintf(stdout, "%s\n", response);
 	doc = xmlReadMemory(response, strlen(response), "noname.xml", NULL, 0);
 	status = get_xml_element(doc, "cStat");
-	//TODO if statuc == NULL
+	if(status == NULL){
+		return -ESEFAZ;	
+	}
 	cStat = atoi(status);
 	return cStat;
 }
 
-int send_lote(LOTE *, int ambiente){
+int send_lote(LOTE *lote, int ambiente){
 	//TODO
 	return 0;	
 }

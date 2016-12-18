@@ -24,7 +24,8 @@
 #include "nfe.h"
 #include "livrenfe.h"
 #include "utils.h"
-#include "send.h"
+//TEST
+#include "sefaz.h"
 #include <gtk/gtk.h>
 #include <string.h>
 #include <stdlib.h>
@@ -278,6 +279,7 @@ static void nfe_manager_init(NFEManager *nman){
 	list_forma_pagamento(priv->forma_pagamento);
 	list_tipo_doc(priv->t_doc);
 	list_tipo_contribuinte(priv->tipo_contribuinte);
+	fprintf(stdout, "%d", get_status_servico(2,35));
 }
 
 
