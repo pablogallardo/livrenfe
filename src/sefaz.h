@@ -22,7 +22,9 @@
 
 #include "livrenfe.h"
 
-extern int get_status_servico(int ambiente, int cuf);
+#define	SEFAZ_STATUS_OK	107
+
+extern int get_status_servico(int ambiente, int cuf, char **msg);
 
 extern int send_lote(LOTE *, int ambiente);
 

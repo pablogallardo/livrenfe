@@ -53,7 +53,6 @@ char *get_xml_element(xmlDocPtr doc, char *element){
 	xmlNodeSetPtr nodeset;
 	xmlXPathObjectPtr result;
 	strcpy(xpath, "//");
-	strcat(xpath, "nfe:");
 	strcat(xpath, element);
 	xmlChar *content;
 

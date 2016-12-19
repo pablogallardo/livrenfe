@@ -46,7 +46,7 @@ CURLcode sslctx_function(CURL *curl, void *sslctx, void *parm){
 	RSA *rsa = NULL;
 	EVP_PKEY *pKey = NULL;
 	int rc;
-	char *pwd = "paris05";
+	char *pwd = "";
 	(void)curl; //avoid warnings
 	(void)parm; //avoid warnings
 
