@@ -29,9 +29,9 @@ char *timetostr(time_t t){
 	buffer = malloc(sizeof(char) * 11);
 	struct tm *tm_info;
 
-	tm_info = localtime(t);
+	tm_info = localtime(&t);
 
-	strftime(buffer, 11, "%Y-%m-%d %H:%M:%S", tm_info);
+	strftime(buffer, 19, "%Y-%m-%d %H:%M:%S", tm_info);
 
 	return buffer;
 }

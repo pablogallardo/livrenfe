@@ -46,15 +46,18 @@ static void nfe_manager_activate(GtkButton *b, gpointer win){
 	gtk_window_present(GTK_WINDOW(nman));
 }
 
-static void view_on_row_activated(GtkTreeView *t, GtkTreePath *path, 
-		GtkTreeViewColumn *col, gpointer userdata){
+void view_on_row_activated(GtkTreeView *t, GtkTreePath *path, 
+		GtkTreeViewColumn *col, gpointer win){
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	model = gtk_tree_view_get_model(t);
 	if(gtk_tree_model_get_iter(model, &iter, path)){
 		int idnfe;
 		gtk_tree_model_get(model, &iter, 0, &idnfe, -1);
-		fprintf(stdout, "%d\n", idnfe);
+		NFEManager *nman;
+		nman = nfe_manager_new(LIVRENFE_WINDOW(win));
+		nman->nfe = get_nfe(idnfe);
+		gtk_window_present(GTK_WINDOW(nman));
 	}
 }
 
@@ -65,7 +68,7 @@ static void livrenfe_window_init(LivrenfeWindow *win){
 	g_signal_connect((LIVRENFE_WINDOW(win))->new_nfe, "clicked", G_CALLBACK(nfe_manager_activate),
 			win);
 	g_signal_connect((LIVRENFE_WINDOW(win))->treeview, "row-activated",
-			G_CALLBACK(view_on_row_activated), NULL);
+			G_CALLBACK(view_on_row_activated), win);
 }
 
 

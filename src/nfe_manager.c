@@ -259,12 +259,64 @@ static void save_nfe(GtkButton *b, GtkWidget *win){
 	gtk_widget_destroy(win);
 }
 
+static void inst_nfe_manager(gpointer p, NFEManager *nman){
+	NFEManagerPrivate *priv;
+
+	priv = nfe_manager_get_instance_private(nman);
+	NFE *nfe = nman->nfe;
+	if(nfe->idnfe->id_nfe != 0){
+		IDNFE *idnfe = nfe->idnfe;
+		DESTINATARIO *destinatario = nfe->destinatario;
+		ENDERECO *endereco = destinatario->endereco;
+
+		gtk_entry_set_text(priv->serie, itoa(idnfe->serie));
+		gtk_entry_set_text(priv->num, itoa(idnfe->num_nf));
+		gtk_entry_set_text(priv->nat_op, idnfe->nat_op);
+		gtk_combo_box_set_active_id(priv->forma_pagamento, itoa(idnfe->ind_pag));
+
+		gtk_entry_set_text(priv->dh_emis, timef(idnfe->dh_emis,
+			"%d/%m/%Y %H:%M:%S", 19));
+		if(idnfe->dh_saida != NULL){
+			gtk_entry_set_text(priv->dh_saida, timef(*idnfe->dh_saida,
+				"%d/%m/%Y %H:%M:%S", 19));
+		}
+		/**TODO idnfe->dh_emis = strtotime(gtk_entry_get_text(priv->dh_emis));
+		time_t saida = strtotime(gtk_entry_get_text(priv->dh_saida));
+		idnfe->dh_saida = saida == -1? NULL:&saida; */
+		gtk_combo_box_set_active_id(priv->uf, 
+			itoa(idnfe->municipio->cod_uf));
+		gtk_combo_box_set_active_id(priv->municipio, 
+			itoa(idnfe->municipio->codigo));
+
+		/* TODO gtk_combo_box_set_active_id(priv->tipo_doc, 
+			itoa(destinatario->tipo_doc));*/
+		gtk_entry_set_text(priv->doc, destinatario->cnpj);
+		gtk_entry_set_text(priv->razao_social, destinatario->nome);
+		gtk_combo_box_set_active_id(priv->tipo_contribuinte, 
+			itoa(destinatario->tipo_ie));
+		if(destinatario->inscricao_estadual != NULL)
+			gtk_entry_set_text(priv->ie, 
+				destinatario->inscricao_estadual);
+
+		gtk_entry_set_text(priv->logradouro, endereco->rua);
+		gtk_entry_set_text(priv->numero_endereco, itoa(endereco->num));
+		gtk_entry_set_text(priv->complemento, endereco->complemento);
+		gtk_entry_set_text(priv->bairro, endereco->bairro);
+		gtk_entry_set_text(priv->cep, itoa(endereco->cep));
+		gtk_combo_box_set_active_id(priv->uf_destinatario, 
+			itoa(endereco->municipio->cod_uf));
+		gtk_combo_box_set_active_id(priv->municipio_destinatario, 
+			itoa(endereco->municipio->codigo));
+	}
+}
+
 static void nfe_manager_init(NFEManager *nman){
 	NFEManagerPrivate *priv;
 
 	priv = nfe_manager_get_instance_private(nman);
 	gtk_widget_init_template(GTK_WIDGET(nman));
 	g_signal_connect(nman, "show", G_CALLBACK(list_items), nman);
+	g_signal_connect(nman, "show", G_CALLBACK(inst_nfe_manager), nman);
 	g_signal_connect(priv->novo_item, "clicked", G_CALLBACK(item_manager_activate),
 			nman);
 	g_signal_connect(priv->save_nfe, "clicked", G_CALLBACK(save_nfe),
@@ -277,6 +329,7 @@ static void nfe_manager_init(NFEManager *nman){
 	list_forma_pagamento(priv->forma_pagamento);
 	list_tipo_doc(priv->t_doc);
 	list_tipo_contribuinte(priv->tipo_contribuinte);
+
 }
 
 

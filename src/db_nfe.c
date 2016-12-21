@@ -326,7 +326,7 @@ NFE *get_nfe(int id){
 		id_uf_emit, cep_emit, id_dest, t_ie_dest,
 		id_mun_dest, id_uf_dest, cod_nfe,
 		num_e_emit, num_e_dest, cep_dest;
-	float dh_emis, dh_saida, total;
+	float dh_emis, *dh_saida, total;
 	char *nome_mun, *uf, *nat_op, *versao,  *nome_emit, 
 		*cnpj_emit, *rua_emit, *comp_emit, *bairro_emit,
 		*mun_emit, *uf_emit, *nome_dest, *cnpj_dest,
@@ -410,7 +410,13 @@ NFE *get_nfe(int id){
 			div = sqlite3_column_int(stmt, DIV); 
 
 			dh_emis = sqlite3_column_double(stmt, DH_EMIS);
-			dh_saida = sqlite3_column_double(stmt, DH_SAIDA);
+			dh_saida = malloc(sizeof(float));
+			if(sqlite3_column_type(stmt, DH_SAIDA) == SQLITE_NULL){
+				free(dh_saida);
+				dh_saida = NULL;
+			} else {
+				*dh_saida = sqlite3_column_double(stmt, DH_SAIDA);
+			}
 			total = sqlite3_column_double(stmt, TOTAL);
 
 			nome_mun = strdup(sqlite3_column_text(stmt, MUN)); 
@@ -447,7 +453,7 @@ NFE *get_nfe(int id){
 		id_emit, ie_emit, crt_emit, id_mun_emit,
 		id_uf_emit, cep_emit, num_e_emit, id_dest, 
 		t_ie_dest, id_mun_dest, id_uf_dest, num_e_dest,
-		cod_nfe, cep_dest, dh_emis, &dh_saida, total,
+		cod_nfe, cep_dest, dh_emis, dh_saida, total,
 		nome_mun, uf, nat_op, versao, 
 		nome_emit, cnpj_emit, rua_emit,
 		comp_emit, bairro_emit, mun_emit, uf_emit,
