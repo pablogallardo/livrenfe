@@ -37,6 +37,7 @@ CREATE TABLE emitentes (id_emitente integer, nome varchar(100),\
 	crt char(1), cnpj varchar(14), rua varchar(200), complemento varchar(200),\
 	bairro varchar(200), id_municipio varchar(7), cep varchar(9), numero integer, \
 	CONSTRAINT emitente_pk PRIMARY KEY (id_emitente),\
+	CONSTRAINT emitentes_uq UNIQUE (cnpj),\
 	CONSTRAINT emitente_munic_fk FOREIGN KEY (id_municipio)\
 		REFERENCES municipios(id_municipio));\
 CREATE TABLE destinatarios (id_destinatario integer, nome varchar(200),\
@@ -45,6 +46,7 @@ CREATE TABLE destinatarios (id_destinatario integer, nome varchar(200),\
 	cep varchar(9), numero integer, inscricao_estadual varchar(20),\
 	tipo_doc varchar(4),\
 	CONSTRAINT destinatario_pk PRIMARY KEY (id_destinatario),\
+	CONSTRAINT destinatarios_uq UNIQUE (cnpj),\
 	CONSTRAINT destinatario_munic_fk FOREIGN KEY (id_municipio)\
 		REFERENCES municipios(id_municipio));\
 CREATE TABLE produtos (id_produto integer, descricao varchar(200), ncm integer,\
@@ -65,6 +67,7 @@ CREATE TABLE nfe (id_nfe integer, id_municipio varchar(8),\
 	total real, id_transportadora varchar(20), cod_nfe integer,\
 	id_lote integer, protocolo integer, xml text,\
 	CONSTRAINT nfe_pk PRIMARY KEY (id_nfe),\
+	CONSTRAINT nfe_uq UNIQUE (num_nf, serie, id_emitente),\
 	CONSTRAINT nfe_municipio_fk FOREIGN KEY (id_municipio)\
 	REFERENCES municipios(id_municipio),\
 	CONSTRAINT nfe_emitente_fk FOREIGN KEY (id_emitente)\
