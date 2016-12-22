@@ -43,7 +43,7 @@ struct _NFEManagerPrivate{
 	GtkComboBox *uf_destinatario;
 	GtkComboBox *municipio_destinatario;
 	GtkComboBox *forma_pagamento;
-	GtkComboBoxText *t_doc;
+	GtkComboBox *t_doc;
 	GtkComboBox *tipo_contribuinte;
 	GtkEntry *num;
 	GtkEntry *serie;
@@ -148,9 +148,32 @@ static void list_tipo_contribuinte(GtkComboBox *t){
 	gtk_combo_box_set_id_column(t, ID);
 }
 
-static void list_tipo_doc(GtkComboBoxText *t){
-	gtk_combo_box_text_append(t, "CNPJ", "CNPJ");
-	gtk_combo_box_text_append(t, "CPF", "CPF");
+static void list_tipo_doc(GtkComboBox *t){
+	GtkListStore *list_store;
+	GtkTreeIter iter;
+
+	enum{
+		ID,
+		TEXT,
+		N_COLS
+	};
+
+	list_store = gtk_list_store_new(N_COLS, G_TYPE_STRING, G_TYPE_STRING);
+	gtk_list_store_append(list_store, &iter);
+	gtk_list_store_set(list_store, &iter, ID, "CNPJ", 
+			 -1);
+	gtk_list_store_append(list_store, &iter);
+	gtk_list_store_set(list_store, &iter, ID, "CPF", 
+			 -1);
+
+	GtkCellRenderer *r_td;
+
+	r_td = gtk_cell_renderer_text_new();
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(t), r_td, TRUE);
+	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(t),
+				r_td, "text", ID, NULL);
+	gtk_combo_box_set_model(t, GTK_TREE_MODEL(list_store));
+	gtk_combo_box_set_id_column(t, ID);
 }
 
 static void list_uf(GtkComboBox *uf){
@@ -242,7 +265,7 @@ static void save_nfe(GtkButton *b, GtkWidget *win){
 	idnfe->municipio->cod_uf = atoi(gtk_combo_box_get_active_id(priv->uf));
 	idnfe->municipio->codigo = atoi(gtk_combo_box_get_active_id(priv->municipio));
 
-	destinatario->tipo_doc = gtk_combo_box_text_get_active_text(priv->t_doc);
+	destinatario->tipo_doc = gtk_combo_box_get_active_id(priv->t_doc);
 	destinatario->cnpj = gtk_entry_get_text(priv->doc);
 	destinatario->nome = gtk_entry_get_text(priv->razao_social);
 	destinatario->tipo_ie = atoi(gtk_combo_box_get_active_id(priv->tipo_contribuinte));
@@ -288,8 +311,8 @@ static void inst_nfe_manager(gpointer p, NFEManager *nman){
 		gtk_combo_box_set_active_id(priv->municipio, 
 			itoa(idnfe->municipio->codigo));
 
-		/* TODO gtk_combo_box_set_active_id(priv->tipo_doc, 
-			itoa(destinatario->tipo_doc));*/
+		gtk_combo_box_set_active_id(priv->t_doc, 
+			destinatario->tipo_doc);
 		gtk_entry_set_text(priv->doc, destinatario->cnpj);
 		gtk_entry_set_text(priv->razao_social, destinatario->nome);
 		gtk_combo_box_set_active_id(priv->tipo_contribuinte, 

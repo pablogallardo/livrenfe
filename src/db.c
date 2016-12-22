@@ -28,7 +28,6 @@ const char *db_file = NULL;
 sqlite3 *db;
 
 int db_exec(const char *sql, char **err){
-	fprintf(stdout, "%s\n", sql);
 	sqlite3_stmt *stmt;
 	int rc;
 	const char *tail_sql;

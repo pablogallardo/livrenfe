@@ -258,7 +258,6 @@ static int get_itens(NFE *n){
 		FROM produtos p LEFT JOIN nfe_itens ni\
 			ON ni.id_produto = p.id_produto\
 		WHERE ni.id_nfe = %d", n->idnfe->id_nfe);
-	fprintf(stderr, "%s", sql);
 	if(db_select(sql, &err, &stmt)){
 		return -ESQL;
 	}
