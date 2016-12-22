@@ -88,7 +88,7 @@ int register_nfe(NFE *nfe){
 	sql = malloc(400);
 	err = NULL;
 	int last_id, id_nf;
-       	sql = sqlite3_mprintf("INSERT INTO destinatarios (nome, tipo_ie, cnpj, rua, complemento, \
+       	sql = sqlite3_mprintf("REPLACE INTO destinatarios (nome, tipo_ie, cnpj, rua, complemento, \
 		bairro, id_municipio, cep) VALUES (%Q, '%d', %Q, %Q, %Q, %Q, \
 		'%d', '%d');", d->nome, d->tipo_ie, d->cnpj, ed->rua, ed->complemento,
 		ed->bairro, ed->municipio->codigo, ed->cep);
@@ -98,7 +98,7 @@ int register_nfe(NFE *nfe){
 		return -1;
 	}
 	last_id = db_last_insert_id();
-       	sql = sqlite3_mprintf("INSERT INTO nfe (id_municipio, nat_op, ind_pag, mod_nfe, \
+       	sql = sqlite3_mprintf("REPLACE INTO nfe (id_municipio, nat_op, ind_pag, mod_nfe, \
 		serie, num_nf, dh_emis, dh_saida, tipo, local_destino, \
 		tipo_impressao, tipo_ambiente, finalidade, consumidor_final, \
 		presencial, versao, div, chave, id_emitente, id_destinatario, \
@@ -126,7 +126,7 @@ int register_nfe(NFE *nfe){
 		ICMS *icms = imp->icms;
 		PIS *pis = imp->pis;
 		COFINS *cofins = imp->cofins;
-		sql = sqlite3_mprintf("INSERT INTO  produtos (id_produto, descricao, ncm, cfop, unidade,\
+		sql = sqlite3_mprintf("REPLACE INTO  produtos (id_produto, descricao, ncm, cfop, unidade,\
 			valor) VALUES (%d, %Q, %d, %d, %Q, %f);",
 		       p->codigo, p->descricao, p->ncm, p->cfop, p->unidade_comercial,
 		       p->valor);
@@ -136,7 +136,7 @@ int register_nfe(NFE *nfe){
 			return -1;
 		}
 		last_id = db_last_insert_id();
-		sql = sqlite3_mprintf("INSERT INTO  nfe_itens (id_nfe, ordem, id_produto, icms_origem,\
+		sql = sqlite3_mprintf("REPLACE INTO  nfe_itens (id_nfe, ordem, id_produto, icms_origem,\
 		       	icms_tipo, icms_aliquota, icms_valor, pis_aliquota, pis_quantidade,\
 			pis_nt, cofins_aliquota, cofins_quantidade, cofins_nt,\
 			qtd)\
