@@ -26,7 +26,7 @@
 
 char *timetostr(time_t t){
 	char *buffer;
-	buffer = malloc(sizeof(char) * 11);
+	buffer = malloc(sizeof(char) * 20);
 	struct tm *tm_info;
 
 	tm_info = localtime(&t);
@@ -64,12 +64,12 @@ char *strrev(char *s){
 
 char *timef(time_t t, char *format, int chars){
 	char *buffer;
-	buffer = malloc(sizeof(char) * chars);
+	buffer = malloc(sizeof(char) * ++chars);
 	struct tm *tm_info;
 
 	tm_info = localtime(&t);
 
-	strftime(buffer, ++chars, format, tm_info);
+	strftime(buffer, chars, format, tm_info);
 
 	return buffer;
 }

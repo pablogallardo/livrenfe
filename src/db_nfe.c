@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 GtkListStore *get_list_nfe(){
 	sqlite3_stmt *stmt;
@@ -325,7 +326,8 @@ NFE *get_nfe(int id){
 		id_uf_emit, cep_emit, id_dest, t_ie_dest,
 		id_mun_dest, id_uf_dest, cod_nfe,
 		num_e_emit, num_e_dest, cep_dest;
-	float dh_emis, *dh_saida, total;
+	time_t dh_emis, *dh_saida;
+	float total;
 	char *nome_mun, *uf, *nat_op, *versao,  *nome_emit, 
 		*cnpj_emit, *rua_emit, *comp_emit, *bairro_emit,
 		*mun_emit, *uf_emit, *nome_dest, *cnpj_dest,
@@ -461,7 +463,9 @@ NFE *get_nfe(int id){
 		uf_dest, chave, div, ie_dest,
 		tipo_doc_dest, nfe);
 	get_itens(nfe);
-	return nfe; } 
+	return nfe; 
+}
+
 EMITENTE *get_emitente(int id){
 	EMITENTE *e = new_emitente();
 	char *err;
