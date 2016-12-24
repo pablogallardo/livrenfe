@@ -378,7 +378,7 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="t_doc">
+                  <object class="GtkComboBox" id="t_doc">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>

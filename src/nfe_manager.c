@@ -154,17 +154,14 @@ static void list_tipo_doc(GtkComboBox *t){
 
 	enum{
 		ID,
-		TEXT,
 		N_COLS
 	};
 
-	list_store = gtk_list_store_new(N_COLS, G_TYPE_STRING, G_TYPE_STRING);
+	list_store = gtk_list_store_new(N_COLS, G_TYPE_STRING);
 	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, ID, "CNPJ", 
-			 -1);
+	gtk_list_store_set(list_store, &iter, ID, "CNPJ", -1);
 	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, ID, "CPF", 
-			 -1);
+	gtk_list_store_set(list_store, &iter, ID, "CPF", -1);
 
 	GtkCellRenderer *r_td;
 
