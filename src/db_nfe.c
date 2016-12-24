@@ -90,9 +90,11 @@ int register_nfe(NFE *nfe){
 	err = NULL;
 	int last_id, id_nf;
        	sql = sqlite3_mprintf("REPLACE INTO destinatarios (nome, tipo_ie, cnpj, rua, complemento, \
-		bairro, id_municipio, cep) VALUES (%Q, '%d', %Q, %Q, %Q, %Q, \
-		'%d', '%d');", d->nome, d->tipo_ie, d->cnpj, ed->rua, ed->complemento,
-		ed->bairro, ed->municipio->codigo, ed->cep);
+		bairro, id_municipio, cep, numero, inscricao_estadual, \
+		tipo_doc) VALUES (%Q, '%d', %Q, %Q, %Q, %Q, \
+		'%d', '%d', %d, %Q, %Q);", d->nome, d->tipo_ie, d->cnpj, 
+		ed->rua, ed->complemento, ed->bairro, ed->municipio->codigo, 
+		ed->cep, ed->num, d->inscricao_estadual, d->tipo_doc);
 	db_exec(sql, &err);
 	if(err){
 		fprintf(stderr, "livrenfe: Error: %s", err);
@@ -356,7 +358,7 @@ NFE *get_nfe(int id){
 		e.crt, e.cnpj, e.rua, e.complemento, e.bairro, e.id_municipio, m_e.nome, \
 		u_e.cod_ibge, u_e.nome, e.cep, d.id_destinatario, d.nome, d.tipo_ie, \
 		d.cnpj, d.rua, d.complemento, d.bairro, m_d.id_municipio, m_d.nome, \
-		u_d.cod_ibge, u_d.nome, d.cep, n.cod_nfe, e.numero, d.numero, \
+		u_d.cod_ibge, u_d.nome, n.cod_nfe, e.numero, d.numero, \
 		d.inscricao_estadual, d.tipo_doc, d.cep\
 		FROM nfe n LEFT JOIN municipios m ON m.id_municipio = n.id_municipio \
 		LEFT JOIN uf u ON u.id_uf = m.id_uf \
@@ -407,7 +409,6 @@ NFE *get_nfe(int id){
 			cod_nfe = sqlite3_column_int(stmt, COD_NFE);
 			num_e_emit = sqlite3_column_int(stmt, NUM_E_EMIT);
 			num_e_dest = sqlite3_column_int(stmt, NUM_E_DEST);
-			tipo_doc_dest = sqlite3_column_int(stmt, TIPO_DOC_DEST);
 			div = sqlite3_column_int(stmt, DIV); 
 
 			dh_emis = sqlite3_column_double(stmt, DH_EMIS);
@@ -440,6 +441,7 @@ NFE *get_nfe(int id){
 			bairro_dest = strdup(sqlite3_column_text(stmt, BAIRRO_DEST)); 
 			mun_dest = strdup(sqlite3_column_text(stmt, MUN_DEST)); 
 			uf_dest = strdup(sqlite3_column_text(stmt, UF_DEST)); 
+			tipo_doc_dest = strdup(sqlite3_column_text(stmt, TIPO_DOC_DEST));
 			chave = strdup(sqlite3_column_text(stmt, CHAVE)); 
 		} else if(rc == SQLITE_DONE){
 			break;
