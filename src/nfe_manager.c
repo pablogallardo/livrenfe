@@ -102,7 +102,7 @@ static GtkListStore *get_item_list(NFE *nfe){
 	enum{ ID_PRODUTO, DESCRICAO, QTD, VALOR, N_COLS };
 
 	list_store = gtk_list_store_new(N_COLS, G_TYPE_INT, G_TYPE_STRING,
-		G_TYPE_FLOAT, G_TYPE_FLOAT);
+		G_TYPE_INT, G_TYPE_FLOAT);
 	i = nfe->itens;
 	while(i){
 		gtk_list_store_append(list_store, &iter);

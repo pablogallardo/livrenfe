@@ -87,6 +87,7 @@ CREATE TABLE nfe_itens (id_nfe integer, ordem integer, id_produto integer, icms_
 	icms_tipo integer, icms_aliquota real, icms_valor real, pis_aliquota real,\
 	pis_quantidade integer, pis_nt varchar(40), cofins_aliquota real,\
 	cofins_quantidade integer, cofins_nt varchar(40), qtd integer,\
+	valor real,\
 	CONSTRAINT itens_pk PRIMARY KEY (id_nfe, ordem),\
 	CONSTRAINT itens_nfe_fk FOREIGN KEY (id_nfe)\
 	REFERENCES nfe(id_nfe),\

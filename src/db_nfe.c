@@ -139,15 +139,18 @@ int register_nfe(NFE *nfe){
 			return -1;
 		}
 		last_id = db_last_insert_id();
-		sql = sqlite3_mprintf("REPLACE INTO  nfe_itens (id_nfe, ordem, id_produto, icms_origem,\
-		       	icms_tipo, icms_aliquota, icms_valor, pis_aliquota, pis_quantidade,\
+		sql = sqlite3_mprintf("REPLACE INTO  nfe_itens (id_nfe, ordem,\
+			id_produto, icms_origem, icms_tipo, icms_aliquota,\
+			icms_valor, pis_aliquota, pis_quantidade,\
 			pis_nt, cofins_aliquota, cofins_quantidade, cofins_nt,\
-			qtd)\
-			VALUES (%d, %d, %d, %d, %d, %f, %f, %f, %f, %f, %f, \
-			%f, %f, %f);",
-			id_nf, item->ordem, last_id, icms->origem, icms->tipo, icms->aliquota, icms->valor,
-			pis->aliquota, pis->quantidade, pis->nt, cofins->aliquota,
-			cofins->quantidade, cofins->nt, item->quantidade);
+			qtd, valor)\
+			VALUES (%d, %d, %d, %d, %d, %f, %f, %f, %d, %Q, %f, \
+			%d, %Q, %d, %f);",
+			id_nf, item->ordem, last_id, icms->origem, icms->tipo, 
+			icms->aliquota, icms->valor, pis->aliquota, 
+			pis->quantidade, pis->nt, cofins->aliquota,
+			cofins->quantidade, cofins->nt, item->quantidade,
+			item->valor);
 		db_exec(sql, &err);
 		if(err){
 			fprintf(stderr, "livrenfe: Error - %s", err);

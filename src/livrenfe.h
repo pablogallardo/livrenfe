@@ -173,7 +173,7 @@ struct ITEM {
 	PRODUTO *produto;
 	IMPOSTO *imposto;
 	unsigned int ordem;
-	float quantidade;
+	unsigned int quantidade;
 	float valor;
 	ITEM *pointer; //next item
 };
