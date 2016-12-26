@@ -9,7 +9,8 @@ livrenfe_SOURCES = main.c db.c db_create.c db_init.c livrenfe.c lnfe_window.c \
 		   nfe.c gen_xml.c crypto_interface.c sign.c send.c xml.c \
 		   db_prefs.c sefaz.c emitente_manager.c
 
-resources.c: livrenfe.gresource.xml window.ui nfe_manager.ui item_manager.ui
+resources.c: livrenfe.gresource.xml window.ui nfe_manager.ui item_manager.ui \
+		emitente_manager.ui
 	glib-compile-resources --target=$@ --generate-source $<
 
 clean-local:

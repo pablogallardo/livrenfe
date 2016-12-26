@@ -580,7 +580,8 @@ uninstall-am: uninstall-binPROGRAMS
 	uninstall-am uninstall-binPROGRAMS
 
 
-resources.c: livrenfe.gresource.xml window.ui nfe_manager.ui item_manager.ui
+resources.c: livrenfe.gresource.xml window.ui nfe_manager.ui item_manager.ui \
+		emitente_manager.ui
 	glib-compile-resources --target=$@ --generate-source $<
 
 clean-local:
