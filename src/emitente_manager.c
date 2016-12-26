@@ -65,9 +65,30 @@ static void emitente_manager_init(EmitenteManager *eman){
 
 static void emitente_manager_class_init(EmitenteManagerClass *class){
 	G_OBJECT_CLASS (class)->dispose = emitente_manager_dispose;
-
 	gtk_widget_class_set_template_from_resource(GTK_WIDGET_CLASS(class),
 		"/br/com/lapagina/livrenfe/emitente_manager.ui");
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		EmitenteManager, cnpj);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		EmitenteManager, razao_social);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		EmitenteManager, ie);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		EmitenteManager, rua);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		EmitenteManager, num);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		EmitenteManager, complemento);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		EmitenteManager, bairro);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		EmitenteManager, cep);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		EmitenteManager, crt);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		EmitenteManager, uf);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		EmitenteManager, municipio);
 }
 
 EmitenteManager *emitente_manager_new(LivrenfeWindow *win){
