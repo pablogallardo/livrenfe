@@ -19,6 +19,7 @@
 
 #include "emitente_manager.h"
 #include "lnfe_window.h"
+#include "db_interface.h"
 #include <gtk/gtk.h>
 #include <stdlib.h>
 
@@ -53,12 +54,20 @@ static void emitente_manager_dispose(GObject *object){
 	G_OBJECT_CLASS(emitente_manager_parent_class)->dispose(object);
 }
 
+static void inst_emitente(gpointer p, EmitenteManager *eman){
+	EMITENTE *e = get_emitente(1);
+	if(e){
+		//gtk_entry_set_text(priv->serie, itoa(idnfe->serie));
+		//gtk_combo_box_set_active_id(priv->t_doc, destinatario->tipo_doc);
+	}
+}
 
 static void emitente_manager_init(EmitenteManager *eman){
 	EmitenteManagerPrivate *priv;
 
 	priv = emitente_manager_get_instance_private(eman);
 	gtk_widget_init_template(GTK_WIDGET(eman));
+	g_signal_connect(eman, "show", G_CALLBACK(inst_emitente), eman);
 }
 
 
