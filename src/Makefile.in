@@ -96,7 +96,7 @@ am_livrenfe_OBJECTS = main.$(OBJEXT) db.$(OBJEXT) db_create.$(OBJEXT) \
 	item_manager.$(OBJEXT) utils.$(OBJEXT) nfe.$(OBJEXT) \
 	gen_xml.$(OBJEXT) crypto_interface.$(OBJEXT) sign.$(OBJEXT) \
 	send.$(OBJEXT) xml.$(OBJEXT) db_prefs.$(OBJEXT) \
-	sefaz.$(OBJEXT)
+	sefaz.$(OBJEXT) emitente_manager.$(OBJEXT)
 livrenfe_OBJECTS = $(am_livrenfe_OBJECTS)
 livrenfe_LDADD = $(LDADD)
 AM_V_P = $(am__v_P_@AM_V@)
@@ -251,7 +251,7 @@ AM_LDFLAGS = -L/usr/local/lib -lsqlite3 -lssl -lcrypto -lp11 \
 livrenfe_SOURCES = main.c db.c db_create.c db_init.c livrenfe.c lnfe_window.c \
 		   resources.c  db_nfe.c nfe_manager.c item_manager.c utils.c \
 		   nfe.c gen_xml.c crypto_interface.c sign.c send.c xml.c \
-		   db_prefs.c sefaz.c
+		   db_prefs.c sefaz.c emitente_manager.c
 
 all: all-am
 
@@ -346,6 +346,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/db_init.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/db_nfe.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/db_prefs.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/emitente_manager.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gen_xml.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/item_manager.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/livrenfe.Po@am__quote@

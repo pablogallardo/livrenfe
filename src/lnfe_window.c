@@ -19,6 +19,7 @@
 
 #include "lnfe_window.h"
 #include "nfe_manager.h"
+#include "emitente_manager.h"
 #include "livrenfe.h"
 #include "nfe.h"
 #include "db_interface.h"
@@ -30,6 +31,7 @@ struct _LivrenfeWindow{
 	GtkApplicationWindow parent;
 	GtkTreeView *treeview;
 	GtkButton *new_nfe;
+	GtkMenuItem *emitente_manager_btn;
 };
 
 struct _LivrenfeWindowClass{
@@ -44,6 +46,12 @@ static void nfe_manager_activate(GtkButton *b, gpointer win){
 	nman = nfe_manager_new(LIVRENFE_WINDOW(win));
 	nman->nfe = new_nfe();
 	gtk_window_present(GTK_WINDOW(nman));
+}
+
+static void emitente_manager_activate(GtkMenuItem *i, gpointer win){
+	EmitenteManager *eman;
+	eman = emitente_manager_new(LIVRENFE_WINDOW(win));
+	gtk_window_present(GTK_WINDOW(eman));
 }
 
 void view_on_row_activated(GtkTreeView *t, GtkTreePath *path, 
@@ -69,6 +77,8 @@ static void livrenfe_window_init(LivrenfeWindow *win){
 			win);
 	g_signal_connect((LIVRENFE_WINDOW(win))->treeview, "row-activated",
 			G_CALLBACK(view_on_row_activated), win);
+	g_signal_connect((LIVRENFE_WINDOW(win))->emitente_manager_btn, "activate",
+			G_CALLBACK(emitente_manager_activate), win);
 }
 
 
@@ -79,6 +89,8 @@ static void livrenfe_window_class_init(LivrenfeWindowClass *class){
 		       	treeview);
 	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
 		       	new_nfe);
+	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
+		       	emitente_manager_btn);
 }
 
 void list_nfe(LivrenfeWindow *win){
