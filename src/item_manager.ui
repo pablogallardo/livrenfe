@@ -18,8 +18,8 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="ok_btn">
-                <property name="label" translatable="yes">OK</property>
+              <object class="GtkButton" id="cancel_btn">
+                <property name="label" translatable="yes">Cancelar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -31,8 +31,8 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="cancel_btn">
-                <property name="label" translatable="yes">Cancelar</property>
+              <object class="GtkButton" id="ok_btn">
+                <property name="label" translatable="yes">OK</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -58,6 +58,10 @@
               <object class="GtkGrid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_left">6</property>
+                <property name="margin_right">6</property>
+                <property name="margin_top">4</property>
+                <property name="margin_bottom">4</property>
                 <property name="row_spacing">7</property>
                 <property name="column_spacing">15</property>
                 <child>
@@ -228,6 +232,10 @@
                   <object class="GtkGrid">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_left">6</property>
+                    <property name="margin_right">6</property>
+                    <property name="margin_top">4</property>
+                    <property name="margin_bottom">4</property>
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">13</property>
                     <child>
@@ -354,6 +362,10 @@
                   <object class="GtkGrid">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_left">6</property>
+                    <property name="margin_right">6</property>
+                    <property name="margin_top">4</property>
+                    <property name="margin_bottom">4</property>
                     <property name="column_spacing">34</property>
                     <property name="column_homogeneous">True</property>
                     <child>
@@ -397,6 +409,10 @@
                   <object class="GtkGrid">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_left">6</property>
+                    <property name="margin_right">6</property>
+                    <property name="margin_top">4</property>
+                    <property name="margin_bottom">4</property>
                     <property name="column_homogeneous">True</property>
                     <child>
                       <object class="GtkLabel">

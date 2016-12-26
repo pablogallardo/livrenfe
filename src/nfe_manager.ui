@@ -32,6 +32,7 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
       <object class="GtkBox" id="vbox">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
+        <property name="spacing">3</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox">
             <property name="can_focus">False</property>
@@ -50,6 +51,10 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
               <object class="GtkGrid" id="notebook-nfe">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_left">6</property>
+                <property name="margin_right">6</property>
+                <property name="margin_top">4</property>
+                <property name="margin_bottom">4</property>
                 <property name="row_spacing">5</property>
                 <property name="column_spacing">15</property>
                 <child>
@@ -237,6 +242,10 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
               <object class="GtkGrid" id="notebook-dest">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_left">6</property>
+                <property name="margin_right">6</property>
+                <property name="margin_top">4</property>
+                <property name="margin_bottom">4</property>
                 <property name="row_spacing">5</property>
                 <property name="column_spacing">15</property>
                 <child>
