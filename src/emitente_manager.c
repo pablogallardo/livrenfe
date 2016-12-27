@@ -44,6 +44,9 @@ struct _EmitenteManagerPrivate{
 	GtkComboBox *crt;
 	GtkComboBox *uf;
 	GtkComboBox *municipio;
+
+	GtkButton *cancel_btn;
+	GtkButton *save_btn;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(EmitenteManager, emitente_manager, GTK_TYPE_DIALOG)
@@ -174,6 +177,10 @@ static void emitente_manager_class_init(EmitenteManagerClass *class){
 		EmitenteManager, uf);
 	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
 		EmitenteManager, municipio);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		EmitenteManager, cancel_btn);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		EmitenteManager, save_btn);
 }
 
 EmitenteManager *emitente_manager_new(LivrenfeWindow *win){
