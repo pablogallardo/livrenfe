@@ -80,6 +80,10 @@ static void save_emitente(GtkButton *b, GtkWidget *win){
 	gtk_widget_destroy(win);
 }
 
+static void cancel(GtkButton *b, GtkWidget *win){
+	gtk_widget_destroy(win);
+}
+
 static void list_uf(GtkComboBox *uf){
 	GtkCellRenderer *r_uf;
 
@@ -177,6 +181,8 @@ static void emitente_manager_init(EmitenteManager *eman){
 		G_CALLBACK(list_municipios), priv->municipio);
 	g_signal_connect(G_OBJECT(priv->save_btn), "clicked",
 		G_CALLBACK(save_emitente), eman);
+	g_signal_connect(G_OBJECT(priv->cancel_btn), "clicked",
+		G_CALLBACK(cancel), eman);
 	list_uf(priv->uf);
 	list_crt(priv->crt);
 }
