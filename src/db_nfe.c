@@ -477,13 +477,14 @@ EMITENTE *get_emitente(int id){
 	sqlite3_stmt *stmt;
 	enum{
 		ID_EMIT, NOME, IE, CRT, CNPJ, RUA, BAIRRO, ID_MUN, CEP,
-		NUM, MUN, ID_UF, UF
+		NUM, COMP, MUN, ID_UF, UF
 	};
 	int crt, num, id_uf, id_mun, cep, rc;
 	char *nome, *ie, *cnpj, *rua, *bairro, *mun, *uf, *comp;
 	char *sql = sqlite3_mprintf("SELECT e.id_emitente, e.nome,\
 		e.inscricao_estadual, e.crt, e.cnpj, e.rua, e.bairro,\
-		e.id_municipio, e.cep, e.numero, m.nome, u.cod_ibge, u.nome\
+		e.id_municipio, e.cep, e.numero, e.complemento, m.nome,\
+		u.cod_ibge, u.nome\
 		FROM emitentes e LEFT JOIN municipios m \
 			ON m.id_municipio = e.id_municipio\
 		LEFT JOIN uf u ON u.id_uf = m.id_uf\
@@ -508,7 +509,8 @@ EMITENTE *get_emitente(int id){
 	bairro = strdup(sqlite3_column_text(stmt, BAIRRO));
 	mun = strdup(sqlite3_column_text(stmt, MUN));
 	uf = strdup(sqlite3_column_text(stmt, UF));
-	comp = NULL;
+	comp = sqlite3_column_text(stmt, COMP)? 
+		strdup(sqlite3_column_text(stmt, COMP)) : NULL;
 	inst_emitente(id, nome, ie, crt, cnpj, rua, num, comp,
 		bairro, uf, mun, id_mun, id_uf, cep, e);
 	return e;
