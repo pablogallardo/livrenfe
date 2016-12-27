@@ -379,7 +379,12 @@ int inst_nfe(int id_nfe, int id_mun, int id_uf, int ind_pag, int mod_nfe,
 	return 0;
 }
 
+static void free_endereco(ENDERECO *e){
+	free(e->pais);
+	free(e->municipio);
+}
 void free_emitente(EMITENTE *e){
-	free(e->endereco);
+	free_endereco(e->endereco);
 	free(e);
 }
+
