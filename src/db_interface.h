@@ -71,4 +71,9 @@ extern EMITENTE *get_emitente(int id);
 extern char *get_ws_url(char *service, int ambiente, char **url_header,
 	char **url_body);
 
+/**
+ * Set emitente info
+ */
+extern int set_emitente(EMITENTE *e);
+
 #endif

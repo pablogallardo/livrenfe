@@ -514,3 +514,21 @@ EMITENTE *get_emitente(int id){
 	return e;
 
 }
+
+int set_emitente(EMITENTE *e){
+	char *sql, *err;
+	sql = malloc(400);
+	err = NULL;
+       	sql = sqlite3_mprintf("REPLACE INTO emitentes\
+  		(id_emitente, nome, inscricao_estadual, crt, cnpj, rua,\
+		complemento, bairro, id_municipio, cep, numero)\
+ 		VALUES (1, %Q, %Q, %d, %Q, %Q, %Q, %Q, %d, %d, %d);", 
+		e->nome, e->inscricao_estadual, e->crt, e->cnpj,
+		e->endereco->rua, e->endereco->complemento,
+		e->endereco->bairro, e->endereco->municipio->codigo,
+		e->endereco->cep, e->endereco->num);
+	db_exec(sql, &err);
+	if(err)
+		return -ESQL;
+	return 0;
+}

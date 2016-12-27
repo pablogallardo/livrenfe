@@ -21,6 +21,8 @@
 #include "lnfe_window.h"
 #include "db_interface.h"
 #include "utils.h"
+#include "nfe.h"
+#include "livrenfe.h"
 #include <gtk/gtk.h>
 #include <stdlib.h>
 
@@ -50,6 +52,33 @@ struct _EmitenteManagerPrivate{
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(EmitenteManager, emitente_manager, GTK_TYPE_DIALOG)
+
+static void save_emitente(GtkButton *b, GtkWidget *win){
+	EmitenteManagerPrivate *priv;
+
+	priv = emitente_manager_get_instance_private(win);
+	EMITENTE *e = new_emitente();
+	unsigned int id, crt, num, cod_mun, cod_uf, cep;
+	char *nome, *ie, *cnpj, *rua, *complemento, *bairro;
+	id = 1;
+	num = atoi(gtk_entry_get_text(priv->num));
+	cep = atoi(gtk_entry_get_text(priv->cep));
+	cnpj = gtk_entry_get_text(priv->cnpj);
+	nome = gtk_entry_get_text(priv->razao_social);
+	ie = gtk_entry_get_text(priv->ie);
+	rua = gtk_entry_get_text(priv->rua);
+	complemento = gtk_entry_get_text(priv->complemento);
+	bairro = gtk_entry_get_text(priv->bairro);
+
+	crt = atoi(gtk_combo_box_get_active_id(priv->crt));
+	cod_uf = atoi(gtk_combo_box_get_active_id(priv->uf));
+	cod_mun = atoi(gtk_combo_box_get_active_id(priv->municipio));
+	inst_emitente(id, nome, ie, crt, cnpj, rua, num, complemento,
+		bairro, NULL, NULL, cod_mun, cod_uf, cep, e);
+	set_emitente(e);
+	free_emitente(e);
+	gtk_widget_destroy(win);
+}
 
 static void list_uf(GtkComboBox *uf){
 	GtkCellRenderer *r_uf;
@@ -113,7 +142,7 @@ static void emitente_manager_dispose(GObject *object){
 	G_OBJECT_CLASS(emitente_manager_parent_class)->dispose(object);
 }
 
-static void inst_emitente(gpointer p, EmitenteManager *eman){
+static void inst_emitente_manager(gpointer p, EmitenteManager *eman){
 	EmitenteManagerPrivate *priv;
 	priv = emitente_manager_get_instance_private(eman);
 	EMITENTE *e = get_emitente(1);
@@ -142,9 +171,12 @@ static void emitente_manager_init(EmitenteManager *eman){
 
 	priv = emitente_manager_get_instance_private(eman);
 	gtk_widget_init_template(GTK_WIDGET(eman));
-	g_signal_connect(eman, "show", G_CALLBACK(inst_emitente), eman);
+	g_signal_connect(eman, "show", G_CALLBACK(inst_emitente_manager),
+		eman);
 	g_signal_connect(G_OBJECT(priv->uf), "changed",
 		G_CALLBACK(list_municipios), priv->municipio);
+	g_signal_connect(G_OBJECT(priv->save_btn), "clicked",
+		G_CALLBACK(save_emitente), eman);
 	list_uf(priv->uf);
 	list_crt(priv->crt);
 }

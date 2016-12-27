@@ -378,3 +378,8 @@ int inst_nfe(int id_nfe, int id_mun, int id_uf, int ind_pag, int mod_nfe,
 		nfe->destinatario);
 	return 0;
 }
+
+void free_emitente(EMITENTE *e){
+	free(e->endereco);
+	free(e);
+}

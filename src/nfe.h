@@ -68,3 +68,6 @@ extern int inst_emitente(char *id, char *nome, char *ie, int crt, char *cnpj,
 		char *rua, unsigned int num, char *complemento,
 		char *bairro, char *uf, char *nome_mun, unsigned int codigo,
 		unsigned int cod_uf, unsigned int cep, EMITENTE *e);
+
+
+extern void free_emitente(EMITENTE *e);
