@@ -98,6 +98,7 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
                   <object class="GtkEntry" id="codigo">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="input_purpose">digits</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -119,6 +120,7 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
                   <object class="GtkEntry" id="ncm">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="input_purpose">digits</property>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -162,6 +164,7 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
                   <object class="GtkEntry" id="cfop">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="input_purpose">digits</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -172,6 +175,7 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
                   <object class="GtkEntry" id="unidade">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="input_purpose">alpha</property>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -204,6 +208,7 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
                   <object class="GtkEntry" id="quantidade">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="input_purpose">number</property>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -214,6 +219,7 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
                   <object class="GtkEntry" id="valor">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="input_purpose">number</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -349,6 +355,7 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkEntry" id="icms_aliquota">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="input_purpose">number</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -359,6 +366,7 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkEntry" id="icms_credito_aproveitado">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="input_purpose">number</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>

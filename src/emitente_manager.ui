@@ -104,6 +104,7 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
               <object class="GtkEntry" id="cnpj">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="input_purpose">digits</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -114,6 +115,7 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
               <object class="GtkEntry" id="razao_social">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="input_purpose">alpha</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -136,6 +138,7 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
               <object class="GtkEntry" id="ie">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="input_purpose">digits</property>
               </object>
               <packing>
                 <property name="left_attach">3</property>
@@ -254,6 +257,7 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
               <object class="GtkEntry" id="num">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="input_purpose">digits</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -306,6 +310,7 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
               <object class="GtkEntry" id="cep">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="input_purpose">number</property>
               </object>
               <packing>
                 <property name="left_attach">3</property>
