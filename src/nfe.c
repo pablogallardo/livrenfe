@@ -165,7 +165,9 @@ NFE *new_nfe(){
 }
 
 LOTE *new_lote(){
-	LOTE m = {};
+	LOTE m = {
+		.id = get_lote_id()
+	};
 	LOTE *l = malloc(sizeof(LOTE));
 	memcpy(l, &m, sizeof(LOTE));
 	return l;

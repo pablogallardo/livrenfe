@@ -6,8 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * LivreNFE is distributed in the hope that it will be useful,
+ * * LivreNFE is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -533,4 +532,21 @@ int set_emitente(EMITENTE *e){
 	if(err)
 		return -ESQL;
 	return 0;
+}
+
+int get_lote_id(){
+	char *err;
+	sqlite3_stmt *stmt;
+	int id, rc;
+	char *sql = sqlite3_mprintf("SELECT max(l.id_lote)\
+		FROM lote l");
+	if(db_select(sql, &err, &stmt)){
+		return -ESQL;
+	}
+
+	rc = sqlite3_step(stmt);
+	if(rc != SQLITE_ROW)
+		return 1;
+	id = sqlite3_column_int(stmt, 0);
+	return id;
 }

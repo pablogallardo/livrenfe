@@ -76,4 +76,9 @@ extern char *get_ws_url(char *service, int ambiente, char **url_header,
  */
 extern int set_emitente(EMITENTE *e);
 
+/**
+ * Get next lote ID
+ */
+extern int get_lote_id();
+
 #endif
