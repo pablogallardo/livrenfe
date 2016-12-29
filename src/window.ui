@@ -183,4 +183,24 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
       <placeholder/>
     </child>
   </template>
+  <object class="GtkMenu" id="menu_nf">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="abrir_nfe">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Abrir</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="emitir_nfe">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Emitir</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+  </object>
 </interface>
