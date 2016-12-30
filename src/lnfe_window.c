@@ -32,6 +32,9 @@ struct _LivrenfeWindow{
 	GtkTreeView *treeview;
 	GtkButton *new_nfe;
 	GtkMenuItem *emitente_manager_btn;
+	GtkMenu *menu_nf;
+	GtkMenuItem *abrir_nfe;
+	GtkMenuItem *emitir_nfe;
 };
 
 struct _LivrenfeWindowClass{
@@ -69,6 +72,27 @@ void view_on_row_activated(GtkTreeView *t, GtkTreePath *path,
 	}
 }
 
+static gint nfe_context_menu_show(GtkTreeView *t, GdkEventButton *e, 
+		gpointer win){
+	if(e->type == GDK_BUTTON_PRESS){
+		if(e->button == GDK_BUTTON_SECONDARY){
+			GtkTreeSelection *s;
+			GtkTreePath *p;
+			s = gtk_tree_view_get_selection(t);
+			if(gtk_tree_view_get_path_at_pos(t, e->x, e->y, &p,
+					NULL, NULL, NULL)){
+				gtk_tree_selection_unselect_all(s);
+				gtk_tree_selection_select_path(s, p);
+				gtk_tree_path_free(p);
+			}
+			gtk_menu_popup((LIVRENFE_WINDOW(win))->menu_nf, NULL, 
+				NULL, NULL, NULL, e->button, e->time);
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
 static void livrenfe_window_init(LivrenfeWindow *win){
 	gtk_widget_init_template(GTK_WIDGET(win));
 	g_signal_connect(win, "visibility-notify-event", G_CALLBACK(list_nfe),
@@ -77,6 +101,8 @@ static void livrenfe_window_init(LivrenfeWindow *win){
 			win);
 	g_signal_connect((LIVRENFE_WINDOW(win))->treeview, "row-activated",
 			G_CALLBACK(view_on_row_activated), win);
+	g_signal_connect((LIVRENFE_WINDOW(win))->treeview, "button-press-event",
+			G_CALLBACK(nfe_context_menu_show), win);
 	g_signal_connect((LIVRENFE_WINDOW(win))->emitente_manager_btn, "activate",
 			G_CALLBACK(emitente_manager_activate), win);
 }
@@ -91,6 +117,12 @@ static void livrenfe_window_class_init(LivrenfeWindowClass *class){
 		       	new_nfe);
 	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
 		       	emitente_manager_btn);
+	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
+		       	menu_nf);
+	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
+		       	abrir_nfe);
+	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
+		       	emitir_nfe);
 }
 
 void list_nfe(LivrenfeWindow *win){
