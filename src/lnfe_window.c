@@ -72,6 +72,11 @@ void view_on_row_activated(GtkTreeView *t, GtkTreePath *path,
 	}
 }
 
+static gint popup_menu_nfe(GtkTreeView *t, GdkEventButton *e, gpointer *win){
+	gtk_menu_popup((LIVRENFE_WINDOW(win))->menu_nf, NULL, 
+		NULL, NULL, NULL, e->button, e->time);
+}
+
 static gint nfe_context_menu_show(GtkTreeView *t, GdkEventButton *e, 
 		gpointer win){
 	if(e->type == GDK_BUTTON_PRESS){
@@ -85,12 +90,16 @@ static gint nfe_context_menu_show(GtkTreeView *t, GdkEventButton *e,
 				gtk_tree_selection_select_path(s, p);
 				gtk_tree_path_free(p);
 			}
-			gtk_menu_popup((LIVRENFE_WINDOW(win))->menu_nf, NULL, 
-				NULL, NULL, NULL, e->button, e->time);
+			popup_menu_nfe(t, e, win);
 			return TRUE;
 		}
 	}
 	return FALSE;
+}
+
+static gint nfe_on_popup(GtkTreeView *t, gpointer win){
+	popup_menu_nfe(t, NULL, win);
+	return TRUE;
 }
 
 static void livrenfe_window_init(LivrenfeWindow *win){
@@ -103,6 +112,8 @@ static void livrenfe_window_init(LivrenfeWindow *win){
 			G_CALLBACK(view_on_row_activated), win);
 	g_signal_connect((LIVRENFE_WINDOW(win))->treeview, "button-press-event",
 			G_CALLBACK(nfe_context_menu_show), win);
+	g_signal_connect((LIVRENFE_WINDOW(win))->treeview, "popup-menu",
+			G_CALLBACK(nfe_on_popup), win);
 	g_signal_connect((LIVRENFE_WINDOW(win))->emitente_manager_btn, "activate",
 			G_CALLBACK(emitente_manager_activate), win);
 }
