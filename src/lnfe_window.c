@@ -32,9 +32,12 @@ struct _LivrenfeWindow{
 	GtkTreeView *treeview;
 	GtkButton *new_nfe;
 	GtkMenuItem *emitente_manager_btn;
+	GtkMenuItem *status_servico_btn;
 	GtkMenu *menu_nf;
 	GtkMenuItem *abrir_nfe;
 	GtkMenuItem *emitir_nfe;
+	GtkDialog *password_modal;
+	GtkEntry *password;
 };
 
 struct _LivrenfeWindowClass{
@@ -42,6 +45,10 @@ struct _LivrenfeWindowClass{
 };
 
 G_DEFINE_TYPE(LivrenfeWindow, livrenfe_window, GTK_TYPE_APPLICATION_WINDOW);
+
+void on_abrir_nfe_click(GtkMenuItem *m, gpointer win){
+	
+}
 
 void list_nfe(LivrenfeWindow *win){
 	GtkCellRenderer *r_num_nfe;
@@ -142,6 +149,10 @@ static gint nfe_on_popup(GtkTreeView *t, gpointer win){
 	return TRUE;
 }
 
+static void on_status_servico_click(gpointer p, LivrenfeWindow *win){
+	gtk_widget_set_visible(win->password_modal, TRUE);
+}
+
 static void livrenfe_window_init(LivrenfeWindow *win){
 	gtk_widget_init_template(GTK_WIDGET(win));
 	g_signal_connect(win, "show", G_CALLBACK(list_nfe),
@@ -156,6 +167,8 @@ static void livrenfe_window_init(LivrenfeWindow *win){
 			G_CALLBACK(nfe_on_popup), win);
 	g_signal_connect((LIVRENFE_WINDOW(win))->emitente_manager_btn, "activate",
 			G_CALLBACK(emitente_manager_activate), win);
+	g_signal_connect((LIVRENFE_WINDOW(win))->status_servico_btn, "activate",
+			G_CALLBACK(on_status_servico_click), win);
 }
 
 
@@ -174,6 +187,12 @@ static void livrenfe_window_class_init(LivrenfeWindowClass *class){
 		       	abrir_nfe);
 	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
 		       	emitir_nfe);
+	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
+		       	status_servico_btn);
+	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
+		       	password_modal);
+	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
+		       	password);
 }
 
 LivrenfeWindow *livrenfe_window_new(Livrenfe *app){
