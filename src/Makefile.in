@@ -96,7 +96,8 @@ am_livrenfe_OBJECTS = main.$(OBJEXT) db.$(OBJEXT) db_create.$(OBJEXT) \
 	item_manager.$(OBJEXT) utils.$(OBJEXT) nfe.$(OBJEXT) \
 	gen_xml.$(OBJEXT) crypto_interface.$(OBJEXT) sign.$(OBJEXT) \
 	send.$(OBJEXT) xml.$(OBJEXT) db_prefs.$(OBJEXT) \
-	sefaz.$(OBJEXT) emitente_manager.$(OBJEXT)
+	sefaz.$(OBJEXT) emitente_manager.$(OBJEXT) \
+	sefaz_response.$(OBJEXT)
 livrenfe_OBJECTS = $(am_livrenfe_OBJECTS)
 livrenfe_LDADD = $(LDADD)
 AM_V_P = $(am__v_P_@AM_V@)
@@ -251,7 +252,7 @@ AM_LDFLAGS = -L/usr/local/lib -lsqlite3 -lssl -lcrypto -lp11 \
 livrenfe_SOURCES = main.c db.c db_create.c db_init.c livrenfe.c lnfe_window.c \
 		   resources.c  db_nfe.c nfe_manager.c item_manager.c utils.c \
 		   nfe.c gen_xml.c crypto_interface.c sign.c send.c xml.c \
-		   db_prefs.c sefaz.c emitente_manager.c
+		   db_prefs.c sefaz.c emitente_manager.c sefaz_response.c
 
 all: all-am
 
@@ -356,6 +357,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nfe_manager.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/resources.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sefaz.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sefaz_response.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/send.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sign.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/utils.Po@am__quote@
@@ -581,7 +583,7 @@ uninstall-am: uninstall-binPROGRAMS
 
 
 resources.c: livrenfe.gresource.xml window.ui nfe_manager.ui item_manager.ui \
-		emitente_manager.ui
+		emitente_manager.ui sefaz_response.ui
 	glib-compile-resources --target=$@ --generate-source $<
 
 clean-local:
