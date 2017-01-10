@@ -30,7 +30,9 @@ struct _SefazResponseClass {
 typedef struct _SefazResponsePrivate SefazResponsePrivate;
 
 struct _SefazResponsePrivate{
-	GtkButton *cancel_btn;
+	GtkSpinner *spinner;
+	GtkLabel *resposta;
+	GtkButton *ok_btn;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(SefazResponse, sefaz_response, GTK_TYPE_DIALOG)
@@ -48,6 +50,7 @@ static void sefaz_response_init(SefazResponse *sr){
 
 	priv = sefaz_response_get_instance_private(sr);
 	gtk_widget_init_template(GTK_WIDGET(sr));
+
 }
 
 
@@ -57,6 +60,12 @@ static void sefaz_response_class_init(SefazResponseClass *class){
 
 	gtk_widget_class_set_template_from_resource(GTK_WIDGET_CLASS(class),
                                "/br/com/lapagina/livrenfe/sefaz_response.ui");
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		SefazResponse, spinner);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		SefazResponse, resposta);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		SefazResponse, ok_btn);
 }
 
 SefazResponse *sefaz_response_new(LivrenfeWindow *win){

@@ -20,6 +20,7 @@
 #include "lnfe_window.h"
 #include "nfe_manager.h"
 #include "emitente_manager.h"
+#include "sefaz_response.h"
 #include "livrenfe.h"
 #include "nfe.h"
 #include "db_interface.h"
@@ -38,6 +39,8 @@ struct _LivrenfeWindow{
 	GtkMenuItem *emitir_nfe;
 	GtkDialog *password_modal;
 	GtkEntry *password;
+	GtkButton *pw_cancel_btn;
+	GtkButton *pw_ok_btn;
 };
 
 struct _LivrenfeWindowClass{
@@ -149,8 +152,19 @@ static gint nfe_on_popup(GtkTreeView *t, gpointer win){
 	return TRUE;
 }
 
+static void sefaz_status(GtkButton *b, LivrenfeWindow *win){
+	char *password = strdup(gtk_entry_get_text(win->password));
+	gtk_entry_set_text(win->password, "");
+	gtk_widget_set_visible(win->password_modal, FALSE);
+	SefazResponse *sr;
+	sr = sefaz_response_new(LIVRENFE_WINDOW(win));
+	gtk_window_present(GTK_WINDOW(sr));
+}
+
 static void on_status_servico_click(gpointer p, LivrenfeWindow *win){
 	gtk_widget_set_visible(win->password_modal, TRUE);
+	g_signal_connect((LIVRENFE_WINDOW(win))->pw_ok_btn, "clicked",
+			G_CALLBACK(sefaz_status), win);
 }
 
 static void livrenfe_window_init(LivrenfeWindow *win){
@@ -193,6 +207,10 @@ static void livrenfe_window_class_init(LivrenfeWindowClass *class){
 		       	password_modal);
 	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
 		       	password);
+	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
+		       	pw_cancel_btn);
+	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
+		       	pw_ok_btn);
 }
 
 LivrenfeWindow *livrenfe_window_new(Livrenfe *app){
