@@ -41,6 +41,7 @@ struct _LivrenfeWindow{
 	GtkEntry *password;
 	GtkButton *pw_cancel_btn;
 	GtkButton *pw_ok_btn;
+	gulong passwd_signal_handler;
 };
 
 struct _LivrenfeWindowClass{
@@ -163,12 +164,16 @@ static void sefaz_status(GtkButton *b, LivrenfeWindow *win){
 
 static void on_status_servico_click(gpointer p, LivrenfeWindow *win){
 	gtk_widget_set_visible(win->password_modal, TRUE);
-	g_signal_connect((LIVRENFE_WINDOW(win))->pw_ok_btn, "clicked",
+	if(win->passwd_signal_handler != 0){
+		g_signal_handler_disconnect(win->pw_ok_btn, win->passwd_signal_handler);
+	}
+	win->passwd_signal_handler =  g_signal_connect(win->pw_ok_btn, "clicked",
 			G_CALLBACK(sefaz_status), win);
 }
 
 static void livrenfe_window_init(LivrenfeWindow *win){
 	gtk_widget_init_template(GTK_WIDGET(win));
+	win->passwd_signal_handler = 0;
 	g_signal_connect(win, "show", G_CALLBACK(list_nfe),
 			NULL);
 	g_signal_connect((LIVRENFE_WINDOW(win))->new_nfe, "clicked", G_CALLBACK(nfe_manager_activate),
