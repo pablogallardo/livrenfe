@@ -41,14 +41,12 @@ static size_t writefunction(void *ptr, size_t size,
 	return (nmemb*size);
 }
 
-CURLcode sslctx_function(CURL *curl, void *sslctx, void *parm){
+CURLcode sslctx_function(CURL *curl, void *sslctx, char *pwd){
 	X509 *cert = NULL;
 	RSA *rsa = NULL;
 	EVP_PKEY *pKey = NULL;
 	int rc;
-	char *pwd = "";
 	(void)curl; //avoid warnings
-	(void)parm; //avoid warnings
 
 	get_private_key(&pKey, &cert, pwd);
 	rsa = EVP_PKEY_get1_RSA(pKey);
@@ -150,7 +148,8 @@ static char *format_soap(char *service, char *xml, int cuf, char *url_cabec,
 	return xml_inline;
 }
 
-char *send_sefaz(char *service, int ambiente, int cuf, char *xml){
+char *send_sefaz(char *service, int ambiente, int cuf, char *xml,
+		char *password){
 	CURL *ch;
 	CURLcode rv;
 	rv = curl_global_init(CURL_GLOBAL_ALL);
@@ -178,6 +177,7 @@ char *send_sefaz(char *service, int ambiente, int cuf, char *xml){
 	rv = curl_easy_setopt(ch, CURLOPT_SSL_VERIFYHOST, 0L);
 	rv = curl_easy_setopt(ch, CURLOPT_URL, URL);
 	rv = curl_easy_setopt(ch, CURLOPT_SSL_CTX_FUNCTION, *sslctx_function);
+	rv = curl_easy_setopt(ch, CURLOPT_SSL_CTX_DATA, password);
 	rv = curl_easy_perform(ch);
 	free(URL);
 	free(h);

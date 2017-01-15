@@ -24,6 +24,8 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
   <template class="SefazResponse" parent="GtkDialog">
     <property name="can_focus">False</property>
     <property name="window_position">center</property>
+    <property name="default_width">300</property>
+    <property name="default_height">100</property>
     <property name="type_hint">dialog</property>
     <property name="gravity">center</property>
     <child internal-child="vbox">
@@ -56,7 +58,7 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
           </packing>
         </child>
         <child>
-          <object class="GtkOverlay">
+          <object class="GtkOverlay" id="overlay">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
@@ -76,6 +78,7 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
+                <property name="justify">center</property>
               </object>
             </child>
           </object>

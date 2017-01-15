@@ -159,11 +159,13 @@ static void sefaz_status(GtkButton *b, LivrenfeWindow *win){
 	gtk_widget_set_visible(win->password_modal, FALSE);
 	SefazResponse *sr;
 	sr = sefaz_response_new(LIVRENFE_WINDOW(win));
+	sr->password = password;
 	gtk_window_present(GTK_WINDOW(sr));
 }
 
 static void on_status_servico_click(gpointer p, LivrenfeWindow *win){
 	gtk_widget_set_visible(win->password_modal, TRUE);
+	gtk_widget_grab_focus(win->password);
 	if(win->passwd_signal_handler != 0){
 		g_signal_handler_disconnect(win->pw_ok_btn, win->passwd_signal_handler);
 	}

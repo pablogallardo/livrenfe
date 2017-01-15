@@ -19,7 +19,9 @@
 
 #include "sefaz_response.h"
 #include "lnfe_window.h"
+#include "sefaz.h"
 #include <gtk/gtk.h>
+#include <pthread.h>
 #include <stdlib.h>
 
 
@@ -33,9 +35,37 @@ struct _SefazResponsePrivate{
 	GtkSpinner *spinner;
 	GtkLabel *resposta;
 	GtkButton *ok_btn;
+	GtkOverlay *overlay;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(SefazResponse, sefaz_response, GTK_TYPE_DIALOG)
+
+static void sefaz_thread(void *arg){
+	SefazResponse *sr = SEFAZ_RESPONSE(arg);
+	SefazResponsePrivate *priv;
+	pthread_t tid;
+
+	priv = sefaz_response_get_instance_private(sr);
+	char *msg = malloc(sizeof(char) * 255);
+	int rc = get_status_servico(2, 35, sr->password, &msg);
+	gtk_spinner_stop(priv->spinner);
+	gtk_label_set_text(priv->resposta, msg);
+	gtk_overlay_reorder_overlay(priv->overlay, priv->resposta, -1);
+	free(msg);
+}
+
+static void get_response(SefazResponse *sr){
+	SefazResponsePrivate *priv;
+	pthread_t tid;
+
+	priv = sefaz_response_get_instance_private(sr);
+	gtk_spinner_start(priv->spinner);
+	pthread_create(&tid, NULL, &sefaz_thread, sr);
+}
+
+static void ok_click(GtkButton *b, SefazResponse *sr){
+	gtk_widget_destroy(sr);
+}
 
 static void sefaz_response_dispose(GObject *object){
 	SefazResponsePrivate *priv;
@@ -50,6 +80,10 @@ static void sefaz_response_init(SefazResponse *sr){
 
 	priv = sefaz_response_get_instance_private(sr);
 	gtk_widget_init_template(GTK_WIDGET(sr));
+	g_signal_connect(sr, "show", G_CALLBACK(get_response),
+			NULL);
+	g_signal_connect(priv->ok_btn, "clicked", G_CALLBACK(ok_click),
+			sr);
 
 }
 
@@ -66,6 +100,8 @@ static void sefaz_response_class_init(SefazResponseClass *class){
 		SefazResponse, resposta);
 	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
 		SefazResponse, ok_btn);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		SefazResponse, overlay);
 }
 
 SefazResponse *sefaz_response_new(LivrenfeWindow *win){

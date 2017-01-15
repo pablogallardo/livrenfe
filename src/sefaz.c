@@ -26,26 +26,25 @@
 #include <libxml/parser.h>
 #include <string.h>
 
-int get_status_servico(int ambiente, int cuf, char **msg){
+int get_status_servico(int ambiente, int cuf, char *passwd, char **msg){
 	char *response, *status;
 	int cStat;
 	xmlDocPtr doc;
+	char *xml = gen_cons_status(2, 35);
 	response = send_sefaz("NfeStatusServico", 2, 35, 
-		gen_cons_status(2, 35));
+		xml, passwd);
 	doc = xmlReadMemory(response, strlen(response), "noname.xml", NULL, 0);
 	status = get_xml_element(doc, "nfe:cStat");
 	if(status == NULL){
 		return -ESEFAZ;	
 	}
-	if(msg != NULL){
-		char motivo = get_xml_element(doc, "nfe:xMotivo");
-		if(motivo == NULL){
-			return -ESEFAZ;	
-		}
-		*msg = strdup(motivo);
-		xmlFree(motivo);
-	}
 	cStat = atoi(status);
+	char *motivo = get_xml_element(doc, "nfe:xMotivo");
+	if(motivo == NULL){
+		return -ESEFAZ;	
+	}
+	*msg = strdup(motivo);
+	xmlFree(motivo);
 	xmlFree(status);
 	return cStat;
 }

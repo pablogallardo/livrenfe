@@ -25,6 +25,7 @@
 /**
  * Send request to SEFAZ
  */
-extern char *send_sefaz(char *service, int ambiente, int cuf, char *xml);
+extern char *send_sefaz(char *service, int ambiente, int cuf, char *xml,
+		char *password);
 
 #endif

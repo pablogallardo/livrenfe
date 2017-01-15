@@ -63,7 +63,7 @@ char *get_xml_element(xmlDocPtr doc, char *element){
 			nodeset->nodeTab[0]->xmlChildrenNode, 1);
 	}
 	free(xpath);
-	xmlFreeDoc(doc);
+	//xmlFreeDoc(doc);
 	xmlCleanupParser();
 	return content;
 }
