@@ -41,7 +41,6 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
             <child>
               <object class="GtkButton" id="ok_btn">
                 <property name="label" translatable="yes">OK</property>
-                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
               </object>

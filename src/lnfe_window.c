@@ -41,7 +41,8 @@ struct _LivrenfeWindow{
 	GtkEntry *password;
 	GtkButton *pw_cancel_btn;
 	GtkButton *pw_ok_btn;
-	gulong passwd_signal_handler;
+	gulong passwd_click_signal_handler;
+	gulong passwd_key_signal_handler;
 };
 
 struct _LivrenfeWindowClass{
@@ -153,10 +154,14 @@ static gint nfe_on_popup(GtkTreeView *t, gpointer win){
 	return TRUE;
 }
 
-static void sefaz_status(GtkButton *b, LivrenfeWindow *win){
-	char *password = strdup(gtk_entry_get_text(win->password));
+static void password_modal_dismiss(GtkWidget *p, LivrenfeWindow *win){
 	gtk_entry_set_text(win->password, "");
 	gtk_widget_set_visible(win->password_modal, FALSE);
+}
+
+static void sefaz_status(gpointer *b, LivrenfeWindow *win){
+	char *password = strdup(gtk_entry_get_text(win->password));
+	password_modal_dismiss(NULL, win);
 	SefazResponse *sr;
 	sr = sefaz_response_new(LIVRENFE_WINDOW(win));
 	sr->password = password;
@@ -166,16 +171,22 @@ static void sefaz_status(GtkButton *b, LivrenfeWindow *win){
 static void on_status_servico_click(gpointer p, LivrenfeWindow *win){
 	gtk_widget_set_visible(win->password_modal, TRUE);
 	gtk_widget_grab_focus(win->password);
-	if(win->passwd_signal_handler != 0){
-		g_signal_handler_disconnect(win->pw_ok_btn, win->passwd_signal_handler);
+	if(win->passwd_click_signal_handler != 0){
+		g_signal_handler_disconnect(win->pw_ok_btn, 
+			win->passwd_click_signal_handler);
+		g_signal_handler_disconnect(win->password, 
+			win->passwd_key_signal_handler);
 	}
-	win->passwd_signal_handler =  g_signal_connect(win->pw_ok_btn, "clicked",
-			G_CALLBACK(sefaz_status), win);
+	win->passwd_click_signal_handler =  g_signal_connect(win->pw_ok_btn, 
+		"clicked", G_CALLBACK(sefaz_status), win);
+	win->passwd_key_signal_handler =  g_signal_connect(win->password, 
+		"activate", G_CALLBACK(sefaz_status), win);
 }
 
 static void livrenfe_window_init(LivrenfeWindow *win){
 	gtk_widget_init_template(GTK_WIDGET(win));
-	win->passwd_signal_handler = 0;
+	win->passwd_click_signal_handler = 0;
+	win->passwd_key_signal_handler = 0;
 	g_signal_connect(win, "show", G_CALLBACK(list_nfe),
 			NULL);
 	g_signal_connect((LIVRENFE_WINDOW(win))->new_nfe, "clicked", G_CALLBACK(nfe_manager_activate),
@@ -190,6 +201,8 @@ static void livrenfe_window_init(LivrenfeWindow *win){
 			G_CALLBACK(emitente_manager_activate), win);
 	g_signal_connect((LIVRENFE_WINDOW(win))->status_servico_btn, "activate",
 			G_CALLBACK(on_status_servico_click), win);
+	g_signal_connect((LIVRENFE_WINDOW(win))->pw_cancel_btn, "clicked",
+			G_CALLBACK(password_modal_dismiss), win);
 }
 
 

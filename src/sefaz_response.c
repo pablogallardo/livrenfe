@@ -51,6 +51,7 @@ static void sefaz_thread(void *arg){
 	gtk_spinner_stop(priv->spinner);
 	gtk_label_set_text(priv->resposta, msg);
 	gtk_overlay_reorder_overlay(priv->overlay, priv->resposta, -1);
+	gtk_widget_set_visible(priv->ok_btn, TRUE);
 	free(msg);
 }
 
