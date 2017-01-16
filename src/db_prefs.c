@@ -38,9 +38,13 @@ char *get_ws_url(char *service, int ambiente, char **url_header,
 	}
 	rc = sqlite3_step(stmt);
 	if(rc == SQLITE_ROW){
-		url = strdup(sqlite3_column_text(stmt, 0));
-		*url_header = strdup(sqlite3_column_text(stmt, 1));
-		*url_body = strdup(sqlite3_column_text(stmt, 2));
+		char *aux = NULL;
+		aux = sqlite3_column_text(stmt, 0);
+		url = aux == NULL? NULL:strdup(aux);
+		aux = sqlite3_column_text(stmt, 1);
+		*url_header = aux == NULL? NULL:strdup(aux);
+		aux = sqlite3_column_text(stmt, 2);
+		*url_body = aux == NULL? NULL:strdup(aux);
 	}
 	return url;
 }
