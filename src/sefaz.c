@@ -33,6 +33,10 @@ int get_status_servico(int ambiente, int cuf, char *passwd, char **msg){
 	char *xml = gen_cons_status(2, 35);
 	response = send_sefaz("NfeStatusServico", 2, 35, 
 		xml, passwd);
+	if(response == NULL){
+		*msg = strdup("Sem resposta do SEFAZ, tente novamente");
+		return -ESEFAZ;
+	}
 	doc = xmlReadMemory(response, strlen(response), "noname.xml", NULL, 0);
 	status = get_xml_element(doc, "nfe:cStat");
 	if(status == NULL){

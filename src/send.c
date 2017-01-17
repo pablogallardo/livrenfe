@@ -49,6 +49,9 @@ CURLcode sslctx_function(CURL *curl, void *sslctx, char *pwd){
 	(void)curl; //avoid warnings
 
 	get_private_key(&pKey, &cert, pwd);
+	if(pKey == NULL){
+		return -1;
+	}
 	rsa = EVP_PKEY_get1_RSA(pKey);
 
 	// tell SSL to use the X509 certificate 
