@@ -12,7 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU General Public License 
  * along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
@@ -53,7 +53,7 @@ int get_status_servico(int ambiente, int cuf, char *passwd, char **msg){
 	return cStat;
 }
 
-int send_lote(LOTE *lote, int ambiente){
+int send_lote(LOTE *lote, int ambiente, char *passwd, char **msg){
 	//TODO
 	return 0;	
 }

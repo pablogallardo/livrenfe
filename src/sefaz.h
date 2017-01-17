@@ -26,7 +26,7 @@
 
 extern int get_status_servico(int ambiente, int cuf, char *passwd, char **msg);
 
-extern int send_lote(LOTE *, int ambiente);
+extern int send_lote(LOTE *lote, int ambiente, char *passwd, char **msg);
 
 extern int cons_lote(LOTE *, int ambiente);
 
