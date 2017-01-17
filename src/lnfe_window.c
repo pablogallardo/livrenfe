@@ -52,7 +52,45 @@ struct _LivrenfeWindowClass{
 G_DEFINE_TYPE(LivrenfeWindow, livrenfe_window, GTK_TYPE_APPLICATION_WINDOW);
 
 void on_abrir_nfe_click(GtkMenuItem *m, gpointer win){
-	
+	GtkTreeView *t = win->treeview;
+	GtkTreeSelection *s;
+	GtkTreePath *p;
+	s = gtk_tree_view_get_selection(t);
+	gtk_tree_view_get_path_at_pos(t, e->x, e->y, &p,
+			NULL, NULL, NULL);
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	model = gtk_tree_view_get_model(t);
+	if(gtk_tree_model_get_iter(model, &iter, p)){
+		int idnfe;
+		gtk_tree_model_get(model, &iter, 0, &idnfe, -1);
+		NFEManager *nman;
+		nman = nfe_manager_new(LIVRENFE_WINDOW(win));
+		nman->nfe = get_nfe(idnfe);
+		gtk_window_present(GTK_WINDOW(nman));
+		g_signal_connect(nman, "destroy", G_CALLBACK(on_nfe_manager_destroy), win);
+	}
+}
+
+void on_emitir_nfe_click(GtkMenuItem *m, LivrenfeWindow *win){
+	GtkTreeView *t = win->treeview;
+	GtkTreeSelection *s;
+	GtkTreePath *p;
+	s = gtk_tree_view_get_selection(t);
+	gtk_tree_view_get_path_at_pos(t, e->x, e->y, &p,
+			NULL, NULL, NULL);
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	model = gtk_tree_view_get_model(t);
+	if(gtk_tree_model_get_iter(model, &iter, p)){
+		int idnfe;
+		gtk_tree_model_get(model, &iter, 0, &idnfe, -1);
+		NFEManager *nman;
+		nman = nfe_manager_new(LIVRENFE_WINDOW(win));
+		nman->nfe = get_nfe(idnfe);
+		gtk_window_present(GTK_WINDOW(nman));
+		g_signal_connect(nman, "destroy", G_CALLBACK(on_nfe_manager_destroy), win);
+	}
 }
 
 void list_nfe(LivrenfeWindow *win){
@@ -90,7 +128,6 @@ void list_nfe(LivrenfeWindow *win){
 static void on_nfe_manager_destroy(gpointer p, LivrenfeWindow *win){
 	list_nfe(win);
 }
-
 
 static void nfe_manager_activate(GtkButton *b, gpointer win){
 	NFEManager *nman;
