@@ -548,5 +548,9 @@ int get_lote_id(){
 	if(rc != SQLITE_ROW)
 		return 1;
 	id = sqlite3_column_int(stmt, 0);
-	return id;
+	return ++id;
+}
+
+int db_save_lote(LOTE *lote){
+	//TODO
 }

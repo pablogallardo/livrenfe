@@ -55,7 +55,7 @@ CREATE TABLE produtos (id_produto integer, descricao varchar(200), ncm integer,\
 CREATE TABLE transportadoras (id_transportadora varchar(20), modfrete char(1), \
 	nome varchar(200),\
 	CONSTRAINT transportadora_pk PRIMARY KEY (id_transportadora));\
-CREATE TABLE lote (id_lote integer, recibo integer,\
+CREATE TABLE lotes (id_lote integer, recibo integer,\
 	CONSTRAINT lote_pk PRIMARY KEY (id_lote));\
 CREATE TABLE nfe (id_nfe integer, id_municipio varchar(8),\
 	nat_op varchar(20), ind_pag integer, mod_nfe char(2),\
@@ -65,7 +65,7 @@ CREATE TABLE nfe (id_nfe integer, id_municipio varchar(8),\
 	presencial char(1), versao varchar(10), div char(1), chave varchar(20),\
 	id_emitente integer, id_destinatario integer, q_itens integer,\
 	total real, id_transportadora varchar(20), cod_nfe integer,\
-	id_lote integer, protocolo integer, xml text,\
+	protocolo integer, xml text,\
 	CONSTRAINT nfe_pk PRIMARY KEY (id_nfe),\
 	CONSTRAINT nfe_uq UNIQUE (num_nf, serie, id_emitente),\
 	CONSTRAINT nfe_municipio_fk FOREIGN KEY (id_municipio)\
@@ -75,9 +75,13 @@ CREATE TABLE nfe (id_nfe integer, id_municipio varchar(8),\
 	CONSTRAINT nfe_destinatario_fk FOREIGN KEY (id_destinatario)\
 	REFERENCES destinatarios(id_destinatario),\
 	CONSTRAINT nfe_transportadora_fk FOREIGN KEY (id_transportadora)\
-	REFERENCES transportadoras(id_transportadora),\
-	CONSTRAINT nfe_lote_fk FOREIGN KEY (id_lote)\
-	REFERENCES lote(id_lote));\
+	REFERENCES transportadoras(id_transportadora));\
+CREATE TABLE lotes_nfes (id_lote integer, id_nfe integer,\
+	CONSTRAINT lotes_nfes_pk PRIMARY KEY (id_lote, id_nfe),\
+	CONSTRAINT lotes_nfes_lotes_fk FOREIGN KEY (id_lote)\
+		REFERENCES lotes(id_lote),\
+	CONSTRAINT lotes_nfes_nfe_fk FOREIGN KEY (id_nfe)\
+		REFERENCES nfe(id_nfe));\
 CREATE TABLE protocolos (id_protocolo integer, numero varchar(20), \
 	dh_recib datetime, id_nfe integer,\
 	CONSTRAINT protocolo_pk PRIMARY KEY (id_protocolo),\

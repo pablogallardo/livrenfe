@@ -74,8 +74,8 @@ int send_lote(LOTE *lote, int ambiente, char *passwd, char **msg){
 	if(motivo == NULL){
 		return -ESEFAZ;	
 	}
-	char *nRec = get_xml_element(doc, "nfe:nRec");
 	*msg = strdup(motivo);
+	char *nRec = get_xml_element(doc, "nfe:nRec");
 	xmlFree(motivo);
 	xmlFree(status);
 	xmlFree(nRec);
