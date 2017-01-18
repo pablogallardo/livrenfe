@@ -54,6 +54,30 @@ int get_status_servico(int ambiente, int cuf, char *passwd, char **msg){
 }
 
 int send_lote(LOTE *lote, int ambiente, char *passwd, char **msg){
-	//TODO
-	return 0;	
+	char *response, *status;
+	int cStat;
+	xmlDocPtr doc;
+	char *xml = gen_lote_xml(lote, passwd);
+	response = send_sefaz("NFeAutorizacao", 2, 35, 
+		xml, passwd);
+	if(response == NULL){
+		*msg = strdup("Sem resposta do SEFAZ, tente novamente");
+		return -ESEFAZ;
+	}
+	doc = xmlReadMemory(response, strlen(response), "noname.xml", NULL, 0);
+	status = get_xml_element(doc, "nfe:cStat");
+	if(status == NULL){
+		return -ESEFAZ;	
+	}
+	cStat = atoi(status);
+	char *motivo = get_xml_element(doc, "nfe:xMotivo");
+	if(motivo == NULL){
+		return -ESEFAZ;	
+	}
+	char *nRec = get_xml_element(doc, "nfe:nRec");
+	*msg = strdup(motivo);
+	xmlFree(motivo);
+	xmlFree(status);
+	xmlFree(nRec);
+	return cStat;
 }

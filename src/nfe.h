@@ -71,3 +71,5 @@ extern int inst_emitente(char *id, char *nome, char *ie, int crt, char *cnpj,
 
 
 extern void free_emitente(EMITENTE *e);
+
+extern int add_nfe(LOTE *lote, NFE *nfe);

@@ -32,10 +32,14 @@
 #include "livrenfe.h"
 
 /**
- * This function generate a basic XML for the NFE WITHOUT signature and
- * SEFAZ response (protocolo).
+ * This function generates a basic XML for the NFE WITH signature 
  */
-extern char *generate_xml(NFE *);
+extern char *generate_xml(NFE *, char *password);
+
+/**
+ * This function generates the XML for emitting to SEFAZ
+ */
+extern char *gen_lote_xml(LOTE *, char *password);
 
 /**
  * XML for consulting service status

@@ -112,7 +112,7 @@ char *gen_cons_nfe(LOTE *lote, int ambiente){
 	return buf->content;
 }
 
-char *gen_lote_xml(LOTE *lote){
+char *gen_lote_xml(LOTE *lote, char *password){
 	int rc;
 	xmlTextWriterPtr writer;
 	xmlDocPtr doc;
@@ -142,7 +142,7 @@ char *gen_lote_xml(LOTE *lote){
 	LOTE_ITEM *it = lote->nfes;
 	for (i = 0; i < lote->qtd; i++){
 		char *xml;
-		xml = generate_xml(it->nfe);
+		xml = generate_xml(it->nfe, password);
 		rc = xmlTextWriterWriteRaw(writer, BAD_CAST xml);
 		if (rc < 0)
 			return NULL;
@@ -156,7 +156,7 @@ char *gen_lote_xml(LOTE *lote){
 	return buf->content;
 }
 
-char *generate_xml(NFE *nfe) {
+char *generate_xml(NFE *nfe, char *password) {
 	int rc;
 	xmlTextWriterPtr writer;
 	xmlDocPtr doc;
@@ -175,7 +175,7 @@ char *generate_xml(NFE *nfe) {
 	strcpy(URI, "#");
 	strcat(URI, ID_PREFIX);
 	strcat(URI, nfe->idnfe->chave);
-	sign_xml(doc, "", URI);
+	sign_xml(doc, password, URI);
 	xmlNodeDump(buf, NULL, xmlDocGetRootElement(doc), 0, 0);
 	return buf->content;
 }
