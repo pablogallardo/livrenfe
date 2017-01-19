@@ -518,7 +518,6 @@ EMITENTE *get_emitente(int id){
 
 int set_emitente(EMITENTE *e){
 	char *sql, *err;
-	sql = malloc(400);
 	err = NULL;
        	sql = sqlite3_mprintf("REPLACE INTO emitentes\
   		(id_emitente, nome, inscricao_estadual, crt, cnpj, rua,\
@@ -552,5 +551,17 @@ int get_lote_id(){
 }
 
 int db_save_lote(LOTE *lote){
-	//TODO
+	char *sql, *err;
+	err = NULL;
+	if(lote->qtd > 0){
+		LOTE_ITEM *i = lote->nfes;
+		while(i != NULL){
+			//TODO
+			i = i->next;
+		}
+		db_exec(sql, &err);
+		if(err)
+			return -ESQL;
+	}
+	return 0;
 }
