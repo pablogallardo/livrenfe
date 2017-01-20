@@ -22,11 +22,11 @@
 #include "xml.h"
 #include "gen_xml.h"
 #include "errno.h"
+#include "db_interface.h"
 #include <libxml/parser.h>
 #include <string.h>
 
-int get_status_servico(int ambiente, int cuf, char *passwd, char **msg){
-	char *response, *status;
+int get_status_servico(int ambiente, int cuf, char *passwd, char **msg){ char *response, *status;
 	int cStat;
 	xmlDocPtr doc;
 	char *xml = gen_cons_status(2, 35);
@@ -54,7 +54,7 @@ int get_status_servico(int ambiente, int cuf, char *passwd, char **msg){
 
 int send_lote(LOTE *lote, int ambiente, char *passwd, char **msg){
 	char *response, *status;
-	int cStat;
+	int cStat, rc;
 	xmlDocPtr doc;
 	char *xml = gen_lote_xml(lote, passwd);
 	response = send_sefaz("NFeAutorizacao", 2, 35, 
@@ -79,5 +79,13 @@ int send_lote(LOTE *lote, int ambiente, char *passwd, char **msg){
 	xmlFree(motivo);
 	xmlFree(status);
 	xmlFree(nRec);
+
+	rc = db_save_lote(lote);
+	if(rc){
+		*msg = malloc(sizeof(char) * 200);
+		sprintf(*msg, "Erro ao salvar lote\nNúmero de recibo: %d",
+			nRec);
+		return -ESQL;
+	}
 	return cStat;
 }

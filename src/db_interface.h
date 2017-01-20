@@ -81,4 +81,9 @@ extern int set_emitente(EMITENTE *e);
  */
 extern int get_lote_id();
 
+/**
+ * Save lote on DB
+ */
+int db_save_lote(LOTE *lote);
+
 #endif
