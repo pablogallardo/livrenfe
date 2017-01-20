@@ -87,8 +87,7 @@ int register_nfe(NFE *nfe){
 	char *sql, *err;
 	sql = malloc(400);
 	err = NULL;
-	int last_id, id_nf;
-       	sql = sqlite3_mprintf("REPLACE INTO destinatarios (nome, tipo_ie, cnpj, rua, complemento, \
+	int last_id, id_nf; sql = sqlite3_mprintf("REPLACE INTO destinatarios (nome, tipo_ie, cnpj, rua, complemento, \
 		bairro, id_municipio, cep, numero, inscricao_estadual, \
 		tipo_doc) VALUES (%Q, '%d', %Q, %Q, %Q, %Q, \
 		'%d', '%d', %d, %Q, %Q);", d->nome, d->tipo_ie, d->cnpj, 
@@ -554,9 +553,21 @@ int db_save_lote(LOTE *lote){
 	char *sql, *err;
 	err = NULL;
 	if(lote->qtd > 0){
+		sql = sqlite3_mprintf("INSERT INTO lotes (id_lote, recibo)\
+			VALUES (%d, %d)", lote->id, lote->recibo);
+		db_exec(sql, &err);
+		if(err)
+			return -ESQL;
 		LOTE_ITEM *i = lote->nfes;
+		sql = malloc(sizeof(char) * 500);
+		strcpy(sql, "INSERT INTO lotes_nfes (id_lote, id_nfe) VALUES ");
 		while(i != NULL){
-			//TODO
+			NFE *n = i->nfe;
+			char *aux = sqlite3_mprintf("(%d, %d)", lote->id,
+				n->idnfe);
+			if(i != lote->nfes)
+				strcat(sql, ", ");
+			strcat(sql, aux);
 			i = i->next;
 		}
 		db_exec(sql, &err);
