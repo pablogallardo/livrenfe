@@ -224,7 +224,7 @@ struct LOTE_ITEM{
  */
 typedef struct {
 	unsigned int id;
-	unsigned int recibo;
+	char *recibo;
 	unsigned int qtd;
 	LOTE_ITEM *nfes;
 } LOTE;

@@ -55,7 +55,7 @@ CREATE TABLE produtos (id_produto integer, descricao varchar(200), ncm integer,\
 CREATE TABLE transportadoras (id_transportadora varchar(20), modfrete char(1), \
 	nome varchar(200),\
 	CONSTRAINT transportadora_pk PRIMARY KEY (id_transportadora));\
-CREATE TABLE lotes (id_lote integer, recibo integer,\
+CREATE TABLE lotes (id_lote integer, recibo varchar(20),\
 	CONSTRAINT lote_pk PRIMARY KEY (id_lote));\
 CREATE TABLE nfe (id_nfe integer, id_municipio varchar(8),\
 	nat_op varchar(20), ind_pag integer, mod_nfe char(2),\
@@ -78,8 +78,7 @@ CREATE TABLE nfe (id_nfe integer, id_municipio varchar(8),\
 	REFERENCES transportadoras(id_transportadora));\
 CREATE TABLE lotes_nfes (id_lote integer, id_nfe integer,\
 	CONSTRAINT lotes_nfes_pk PRIMARY KEY (id_lote, id_nfe),\
-	CONSTRAINT lotes_nfes_lotes_fk FOREIGN KEY (id_lote)\
-		REFERENCES lotes(id_lote),\
+	CONSTRAINT lotes_nfes_lotes_fk FOREIGN KEY (id_lote)\ REFERENCES lotes(id_lote),\
 	CONSTRAINT lotes_nfes_nfe_fk FOREIGN KEY (id_nfe)\
 		REFERENCES nfe(id_nfe));\
 CREATE TABLE protocolos (id_protocolo integer, numero varchar(20), \
@@ -5671,14 +5670,15 @@ const char *insert_sql = "INSERT INTO paises (id_pais, nome) VALUES (1, 'Brasil'
 		    INSERT INTO municipios (id_municipio, id_uf, nome, id_pais) VALUES ('5300108', 'DF', 'Brasília', 1);\
 		    INSERT INTO uf (id_uf, nome, cod_ibge) SELECT DISTINCT id_uf, id_uf, substr(id_municipio,1,2)\
 		    	FROM municipios;\
-		    INSERT INTO urls (service, url_prod, url_cert)\
-		    	VALUES ('RecepcaoEvento', 'https://nfe.fazenda.sp.gov.br/ws/recepcaoevento.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/recepcaoevento.asmx'),\
-			('NfeConsultaCadastro', 'https://nfe.fazenda.sp.gov.br/ws/cadconsultacadastro2.asmx', '	https://homologacao.nfe.fazenda.sp.gov.br/ws/cadconsultacadastro2.asmx'),\
-			('NfeInutilizacao', 'https://nfe.fazenda.sp.gov.br/ws/nfeinutilizacao2.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeinutilizacao2.asmx'),\
-			('NfeConsultaProtocolo', 'https://nfe.fazenda.sp.gov.br/ws/nfeconsulta2.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeconsulta2.asmx'),\
-			('NfeStatusServico', 'https://nfe.fazenda.sp.gov.br/ws/nfestatusservico2.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfestatusservico2.asmx'),\
-			('NFeAutorizacao', 'https://nfe.fazenda.sp.gov.br/ws/nfeautorizacao.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeautorizacao.asmx'),\
-			('NFeRetAutorizacao', 'https://nfe.fazenda.sp.gov.br/ws/cadconsultacadastro2.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nferetautorizacao.asmx');";
+		    INSERT INTO urls (service, url_prod, url_cert, url_header,\
+		    	url_body)\
+		    	VALUES ('RecepcaoEvento', 'https://nfe.fazenda.sp.gov.br/ws/recepcaoevento.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/recepcaoevento.asmx', NULL, NULL),\
+			('NfeConsultaCadastro', 'https://nfe.fazenda.sp.gov.br/ws/cadconsultacadastro2.asmx', '	https://homologacao.nfe.fazenda.sp.gov.br/ws/cadconsultacadastro2.asmx', NULL, NULL),\
+			('NfeInutilizacao', 'https://nfe.fazenda.sp.gov.br/ws/nfeinutilizacao2.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeinutilizacao2.asmx', NULL, NULL),\
+			('NfeConsultaProtocolo', 'https://nfe.fazenda.sp.gov.br/ws/nfeconsulta2.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeconsulta2.asmx', NULL, NULL),\
+			('NfeStatusServico', 'https://nfe.fazenda.sp.gov.br/ws/nfestatusservico2.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfestatusservico2.asmx', 'http://www.portalfiscal.inf.br/nfe/wsdl/NfeStatusServico2', 'http://www.portalfiscal.inf.br/nfe/wsdl/NfeStatusServico2'),\
+			('NFeAutorizacao', 'https://nfe.fazenda.sp.gov.br/ws/nfeautorizacao.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeautorizacao.asmx', 'http://www.portalfiscal.inf.br/nfe/wsdl/NfeStatusServico2', 'http://www.portalfiscal.inf.br/nfe/wsdl/NfeAutorizacao'),\
+			('NFeRetAutorizacao', 'https://nfe.fazenda.sp.gov.br/ws/cadconsultacadastro2.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nferetautorizacao.asmx', NULL, NULL);";
 
 int create_db(){
 	int rc;

@@ -90,7 +90,7 @@ static void on_emitir_nfe_click(GtkMenuItem *m, LivrenfeWindow *win){
 		LOTE *lote = new_lote();
 		add_nfe(lote, nfe);
 		char *msg;
-		send_lote(lote, 2, "", &msg);
+		send_lote(lote, 2, "paris05", &msg);
 	}
 }
 

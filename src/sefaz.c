@@ -75,7 +75,8 @@ int send_lote(LOTE *lote, int ambiente, char *passwd, char **msg){
 	}
 	*msg = strdup(motivo);
 	char *nRec = get_xml_element(doc, "nfe:nRec");
-	lote->recibo = atoi(nRec);
+	fprintf(stdout, "Lote: %s\n", nRec);
+	lote->recibo = strdup(nRec);
 	xmlFree(motivo);
 	xmlFree(status);
 	xmlFree(nRec);

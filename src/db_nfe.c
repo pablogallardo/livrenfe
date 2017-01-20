@@ -537,7 +537,7 @@ int get_lote_id(){
 	sqlite3_stmt *stmt;
 	int id, rc;
 	char *sql = sqlite3_mprintf("SELECT max(l.id_lote)\
-		FROM lote l");
+		FROM lotes l");
 	if(db_select(sql, &err, &stmt)){
 		return -ESQL;
 	}
@@ -554,7 +554,7 @@ int db_save_lote(LOTE *lote){
 	err = NULL;
 	if(lote->qtd > 0){
 		sql = sqlite3_mprintf("INSERT INTO lotes (id_lote, recibo)\
-			VALUES (%d, %d)", lote->id, lote->recibo);
+			VALUES (%d, %Q)", lote->id, lote->recibo);
 		db_exec(sql, &err);
 		if(err)
 			return -ESQL;
