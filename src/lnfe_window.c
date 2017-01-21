@@ -104,8 +104,6 @@ static void sefaz_emitir(gpointer *b, LivrenfeWindow *win){
 		NFE *nfe = get_nfe(idnfe);
 		lote = new_lote();
 		add_nfe(lote, nfe);
-		//char *msg;
-		//send_lote(lote, 2, "paris05", &msg);
 	}
 	char *password = strdup(gtk_entry_get_text(win->password));
 	password_modal_dismiss(NULL, win);

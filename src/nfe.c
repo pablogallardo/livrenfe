@@ -39,7 +39,8 @@ static IDNFE *new_idnfe(){
 		.municipio = new_municipio(),
 		.dh_saida = malloc(sizeof(time_t)),
 		.cod_nfe = rand() % 99999999,
-		.tipo_emissao = TE_NORMAL
+		.tipo_emissao = TE_NORMAL,
+		.tipo_ambiente = HOMOLOGACAO
 	};
 	IDNFE *p = malloc(sizeof(IDNFE));
 	memcpy(p, &i, sizeof(IDNFE));
@@ -47,7 +48,10 @@ static IDNFE *new_idnfe(){
 }
 
 static PAIS *new_pais(){
-	PAIS m = {};
+	PAIS m = {
+		.codigo = 1,
+		.nome = "BRASIL"
+	};
 	PAIS *p = malloc(sizeof(PAIS));
 	memcpy(p, &m, sizeof(PAIS));
 	return p;
