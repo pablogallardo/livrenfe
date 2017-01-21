@@ -55,6 +55,11 @@ static void on_nfe_manager_destroy(gpointer p, LivrenfeWindow *win){
 	list_nfe(win);
 }
 
+static void password_modal_dismiss(GtkWidget *p, LivrenfeWindow *win){
+	gtk_entry_set_text(win->password, "");
+	gtk_widget_set_visible(win->password_modal, FALSE);
+}
+
 static void on_abrir_nfe_click(GtkMenuItem *m, LivrenfeWindow *win){
 	GtkTreeView *t = win->treeview;
 	GtkTreeSelection *s;
@@ -75,23 +80,55 @@ static void on_abrir_nfe_click(GtkMenuItem *m, LivrenfeWindow *win){
 	}
 }
 
-static void on_emitir_nfe_click(GtkMenuItem *m, LivrenfeWindow *win){
+static void sefaz_status(gpointer *b, LivrenfeWindow *win){
+	char *password = strdup(gtk_entry_get_text(win->password));
+	password_modal_dismiss(NULL, win);
+	SefazResponse *sr;
+	sr = sefaz_response_new(LIVRENFE_WINDOW(win));
+	sr->password = password;
+	gtk_window_present(GTK_WINDOW(sr));
+}
+
+static void sefaz_emitir(gpointer *b, LivrenfeWindow *win){
 	GtkTreeView *t = win->treeview;
 	GtkTreeSelection *s;
 	GtkTreePath *p;
 	s = gtk_tree_view_get_selection(t);
 	GtkTreeModel *model;
 	GtkTreeIter iter;
+	LOTE *lote;
 
 	if(gtk_tree_selection_get_selected(s, &model, &iter)){
 		int idnfe;
 		gtk_tree_model_get(model, &iter, 0, &idnfe, -1);
 		NFE *nfe = get_nfe(idnfe);
-		LOTE *lote = new_lote();
+		lote = new_lote();
 		add_nfe(lote, nfe);
-		char *msg;
-		send_lote(lote, 2, "paris05", &msg);
+		//char *msg;
+		//send_lote(lote, 2, "paris05", &msg);
 	}
+	char *password = strdup(gtk_entry_get_text(win->password));
+	password_modal_dismiss(NULL, win);
+	SefazResponse *sr;
+	sr = sefaz_response_new(LIVRENFE_WINDOW(win));
+	sr->password = password;
+	sr->lote = lote;
+	gtk_window_present(GTK_WINDOW(sr));
+}
+
+static void on_emitir_nfe_click(GtkMenuItem *m, LivrenfeWindow *win){
+	gtk_widget_set_visible(win->password_modal, TRUE);
+	gtk_widget_grab_focus(win->password);
+	if(win->passwd_click_signal_handler != 0){
+		g_signal_handler_disconnect(win->pw_ok_btn, 
+			win->passwd_click_signal_handler);
+		g_signal_handler_disconnect(win->password, 
+			win->passwd_key_signal_handler);
+	}
+	win->passwd_click_signal_handler =  g_signal_connect(win->pw_ok_btn, 
+		"clicked", G_CALLBACK(sefaz_emitir), win);
+	win->passwd_key_signal_handler =  g_signal_connect(win->password, 
+		"activate", G_CALLBACK(sefaz_emitir), win);
 }
 
 void list_nfe(LivrenfeWindow *win){
@@ -187,20 +224,6 @@ static gint nfe_context_menu_show(GtkTreeView *t, GdkEventButton *e,
 static gint nfe_on_popup(GtkTreeView *t, gpointer win){
 	popup_menu_nfe(t, NULL, win);
 	return TRUE;
-}
-
-static void password_modal_dismiss(GtkWidget *p, LivrenfeWindow *win){
-	gtk_entry_set_text(win->password, "");
-	gtk_widget_set_visible(win->password_modal, FALSE);
-}
-
-static void sefaz_status(gpointer *b, LivrenfeWindow *win){
-	char *password = strdup(gtk_entry_get_text(win->password));
-	password_modal_dismiss(NULL, win);
-	SefazResponse *sr;
-	sr = sefaz_response_new(LIVRENFE_WINDOW(win));
-	sr->password = password;
-	gtk_window_present(GTK_WINDOW(sr));
 }
 
 static void on_status_servico_click(gpointer p, LivrenfeWindow *win){

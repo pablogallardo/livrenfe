@@ -101,7 +101,7 @@ char *gen_cons_nfe(LOTE *lote, int ambiente){
 	if (rc < 0)
 		return NULL;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "nRec",
-			"%d", lote->recibo);
+			"%s", lote->recibo);
 	if (rc < 0)
 		return NULL;
 	rc = xmlTextWriterEndElement(writer);
@@ -129,6 +129,10 @@ char *gen_lote_xml(LOTE *lote, char *password){
 			BAD_CAST "http://www.portalfiscal.inf.br/nfe");
 	if (rc < 0)
 		return NULL;
+	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "versao",
+			BAD_CAST NFE_VERSAO);
+	if (rc < 0)
+		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "idLote",
 			"%d", lote->id);
 	if (rc < 0)

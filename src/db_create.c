@@ -5677,7 +5677,7 @@ const char *insert_sql = "INSERT INTO paises (id_pais, nome) VALUES (1, 'Brasil'
 			('NfeInutilizacao', 'https://nfe.fazenda.sp.gov.br/ws/nfeinutilizacao2.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeinutilizacao2.asmx', NULL, NULL),\
 			('NfeConsultaProtocolo', 'https://nfe.fazenda.sp.gov.br/ws/nfeconsulta2.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeconsulta2.asmx', NULL, NULL),\
 			('NfeStatusServico', 'https://nfe.fazenda.sp.gov.br/ws/nfestatusservico2.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfestatusservico2.asmx', 'http://www.portalfiscal.inf.br/nfe/wsdl/NfeStatusServico2', 'http://www.portalfiscal.inf.br/nfe/wsdl/NfeStatusServico2'),\
-			('NFeAutorizacao', 'https://nfe.fazenda.sp.gov.br/ws/nfeautorizacao.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeautorizacao.asmx', 'http://www.portalfiscal.inf.br/nfe/wsdl/NfeStatusServico2', 'http://www.portalfiscal.inf.br/nfe/wsdl/NfeAutorizacao'),\
+			('NFeAutorizacao', 'https://nfe.fazenda.sp.gov.br/ws/nfeautorizacao.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeautorizacao.asmx', 'http://www.portalfiscal.inf.br/nfe/wsdl/NfeAutorizacao', 'http://www.portalfiscal.inf.br/nfe/wsdl/NfeAutorizacao'),\
 			('NFeRetAutorizacao', 'https://nfe.fazenda.sp.gov.br/ws/cadconsultacadastro2.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nferetautorizacao.asmx', NULL, NULL);";
 
 int create_db(){

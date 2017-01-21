@@ -1,7 +1,6 @@
 /* Copyright (c) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
  *
- * This file is part of LivreNFE.
- *
+ * This file is part of LivreNFE.  *
  * LivreNFE is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -171,6 +170,7 @@ char *send_sefaz(char *service, int ambiente, int cuf, char *xml,
 	char *URL, *url_cabec, *url_body;
 	URL = get_ws_url(service, ambiente, &url_cabec, &url_body);
 	char *h = format_soap(service, xml, cuf, url_cabec, url_body);
+	fprintf(stdout, "%s\n", h);
 	rv = curl_easy_setopt(ch, CURLOPT_POSTFIELDS, h);
 
 	/* both VERIFYPEER and VERIFYHOST are set to 0 in this case because there is

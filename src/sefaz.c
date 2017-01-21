@@ -90,3 +90,32 @@ int send_lote(LOTE *lote, int ambiente, char *passwd, char **msg){
 	}
 	return cStat;
 }
+
+int cons_lote(LOTE *lote, int ambiente, char *passwd, char **msg){
+	char *response, *status;
+	int cStat, rc;
+	xmlDocPtr doc;
+	char *xml = gen_cons_nfe(lote, ambiente);
+	response = send_sefaz("NFeRetAutorizacao", 2, 35, 
+		xml, passwd);
+	if(response == NULL){
+		*msg = strdup("Sem resposta do SEFAZ, tente novamente");
+		return -ESEFAZ;
+	}
+	fprintf(stdout, "%s\n", response);
+	doc = xmlReadMemory(response, strlen(response), "noname.xml", NULL, 0);
+	status = get_xml_element(doc, "nfe:cStat");
+	if(status == NULL){
+		return -ESEFAZ;	
+	}
+	cStat = atoi(status);
+	char *motivo = get_xml_element(doc, "nfe:xMotivo");
+	if(motivo == NULL){
+		return -ESEFAZ;	
+	}
+	*msg = strdup(motivo);
+	xmlFree(motivo);
+	xmlFree(status);
+
+	return cStat;
+}

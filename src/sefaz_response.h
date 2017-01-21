@@ -36,6 +36,7 @@ SefazResponse *sefaz_response_new(LivrenfeWindow *win);
 struct _SefazResponse{
 	GtkDialog parent;
 	char *password;
+	LOTE *lote;
 };
 
 #endif

@@ -47,7 +47,15 @@ static void sefaz_thread(void *arg){
 
 	priv = sefaz_response_get_instance_private(sr);
 	char *msg = malloc(sizeof(char) * 255);
-	int rc = get_status_servico(2, 35, sr->password, &msg);
+
+	if(sr->lote){
+		int rc = send_lote(sr->lote, 2, sr->password, &msg);
+		rc = cons_lote(sr->lote, 2, sr->password, &msg);
+
+	} else {
+		int rc = get_status_servico(2, 35, sr->password, &msg);
+	}
+
 	gtk_spinner_stop(priv->spinner);
 	gtk_label_set_text(priv->resposta, msg);
 	gtk_overlay_reorder_overlay(priv->overlay, priv->resposta, -1);
