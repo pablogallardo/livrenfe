@@ -578,15 +578,15 @@ int _gen_prod(xmlTextWriterPtr writer, ITEM *i){
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "qCom",
-			"%f", i->quantidade);
+			"%.4f", (float) i->quantidade);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vUnCom",
-			"%f", p->valor);
+			"%.10f", p->valor);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vProd",
-			"%f", p->valor);
+			"%.2f", p->valor);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "cEANTrib");
@@ -600,11 +600,11 @@ int _gen_prod(xmlTextWriterPtr writer, ITEM *i){
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "qTrib",
-			"%f", i->quantidade);
+			"%.4f", (float)i->quantidade);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vUnTrib",
-			"%f", p->valor);
+			"%.10f", p->valor);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteElement(writer, BAD_CAST "indTot",
@@ -638,12 +638,12 @@ int _gen_imposto(xmlTextWriterPtr writer, IMPOSTO *i, float v){
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "pCredSN",
-			"%f", i->icms->aliquota);
+			"%.4f", i->icms->aliquota);
 	if (rc < 0)
 		return -EXML;
 	float valor_icms = (v) * (i->icms->aliquota);
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vCredICMSSN",
-			"%f", i->icms->aliquota);
+			"%.2f", i->icms->aliquota);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterEndElement(writer);
@@ -659,7 +659,7 @@ int _gen_imposto(xmlTextWriterPtr writer, IMPOSTO *i, float v){
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "CST",
-			"%d", "08");
+			"%2d", 8);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterEndElement(writer);
@@ -676,7 +676,7 @@ int _gen_imposto(xmlTextWriterPtr writer, IMPOSTO *i, float v){
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "CST",
-			"%d", "08");
+			"%2d", 8);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterEndElement(writer);
@@ -705,91 +705,79 @@ int _gen_total(xmlTextWriterPtr writer, float v){
 		return -EXML;
 
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vBC",
-			"%f", 0);
+			"%.2f", 0.0);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vICMS",
-			"%f", 0);
+			"%.2f", 0.0);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vICMSDeson",
-			"%f", 0);
+			"%.2f", 0.0);
 	if (rc < 0)
 		return -EXML;
-	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vICMSDeson",
-			"%f", 0);
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vFCPUFDest",
+			"%.2f", 0.0);
 	if (rc < 0)
 		return -EXML;
-	rc = xmlTextWriterStartElement(writer, BAD_CAST "vFCPUFDest");
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vICMSUFDest",
+			"%.2f", 0.0);
 	if (rc < 0)
 		return -EXML;
-	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xsi:nil",
-			BAD_CAST "true");
-	rc = xmlTextWriterEndElement(writer);
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterStartElement(writer, BAD_CAST "vICMSUFDest");
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xsi:nil",
-			BAD_CAST "true");
-	rc = xmlTextWriterEndElement(writer);
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterStartElement(writer, BAD_CAST "vICMSUFRemet");
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xsi:nil",
-			BAD_CAST "true");
-	rc = xmlTextWriterEndElement(writer);
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vICMSUFRemet",
+			"%.2f", 0.0);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vBCST",
-			"%f", 0);
+			"%.2f", 0.0);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vST",
-			"%f", 0);
+			"%.2f", 0.0);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vProd",
-			"%f", v);
+			"%.2f", v);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vFrete",
-			"%f", 0);
+			"%.2f", 0.0);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vSeg",
-			"%f", 0);
+			"%.2f", 0.0);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vDesc",
-			"%f", 0);
+			"%.2f", 0.0);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vII",
-			"%f", 0);
+			"%.2f", 0.0);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vIPI",
-			"%f", 0);
+			"%.2f", 0.0);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vPIS",
-			"%f", 0);
+			"%.2f", 0.0);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vCOFINS",
-			"%f", 0);
+			"%.2f", 0.0);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vOutro",
-			"%f", 0);
+			"%.2f", 0.0);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vNF",
-			"%f", v);
+			"%.2f", v);
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vTotTrib",
+			"%.2f", 0.0);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterEndElement(writer);
