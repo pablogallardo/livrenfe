@@ -43,7 +43,8 @@ static IDNFE *new_idnfe(){
 		.tipo_ambiente = HOMOLOGACAO,
 		.local_destino = DEST_INTERNA,
 		.tipo = TIPO_SAIDA,
-		.tipo_impressao = IMP_RET
+		.tipo_impressao = IMP_RET,
+		.finalidade = FIN_NORMAL 
 	};
 	IDNFE *p = malloc(sizeof(IDNFE));
 	memcpy(p, &i, sizeof(IDNFE));
