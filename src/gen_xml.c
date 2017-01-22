@@ -236,13 +236,14 @@ int gen_inf_nfe(xmlTextWriterPtr writer, NFE *nfe){
 	if (rc < 0)
 		return -EXML;
 
-	//rc = xmlTextWriterStartElement(writer, BAD_CAST "transp");
-	//if (rc < 0)
-	//	return -EXML;
-	//rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "modFrete",
-	//		"%d", nfe->transp->modfrete);
-	//if (rc < 0)
-	//	return -EXML;
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "transp");
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "modFrete",
+		//	"%d", nfe->transp->modfrete);
+			"%d", 0);
+	if (rc < 0)
+		return -EXML;
 
 	rc = xmlTextWriterEndElement(writer);
 	if (rc < 0)
@@ -526,7 +527,7 @@ int _gen_det(xmlTextWriterPtr writer, ITEM *item){
 		return -EXML;
 	char *ordem = malloc(sizeof(char) * 2);
 	sprintf(ordem, "%d", item->ordem);
-	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "det",
+	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "nItem",
 			BAD_CAST ordem);
 	if (rc < 0)
 		return -EXML;
@@ -659,7 +660,7 @@ int _gen_imposto(xmlTextWriterPtr writer, IMPOSTO *i, float v){
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "CST",
-			"%2d", 8);
+			"%02d", 8);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterEndElement(writer);
@@ -676,7 +677,7 @@ int _gen_imposto(xmlTextWriterPtr writer, IMPOSTO *i, float v){
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "CST",
-			"%2d", 8);
+			"%02d", 8);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterEndElement(writer);
