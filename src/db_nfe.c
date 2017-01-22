@@ -433,7 +433,7 @@ NFE *get_nfe(int id){
 			bairro_emit = strdup(sqlite3_column_text(stmt, BAIRRO_EMIT)); 
 			mun_emit = strdup(sqlite3_column_text(stmt, MUN_EMIT)); 
 			uf_emit = strdup(sqlite3_column_text(stmt, UF_EMIT)); 
-			//ie_emit = strdup(sqlite3_column_text(stmt, IE_EMIT));
+			ie_emit = strdup(sqlite3_column_text(stmt, IE_EMIT));
 			//ie_dest = strdup(sqlite3_column_text(stmt, IE_DEST));
 			nome_dest = strdup(sqlite3_column_text(stmt, NOME_DEST)); 
 			cnpj_dest = strdup(sqlite3_column_text(stmt, CNPJ_DEST)); 

@@ -40,7 +40,10 @@ static IDNFE *new_idnfe(){
 		.dh_saida = malloc(sizeof(time_t)),
 		.cod_nfe = rand() % 99999999,
 		.tipo_emissao = TE_NORMAL,
-		.tipo_ambiente = HOMOLOGACAO
+		.tipo_ambiente = HOMOLOGACAO,
+		.local_destino = DEST_INTERNA,
+		.tipo = TIPO_SAIDA,
+		.tipo_impressao = IMP_RET
 	};
 	IDNFE *p = malloc(sizeof(IDNFE));
 	memcpy(p, &i, sizeof(IDNFE));
@@ -49,7 +52,7 @@ static IDNFE *new_idnfe(){
 
 static PAIS *new_pais(){
 	PAIS m = {
-		.codigo = 1,
+		.codigo = 1058,
 		.nome = "BRASIL"
 	};
 	PAIS *p = malloc(sizeof(PAIS));

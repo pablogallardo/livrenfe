@@ -122,7 +122,7 @@ char *gen_lote_xml(LOTE *lote, char *password){
 	if (writer == NULL)
 		return NULL;
 	xmlTextWriterStartDocument(writer, NULL, "UTF-8", NULL);
-	rc = xmlTextWriterStartElement(writer, BAD_CAST "enviNFE");
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "enviNFe");
 	if (rc < 0)
 		return NULL;
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
@@ -272,7 +272,7 @@ int _gen_ide(xmlTextWriterPtr writer, NFE *nfe){
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cNF",
-			"%d", nfe->idnfe->cod_nfe);
+			"%08d", nfe->idnfe->cod_nfe);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "natOp",
@@ -631,11 +631,13 @@ int _gen_imposto(xmlTextWriterPtr writer, IMPOSTO *i, float v){
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "orig",
-			"%d", i->icms->origem);
+			//"%d", i->icms->origem);
+			"%d", 0);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "CSOSN",
-			"%d", i->icms->tipo);
+			//"%d", i->icms->tipo);
+			"%d", 101);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "pCredSN",
