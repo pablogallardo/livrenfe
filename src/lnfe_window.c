@@ -27,6 +27,7 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include <string.h>
+#include <locale.h>
 
 struct _LivrenfeWindow{
 	GtkApplicationWindow parent;
@@ -294,6 +295,7 @@ static void livrenfe_window_class_init(LivrenfeWindowClass *class){
 }
 
 LivrenfeWindow *livrenfe_window_new(Livrenfe *app){
+	setlocale(LC_NUMERIC, "C");
 	return g_object_new(LIVRENFE_WINDOW_TYPE, "application", app, NULL);
 }
 
