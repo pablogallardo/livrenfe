@@ -87,6 +87,7 @@ int sign_xml(xmlDocPtr doc, char *password, char *id) {
     xmlLoadExtDtdDefaultValue = XML_DETECT_IDS | XML_COMPLETE_ATTRS;
     xmlSubstituteEntitiesDefault(1);
     xmlKeepBlanksDefault(0);
+    xmlSecBase64SetDefaultLineSize(76);
 #ifndef XMLSEC_NO_XSLT
     xmlIndentTreeOutput = 0; 
 #endif /* XMLSEC_NO_XSLT */
