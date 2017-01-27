@@ -125,6 +125,9 @@ static void list_icms_st(GtkComboBox *t){
 	gtk_list_store_append(list_store, &iter);
 	gtk_list_store_set(list_store, &iter, ID, "101", 
 			TEXT, "Tributada pelo Simples Nacional com permissão de crédito", -1);
+	gtk_list_store_append(list_store, &iter);
+	gtk_list_store_set(list_store, &iter, ID, "102", 
+			TEXT, "Tributada pelo Simples Nacional sem permissão de crédito", -1);
 
 	GtkCellRenderer *r;
 

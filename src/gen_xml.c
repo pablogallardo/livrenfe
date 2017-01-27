@@ -509,9 +509,15 @@ int _gen_dest(xmlTextWriterPtr writer, NFE *nfe){
 		return -EXML;
 
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "indIEDest",
-			"%d", nfe->destinatario->tipo_ie);
+			"%d", 9);
 	if (rc < 0)
 		return -EXML;
+/*TODO	if (nfe->destinatario->inscricao_estadual) {
+		rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "IE",
+				"%s", nfe->emitente->inscricao_estadual);
+		if (rc < 0)
+			return -EXML;
+	}*/
 
 	rc = xmlTextWriterEndElement(writer);
 	if (rc < 0)
@@ -627,28 +633,54 @@ int _gen_imposto(xmlTextWriterPtr writer, IMPOSTO *i, float v){
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "ICMS");
 	if (rc < 0)
 		return -EXML;
-	rc = xmlTextWriterStartElement(writer, BAD_CAST "ICMSSN101");
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "orig",
-			//"%d", i->icms->origem);
-			"%d", 0);
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "CSOSN",
-			//"%d", i->icms->tipo);
-			"%d", 101);
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "pCredSN",
-			"%.4f", i->icms->aliquota);
-	if (rc < 0)
-		return -EXML;
-	float valor_icms = (v) * (i->icms->aliquota);
-	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vCredICMSSN",
-			"%.2f", i->icms->aliquota);
-	if (rc < 0)
-		return -EXML;
+	switch(i->icms->tipo){
+		case 101:
+			rc = xmlTextWriterStartElement(writer, 
+				BAD_CAST "ICMSSN101");
+			if (rc < 0)
+				return -EXML;
+			rc = xmlTextWriterWriteFormatElement(writer, 
+				BAD_CAST "orig",
+					"%d", i->icms->origem);
+			if (rc < 0)
+				return -EXML;
+			rc = xmlTextWriterWriteFormatElement(writer, 
+				BAD_CAST "CSOSN",
+					"%d", i->icms->tipo);
+			if (rc < 0)
+				return -EXML;
+			rc = xmlTextWriterWriteFormatElement(writer, 
+				BAD_CAST "pCredSN",
+					"%.4f", i->icms->aliquota);
+			if (rc < 0)
+				return -EXML;
+			float valor_icms = (v) * (i->icms->aliquota);
+			rc = xmlTextWriterWriteFormatElement(writer, 
+				BAD_CAST "vCredICMSSN",
+					"%.2f", i->icms->aliquota);
+			if (rc < 0)
+				return -EXML;
+			break;
+		case 102:
+		default:
+			rc = xmlTextWriterStartElement(writer, 
+				BAD_CAST "ICMSSN102");
+			if (rc < 0)
+				return -EXML;
+			rc = xmlTextWriterWriteFormatElement(writer, 
+				BAD_CAST "orig",
+					"%d", i->icms->origem);
+			if (rc < 0)
+				return -EXML;
+			rc = xmlTextWriterWriteFormatElement(writer, 
+				BAD_CAST "CSOSN",
+					//"%d", i->icms->tipo);
+					"%d", 102);
+			if (rc < 0)
+				return -EXML;
+	
+			break;
+	}
 	rc = xmlTextWriterEndElement(writer);
 	if (rc < 0)
 		return -EXML;
