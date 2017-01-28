@@ -55,7 +55,7 @@ CREATE TABLE produtos (id_produto integer, descricao varchar(200), ncm integer,\
 CREATE TABLE transportadoras (id_transportadora varchar(20), modfrete char(1), \
 	nome varchar(200),\
 	CONSTRAINT transportadora_pk PRIMARY KEY (id_transportadora));\
-CREATE TABLE lotes (id_lote integer, recibo varchar(20),\
+CREATE TABLE lotes (id_lote integer, recibo varchar(20), xml_response text,\
 	CONSTRAINT lote_pk PRIMARY KEY (id_lote));\
 CREATE TABLE nfe (id_nfe integer, id_municipio varchar(8),\
 	nat_op varchar(20), ind_pag integer, mod_nfe char(2),\
