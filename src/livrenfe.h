@@ -207,6 +207,7 @@ typedef struct {
 	float total;
 	TRANSP *transp;
 	PROTOCOLO *protocolo;
+	char *xml;
 } NFE;
 
 typedef struct LOTE_ITEM LOTE_ITEM;
@@ -227,6 +228,7 @@ typedef struct {
 	char *recibo;
 	unsigned int qtd;
 	LOTE_ITEM *nfes;
+	char *xml_response;
 } LOTE;
 
 

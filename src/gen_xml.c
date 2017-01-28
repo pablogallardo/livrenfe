@@ -20,6 +20,7 @@
 #include "gen_xml.h"
 #include "sign.h"
 #include "errno.h"
+#include "db_interface.h"
 #include <stdio.h>
 #include <string.h>
 #include <libxml/xmlwriter.h>
@@ -181,6 +182,7 @@ char *generate_xml(NFE *nfe, char *password) {
 	strcat(URI, nfe->idnfe->chave);
 	sign_xml(doc, password, URI);
 	xmlNodeDump(buf, NULL, xmlDocGetRootElement(doc), 0, 0);
+	nfe->xml = strdup(buf->content);
 	return buf->content;
 }
 

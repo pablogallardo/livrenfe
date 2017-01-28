@@ -553,8 +553,10 @@ int db_save_lote(LOTE *lote){
 	char *sql, *err;
 	err = NULL;
 	if(lote->qtd > 0){
-		sql = sqlite3_mprintf("INSERT INTO lotes (id_lote, recibo)\
-			VALUES (%d, %Q)", lote->id, lote->recibo);
+		sql = sqlite3_mprintf("INSERT INTO lotes (id_lote, recibo, \
+			xml_response)\
+			VALUES (%d, %Q, %Q)", lote->id, lote->recibo, 
+				lote->xml_response);
 		db_exec(sql, &err);
 		if(err)
 			return -ESQL;
@@ -568,6 +570,7 @@ int db_save_lote(LOTE *lote){
 			if(i != lote->nfes)
 				strcat(sql, ", ");
 			strcat(sql, aux);
+			register_nfe(n);
 			i = i->next;
 		}
 		db_exec(sql, &err);
