@@ -191,8 +191,9 @@ typedef struct {
  */
 typedef struct {
 	char *dh_recib;
-	unsigned long long numero;
+	char *numero;
 	int cod_status;
+	char *xml;
 } PROTOCOLO;
 
 /*
