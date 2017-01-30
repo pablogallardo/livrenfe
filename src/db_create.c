@@ -79,7 +79,8 @@ CREATE TABLE nfe (id_nfe integer, id_municipio varchar(8),\
 	REFERENCES transportadoras(id_transportadora));\
 CREATE TABLE lotes_nfes (id_lote integer, id_nfe integer,\
 	CONSTRAINT lotes_nfes_pk PRIMARY KEY (id_lote, id_nfe),\
-	CONSTRAINT lotes_nfes_lotes_fk FOREIGN KEY (id_lote)\ REFERENCES lotes(id_lote),\
+	CONSTRAINT lotes_nfes_lotes_fk FOREIGN KEY (id_lote)\
+	REFERENCES lotes(id_lote),\
 	CONSTRAINT lotes_nfes_nfe_fk FOREIGN KEY (id_nfe)\
 		REFERENCES nfe(id_nfe));\
 CREATE TABLE protocolos (id_protocolo integer, numero varchar(20), \
