@@ -54,7 +54,7 @@ char *get_xml_element(xmlDocPtr doc, char *element){
 	xmlXPathObjectPtr result;
 	strcpy(xpath, "//");
 	strcat(xpath, element);
-	xmlChar *content;
+	xmlChar *content = NULL;
 
 	result = getnodeset(doc, xpath);
 	if(result) {
