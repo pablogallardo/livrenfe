@@ -1,4 +1,4 @@
-/* Copyright (c) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
+/* Copyright (c) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
  *
  * This file is part of LivreNFE.
  *
@@ -27,5 +27,10 @@
  */
 extern char *get_xml_element(xmlDocPtr doc, char *element);
 
+
+/**
+ * Get subtree from XML
+ */
+char *get_xml_subtree(xmlDocPtr doc, char *xpath);
 
 #endif

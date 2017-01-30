@@ -1,4 +1,4 @@
-/* Copyright (c) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
+/* Copyright (c) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
  *
  * This file is part of LivreNFE.
  *
@@ -66,4 +66,26 @@ char *get_xml_element(xmlDocPtr doc, char *element){
 	//xmlFreeDoc(doc);
 	xmlCleanupParser();
 	return content;
+}
+
+char *get_xml_subtree(xmlDocPtr doc, char *xpath){
+	xmlXPathContextPtr context;
+	xmlXPathObjectPtr result;
+	xmlBufferPtr buf;
+	char *subtree = NULL;
+
+	context = xmlXPathNewContext(doc);
+	if (context == NULL) {
+		printf("Error in xmlXPathNewContext\n");
+		return NULL;
+	}
+	xmlXPathRegisterNs(context, BAD_CAST "nfe", 
+		BAD_CAST "http://www.portalfiscal.inf.br/nfe");
+	result = xmlXPathEvalExpression(xpath, context);
+	
+	buf = xmlBufferCreate();
+	int size = xmlNodeDump(buf, doc, context->here, 0, 0);
+	subtree = strdup(buf->content);
+	xmlXPathFreeContext(context);
+	return subtree;
 }
