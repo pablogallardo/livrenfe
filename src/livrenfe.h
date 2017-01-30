@@ -194,6 +194,7 @@ typedef struct {
 	char *numero;
 	int cod_status;
 	char *xml;
+	char *xmot;
 } PROTOCOLO;
 
 /*

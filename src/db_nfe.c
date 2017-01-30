@@ -104,10 +104,10 @@ int register_nfe(NFE *nfe){
 		tipo_impressao, tipo_ambiente, finalidade, consumidor_final, \
 		presencial, versao, div, chave, id_emitente, id_destinatario, \
 		q_itens, total, id_transportadora, cod_nfe, tipo_emissao, id_nfe,\
-		xml) VALUES  \
+		xml, protocolo, sefaz_cstat, sefaz_xmot, xml_protocolo) VALUES  \
 		(%d, %Q, %d, '%d', '%d', '%d', %lu, %Q, '%d', '%d' , '%d', '%d', \
 		 '%d', '%d', '%d', '%s', '%d', %Q, %d, '%d' , '%d', %f, %Q,\
-		 %d, %d, %Q, %Q);",
+		 %d, %d, %Q, %Q, %Q, %d, %Q, %Q);",
 		idnfe->municipio->codigo, idnfe->nat_op, idnfe->ind_pag, idnfe->mod, idnfe->serie,
 		idnfe->num_nf, (unsigned long)idnfe->dh_emis, idnfe->dh_saida == NULL? NULL:itoa(*idnfe->dh_saida), idnfe->tipo,
 		idnfe->local_destino, idnfe->tipo_impressao, idnfe->tipo_ambiente, idnfe->finalidade, idnfe->consumidor_final, idnfe->presencial,
@@ -115,7 +115,8 @@ int register_nfe(NFE *nfe){
 		last_id, nfe->q_itens, nfe->total, nfe->transp, idnfe->cod_nfe, 
 		idnfe->tipo_emissao, 
 		nfe->idnfe->id_nfe == 0? NULL:itoa(nfe->idnfe->id_nfe),
-		nfe->xml);
+		nfe->xml, nfe->protocolo->numero, nfe->protocolo->cod_status,
+		nfe->protocolo->xmot, nfe->protocolo->xml);
 	db_exec(sql, &err);
 	if(err){
 		fprintf(stderr, "livrenfe: Error - %s", err);

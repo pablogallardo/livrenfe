@@ -52,6 +52,44 @@ int get_status_servico(int ambiente, int cuf, char *passwd, char **msg){ char *r
 	return cStat;
 }
 
+static int sefaz_response_protocolos(LOTE *lote, xmlDocPtr doc){
+	int i;
+	LOTE_ITEM *it = lote->nfes;
+	for (i = 0; i < lote->qtd; i++){
+		char *status, *motivo;
+		int cStat;
+		NFE *n = it->nfe;
+		char *xp = malloc(sizeof(char) * 100);
+		sprintf(xp, "//nfe:protNFe/nfe:infProt[nfe:chNFe='%s']/nfe:cStat", 
+			n->idnfe->chave);
+		status = get_xml_element(doc, xp);
+		if(status == NULL){
+			xmlFree(status);
+			free(xp);
+			return -ESEFAZ;	
+		}
+		cStat = atoi(status);
+		xmlFree(status);
+		n->protocolo->cod_status = cStat;
+
+		sprintf(xp, "//nfe:protNFe/nfe:infProt[nfe:chNFe='%s']/nfe:xMotivo", 
+			n->idnfe->chave);
+		motivo = get_xml_element(doc, xp);
+		n->protocolo->xmot = strdup(motivo);
+		xmlFree(motivo);
+		if(cStat == 100){
+			char *nProt;
+			sprintf(xp, "//nfe:protNFe/nfe:infProt[nfe:chNFe='%s']/nfe:nProt", 
+				n->idnfe->chave);
+			nProt = get_xml_element(doc, xp);
+			n->protocolo->numero = strdup(nProt);
+			xmlFree(nProt);
+		}
+		it = it->next;
+		free(xp);
+	}
+}
+
 int send_lote(LOTE *lote, int ambiente, char *passwd, char **msg){
 	char *response, *status;
 	int cStat, rc;
@@ -114,6 +152,9 @@ int cons_lote(LOTE *lote, int ambiente, char *passwd, char **msg){
 	if(motivo == NULL){
 		return -ESEFAZ;	
 	}
+	if(cStat == 104)
+		sefaz_response_protocolos(lote, doc);
+	db_save_lote(lote);
 	*msg = strdup(motivo);
 	xmlFree(motivo);
 	xmlFree(status);
