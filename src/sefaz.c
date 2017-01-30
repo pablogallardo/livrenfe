@@ -83,7 +83,12 @@ static int sefaz_response_protocolos(LOTE *lote, xmlDocPtr doc){
 				n->idnfe->chave);
 			nProt = get_xml_element(doc, xp);
 			n->protocolo->numero = strdup(nProt);
+			sprintf(xp, "//nfe:protNFe/nfe:infProt[nfe:chNFe='%s']/..", 
+				n->idnfe->chave);
+			char *xml_prot = get_xml_subtree(doc, xp);
+			n->protocolo->xml = strdup(xml_prot);
 			xmlFree(nProt);
+			xmlFree(xml_prot);
 		}
 		it = it->next;
 		free(xp);

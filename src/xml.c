@@ -72,6 +72,7 @@ char *get_xml_subtree(xmlDocPtr doc, char *xpath){
 	xmlXPathContextPtr context;
 	xmlXPathObjectPtr result;
 	xmlBufferPtr buf;
+	xmlNodeSetPtr nodeset;
 	char *subtree = NULL;
 
 	context = xmlXPathNewContext(doc);
@@ -82,10 +83,13 @@ char *get_xml_subtree(xmlDocPtr doc, char *xpath){
 	xmlXPathRegisterNs(context, BAD_CAST "nfe", 
 		BAD_CAST "http://www.portalfiscal.inf.br/nfe");
 	result = xmlXPathEvalExpression(xpath, context);
+	if(result) {
+		nodeset = result->nodesetval;
+		buf = xmlBufferCreate();
+		int size = xmlNodeDump(buf, doc, nodeset->nodeTab[0], 0, 0);
+		subtree = strdup(buf->content);
+	}
 	
-	buf = xmlBufferCreate();
-	int size = xmlNodeDump(buf, doc, context->here, 0, 0);
-	subtree = strdup(buf->content);
 	xmlXPathFreeContext(context);
 	return subtree;
 }
