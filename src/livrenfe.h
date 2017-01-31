@@ -233,6 +233,44 @@ typedef struct {
 	char *xml_response;
 } LOTE;
 
+/**
+ * Evento
+ */
+typedef struct {
+	char *id;
+	NFE *nfe;
+} EVENTO;
+
+/**
+ * Evento cancelamento
+ */
+typedef struct {
+	EVENTO evento;
+	int tp_evento;
+	char *protocolo;
+	char *justificativa;
+} EVENTO_CANCELAMENTO;
+
+/**
+ * List evento items
+ */
+typedef struct LOTE_EVENTO_ITEM LOTE_EVENTO_ITEM;
+struct LOTE_EVENTO_ITEM {
+	EVENTO *evento;
+	LOTE_ITEM *next;
+};
+
+/**
+ * Eventos Lote
+ */
+typedef struct {
+	unsigned int id;
+	char *recibo;
+	unsigned int qtd;
+	LOTE_EVENTO_ITEM *eventos;
+	char *xml_response;
+} LOTE_EVENTO;
+
 
 #define LIVRENFE_TYPE	(livrenfe_get_type())
 #define	LIVRENFE_APP(obj)	(G_TYPE_CHECK_INSTANCE_CAST ((obj), LIVRENFE_TYPE, Livrenfe))
