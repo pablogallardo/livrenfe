@@ -104,10 +104,10 @@ int register_nfe(NFE *nfe){
 		tipo_impressao, tipo_ambiente, finalidade, consumidor_final, \
 		presencial, versao, div, chave, id_emitente, id_destinatario, \
 		q_itens, total, id_transportadora, cod_nfe, tipo_emissao, id_nfe,\
-		xml, protocolo, sefaz_cstat, sefaz_xmot, xml_protocolo) VALUES  \
+		xml, protocolo, sefaz_cstat, sefaz_xmot, xml_protocolo, canceled) VALUES  \
 		(%d, %Q, %d, '%d', '%d', '%d', %lu, %Q, '%d', '%d' , '%d', '%d', \
 		 '%d', '%d', '%d', '%s', '%d', %Q, %d, '%d' , '%d', %f, %Q,\
-		 %d, %d, %Q, %Q, %Q, %d, %Q, %Q);",
+		 %d, %d, %Q, %Q, %Q, %d, %Q, %Q, %d);",
 		idnfe->municipio->codigo, idnfe->nat_op, idnfe->ind_pag, idnfe->mod, idnfe->serie,
 		idnfe->num_nf, (unsigned long)idnfe->dh_emis, idnfe->dh_saida == NULL? NULL:itoa(*idnfe->dh_saida), idnfe->tipo,
 		idnfe->local_destino, idnfe->tipo_impressao, idnfe->tipo_ambiente, idnfe->finalidade, idnfe->consumidor_final, idnfe->presencial,
@@ -116,7 +116,7 @@ int register_nfe(NFE *nfe){
 		idnfe->tipo_emissao, 
 		nfe->idnfe->id_nfe == 0? NULL:itoa(nfe->idnfe->id_nfe),
 		nfe->xml, nfe->protocolo->numero, nfe->protocolo->cod_status,
-		nfe->protocolo->xmot, nfe->protocolo->xml);
+		nfe->protocolo->xmot, nfe->protocolo->xml, nfe->canceled);
 	db_exec(sql, &err);
 	if(err){
 		fprintf(stderr, "livrenfe: Error - %s", err);
@@ -332,7 +332,7 @@ NFE *get_nfe(int id){
 		id_emit, crt_emit, id_mun_emit,
 		id_uf_emit, cep_emit, id_dest, t_ie_dest,
 		id_mun_dest, id_uf_dest, cod_nfe,
-		num_e_emit, num_e_dest, cep_dest;
+		num_e_emit, num_e_dest, cep_dest, canceled;
 	time_t dh_emis, *dh_saida;
 	float total;
 	char *nome_mun, *uf, *nat_op, *versao,  *nome_emit, 
@@ -352,7 +352,7 @@ NFE *get_nfe(int id){
 		ID_UF_EMIT, UF_EMIT, CEP_EMIT, ID_DEST, NOME_DEST, T_IE_DEST, 
 		CNPJ_DEST, RUA_DEST, COMP_DEST, BAIRRO_DEST, ID_MUN_DEST, 
 		MUN_DEST, ID_UF_DEST, UF_DEST, COD_NFE, NUM_E_EMIT, NUM_E_DEST,
-		IE_DEST, TIPO_DOC_DEST, CEP_DEST, N_COLS
+		IE_DEST, TIPO_DOC_DEST, CEP_DEST, CANCELED, N_COLS
 	};
 
 	char *sql = sqlite3_mprintf("SELECT n.id_nfe, m.id_municipio, m.nome, u.cod_ibge, u.nome, \
@@ -415,6 +415,7 @@ NFE *get_nfe(int id){
 			num_e_emit = sqlite3_column_int(stmt, NUM_E_EMIT);
 			num_e_dest = sqlite3_column_int(stmt, NUM_E_DEST);
 			div = sqlite3_column_int(stmt, DIV); 
+			canceled = sqlite3_column_int(stmt, CANCELED); 
 
 			dh_emis = sqlite3_column_double(stmt, DH_EMIS);
 			dh_saida = malloc(sizeof(float));
@@ -461,7 +462,7 @@ NFE *get_nfe(int id){
 		id_emit, ie_emit, crt_emit, id_mun_emit,
 		id_uf_emit, cep_emit, num_e_emit, id_dest, 
 		t_ie_dest, id_mun_dest, id_uf_dest, num_e_dest,
-		cod_nfe, cep_dest, dh_emis, dh_saida, total,
+		cod_nfe, cep_dest, canceled, dh_emis, dh_saida, total,
 		nome_mun, uf, nat_op, versao, 
 		nome_emit, cnpj_emit, rua_emit,
 		comp_emit, bairro_emit, mun_emit, uf_emit,

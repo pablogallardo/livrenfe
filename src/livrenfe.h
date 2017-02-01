@@ -215,6 +215,7 @@ typedef struct {
 	TRANSP *transp;
 	PROTOCOLO *protocolo;
 	char *xml;
+	int canceled;
 } NFE;
 
 typedef struct LOTE_ITEM LOTE_ITEM;

@@ -67,6 +67,7 @@ CREATE TABLE nfe (id_nfe integer, id_municipio varchar(8),\
 	total real, id_transportadora varchar(20), cod_nfe integer,\
 	sefaz_cstat int, sefaz_xmot varchar(255),\
 	protocolo integer, xml text, xml_protocolo text,\
+	canceled boolean NOT NULL DEFAULT 0,\
 	CONSTRAINT nfe_pk PRIMARY KEY (id_nfe),\
 	CONSTRAINT nfe_uq UNIQUE (num_nf, serie, id_emitente),\
 	CONSTRAINT nfe_municipio_fk FOREIGN KEY (id_municipio)\
