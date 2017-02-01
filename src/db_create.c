@@ -1,4 +1,4 @@
-/* Copyright (c) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
+/* Copyright (c) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
  *
  * This file is part of LivreNFE.
  *
@@ -100,6 +100,19 @@ CREATE TABLE nfe_itens (id_nfe integer, ordem integer, id_produto integer, icms_
 	REFERENCES produtos(id_produto));\
 CREATE TABLE prefs (id integer, cert_pass varchar(200), ambiente integer,\
 	CONSTRAINT pref_pk PRIMARY KEY (id));\
+CREATE TABLE lotes_evento (id_lote_evento integer, recibo varchar(20), xml_response text,\
+	CONSTRAINT lote_evento_pk PRIMARY KEY (id_lote_evento));\
+CREATE TABLE eventos (id_evento integer, id_nfe integer, type integer,\
+	justificativa text,\
+	CONSTRAINT eventos_pk PRIMARY KEY (id_evento),\
+	CONSTRAINT eventos_nfe_fk FOREIGN KEY (id_nfe)\
+	REFERENCES nfe(id_nfe));\
+CREATE TABLE lotes_evento_items (id_lote_evento integer, id_evento integer,\
+	CONSTRAINT lotes_evento_items_pk PRIMARY KEY (id_lote_evento, id_evento),\
+	CONSTRAINT lotes_evento_lotes_fk FOREIGN KEY (id_lote_evento)\
+	REFERENCES lotes_evento(id_lote_evento),\
+	CONSTRAINT lotes_evento_evento_fk FOREIGN KEY (id_evento)\
+		REFERENCES eventos(id_evento));\
 CREATE TABLE urls (id_url integer, service varchar(200), url_prod varchar(255),\
 	url_cert varchar(255), url_header varchar(255), url_body varchar(255),\
 	CONSTRAINT url_pk PRIMARY KEY (id_url));";
