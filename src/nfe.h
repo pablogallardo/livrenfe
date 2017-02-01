@@ -1,4 +1,4 @@
-/* Copyright (c) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
+/* Copyright (c) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
  *
  * This file is part of LivreNFE.
  *
@@ -25,6 +25,10 @@ extern NFE *new_nfe();
 extern LOTE *new_lote();
 
 extern ITEM *new_item();
+
+extern EVENTO_CANCELAMENTO *new_evento_cancelamento();
+
+extern LOTE_EVENTO *new_lote_evento();
 
 extern EMITENTE *new_emitente();
 
@@ -73,3 +77,5 @@ extern int inst_emitente(char *id, char *nome, char *ie, int crt, char *cnpj,
 extern void free_emitente(EMITENTE *e);
 
 extern int add_nfe(LOTE *lote, NFE *nfe);
+
+extern int add_evento(LOTE_EVENTO *lote, EVENTO *e);

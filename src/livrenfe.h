@@ -1,4 +1,4 @@
-/* Copyright (c) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
+/* Copyright (c) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
  *
  * This file is part of LivreNFE.
  *
@@ -22,10 +22,15 @@
 #include <time.h>
 #include <gtk/gtk.h>
 
-#define	VERSION_NAME	"0.1"
-#define	VERSION_COUNTER	1
+#define	VERSION_NAME		"0.1"
+#define	VERSION_COUNTER		1
 #define	LIVRENFE_FOLDER_NAME	"/.livrenfe"
-#define	LIVRENFE_DB	"/livrenfe.db"
+#define	LIVRENFE_DB		"/livrenfe.db"
+
+#define CANCELAMENTO_TYPE	110111
+#define	CARTA_CORRECAO_TYPE	110110
+
+typedef int evento_t;
 
 /*
  * City information
@@ -239,6 +244,7 @@ typedef struct {
 typedef struct {
 	char *id;
 	NFE *nfe;
+	evento_t type;
 } EVENTO;
 
 /**
@@ -246,8 +252,6 @@ typedef struct {
  */
 typedef struct {
 	EVENTO evento;
-	int tp_evento;
-	char *protocolo;
 	char *justificativa;
 } EVENTO_CANCELAMENTO;
 

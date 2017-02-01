@@ -1,4 +1,4 @@
-/* Copyright (c) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
+/* Copyright (c) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
  *
  * This file is part of LivreNFE.
  *
@@ -181,6 +181,35 @@ LOTE *new_lote(){
 	return l;
 }
 
+EVENTO_CANCELAMENTO *new_evento_cancelamento(){
+	EVENTO e = {
+		.type = CANCELAMENTO_TYPE
+	};
+
+	EVENTO_CANCELAMENTO c = {
+		.evento = e
+	};
+
+	EVENTO_CANCELAMENTO *ec = malloc(sizeof(EVENTO_CANCELAMENTO));
+	memcpy(ec, &c, sizeof(EVENTO_CANCELAMENTO));
+	return ec;
+}
+
+static LOTE_EVENTO_ITEM *new_lote_evento_item(){
+	LOTE_EVENTO_ITEM m = {};
+	LOTE_EVENTO_ITEM *l = malloc(sizeof(LOTE_EVENTO_ITEM));
+	memcpy(l, &m, sizeof(LOTE_EVENTO_ITEM));
+	return l;
+}
+
+LOTE_EVENTO *new_lote_evento(){
+	LOTE_EVENTO m = {
+	};
+	LOTE_EVENTO *l = malloc(sizeof(LOTE_EVENTO));
+	memcpy(l, &m, sizeof(LOTE_EVENTO));
+	return l;
+}
+
 int inst_produto(int codigo, char *desc, unsigned int ncm, unsigned int cfop,
 		char *unidade_comercial, float valor, PRODUTO *p){
 	p->codigo = codigo;
@@ -254,6 +283,22 @@ int add_nfe(LOTE *lote, NFE *nfe){
 	lote->qtd++;
 	if((aux = lote->nfes) == NULL){
 		lote->nfes= i;
+		return 0;
+	}
+	while(aux->next != NULL){
+		aux = aux->next;
+	}
+	aux->next = i;
+	return 0;
+}
+
+int add_evento(LOTE_EVENTO *lote, EVENTO *e){
+	LOTE_EVENTO_ITEM *i = new_lote_evento_item();
+	LOTE_EVENTO_ITEM *aux;
+	i->evento = e;
+	lote->qtd++;
+	if((aux = lote->eventos) == NULL){
+		lote->eventos = i;
 		return 0;
 	}
 	while(aux->next != NULL){
