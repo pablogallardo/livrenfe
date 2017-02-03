@@ -1,4 +1,4 @@
-/* Copyright (c) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
+/* Copyright (c) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
  *
  * This file is part of LivreNFE.
  *
@@ -831,4 +831,39 @@ int is_cpf(char *v) {
 	//if (i == 11)
 	//	return 1;
 	return 0;
+}
+
+char *gen_lote_evento_xml(LOTE_EVENTO *lote, char *password){
+	int rc;
+	xmlTextWriterPtr writer;
+	xmlDocPtr doc;
+	xmlBufferPtr buf = xmlBufferCreate();
+
+	writer = xmlNewTextWriterDoc(&doc, 0);
+	if (writer == NULL)
+		return NULL;
+	xmlTextWriterStartDocument(writer, NULL, "UTF-8", NULL);
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "enviEvento");
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
+			BAD_CAST "http://www.portalfiscal.inf.br/nfe");
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "versao",
+			BAD_CAST NFE_VERSAO);
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "idLote",
+			"%d", lote->id);
+	if (rc < 0)
+		return NULL;
+	//TODO
+	rc = xmlTextWriterEndElement(writer);
+	if (rc < 0)
+		return NULL;
+	xmlTextWriterEndDocument(writer);
+	xmlNodeDump(buf, NULL, xmlDocGetRootElement(doc), 0, 0);
+	return buf->content;
+
 }
