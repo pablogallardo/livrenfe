@@ -42,6 +42,12 @@ extern char *generate_xml(NFE *, char *password);
 extern char *gen_lote_xml(LOTE *, char *password);
 
 /**
+ * This function generates the events XML used for canceling, correct, etc
+ * sent NFe
+ */
+extern char *gen_lote_evento_xml(LOTE_EVENTO *, char *password);
+
+/**
  * XML for consulting service status
  */
 extern char *gen_cons_status(int ambiente, int cuf);
