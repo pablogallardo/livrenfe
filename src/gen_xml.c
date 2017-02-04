@@ -34,6 +34,7 @@ int _gen_prod(xmlTextWriterPtr, ITEM *);
 int _gen_imposto(xmlTextWriterPtr, IMPOSTO *, float);
 int _gen_total(xmlTextWriterPtr, float );
 int is_cpf(char *);
+static char *generate_evento_xml(EVENTO *e, char *password);
 
 char *gen_cons_status(int ambiente, int cuf){
 	int rc;
@@ -858,7 +859,29 @@ char *gen_lote_evento_xml(LOTE_EVENTO *lote, char *password){
 			"%d", lote->id);
 	if (rc < 0)
 		return NULL;
-	//TODO
+
+	int i;
+	LOTE_EVENTO_ITEM *it = lote->eventos;
+	for (i = 0; i < lote->qtd; i++){
+		rc = xmlTextWriterStartElement(writer, BAD_CAST "evento");
+		if (rc < 0)
+			return NULL;
+		rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "versao",
+				BAD_CAST NFE_VERSAO);
+		if (rc < 0)
+			return -EXML;
+		char *xml;
+		xml = generate_evento_xml(it->evento, password);
+		rc = xmlTextWriterWriteRaw(writer, BAD_CAST xml);
+		if (rc < 0)
+			return NULL;
+		rc = xmlTextWriterEndElement(writer);
+		if (rc < 0)
+			return NULL;
+
+		it = it->next;
+	}
+
 	rc = xmlTextWriterEndElement(writer);
 	if (rc < 0)
 		return NULL;
@@ -866,4 +889,112 @@ char *gen_lote_evento_xml(LOTE_EVENTO *lote, char *password){
 	xmlNodeDump(buf, NULL, xmlDocGetRootElement(doc), 0, 0);
 	return buf->content;
 
+}
+
+char *generate_evento_xml(EVENTO *e, char *password) {
+	int rc;
+	xmlTextWriterPtr writer;
+	xmlDocPtr doc;
+	xmlBufferPtr buf = xmlBufferCreate();
+
+	NFE *nfe = e->nfe;
+
+	writer = xmlNewTextWriterDoc(&doc, 0);
+	if (writer == NULL)
+		return NULL;
+	xmlTextWriterStartDocument(writer, NULL, "UTF-8", NULL);
+
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "infEvento");
+	if (rc < 0)
+		return NULL;
+
+	char id[70];
+	sprintf(id, "ID%d%s%d", e->type, nfe->idnfe->chave, e->seq);
+
+	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "Id",
+			BAD_CAST id);
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cOrgao",
+			"%d", nfe->idnfe->municipio->cod_uf);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "tpAmb",
+			"%d", nfe->idnfe->tipo_ambiente);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "CNPJ",
+			"%s", nfe->emitente->cnpj);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "chNFe",
+			"%s", nfe->idnfe->chave);
+	if (rc < 0)
+		return NULL;
+	time_t now;
+	char buffer[26];
+	struct tm *tm_info;
+	time(&now);
+	tm_info = localtime(&(now));
+	strftime(buffer, 26, "%Y-%m-%dT%H:%M:%S-03:00", tm_info);
+
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "dhEmi",
+			"%s", buffer);
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "tpEvento",
+			"%d", e->type);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "nSeqEvento",
+			"%d", e->seq);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "verEvento",
+			"%s", "1.00");
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "detEvento");
+	if (rc < 0)
+		return NULL;
+
+	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "versao",
+			BAD_CAST "1.00");
+	if (rc < 0)
+		return -EXML;
+
+	switch(e->type){
+		case CANCELAMENTO_TYPE: {
+			EVENTO_CANCELAMENTO *ec;
+			ec = (EVENTO_CANCELAMENTO *) e;
+			rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "descEvento",
+					"%s", "Cancelamento");
+			if (rc < 0)
+				return NULL;
+			rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "nProt",
+					"%s", nfe->protocolo->numero);
+			if (rc < 0)
+				return NULL;
+			rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "xJust",
+					"%s", ec->justificativa);
+			if (rc < 0)
+				return NULL;
+			break;	
+		}
+	}
+
+	
+	rc = xmlTextWriterEndElement(writer);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterEndElement(writer);
+	if (rc < 0)
+		return NULL;
+	xmlTextWriterEndDocument(writer);
+	char *URI = malloc(70);
+	strcpy(URI, "#");
+	strcat(URI, id);
+	sign_xml(doc, password, URI);
+	xmlNodeDump(buf, NULL, xmlDocGetRootElement(doc), 0, 0);
+	return buf->content;
 }

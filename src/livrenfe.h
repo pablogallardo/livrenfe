@@ -244,6 +244,7 @@ typedef struct {
  */
 typedef struct {
 	char *id;
+	int seq;
 	NFE *nfe;
 	evento_t type;
 } EVENTO;

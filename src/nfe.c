@@ -297,6 +297,7 @@ int add_evento(LOTE_EVENTO *lote, EVENTO *e){
 	LOTE_EVENTO_ITEM *aux;
 	i->evento = e;
 	lote->qtd++;
+	i->evento->seq = lote->qtd;
 	if((aux = lote->eventos) == NULL){
 		lote->eventos = i;
 		return 0;
