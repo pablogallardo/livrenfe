@@ -66,6 +66,11 @@ static void password_modal_dismiss(GtkWidget *p, LivrenfeWindow *win){
 	gtk_widget_set_visible(win->password_modal, FALSE);
 }
 
+static void just_modal_dismiss(GtkWidget *p, LivrenfeWindow *win){
+	gtk_entry_set_text(win->justificativa, "");
+	gtk_widget_set_visible(win->just_modal, FALSE);
+}
+
 static void on_abrir_nfe_click(GtkMenuItem *m, LivrenfeWindow *win){
 	GtkTreeView *t = win->treeview;
 	GtkTreeSelection *s;
@@ -138,7 +143,6 @@ static void on_emitir_nfe_click(GtkMenuItem *m, LivrenfeWindow *win){
 static void on_cancel_nfe_click(GtkMenuItem *m, LivrenfeWindow *win){
 	gtk_widget_set_visible(win->just_modal, TRUE);
 	gtk_widget_grab_focus(win->justificativa);
-	//TODO
 }
 
 void list_nfe(LivrenfeWindow *win){
@@ -289,6 +293,8 @@ static void livrenfe_window_init(LivrenfeWindow *win){
 			G_CALLBACK(on_status_servico_click), win);
 	g_signal_connect((LIVRENFE_WINDOW(win))->pw_cancel_btn, "clicked",
 			G_CALLBACK(password_modal_dismiss), win);
+	g_signal_connect((LIVRENFE_WINDOW(win))->just_cancel_btn, "clicked",
+			G_CALLBACK(just_modal_dismiss), win);
 	g_signal_connect((LIVRENFE_WINDOW(win))->abrir_nfe, "activate",
 			G_CALLBACK(on_abrir_nfe_click), win);
 	g_signal_connect((LIVRENFE_WINDOW(win))->emitir_nfe, "activate",
