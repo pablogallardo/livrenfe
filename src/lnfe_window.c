@@ -38,10 +38,15 @@ struct _LivrenfeWindow{
 	GtkMenu *menu_nf;
 	GtkMenuItem *abrir_nfe;
 	GtkMenuItem *emitir_nfe;
+	GtkMenuItem *cancel_nfe;
 	GtkDialog *password_modal;
+	GtkDialog *just_modal;
 	GtkEntry *password;
+	GtkEntry *justificativa;
 	GtkButton *pw_cancel_btn;
 	GtkButton *pw_ok_btn;
+	GtkButton *just_cancel_btn;
+	GtkButton *just_ok_btn;
 	gulong passwd_click_signal_handler;
 	gulong passwd_key_signal_handler;
 };
@@ -130,6 +135,12 @@ static void on_emitir_nfe_click(GtkMenuItem *m, LivrenfeWindow *win){
 		"activate", G_CALLBACK(sefaz_emitir), win);
 }
 
+static void on_cancel_nfe_click(GtkMenuItem *m, LivrenfeWindow *win){
+	gtk_widget_set_visible(win->just_modal, TRUE);
+	gtk_widget_grab_focus(win->justificativa);
+	//TODO
+}
+
 void list_nfe(LivrenfeWindow *win){
 	GtkCellRenderer *r_num_nfe;
 	GtkCellRenderer *r_serie;
@@ -194,7 +205,25 @@ void view_on_row_activated(GtkTreeView *t, GtkTreePath *path,
 	}
 }
 
-static gint popup_menu_nfe(GtkTreeView *t, GdkEventButton *e, gpointer *win){
+static gint popup_menu_nfe(GtkTreeView *t, GdkEventButton *e, LivrenfeWindow *win){
+	GtkTreeSelection *s;
+	GtkTreePath *p;
+	s = gtk_tree_view_get_selection(t);
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+
+	if(gtk_tree_selection_get_selected(s, &model, &iter)){
+		int cancelada;
+		int emitida;
+		gtk_tree_model_get(model, &iter, 5, &cancelada, -1);
+		gtk_tree_model_get(model, &iter, 6, &emitida, -1);
+		if(cancelada || !emitida){
+			gtk_widget_set_sensitive(win->cancel_nfe, FALSE);
+		} else {
+			gtk_widget_set_sensitive(win->cancel_nfe, TRUE);
+		}
+	}
+
 	gtk_menu_popup((LIVRENFE_WINDOW(win))->menu_nf, NULL, 
 		NULL, NULL, NULL, e->button, e->time);
 	return TRUE;
@@ -264,6 +293,8 @@ static void livrenfe_window_init(LivrenfeWindow *win){
 			G_CALLBACK(on_abrir_nfe_click), win);
 	g_signal_connect((LIVRENFE_WINDOW(win))->emitir_nfe, "activate",
 			G_CALLBACK(on_emitir_nfe_click), win);
+	g_signal_connect((LIVRENFE_WINDOW(win))->cancel_nfe, "activate",
+			G_CALLBACK(on_cancel_nfe_click), win);
 }
 
 
@@ -283,6 +314,8 @@ static void livrenfe_window_class_init(LivrenfeWindowClass *class){
 	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
 		       	emitir_nfe);
 	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
+		       	cancel_nfe);
+	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
 		       	status_servico_btn);
 	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
 		       	password_modal);
@@ -292,6 +325,14 @@ static void livrenfe_window_class_init(LivrenfeWindowClass *class){
 		       	pw_cancel_btn);
 	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
 		       	pw_ok_btn);
+	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
+		       	just_modal);
+	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
+		       	justificativa);
+	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
+		       	just_ok_btn);
+	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
+		       	just_cancel_btn);
 }
 
 LivrenfeWindow *livrenfe_window_new(Livrenfe *app){

@@ -967,16 +967,19 @@ char *generate_evento_xml(EVENTO *e, char *password) {
 		case CANCELAMENTO_TYPE: {
 			EVENTO_CANCELAMENTO *ec;
 			ec = (EVENTO_CANCELAMENTO *) e;
-			rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "descEvento",
-					"%s", "Cancelamento");
+			rc = xmlTextWriterWriteFormatElement(writer, 
+				BAD_CAST "descEvento",
+				"%s", "Cancelamento");
 			if (rc < 0)
 				return NULL;
-			rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "nProt",
-					"%s", nfe->protocolo->numero);
+			rc = xmlTextWriterWriteFormatElement(writer, 
+				BAD_CAST "nProt",
+				"%s", nfe->protocolo->numero);
 			if (rc < 0)
 				return NULL;
-			rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "xJust",
-					"%s", ec->justificativa);
+			rc = xmlTextWriterWriteFormatElement(writer, 
+				BAD_CAST "xJust",
+				"%s", ec->justificativa);
 			if (rc < 0)
 				return NULL;
 			break;	

@@ -42,15 +42,19 @@ GtkListStore *get_list_nfe(){
 		SERIE,
 		DH_EMIS,
 		DESTINATARIO,
+		CANCELADA,
+		EMITIDA,
 		N_COLS
 	};
 
 	list_store = gtk_list_store_new(N_COLS, G_TYPE_INT, G_TYPE_INT,
-			G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING);
+		G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT,
+		G_TYPE_INT);
 
-	char *sql = "SELECT id_nfe, num_nf, serie, strftime('%d/%m/%Y %H:%M:%S', dh_emis, 'unixepoch', 'localtime'), \
-			cnpj || ' - ' || nome as destinatario \
-	       		FROM nfe JOIN destinatarios USING (id_destinatario);";
+	char *sql = "SELECT id_nfe, num_nf, serie,\
+		strftime('%d/%m/%Y %H:%M:%S', dh_emis, 'unixepoch', 'localtime'), \
+		cnpj || ' - ' || nome as destinatario, cancelada, protocolo\
+		FROM nfe JOIN destinatarios USING (id_destinatario);";
 	if(db_select(sql, &err, &stmt)){
 		return NULL;
 	}
@@ -63,11 +67,14 @@ GtkListStore *get_list_nfe(){
 			int serie = sqlite3_column_int(stmt, 2);
 			const unsigned char *dh_emis = sqlite3_column_text(stmt, 3);
 			const unsigned char *destinatario = sqlite3_column_text(stmt, 4);
+			int cancelada = sqlite3_column_int(stmt, 5);
+			int emitida = sqlite3_column_type(stmt, 6) == SQLITE_NULL? 0:1;
 
 			gtk_list_store_append(list_store, &iter);
 			gtk_list_store_set(list_store, &iter, ID_NFE, id_nfe, 
-					N_NFE, n_nfe, SERIE, serie,
-					DH_EMIS, dh_emis, DESTINATARIO, destinatario, -1);
+				N_NFE, n_nfe, SERIE, serie,
+				DH_EMIS, dh_emis, DESTINATARIO, destinatario, 
+				CANCELADA, cancelada, EMITIDA, emitida, -1);
 		} else if(rc == SQLITE_DONE){
 			break;
 		} else {
@@ -364,7 +371,7 @@ NFE *get_nfe(int id){
 		u_e.cod_ibge, u_e.nome, e.cep, d.id_destinatario, d.nome, d.tipo_ie, \
 		d.cnpj, d.rua, d.complemento, d.bairro, m_d.id_municipio, m_d.nome, \
 		u_d.cod_ibge, u_d.nome, n.cod_nfe, e.numero, d.numero, \
-		d.inscricao_estadual, d.tipo_doc, d.cep\
+		d.inscricao_estadual, d.tipo_doc, d.cep, n.cancelada\
 		FROM nfe n LEFT JOIN municipios m ON m.id_municipio = n.id_municipio \
 		LEFT JOIN uf u ON u.id_uf = m.id_uf \
 		LEFT JOIN emitentes e ON e.id_emitente = n.id_emitente \
