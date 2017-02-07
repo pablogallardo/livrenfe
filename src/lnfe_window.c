@@ -140,6 +140,7 @@ static void sefaz_cancelar(gpointer *b, LivrenfeWindow *win){
 		NFE *nfe = get_nfe(idnfe);
 		lote = new_lote_evento();
 		EVENTO_CANCELAMENTO *ec = new_evento_cancelamento();
+		ec->evento.nfe = nfe;
 		char *j = strdup(gtk_entry_get_text(win->justificativa));
 		gtk_entry_set_text(win->justificativa, "");
 		ec->justificativa = j;
