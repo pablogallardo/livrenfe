@@ -1,4 +1,4 @@
-/* Copyright (c) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
+/* Copyright (c) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
  *
  * This file is part of LivreNFE.
  *
@@ -27,6 +27,9 @@
 extern int get_status_servico(int ambiente, int cuf, char *passwd, char **msg);
 
 extern int send_lote(LOTE *lote, int ambiente, char *passwd, char **msg);
+
+extern int send_lote_evento(LOTE_EVENTO *lote, int ambiente, char *passwd, 
+	char **msg);
 
 extern int cons_lote(LOTE *, int ambiente, char *passwd, char **msg);
 

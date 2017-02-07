@@ -1,4 +1,4 @@
-/* Copyright (c) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
+/* Copyright (c) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
  *
  * This file is part of LivreNFE.
  *
@@ -52,6 +52,9 @@ static void sefaz_thread(void *arg){
 		int rc = send_lote(sr->lote, 2, sr->password, &msg);
 		rc = cons_lote(sr->lote, 2, sr->password, &msg);
 
+	} else if(sr->lote_evento){
+		int rc = send_lote_evento(sr->lote_evento, 2, sr->password, 
+			&msg);
 	} else {
 		int rc = get_status_servico(2, 35, sr->password, &msg);
 	}

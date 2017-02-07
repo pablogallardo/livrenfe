@@ -5688,7 +5688,7 @@ const char *insert_sql = "INSERT INTO paises (id_pais, nome) VALUES (1, 'Brasil'
 		    	FROM municipios;\
 		    INSERT INTO urls (service, url_prod, url_cert, url_header,\
 		    	url_body)\
-		    	VALUES ('RecepcaoEvento', 'https://nfe.fazenda.sp.gov.br/ws/recepcaoevento.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/recepcaoevento.asmx', NULL, NULL),\
+		    	VALUES ('RecepcaoEvento', 'https://nfe.fazenda.sp.gov.br/ws/recepcaoevento.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/recepcaoevento.asmx', 'http://www.portalfiscal.inf.br/nfe/wsdl/RecepcaoEvento', 'http://www.portalfiscal.inf.br/nfe/wsdl/RecepcaoEvento'),\
 			('NfeConsultaCadastro', 'https://nfe.fazenda.sp.gov.br/ws/cadconsultacadastro2.asmx', '	https://homologacao.nfe.fazenda.sp.gov.br/ws/cadconsultacadastro2.asmx', NULL, NULL),\
 			('NfeInutilizacao', 'https://nfe.fazenda.sp.gov.br/ws/nfeinutilizacao2.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeinutilizacao2.asmx', NULL, NULL),\
 			('NfeConsultaProtocolo', 'https://nfe.fazenda.sp.gov.br/ws/nfeconsulta2.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeconsulta2.asmx', NULL, NULL),\

@@ -1,4 +1,4 @@
-/* Copyright (c) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
+/* Copyright (c) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
  *
  * This file is part of LivreNFE.
  * * LivreNFE is free software: you can redistribute it and/or modify
@@ -26,7 +26,8 @@
 #include <libxml/parser.h>
 #include <string.h>
 
-int get_status_servico(int ambiente, int cuf, char *passwd, char **msg){ char *response, *status;
+int get_status_servico(int ambiente, int cuf, char *passwd, char **msg){ 
+	char *response, *status;
 	int cStat;
 	xmlDocPtr doc;
 	char *xml = gen_cons_status(2, 35);
@@ -130,6 +131,39 @@ int send_lote(LOTE *lote, int ambiente, char *passwd, char **msg){
 		*msg = malloc(sizeof(char) * 200);
 		sprintf(*msg, "Erro ao salvar lote\nNúmero de recibo: %d",
 			nRec);
+		return -ESQL;
+	}
+	return cStat;
+}
+
+int send_lote_evento(LOTE_EVENTO *lote, int ambiente, char *passwd, char **msg){
+	char *response, *status;
+	int cStat, rc;
+	xmlDocPtr doc;
+	char *xml = gen_lote_evento_xml(lote, passwd);
+	response = send_sefaz("RecepcaoEvento", 2, 35, 
+		xml, passwd);
+	if(response == NULL){
+		*msg = strdup("Sem resposta do SEFAZ, tente novamente");
+		return -ESEFAZ;
+	}
+	doc = xmlReadMemory(response, strlen(response), "noname.xml", NULL, 0);
+	status = get_xml_element(doc, "nfe:cStat");
+	if(status == NULL){
+		return -ESEFAZ;	
+	}
+	cStat = atoi(status);
+	char *motivo = get_xml_element(doc, "nfe:xMotivo");
+	if(motivo == NULL){
+		return -ESEFAZ;	
+	}
+	*msg = strdup(motivo);
+	xmlFree(motivo);
+	xmlFree(status);
+
+	if(rc){
+		*msg = malloc(sizeof(char) * 200);
+		sprintf(*msg, "Erro ao enviar eventos");
 		return -ESQL;
 	}
 	return cStat;
