@@ -144,7 +144,7 @@ static void sefaz_cancelar(gpointer *b, LivrenfeWindow *win){
 		char *j = strdup(gtk_entry_get_text(win->justificativa));
 		gtk_entry_set_text(win->justificativa, "");
 		ec->justificativa = j;
-		add_evento(lote, nfe);
+		add_evento(lote, ec);
 	}
 	char *password = strdup(gtk_entry_get_text(win->password));
 	password_modal_dismiss(NULL, win);
