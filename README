@@ -1,7 +1,7 @@
 LivreNFE
 ========
 
-Copyright (C) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
+Copyright (C) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
 
 **** PROJETO EM CONSTRUÇÃO ****
 
@@ -13,6 +13,17 @@ a licença GPLv3. Para mais informação veja o documento LICENSE.
 
 Instalação
 ----------
+$ ./configure
+$ make
+# make install
+
+Dependências
+----------
+- Gtk3
+- cURL 7.51
+- OpenSSL 1.0.2c
+- libp11 0.4.2
+- xmlsec 1.2.23
 
 Erros
 -----
