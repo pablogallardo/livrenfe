@@ -93,3 +93,19 @@ char *get_xml_subtree(xmlDocPtr doc, char *xpath){
 	xmlXPathFreeContext(context);
 	return subtree;
 }
+
+xmlNodePtr get_xml_node(xmlDocPtr doc, char *xpath){
+	xmlNodeSetPtr nodeset;
+	xmlXPathObjectPtr result;
+	xmlNodePtr node = NULL;
+
+	result = getnodeset(doc, xpath);
+	if(result) {
+		nodeset = result->nodesetval;
+		node =  nodeset->nodeTab[0];
+	}
+	free(xpath);
+	//xmlFreeDoc(doc);
+	xmlCleanupParser();
+	return node;
+}

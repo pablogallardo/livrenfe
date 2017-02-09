@@ -21,6 +21,7 @@
 #define	XML_H
 
 #include <libxml/parser.h>
+#include <libxml/tree.h>
 
 /**
  * Get single element from XML
@@ -31,6 +32,11 @@ extern char *get_xml_element(xmlDocPtr doc, char *element);
 /**
  * Get subtree from XML
  */
-char *get_xml_subtree(xmlDocPtr doc, char *xpath);
+extern char *get_xml_subtree(xmlDocPtr doc, char *xpath);
+
+/**
+ * Get single node from XML using xpath
+ */
+extern xmlNodePtr get_xml_node(xmlDocPtr doc, char *xpath);
 
 #endif

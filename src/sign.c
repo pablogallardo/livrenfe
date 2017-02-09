@@ -1,4 +1,4 @@
-/* Copyright (c) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
+/* Copyright (c) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
  *
  * This file is part of LivreNFE.
  *
@@ -20,6 +20,7 @@
 #include "sign.h"
 #include "crypto_interface.h"
 #include "utils.h"
+#include "xml.h"
 #include <stdlib.h>
 #include <string.h>
 #include <libxml/tree.h>
@@ -146,6 +147,7 @@ int sign_xml(xmlDocPtr doc, char *password, char *id) {
     xmlNodePtr keyInfoNode = NULL;
     xmlNodePtr x509DataNode = NULL;
     xmlSecDSigCtxPtr dsigCtx = NULL;
+    xmlNodePtr idNode = NULL;
     int res = -1;
     
     /* create signature template for RSA-SHA1 enveloped signature */
@@ -158,6 +160,7 @@ int sign_xml(xmlDocPtr doc, char *password, char *id) {
 
     /* add <dsig:Signature/> node to the doc */
     xmlAddChild(xmlDocGetRootElement(doc), signNode);
+    idNode = get_xml_node(doc, "//@Id");
     xmlAttrPtr attr = xmlHasProp(doc->children->children, "Id");
     if(attr){
 	xmlAddID(NULL, doc, str_replace("#", "" ,id), attr);
