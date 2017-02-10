@@ -844,7 +844,7 @@ char *gen_lote_evento_xml(LOTE_EVENTO *lote, char *password){
 	if (writer == NULL)
 		return NULL;
 	xmlTextWriterStartDocument(writer, NULL, "UTF-8", NULL);
-	rc = xmlTextWriterStartElement(writer, BAD_CAST "enviEvento");
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "envEvento");
 	if (rc < 0)
 		return NULL;
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
@@ -852,7 +852,7 @@ char *gen_lote_evento_xml(LOTE_EVENTO *lote, char *password){
 	if (rc < 0)
 		return NULL;
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "versao",
-			BAD_CAST NFE_VERSAO);
+			BAD_CAST "1.00");
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "idLote",
@@ -863,13 +863,6 @@ char *gen_lote_evento_xml(LOTE_EVENTO *lote, char *password){
 	int i;
 	LOTE_EVENTO_ITEM *it = lote->eventos;
 	for (i = 0; i < lote->qtd; i++){
-		rc = xmlTextWriterStartElement(writer, BAD_CAST "evento");
-		if (rc < 0)
-			return NULL;
-		rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "versao",
-				BAD_CAST NFE_VERSAO);
-		if (rc < 0)
-			return -EXML;
 		char *xml;
 		xml = generate_evento_xml(it->evento, password);
 		rc = xmlTextWriterWriteRaw(writer, BAD_CAST xml);
@@ -882,9 +875,6 @@ char *gen_lote_evento_xml(LOTE_EVENTO *lote, char *password){
 		it = it->next;
 	}
 
-	rc = xmlTextWriterEndElement(writer);
-	if (rc < 0)
-		return NULL;
 	xmlTextWriterEndDocument(writer);
 	xmlNodeDump(buf, NULL, xmlDocGetRootElement(doc), 0, 0);
 	return buf->content;
@@ -903,13 +893,20 @@ char *generate_evento_xml(EVENTO *e, char *password) {
 	if (writer == NULL)
 		return NULL;
 	xmlTextWriterStartDocument(writer, NULL, "UTF-8", NULL);
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "evento");
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "versao",
+			BAD_CAST "1.00");
+	if (rc < 0)
+		return -EXML;
 
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "infEvento");
 	if (rc < 0)
 		return NULL;
 
 	char id[70];
-	sprintf(id, "ID%d%s%d", e->type, nfe->idnfe->chave, e->seq);
+	sprintf(id, "ID%d%s%02d", e->type, nfe->idnfe->chave, e->seq);
 
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "Id",
 			BAD_CAST id);
@@ -938,7 +935,7 @@ char *generate_evento_xml(EVENTO *e, char *password) {
 	tm_info = localtime(&(now));
 	strftime(buffer, 26, "%Y-%m-%dT%H:%M:%S-03:00", tm_info);
 
-	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "dhEmi",
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "dhEvento",
 			"%s", buffer);
 	if (rc < 0)
 		return -EXML;
@@ -993,6 +990,9 @@ char *generate_evento_xml(EVENTO *e, char *password) {
 	rc = xmlTextWriterEndElement(writer);
 	if (rc < 0)
 		return NULL;
+	rc = xmlTextWriterEndElement(writer);
+	if (rc < 0)
+		return NULL;
 	xmlTextWriterEndDocument(writer);
 	char *URI = malloc(70);
 	strcpy(URI, "#");
@@ -1000,4 +1000,21 @@ char *generate_evento_xml(EVENTO *e, char *password) {
 	sign_xml(doc, password, URI);
 	xmlNodeDump(buf, NULL, xmlDocGetRootElement(doc), 0, 0);
 	return buf->content;
+}
+
+char *get_versao(char *service){
+	char *versao = malloc(sizeof(char) * 5);
+	int id_versao = get_url_id(service);
+	switch(id_versao){
+		case 1:
+			versao = "1.00";
+			break;
+		case 5:
+		case 6:
+		case 7:
+		default:
+			versao = "3.10";
+			break;
+	}
+	return versao;
 }

@@ -1,6 +1,6 @@
 /* Copyright (c) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
  *
- * This file is part of LivreNFE.  *
+ * This file is part of LivreNFE.
  * LivreNFE is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -72,6 +72,7 @@ static char *format_soap(char *service, char *xml, int cuf, char *url_cabec,
 	xmlTextWriterPtr writer;
 	xmlDocPtr doc;
 	xmlChar *xmlbuf;
+	char *versao = get_versao(service);
 
 	writer = xmlNewTextWriterDoc(&doc, 0);
 	if (writer == NULL)
@@ -104,7 +105,7 @@ static char *format_soap(char *service, char *xml, int cuf, char *url_cabec,
 	if (rc < 0)
 		return NULL;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "versaoDados",
-			"%s", NFE_VERSAO);
+			"%s", versao);
 	if (rc < 0)
 		return NULL;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cUF",

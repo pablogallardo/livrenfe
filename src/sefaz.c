@@ -147,6 +147,7 @@ int send_lote_evento(LOTE_EVENTO *lote, int ambiente, char *passwd, char **msg){
 		*msg = strdup("Sem resposta do SEFAZ, tente novamente");
 		return -ESEFAZ;
 	}
+	fprintf(stdout, "%s\n", response);
 	doc = xmlReadMemory(response, strlen(response), "noname.xml", NULL, 0);
 	status = get_xml_element(doc, "nfe:cStat");
 	if(status == NULL){

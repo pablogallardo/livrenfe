@@ -1,4 +1,4 @@
-/* Copyright (c) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
+/* Copyright (c) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
  *
  * This file is part of LivreNFE.
  *
@@ -47,4 +47,22 @@ char *get_ws_url(char *service, int ambiente, char **url_header,
 		*url_body = aux == NULL? NULL:strdup(aux);
 	}
 	return url;
+}
+
+int get_url_id(char *service){
+	sqlite3_stmt *stmt;
+	char *err, *s;
+	err = malloc(sizeof(char) * 200);
+	int rc, id;
+	char *sql = sqlite3_mprintf("SELECT id_url  FROM urls \
+		WHERE service = %Q", service);
+	if(db_select(sql, &err, &stmt)){
+	fprintf(stdout, "SQL: %s\n", err);
+		return NULL;
+	}
+	rc = sqlite3_step(stmt);
+	if(rc == SQLITE_ROW){
+		id = sqlite3_column_int(stmt, 0);
+	}
+	return id;
 }

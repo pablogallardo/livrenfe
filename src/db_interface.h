@@ -1,4 +1,4 @@
-/* Copyright (c) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
+/* Copyright (c) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
  *
  * This file is part of LivreNFE.
  *
@@ -85,5 +85,10 @@ extern int get_lote_id();
  * Save lote on DB
  */
 int db_save_lote(LOTE *lote);
+
+/**
+ * Get Webservice ID
+ */
+int get_url_id(char *service);
 
 #endif

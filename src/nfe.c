@@ -402,7 +402,7 @@ int inst_nfe(int id_nfe, int id_mun, int id_uf, int ind_pag, int mod_nfe,
 		char *nome_dest, char *cnpj_dest, char *rua_dest, 
 		char *comp_dest, char *bairro_dest, char *mun_dest,
 		char *uf_dest, char *chave, char div, char *ie_dest,
-		char *tipo_doc_dest, NFE *nfe){
+		char *tipo_doc_dest, char *protocolo, NFE *nfe){
 	IDNFE *idnfe = nfe->idnfe;
 	idnfe->id_nfe = id_nfe;
 	idnfe->nat_op = nat_op;
@@ -425,6 +425,7 @@ int inst_nfe(int id_nfe, int id_mun, int id_uf, int ind_pag, int mod_nfe,
 	idnfe->chave = chave;
 	idnfe->cod_nfe = cod_nfe;
 	nfe->canceled = canceled;
+	nfe->protocolo->numero = protocolo;
 	inst_municipio(uf, nome_mun, id_mun, id_uf, idnfe->municipio);
 	inst_emitente(id_emit, nome_emit, ie_emit, crt_emit, 
 		cnpj_emit, rua_emit, num_e_emit, comp_emit, bairro_emit, uf_emit,

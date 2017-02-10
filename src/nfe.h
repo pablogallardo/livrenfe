@@ -67,7 +67,7 @@ extern int inst_nfe(int id_nfe, int id_mun, int id_uf, int ind_pag, int mod_nfe,
 		char *nome_dest, char *cnpj_dest, char *rua_dest, 
 		char *comp_dest, char *bairro_dest, char *mun_dest,
 		char *uf_dest, char *chave, char div, char *ie_dest,
-		char *tipo_doc_dest, NFE *nfe);
+		char *tipo_doc_dest, char *protocolo, NFE *nfe);
 
 extern int inst_emitente(char *id, char *nome, char *ie, int crt, char *cnpj,
 		char *rua, unsigned int num, char *complemento,

@@ -1,4 +1,4 @@
-/* Copyright (c) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
+/* Copyright (c) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
  *
  * This file is part of LivreNFE.
  *
@@ -347,7 +347,7 @@ NFE *get_nfe(int id){
 		*mun_emit, *uf_emit, *nome_dest, *cnpj_dest,
 		*rua_dest, *comp_dest,*bairro_dest, *mun_dest,
 		*uf_dest, *chave, div, *ie_emit, *ie_dest,
-		*tipo_doc_dest;
+		*tipo_doc_dest, *protocolo;
 
 	enum{
 		ID_NFE, ID_MUN, MUN, ID_UF, UF, NAT_OP, IND_PAG, MOD_NFE,
@@ -359,7 +359,7 @@ NFE *get_nfe(int id){
 		ID_UF_EMIT, UF_EMIT, CEP_EMIT, ID_DEST, NOME_DEST, T_IE_DEST, 
 		CNPJ_DEST, RUA_DEST, COMP_DEST, BAIRRO_DEST, ID_MUN_DEST, 
 		MUN_DEST, ID_UF_DEST, UF_DEST, COD_NFE, NUM_E_EMIT, NUM_E_DEST,
-		IE_DEST, TIPO_DOC_DEST, CEP_DEST, CANCELED, N_COLS
+		IE_DEST, TIPO_DOC_DEST, CEP_DEST, CANCELED, PROTOCOLO, N_COLS
 	};
 
 	char *sql = sqlite3_mprintf("SELECT n.id_nfe, m.id_municipio, m.nome, u.cod_ibge, u.nome, \
@@ -371,7 +371,7 @@ NFE *get_nfe(int id){
 		u_e.cod_ibge, u_e.nome, e.cep, d.id_destinatario, d.nome, d.tipo_ie, \
 		d.cnpj, d.rua, d.complemento, d.bairro, m_d.id_municipio, m_d.nome, \
 		u_d.cod_ibge, u_d.nome, n.cod_nfe, e.numero, d.numero, \
-		d.inscricao_estadual, d.tipo_doc, d.cep, n.cancelada\
+		d.inscricao_estadual, d.tipo_doc, d.cep, n.cancelada, n.protocolo\
 		FROM nfe n LEFT JOIN municipios m ON m.id_municipio = n.id_municipio \
 		LEFT JOIN uf u ON u.id_uf = m.id_uf \
 		LEFT JOIN emitentes e ON e.id_emitente = n.id_emitente \
@@ -456,6 +456,7 @@ NFE *get_nfe(int id){
 			uf_dest = strdup(sqlite3_column_text(stmt, UF_DEST)); 
 			tipo_doc_dest = strdup(sqlite3_column_text(stmt, TIPO_DOC_DEST));
 			chave = strdup(sqlite3_column_text(stmt, CHAVE)); 
+			protocolo = strdup(sqlite3_column_text(stmt, PROTOCOLO)); 
 		} else if(rc == SQLITE_DONE){
 			break;
 		} else {
@@ -476,7 +477,7 @@ NFE *get_nfe(int id){
 		nome_dest, cnpj_dest, rua_dest, 
 		comp_dest, bairro_dest, mun_dest,
 		uf_dest, chave, div, ie_dest,
-		tipo_doc_dest, nfe);
+		tipo_doc_dest, protocolo, nfe);
 	get_itens(nfe);
 	return nfe; 
 }
