@@ -4,8 +4,7 @@
  *
  * LivreNFE is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * the Free Software Foundation, either version 3 of the License, or * (at your option) any later version.
  * * LivreNFE is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -593,6 +592,39 @@ int db_save_lote(LOTE *lote){
 				strcat(sql, ", ");
 			strcat(sql, aux);
 			register_nfe(n);
+			i = i->next;
+		}
+		db_exec(sql, &err);
+		if(err)
+			return -ESQL;
+	}
+	return 0;
+}
+
+int db_save_lote_evento(LOTE_EVENTO *lote){
+	char *sql, *err;
+	err = NULL;
+	if(lote->qtd > 0){
+		sql = sqlite3_mprintf("INSERT INTO lotes_evento (id_lote_evento, recibo, \
+			xml_response)\
+			VALUES (%d, %Q, %Q)", lote->id, lote->recibo, 
+				lote->xml_response);
+		fprintf(stdout, "%s\n", sql);
+		exit;
+		db_exec(sql, &err);
+		if(err)
+			return -ESQL;
+		LOTE_EVENTO_ITEM *i = lote->eventos;
+		sql = malloc(sizeof(char) * 500);
+		strcpy(sql, "INSERT INTO lotes_evento_items(id_lote_evento, id_evento) VALUES ");
+		while(i != NULL){
+			EVENTO *e = i->evento;
+			char *aux = sqlite3_mprintf("(%d, %Q)", lote->id,
+				e->id);
+			if(i != lote->eventos)
+				strcat(sql, ", ");
+			strcat(sql, aux);
+			//TODO register_evento(e);
 			i = i->next;
 		}
 		db_exec(sql, &err);

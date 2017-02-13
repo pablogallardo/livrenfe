@@ -84,11 +84,16 @@ extern int get_lote_id();
 /**
  * Save lote on DB
  */
-int db_save_lote(LOTE *lote);
+extern int db_save_lote(LOTE *lote);
+
+/**
+ * Save lote evento on DB
+ */
+extern int db_save_lote_evento(LOTE_EVENTO *lote);
 
 /**
  * Get Webservice ID
  */
-int get_url_id(char *service);
+extern int get_url_id(char *service);
 
 #endif
