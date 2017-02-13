@@ -98,7 +98,7 @@ typedef struct {
  * Issuer information
  */
 typedef struct {
-	char *id;
+	int id;
 	char *nome;
 	char *inscricao_estadual;
 	ENDERECO *endereco;
@@ -110,7 +110,7 @@ typedef struct {
  * Recipient information
  */
 typedef struct {
-	char *id;
+	int id;
 	char *nome;
 	ENDERECO *endereco;
 	enum t_tipo_ie {CONT_AV=1, CONT_IS=2, NAO_CONT=9} tipo_ie;

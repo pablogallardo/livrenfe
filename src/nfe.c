@@ -358,7 +358,7 @@ static int inst_endereco(char *rua, unsigned int num, char *complemento,
 	return 0;
 }
 
-int inst_emitente(char *id, char *nome, char *ie, int crt, char *cnpj,
+int inst_emitente(int id, char *nome, char *ie, int crt, char *cnpj,
 		char *rua, unsigned int num, char *complemento,
 		char *bairro, char *uf, char *nome_mun, unsigned int codigo,
 		unsigned int cod_uf, unsigned int cep, EMITENTE *e){
@@ -372,7 +372,7 @@ int inst_emitente(char *id, char *nome, char *ie, int crt, char *cnpj,
 	return 0;
 }
 
-static int inst_destinatario(char *id, char *nome, int t_ie, char *tipo_doc, char *ie,
+static int inst_destinatario(int id, char *nome, int t_ie, char *tipo_doc, char *ie,
 		char *cnpj, char *rua, unsigned int num, char *complemento,
 		char *bairro, char *uf, char *nome_mun, unsigned int codigo,
 		unsigned int cod_uf, unsigned int cep, DESTINATARIO *d){

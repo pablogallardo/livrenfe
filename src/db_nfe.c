@@ -94,10 +94,12 @@ int register_nfe(NFE *nfe){
 	char *sql, *err;
 	sql = malloc(400);
 	err = NULL;
-	int last_id, id_nf; sql = sqlite3_mprintf("REPLACE INTO destinatarios (nome, tipo_ie, cnpj, rua, complemento, \
+	int last_id, id_nf; 
+	sql = sqlite3_mprintf("REPLACE INTO destinatarios (id_destinatario,\
+		nome, tipo_ie, cnpj, rua, complemento, \
 		bairro, id_municipio, cep, numero, inscricao_estadual, \
-		tipo_doc) VALUES (%Q, '%d', %Q, %Q, %Q, %Q, \
-		'%d', '%d', %d, %Q, %Q);", d->nome, d->tipo_ie, d->cnpj, 
+		tipo_doc) VALUES (%d, %Q, '%d', %Q, %Q, %Q, %Q, \
+		'%d', '%d', %d, %Q, %Q);", d->id, d->nome, d->tipo_ie, d->cnpj, 
 		ed->rua, ed->complemento, ed->bairro, ed->municipio->codigo, 
 		ed->cep, ed->num, d->inscricao_estadual, d->tipo_doc);
 	db_exec(sql, &err);
@@ -371,7 +373,7 @@ NFE *get_nfe(int id){
 		u_e.cod_ibge, u_e.nome, e.cep, d.id_destinatario, d.nome, d.tipo_ie, \
 		d.cnpj, d.rua, d.complemento, d.bairro, m_d.id_municipio, m_d.nome, \
 		u_d.cod_ibge, u_d.nome, n.cod_nfe, e.numero, d.numero, \
-		d.inscricao_estadual, d.tipo_doc, d.cep, n.cancelada, n.protocolo\
+		d.inscricao_estadual, d.tipo_doc, d.cep, n.canceled, n.protocolo\
 		FROM nfe n LEFT JOIN municipios m ON m.id_municipio = n.id_municipio \
 		LEFT JOIN uf u ON u.id_uf = m.id_uf \
 		LEFT JOIN emitentes e ON e.id_emitente = n.id_emitente \
@@ -456,7 +458,12 @@ NFE *get_nfe(int id){
 			uf_dest = strdup(sqlite3_column_text(stmt, UF_DEST)); 
 			tipo_doc_dest = strdup(sqlite3_column_text(stmt, TIPO_DOC_DEST));
 			chave = strdup(sqlite3_column_text(stmt, CHAVE)); 
-			protocolo = strdup(sqlite3_column_text(stmt, PROTOCOLO)); 
+			if(sqlite3_column_type(stmt, PROTOCOLO) == SQLITE_NULL){
+				protocolo = NULL;
+			} else {
+				protocolo = strdup(sqlite3_column_text(stmt,
+					PROTOCOLO)); 
+			}
 		} else if(rc == SQLITE_DONE){
 			break;
 		} else {

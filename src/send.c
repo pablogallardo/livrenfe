@@ -145,10 +145,10 @@ static char *format_soap(char *service, char *xml, int cuf, char *url_cabec,
 		return NULL;
 	xmlTextWriterEndDocument(writer);
 	xmlDocDumpMemory(doc, &xmlbuf, &buffersize);
-	char *xml_inline = str_replace(">\n<","><", xmlbuf);
+	//char *xml_inline = str_replace(">\n<","><", xmlbuf);
 	free(url_cabec);
 	free(url_dados);
-	return xml_inline;
+	return xmlbuf;
 }
 
 char *send_sefaz(char *service, int ambiente, int cuf, char *xml,
