@@ -896,6 +896,10 @@ char *generate_evento_xml(EVENTO *e, char *password) {
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "evento");
 	if (rc < 0)
 		return NULL;
+	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
+			BAD_CAST "http://www.portalfiscal.inf.br/nfe");
+	if (rc < 0)
+		return NULL;
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "versao",
 			BAD_CAST "1.00");
 	if (rc < 0)
@@ -933,7 +937,7 @@ char *generate_evento_xml(EVENTO *e, char *password) {
 	struct tm *tm_info;
 	time(&now);
 	tm_info = localtime(&(now));
-	strftime(buffer, 26, "%Y-%m-%dT%H:%M:%S-03:00", tm_info);
+	strftime(buffer, 26, "%Y-%m-%dT%H:%M:%S-02:00", tm_info);
 
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "dhEvento",
 			"%s", buffer);
