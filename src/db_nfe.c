@@ -568,6 +568,23 @@ int get_lote_id(){
 	return ++id;
 }
 
+int get_lote_evento_id(){
+	char *err;
+	sqlite3_stmt *stmt;
+	int id, rc;
+	char *sql = sqlite3_mprintf("SELECT max(l.id_lote_evento)\
+		FROM lotes_evento l");
+	if(db_select(sql, &err, &stmt)){
+		return -ESQL;
+	}
+
+	rc = sqlite3_step(stmt);
+	if(rc != SQLITE_ROW)
+		return 1;
+	id = sqlite3_column_int(stmt, 0);
+	return ++id;
+}
+
 int db_save_lote(LOTE *lote){
 	char *sql, *err;
 	err = NULL;
@@ -631,5 +648,20 @@ int db_save_lote_evento(LOTE_EVENTO *lote){
 		if(err)
 			return -ESQL;
 	}
+	return 0;
+}
+
+int register_evento(EVENTO *e){
+	char *sql, *err;
+	sql = malloc(400);
+	err = NULL;
+	int last_id; 
+	sql = sqlite3_mprintf("REPLACE INTO evento (...) VALUES (...);");
+	db_exec(sql, &err);
+	if(err){
+		fprintf(stderr, "livrenfe: Error: %s", err);
+		return -1;
+	}
+	last_id = db_last_insert_id();
 	return 0;
 }

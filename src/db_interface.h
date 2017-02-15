@@ -36,6 +36,11 @@ extern int create_db();
 extern int register_nfe(NFE *);
 
 /**
+ * Materialize EVENTO 
+ */
+extern int register_evento(EVENTO *);
+
+/**
  * Set db path
  */
 extern int set_db(char *);
