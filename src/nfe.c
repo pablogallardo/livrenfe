@@ -204,6 +204,7 @@ static LOTE_EVENTO_ITEM *new_lote_evento_item(){
 
 LOTE_EVENTO *new_lote_evento(){
 	LOTE_EVENTO m = {
+		.id = get_lote_evento_id()
 	};
 	LOTE_EVENTO *l = malloc(sizeof(LOTE_EVENTO));
 	memcpy(l, &m, sizeof(LOTE_EVENTO));
