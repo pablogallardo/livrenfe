@@ -431,7 +431,7 @@ int inst_nfe(int id_nfe, int id_mun, int id_uf, int ind_pag, int mod_nfe,
 	inst_municipio(uf, nome_mun, id_mun, id_uf, idnfe->municipio);
 	inst_emitente(id_emit, nome_emit, ie_emit, crt_emit, 
 		cnpj_emit, rua_emit, num_e_emit, comp_emit, bairro_emit, uf_emit,
-		uf_emit, id_mun_emit, id_uf_emit, cep_emit, nfe->emitente);
+		mun_emit, id_mun_emit, id_uf_emit, cep_emit, nfe->emitente);
 	inst_destinatario(id_dest, nome_dest, t_ie_dest,
 		tipo_doc_dest, ie_dest, cnpj_dest, rua_dest, num_e_dest,
 		comp_dest, bairro_dest, 
