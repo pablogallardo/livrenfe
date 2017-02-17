@@ -247,6 +247,11 @@ typedef struct {
 	int seq;
 	NFE *nfe;
 	evento_t type;
+	int cStat;
+	char *xmot;
+	char *protocolo;
+	char *xml;
+	char *xml_response;
 } EVENTO;
 
 /**

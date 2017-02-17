@@ -104,7 +104,7 @@ CREATE TABLE prefs (id integer, cert_pass varchar(200), ambiente integer,\
 CREATE TABLE lotes_evento (id_lote_evento integer, recibo varchar(20), xml_response text,\
 	CONSTRAINT lote_evento_pk PRIMARY KEY (id_lote_evento));\
 CREATE TABLE eventos (id_evento integer, id_nfe integer, type integer,\
-	justificativa text,\
+	justificativa text, xml text, xml_response text, xmot text,\
 	CONSTRAINT eventos_pk PRIMARY KEY (id_evento),\
 	CONSTRAINT eventos_nfe_fk FOREIGN KEY (id_nfe)\
 	REFERENCES nfe(id_nfe));\

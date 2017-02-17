@@ -97,8 +97,9 @@ int register_nfe(NFE *nfe){
 	sql = sqlite3_mprintf("REPLACE INTO destinatarios (id_destinatario,\
 		nome, tipo_ie, cnpj, rua, complemento, \
 		bairro, id_municipio, cep, numero, inscricao_estadual, \
-		tipo_doc) VALUES (%d, %Q, '%d', %Q, %Q, %Q, %Q, \
-		'%d', '%d', %d, %Q, %Q);", d->id, d->nome, d->tipo_ie, d->cnpj, 
+		tipo_doc) VALUES (%Q, %Q, '%d', %Q, %Q, %Q, %Q, \
+		'%d', '%d', %d, %Q, %Q);", 
+		d->id == 0? NULL : itoa(d->id), d->nome, d->tipo_ie, d->cnpj, 
 		ed->rua, ed->complemento, ed->bairro, ed->municipio->codigo, 
 		ed->cep, ed->num, d->inscricao_estadual, d->tipo_doc);
 	db_exec(sql, &err);
@@ -657,10 +658,12 @@ int register_evento(EVENTO *e){
 	sql = malloc(400);
 	err = NULL;
 	int last_id; 
-	sql = sqlite3_mprintf("REPLACE INTO evento (id_evento, id_nfe, type)\
-		VALUES ($Q, %d, %d);",
+	sql = sqlite3_mprintf("REPLACE INTO evento (id_evento, id_nfe, type,\
+		xml, xml_response, xmot)\
+		VALUES ($Q, %d, %d, %Q, %Q, %Q);",
 		e->id == 0? NULL : itoa(e->id), e->nfe->idnfe->id_nfe,
-		e->nfe->idnfe->id_nfe, e->type);
+		e->nfe->idnfe->id_nfe, e->type, e->xml, e->xml_response,
+		e->xmot);
 	db_exec(sql, &err);
 	last_id = db_last_insert_id();
 	if(err){

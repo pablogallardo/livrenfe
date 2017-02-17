@@ -44,7 +44,8 @@ static IDNFE *new_idnfe(){
 		.local_destino = DEST_INTERNA,
 		.tipo = TIPO_SAIDA,
 		.tipo_impressao = IMP_RET,
-		.finalidade = FIN_NORMAL 
+		.finalidade = FIN_NORMAL,
+		.consumidor_final = SIM
 	};
 	IDNFE *p = malloc(sizeof(IDNFE));
 	memcpy(p, &i, sizeof(IDNFE));
