@@ -594,8 +594,6 @@ int db_save_lote(LOTE *lote){
 			xml_response)\
 			VALUES (%d, %Q, %Q)", lote->id, lote->recibo, 
 				lote->xml_response);
-		fprintf(stdout, "%s\n", sql);
-		exit;
 		db_exec(sql, &err);
 		if(err)
 			return -ESQL;
@@ -627,8 +625,6 @@ int db_save_lote_evento(LOTE_EVENTO *lote){
 			(id_lote_evento, recibo, xml_response)\
 			VALUES (%d, %Q, %Q)", lote->id, lote->recibo, 
 				lote->xml_response);
-		fprintf(stdout, "%s\n", sql);
-		exit;
 		db_exec(sql, &err);
 		if(err)
 			return -ESQL;
