@@ -392,7 +392,7 @@ static void livrenfe_window_class_init(LivrenfeWindowClass *class){
 }
 
 LivrenfeWindow *livrenfe_window_new(Livrenfe *app){
-	setlocale(LC_NUMERIC, "C");
+	setlocale(LC_ALL, "C");
 	return g_object_new(LIVRENFE_WINDOW_TYPE, "application", app, NULL);
 }
 
