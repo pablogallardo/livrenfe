@@ -319,7 +319,7 @@ static char get_dv(char *base){
 		sum += (baserev[i] - '0') * m[j%8];
 	}
 	div = 11 - (sum % 11);
-	div = div == 1? 0:div;
+	div = (div == 1)? 0 : div;
 	free(baserev);
 	return *itoa(div);
 }
