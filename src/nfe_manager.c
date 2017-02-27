@@ -1,4 +1,4 @@
-/* Copyright (c) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
+/* Copyright (c) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
  *
  * This file is part of LivreNFE.
  *
@@ -58,6 +58,7 @@ struct _NFEManagerPrivate{
 	GtkEntry *complemento;
 	GtkEntry *bairro;
 	GtkEntry *cep;
+	GtkEntry *chave_nfe;
 	GtkTreeView *treeview;
 };
 
@@ -327,6 +328,8 @@ static void inst_nfe_manager(gpointer p, NFEManager *nman){
 			itoa(endereco->municipio->cod_uf));
 		gtk_combo_box_set_active_id(priv->municipio_destinatario, 
 			itoa(endereco->municipio->codigo));
+		gtk_widget_set_sensitive(priv->chave_nfe, TRUE);
+		gtk_entry_set_text(priv->chave_nfe, nfe->idnfe->chave);
 	}
 }
 
@@ -409,6 +412,8 @@ static void nfe_manager_class_init(NFEManagerClass *class){
 		       	bairro);
 	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
 		       	cep);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	chave_nfe);
 	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
 		       	treeview);
 }
