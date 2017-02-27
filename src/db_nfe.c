@@ -44,12 +44,13 @@ GtkListStore *get_list_nfe(){
 		DESTINATARIO,
 		CANCELADA,
 		EMITIDA,
+		STATUS,
 		N_COLS
 	};
 
 	list_store = gtk_list_store_new(N_COLS, G_TYPE_INT, G_TYPE_INT,
 		G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT,
-		G_TYPE_INT);
+		G_TYPE_INT, G_TYPE_STRING);
 
 	char *sql = "SELECT id_nfe, num_nf, serie,\
 		strftime('%d/%m/%Y %H:%M:%S', dh_emis, 'unixepoch', 'localtime'), \
@@ -69,12 +70,17 @@ GtkListStore *get_list_nfe(){
 			const unsigned char *destinatario = sqlite3_column_text(stmt, 4);
 			int cancelada = sqlite3_column_int(stmt, 5);
 			int emitida = sqlite3_column_type(stmt, 6) == SQLITE_NULL? 0:1;
+			char *status;
+
+			status = emitida? "Autorizada" : "Não enviada";
+			status = cancelada? "Cancelada" : status;
 
 			gtk_list_store_append(list_store, &iter);
 			gtk_list_store_set(list_store, &iter, ID_NFE, id_nfe, 
 				N_NFE, n_nfe, SERIE, serie,
 				DH_EMIS, dh_emis, DESTINATARIO, destinatario, 
-				CANCELADA, cancelada, EMITIDA, emitida, -1);
+				CANCELADA, cancelada, EMITIDA, emitida,
+				STATUS, status, -1);
 		} else if(rc == SQLITE_DONE){
 			break;
 		} else {
