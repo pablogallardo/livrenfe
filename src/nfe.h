@@ -49,7 +49,8 @@ extern int inst_item(float valor, float quantidade,
 		int icms_tipo, int pis_quantidade, int pis_nt,
 		int cofins_quantidade, int cofins_nt, int ncm, int cfop,
 		float icms_aliquota, float icms_valor, float pis_aliquota,
-		float cofins_aliquota, char *descricao, char *unidade,
+		float cofins_aliquota, int ipi_sit_trib, char *ipi_classe,
+		char *ipi_codigo, char *descricao, char *unidade,
 		ITEM *);
 
 extern int inst_nfe(int id_nfe, int id_mun, int id_uf, int ind_pag, int mod_nfe,

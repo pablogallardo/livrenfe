@@ -147,6 +147,7 @@ int register_nfe(NFE *nfe){
 		ICMS *icms = imp->icms;
 		PIS *pis = imp->pis;
 		COFINS *cofins = imp->cofins;
+		IPI *ipi = imp->ipi;
 		sql = sqlite3_mprintf("REPLACE INTO  produtos (id_produto, descricao, ncm, cfop, unidade,\
 			valor) VALUES (%d, %Q, %d, %d, %Q, %f);",
 		       p->codigo, p->descricao, p->ncm, p->cfop, p->unidade_comercial,
@@ -161,13 +162,14 @@ int register_nfe(NFE *nfe){
 			id_produto, icms_origem, icms_tipo, icms_aliquota,\
 			icms_valor, pis_aliquota, pis_quantidade,\
 			pis_nt, cofins_aliquota, cofins_quantidade, cofins_nt,\
-			qtd, valor)\
+			ipi_sit_trib, ipi_classe, ipi_codigo, qtd, valor)\
 			VALUES (%d, %d, %d, %d, %d, %f, %f, %f, %d, %Q, %f, \
-			%d, %Q, %d, %f);",
+			%d, %Q, %d, %Q, %Q, %d, %f);",
 			id_nf, item->ordem, last_id, icms->origem, icms->tipo, 
 			icms->aliquota, icms->valor, pis->aliquota, 
 			pis->quantidade, pis->nt, cofins->aliquota,
-			cofins->quantidade, cofins->nt, item->quantidade,
+			cofins->quantidade, cofins->nt, ipi->sit_trib,
+			ipi->classe, ipi->codigo, item->quantidade,
 			item->valor);
 		db_exec(sql, &err);
 		if(err){
@@ -270,15 +272,16 @@ static int get_itens(NFE *n){
 	enum{
 		ID_NFE, ORDEM, ID_PRODUTO, ICMS_ORIGEM, ICMS_TIPO, ICMS_ALIQ,
 		ICMS_VALOR, PIS_ALIQ, PIS_QTD, PIS_NT, COFINS_ALIQ,
-		COFINS_QTD, COFINS_NT, QTD, DESC, NCM, CFOP, UNIDADE, VALOR,
-		N_COLS
+		COFINS_QTD, COFINS_NT, IPI_SIT_TRIB, IPI_CLASSE, IPI_CODIGO,
+		QTD, DESC, NCM, CFOP, UNIDADE, VALOR, N_COLS
 	};
 
 	char *sql = sqlite3_mprintf("SELECT ni.id_nfe, ni.ordem, ni.id_produto,\
 		ni.icms_origem, ni.icms_tipo, ni.icms_aliquota, ni.icms_valor,\
 		ni.pis_aliquota, ni.pis_quantidade, ni.pis_nt, ni.cofins_aliquota,\
-		ni.cofins_quantidade, ni.cofins_nt, ni.qtd, p.descricao, p.ncm, p.cfop,\
-		p.unidade, p.valor\
+		ni.cofins_quantidade, ni.cofins_nt, ni.ipi_sit_trib,\
+		ni.ipi_classe, ni.ipi_codigo, ni.qtd, p.descricao, p.ncm,\
+		p.cfop, p.unidade, p.valor\
 		FROM produtos p LEFT JOIN nfe_itens ni\
 			ON ni.id_produto = p.id_produto\
 		WHERE ni.id_nfe = %d", n->idnfe->id_nfe);
@@ -292,10 +295,10 @@ static int get_itens(NFE *n){
 		if(rc == SQLITE_ROW){
 			int id_nfe, ordem, id_produto, icms_origem, icms_tipo,
 				pis_quantidade, pis_nt, cofins_quantidade,
-				cofins_nt, ncm, cfop;
+				cofins_nt, ipi_sit_trib, ncm, cfop;
 			float icms_aliquota, icms_valor, pis_aliquota,
 				cofins_aliquota, valor, quantidade;
-			char *descricao, *unidade; 
+			char *descricao, *unidade, *ipi_classe, *ipi_codigo; 
 
 			id_nfe = sqlite3_column_int(stmt, ID_NFE);
 			ordem = sqlite3_column_int(stmt, ORDEM);
@@ -306,6 +309,7 @@ static int get_itens(NFE *n){
 			pis_nt = sqlite3_column_int(stmt, PIS_NT);
 			cofins_quantidade = sqlite3_column_int(stmt, COFINS_QTD);
 			cofins_nt = sqlite3_column_int(stmt, COFINS_NT);
+			ipi_sit_trib = sqlite3_column_int(stmt, IPI_SIT_TRIB);
 			ncm = sqlite3_column_int(stmt, NCM);
 			cfop = sqlite3_column_int(stmt, CFOP);
 
@@ -319,13 +323,18 @@ static int get_itens(NFE *n){
 
 			descricao = strdup(sqlite3_column_text(stmt, DESC));
 			unidade = strdup(sqlite3_column_text(stmt, UNIDADE));
+			ipi_classe = strdup(sqlite3_column_text(stmt, 
+				IPI_CLASSE));
+			ipi_codigo = strdup(sqlite3_column_text(stmt, 
+				IPI_CODIGO));
 
 			inst_item(valor, quantidade, 
 				ordem, id_produto, icms_origem,
 				icms_tipo, pis_quantidade, pis_nt,
 				cofins_quantidade, cofins_nt, ncm, cfop,
 				icms_aliquota, icms_valor, pis_aliquota,
-				cofins_aliquota, descricao, unidade, i);
+				cofins_aliquota, ipi_sit_trib, ipi_classe,
+				ipi_codigo, descricao, unidade, i);
 			add_item(n, i);
 		} else if(rc == SQLITE_DONE){
 			break;

@@ -159,6 +159,15 @@ typedef struct {
 	char *nt;
 } COFINS;
 
+/* 
+ * IPI tax
+ */
+typedef struct {
+	int sit_trib;
+	char *classe;
+	char *codigo;
+} IPI;
+
 /*
  * Tax information
  */
@@ -166,6 +175,7 @@ typedef struct {
 	ICMS *icms;
 	PIS *pis;
 	COFINS *cofins;
+	IPI *ipi;
 } IMPOSTO;
 
 typedef struct ITEM ITEM;

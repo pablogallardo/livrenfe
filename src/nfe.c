@@ -119,11 +119,19 @@ static COFINS *new_cofins(){
 	return p;
 }
 
+static IPI *new_ipi(){
+	IPI m = {};
+	IPI *p = malloc(sizeof(IPI));
+	memcpy(p, &m, sizeof(IPI));
+	return p;
+}
+
 static IMPOSTO *new_imposto(){
 	IMPOSTO m = {
 		.icms = new_icms(),
 		.pis = new_pis(),
-		.cofins = new_cofins()
+		.cofins = new_cofins(),
+		.ipi= new_ipi()
 	};
 	IMPOSTO *p = malloc(sizeof(IMPOSTO));
 	memcpy(p, &m, sizeof(IMPOSTO));
@@ -239,6 +247,13 @@ int inst_icms(int origem, unsigned int tipo, float aliquota, float valor,
 	return 0;
 }
 
+static int inst_ipi(int sit_trib, char *classe, char *codigo, IPI *i){
+	i->sit_trib = sit_trib;
+	i->classe = classe;
+	i->codigo = codigo;
+	return 0;
+}
+
 static int inst_imposto(ICMS *i, PIS *p, COFINS *c, IMPOSTO *imp){
 	imp->icms = i;
 	imp->pis = p;
@@ -251,11 +266,12 @@ int inst_item(float valor, float quantidade,
 		int icms_tipo, int pis_quantidade, int pis_nt,
 		int cofins_quantidade, int cofins_nt, int ncm, int cfop,
 		float icms_aliquota, float icms_valor, float pis_aliquota,
-		float cofins_aliquota, char *descricao, char *unidade,
-		ITEM *i){
+		float cofins_aliquota, int ipi_sit_trib, char *ipi_classe,
+		char *ipi_codigo, char *descricao, char *unidade, ITEM *i){
 	inst_produto(id_produto, descricao, ncm, cfop, unidade, valor,
 		i->produto);
 	inst_icms(ordem, icms_tipo, icms_aliquota, icms_valor,i->imposto->icms);
+	inst_ipi(ipi_sit_trib, ipi_classe, ipi_codigo, i->imposto->ipi);
 	i->ordem = ordem;
 	i->quantidade = quantidade;
 	i->valor = valor;
