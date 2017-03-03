@@ -690,6 +690,36 @@ int _gen_imposto(xmlTextWriterPtr writer, IMPOSTO *i, float v){
 	rc = xmlTextWriterEndElement(writer);
 	if (rc < 0)
 		return -EXML;
+
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "IPI");
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterWriteFormatElement(writer, 
+		BAD_CAST "clEnq",
+			"%s", i->ipi->classe);
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterWriteFormatElement(writer, 
+		BAD_CAST "cEnq",
+			"%s", i->ipi->codigo);
+	if (rc < 0)
+		return -EXML;
+
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "IPINT");
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterWriteFormatElement(writer, 
+		BAD_CAST "CST",
+			"%d", i->ipi->sit_trib);
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterEndElement(writer);
+	if (rc < 0)
+		return -EXML;
+	rc = xmlTextWriterEndElement(writer);
+	if (rc < 0)
+		return -EXML;
+
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "PIS");
 	if (rc < 0)
 		return -EXML;

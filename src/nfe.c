@@ -247,10 +247,10 @@ int inst_icms(int origem, unsigned int tipo, float aliquota, float valor,
 	return 0;
 }
 
-static int inst_ipi(int sit_trib, char *classe, char *codigo, IPI *i){
+int inst_ipi(int sit_trib, char *classe, char *codigo, IPI *i){
 	i->sit_trib = sit_trib;
-	i->classe = classe;
-	i->codigo = codigo;
+	i->classe = strdup(classe);
+	i->codigo = strdup(codigo);
 	return 0;
 }
 

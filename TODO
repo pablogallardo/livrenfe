@@ -1,7 +1,6 @@
 TODO list for LivreNFE
 ======================
 
-* Add IPI taxes fields for NFE
 * Add adicional information field for NFE
 * When having items with values and quantity with floating points the total value is incorrect. Fix it.
 * Free PKCS after using it.

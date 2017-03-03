@@ -37,6 +37,7 @@ struct _ItemManagerPrivate{
 	GtkComboBox *icms_origem;
 	GtkComboBox *cofins_situacao_tributaria;
 	GtkComboBox *pis_situacao_tributaria;
+	GtkComboBox *ipi_situacao_tributaria;
 	GtkEntry *codigo;
 	GtkEntry *ncm;
 	GtkEntry *descricao;
@@ -46,6 +47,8 @@ struct _ItemManagerPrivate{
 	GtkEntry *valor;
 	GtkEntry *icms_aliquota;
 	GtkEntry *icms_credito_aproveitado;
+	GtkEntry *ipi_classe;
+	GtkEntry *ipi_codigo;
 	GtkButton *ok_btn;
 	GtkButton *cancel_btn;
 };
@@ -73,6 +76,10 @@ static void set_item(GtkButton *b, GtkWidget *iman){
 	inst_icms(1, 1, atof(gtk_entry_get_text(priv->icms_aliquota)),
 		atof(gtk_entry_get_text(priv->icms_credito_aproveitado)),
 		item->imposto->icms);
+	inst_ipi(atoi(gtk_combo_box_get_active_id(priv->ipi_situacao_tributaria)),
+		gtk_entry_get_text(priv->ipi_classe),
+		gtk_entry_get_text(priv->ipi_codigo),
+		item->imposto->ipi);
 	item->valor = atof(gtk_entry_get_text(priv->valor));
 	item->quantidade = atoi(gtk_entry_get_text(priv->quantidade));
 	item->ordem = (ITEM_MANAGER(iman))->nfe->q_itens + 1; 
@@ -128,6 +135,31 @@ static void list_icms_st(GtkComboBox *t){
 	gtk_list_store_append(list_store, &iter);
 	gtk_list_store_set(list_store, &iter, ID, "102", 
 			TEXT, "Tributada pelo Simples Nacional sem permissão de crédito", -1);
+
+	GtkCellRenderer *r;
+
+	r = gtk_cell_renderer_text_new();
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(t), r, TRUE);
+	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(t),
+				r, "text", TEXT, NULL);
+	gtk_combo_box_set_model(t, GTK_TREE_MODEL(list_store));
+	gtk_combo_box_set_id_column(t, ID);
+}
+
+static void list_ipi_st(GtkComboBox *t){
+	GtkListStore *list_store;
+	GtkTreeIter iter;
+
+	enum{
+		ID,
+		TEXT,
+		N_COLS
+	};
+
+	list_store = gtk_list_store_new(N_COLS, G_TYPE_STRING, G_TYPE_STRING);
+	gtk_list_store_append(list_store, &iter);
+	gtk_list_store_set(list_store, &iter, ID, "53", 
+			TEXT, "Saída não tributada", -1);
 
 	GtkCellRenderer *r;
 
@@ -205,6 +237,7 @@ static void item_manager_init(ItemManager *iman){
 	list_icms_st(priv->icms_situacao_tributaria);
 	list_cofins_st(priv->cofins_situacao_tributaria);
 	list_cofins_st(priv->pis_situacao_tributaria);
+	list_ipi_st(priv->ipi_situacao_tributaria);
 	g_signal_connect(priv->ok_btn, "clicked", G_CALLBACK(set_item),
 			iman);
 }
@@ -248,6 +281,12 @@ static void item_manager_class_init(ItemManagerClass *class){
 		       	icms_aliquota);
 	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), ItemManager,
 		       	icms_credito_aproveitado);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), ItemManager,
+		       	ipi_situacao_tributaria);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), ItemManager,
+		       	ipi_classe);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), ItemManager,
+		       	ipi_codigo);
 }
 
 ItemManager *item_manager_new(NFEManager *win){

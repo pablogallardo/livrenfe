@@ -14,10 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
- *
- */
-
-#include "livrenfe.h"
+ * */ #include "livrenfe.h"
 #include <time.h>
 
 extern NFE *new_nfe();
@@ -43,6 +40,8 @@ extern int inst_produto(int codigo, char *desc, unsigned int ncm, unsigned int c
 
 extern int inst_icms(int origem, unsigned int tipo, float aliquota, float valor,
 		ICMS *i);
+
+extern int inst_ipi(int sit_trib, char *classe, char *codigo, IPI *i);
 
 extern int inst_item(float valor, float quantidade, 
 		unsigned int ordem, int id_produto, int icms_origem,
