@@ -252,6 +252,33 @@ int gen_inf_nfe(xmlTextWriterPtr writer, NFE *nfe){
 	if (rc < 0)
 		return -EXML;
 
+	if(nfe->inf_ad_fisco || nfe->inf_ad_contrib){
+
+		rc = xmlTextWriterStartElement(writer, BAD_CAST "infAdic");
+		if (rc < 0)
+			return -EXML;
+		if(nfe->inf_ad_fisco){
+			rc = xmlTextWriterWriteFormatElement(writer, 
+					BAD_CAST "infAdFisco",
+					"%s", nfe->inf_ad_fisco);
+			if (rc < 0)
+				return -EXML;
+		}
+
+		if(nfe->inf_ad_contrib){
+			rc = xmlTextWriterWriteFormatElement(writer, 
+					BAD_CAST "infCpl",
+					"%s", nfe->inf_ad_contrib);
+			if (rc < 0)
+				return -EXML;
+		}
+
+		rc = xmlTextWriterEndElement(writer);
+		if (rc < 0)
+			return -EXML;
+		
+	}
+
 	rc = xmlTextWriterEndElement(writer);
 	if (rc < 0)
 		return -EXML;

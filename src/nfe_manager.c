@@ -59,6 +59,8 @@ struct _NFEManagerPrivate{
 	GtkEntry *bairro;
 	GtkEntry *cep;
 	GtkEntry *chave_nfe;
+	GtkEntry *inf_ad_fisco;
+	GtkEntry *inf_ad_contrib;
 	GtkTreeView *treeview;
 };
 
@@ -276,6 +278,9 @@ static void save_nfe(GtkButton *b, GtkWidget *win){
 	endereco->cep = gtk_entry_get_text(priv->cep);
 	endereco->municipio->cod_uf = atoi(gtk_combo_box_get_active_id(priv->uf_destinatario));
 	endereco->municipio->codigo = atoi(gtk_combo_box_get_active_id(priv->municipio_destinatario));
+
+	nfe->inf_ad_fisco = gtk_entry_get_text(priv->inf_ad_fisco);
+	nfe->inf_ad_contrib = gtk_entry_get_text(priv->inf_ad_contrib);
 	register_nfe(nfe);
 	gtk_widget_destroy(win);
 }
@@ -330,6 +335,10 @@ static void inst_nfe_manager(gpointer p, NFEManager *nman){
 			itoa(endereco->municipio->codigo));
 		gtk_widget_set_sensitive(priv->chave_nfe, TRUE);
 		gtk_entry_set_text(priv->chave_nfe, nfe->idnfe->chave);
+		if(nfe->inf_ad_fisco)
+			gtk_entry_set_text(priv->inf_ad_fisco, nfe->inf_ad_fisco);
+		if(nfe->inf_ad_contrib)
+			gtk_entry_set_text(priv->inf_ad_contrib, nfe->inf_ad_contrib);
 	}
 }
 
@@ -414,6 +423,10 @@ static void nfe_manager_class_init(NFEManagerClass *class){
 		       	cep);
 	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
 		       	chave_nfe);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	inf_ad_fisco);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	inf_ad_contrib);
 	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
 		       	treeview);
 }

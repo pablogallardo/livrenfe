@@ -226,6 +226,8 @@ typedef struct {
 	PROTOCOLO *protocolo;
 	char *xml;
 	int canceled;
+	char *inf_ad_fisco;
+	char *inf_ad_contrib;
 } NFE;
 
 typedef struct LOTE_ITEM LOTE_ITEM;

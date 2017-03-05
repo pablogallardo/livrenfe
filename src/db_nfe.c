@@ -120,10 +120,11 @@ int register_nfe(NFE *nfe){
 		tipo_impressao, tipo_ambiente, finalidade, consumidor_final, \
 		presencial, versao, div, chave, id_emitente, id_destinatario, \
 		q_itens, total, id_transportadora, cod_nfe, tipo_emissao, id_nfe,\
-		xml, protocolo, sefaz_cstat, sefaz_xmot, xml_protocolo, canceled) VALUES  \
+		xml, protocolo, sefaz_cstat, sefaz_xmot, xml_protocolo, canceled,\
+		inf_ad_fisco, inf_ad_contrib) VALUES  \
 		(%d, %Q, %d, '%d', '%d', '%d', %lu, %Q, '%d', '%d' , '%d', '%d', \
 		 '%d', '%d', '%d', '%s', '%d', %Q, %d, '%d' , '%d', %f, %Q,\
-		 %d, %d, %Q, %Q, %Q, %d, %Q, %Q, %d);",
+		 %d, %d, %Q, %Q, %Q, %d, %Q, %Q, %d, %Q, %Q);",
 		idnfe->municipio->codigo, idnfe->nat_op, idnfe->ind_pag, idnfe->mod, idnfe->serie,
 		idnfe->num_nf, (unsigned long)idnfe->dh_emis, idnfe->dh_saida == NULL? NULL:itoa(*idnfe->dh_saida), idnfe->tipo,
 		idnfe->local_destino, idnfe->tipo_impressao, idnfe->tipo_ambiente, idnfe->finalidade, idnfe->consumidor_final, idnfe->presencial,
@@ -132,7 +133,8 @@ int register_nfe(NFE *nfe){
 		idnfe->tipo_emissao, 
 		nfe->idnfe->id_nfe == 0? NULL:itoa(nfe->idnfe->id_nfe),
 		nfe->xml, nfe->protocolo->numero, nfe->protocolo->cod_status,
-		nfe->protocolo->xmot, nfe->protocolo->xml, nfe->canceled);
+		nfe->protocolo->xmot, nfe->protocolo->xml, nfe->canceled,
+		nfe->inf_ad_fisco, nfe->inf_ad_contrib);
 	db_exec(sql, &err);
 	if(err){
 		fprintf(stderr, "livrenfe: Error - %s", err);
@@ -365,7 +367,7 @@ NFE *get_nfe(int id){
 		*mun_emit, *uf_emit, *nome_dest, *cnpj_dest,
 		*rua_dest, *comp_dest,*bairro_dest, *mun_dest,
 		*uf_dest, *chave, div, *ie_emit, *ie_dest,
-		*tipo_doc_dest, *protocolo;
+		*inf_ad_fisco, *inf_ad_contrib, *tipo_doc_dest, *protocolo;
 
 	enum{
 		ID_NFE, ID_MUN, MUN, ID_UF, UF, NAT_OP, IND_PAG, MOD_NFE,
@@ -377,7 +379,8 @@ NFE *get_nfe(int id){
 		ID_UF_EMIT, UF_EMIT, CEP_EMIT, ID_DEST, NOME_DEST, T_IE_DEST, 
 		CNPJ_DEST, RUA_DEST, COMP_DEST, BAIRRO_DEST, ID_MUN_DEST, 
 		MUN_DEST, ID_UF_DEST, UF_DEST, COD_NFE, NUM_E_EMIT, NUM_E_DEST,
-		IE_DEST, TIPO_DOC_DEST, CEP_DEST, CANCELED, PROTOCOLO, N_COLS
+		IE_DEST, TIPO_DOC_DEST, CEP_DEST, CANCELED, PROTOCOLO, 
+		INF_AD_FISCO, INF_AD_CONTRIB, N_COLS
 	};
 
 	char *sql = sqlite3_mprintf("SELECT n.id_nfe, m.id_municipio, m.nome, u.cod_ibge, u.nome, \
@@ -389,7 +392,8 @@ NFE *get_nfe(int id){
 		u_e.cod_ibge, u_e.nome, e.cep, d.id_destinatario, d.nome, d.tipo_ie, \
 		d.cnpj, d.rua, d.complemento, d.bairro, m_d.id_municipio, m_d.nome, \
 		u_d.cod_ibge, u_d.nome, n.cod_nfe, e.numero, d.numero, \
-		d.inscricao_estadual, d.tipo_doc, d.cep, n.canceled, n.protocolo\
+		d.inscricao_estadual, d.tipo_doc, d.cep, n.canceled, n.protocolo,\
+		n.inf_ad_fisco, n.inf_ad_contrib\
 		FROM nfe n LEFT JOIN municipios m ON m.id_municipio = n.id_municipio \
 		LEFT JOIN uf u ON u.id_uf = m.id_uf \
 		LEFT JOIN emitentes e ON e.id_emitente = n.id_emitente \
@@ -480,6 +484,18 @@ NFE *get_nfe(int id){
 				protocolo = strdup(sqlite3_column_text(stmt,
 					PROTOCOLO)); 
 			}
+			if(sqlite3_column_type(stmt, INF_AD_FISCO) == SQLITE_NULL){
+				inf_ad_fisco = NULL;
+			} else {
+				inf_ad_fisco = strdup(sqlite3_column_text(stmt,
+					INF_AD_FISCO)); 
+			}
+			if(sqlite3_column_type(stmt, INF_AD_CONTRIB) == SQLITE_NULL){
+				inf_ad_contrib = NULL;
+			} else {
+				inf_ad_contrib = strdup(sqlite3_column_text(stmt,
+					INF_AD_CONTRIB)); 
+			}
 		} else if(rc == SQLITE_DONE){
 			break;
 		} else {
@@ -500,7 +516,7 @@ NFE *get_nfe(int id){
 		nome_dest, cnpj_dest, rua_dest, 
 		comp_dest, bairro_dest, mun_dest,
 		uf_dest, chave, div, ie_dest,
-		tipo_doc_dest, protocolo, nfe);
+		tipo_doc_dest, inf_ad_fisco, inf_ad_contrib, protocolo, nfe);
 	get_itens(nfe);
 	return nfe; 
 }
