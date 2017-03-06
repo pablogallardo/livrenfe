@@ -29,6 +29,8 @@ extern LOTE_EVENTO *new_lote_evento();
 
 extern EMITENTE *new_emitente();
 
+extern DESTINATARIO *new_destinatario();
+
 extern int add_item(NFE *nfe, ITEM *i);
 
 extern int rm_item(NFE *nfe, ITEM *i);
@@ -75,6 +77,10 @@ extern int inst_emitente(int id, char *nome, char *ie, int crt, char *cnpj,
 		char *bairro, char *uf, char *nome_mun, unsigned int codigo,
 		unsigned int cod_uf, unsigned int cep, EMITENTE *e);
 
+extern int inst_destinatario(int id, char *nome, int t_ie, char *tipo_doc, char *ie,
+		char *cnpj, char *rua, unsigned int num, char *complemento,
+		char *bairro, char *uf, char *nome_mun, unsigned int codigo,
+		unsigned int cod_uf, unsigned int cep, DESTINATARIO *d);
 
 extern void free_emitente(EMITENTE *e);
 

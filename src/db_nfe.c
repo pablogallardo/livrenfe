@@ -567,6 +567,54 @@ EMITENTE *get_emitente(int id){
 
 }
 
+DESTINATARIO *get_destinatario_by_doc(char *doc){
+	DESTINATARIO *d = new_destinatario();
+	char *err;
+	sqlite3_stmt *stmt;
+	enum{
+		ID_DEST, NOME, TIPO_IE, IE, TIPO_DOC, CNPJ, RUA, BAIRRO, 
+		ID_MUN, CEP, NUM, COMP, MUN, ID_UF, UF
+	};
+	int id, num, id_uf, id_mun, cep, rc, t_ie;
+	char *nome, *ie, *cnpj, *rua, *bairro, *mun, *uf, *comp, *tipo_doc;
+	char *sql = sqlite3_mprintf("SELECT d.id_destinatario, d.nome,\
+		d.tipo_ie, d.inscricao_estadual, d.tipo_doc, d.cnpj, d.rua, \
+		d.bairro, d.id_municipio, d.cep, d.numero, d.complemento, \
+		m.nome, u.cod_ibge, u.nome\
+		FROM destinatarios d LEFT JOIN municipios m \
+			ON m.id_municipio = e.id_municipio\
+		LEFT JOIN uf u ON u.id_uf = m.id_uf\
+		WHERE d.cnpj = %Q", doc);
+	if(db_select(sql, &err, &stmt)){
+		return NULL;
+	}
+
+	rc = sqlite3_step(stmt);
+	if(rc != SQLITE_ROW)
+		return NULL;
+
+	id = sqlite3_column_int(stmt, ID_DEST);
+	num = sqlite3_column_int(stmt, NUM);
+	id_uf = sqlite3_column_int(stmt, ID_UF);
+	id_mun = sqlite3_column_int(stmt, ID_MUN);
+	cep = sqlite3_column_int(stmt, CEP);
+	t_ie = sqlite3_column_int(stmt, TIPO_IE);
+
+	nome = strdup(sqlite3_column_text(stmt, NOME));
+	ie = strdup(sqlite3_column_text(stmt, IE));
+	cnpj = strdup(sqlite3_column_text(stmt, CNPJ));
+	rua = strdup(sqlite3_column_text(stmt, RUA));
+	bairro = strdup(sqlite3_column_text(stmt, BAIRRO));
+	mun = strdup(sqlite3_column_text(stmt, MUN));
+	uf = strdup(sqlite3_column_text(stmt, UF));
+	tipo_doc = strdup(sqlite3_column_text(stmt, TIPO_DOC));
+	comp = sqlite3_column_text(stmt, COMP)? 
+		strdup(sqlite3_column_text(stmt, COMP)) : NULL;
+	inst_destinatario(id, nome, t_ie, tipo_doc, ie, cnpj, rua, 
+		num, comp, bairro, uf, mun, id_mun, id_uf, cep, d);
+	return d;
+}
+
 int set_emitente(EMITENTE *e){
 	char *sql, *err;
 	err = NULL;

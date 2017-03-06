@@ -82,7 +82,7 @@ EMITENTE *new_emitente(){
 	return p;
 }
 
-static DESTINATARIO *new_destinatario(){
+DESTINATARIO *new_destinatario(){
 	DESTINATARIO d = {
 		.endereco = new_endereco()
 	};
@@ -390,7 +390,7 @@ int inst_emitente(int id, char *nome, char *ie, int crt, char *cnpj,
 	return 0;
 }
 
-static int inst_destinatario(int id, char *nome, int t_ie, char *tipo_doc, char *ie,
+int inst_destinatario(int id, char *nome, int t_ie, char *tipo_doc, char *ie,
 		char *cnpj, char *rua, unsigned int num, char *complemento,
 		char *bairro, char *uf, char *nome_mun, unsigned int codigo,
 		unsigned int cod_uf, unsigned int cep, DESTINATARIO *d){
