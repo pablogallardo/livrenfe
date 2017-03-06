@@ -483,7 +483,7 @@ int _gen_dest(xmlTextWriterPtr writer, NFE *nfe){
 	if (rc < 0)
 		return -EXML;
 
-	if (is_cpf(nfe->destinatario->id))
+	if (strlen(nfe->destinatario->tipo_doc) == 3)
 		rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "CPF",
 				"%s", nfe->destinatario->id);
 	else
