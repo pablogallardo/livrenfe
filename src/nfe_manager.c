@@ -280,7 +280,11 @@ static void save_nfe(GtkButton *b, GtkWidget *win){
 	endereco->municipio->codigo = atoi(gtk_combo_box_get_active_id(priv->municipio_destinatario));
 
 	nfe->inf_ad_fisco = gtk_entry_get_text(priv->inf_ad_fisco);
+	nfe->inf_ad_fisco = strlen(nfe->inf_ad_fisco) == 0? 
+		NULL : nfe->inf_ad_fisco;
 	nfe->inf_ad_contrib = gtk_entry_get_text(priv->inf_ad_contrib);
+	nfe->inf_ad_contrib = strlen(nfe->inf_ad_contrib) == 0? 
+		NULL : nfe->inf_ad_contrib;
 	register_nfe(nfe);
 	gtk_widget_destroy(win);
 }
