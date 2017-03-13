@@ -84,6 +84,8 @@ extern int inst_destinatario(int id, char *nome, int t_ie, char *tipo_doc, char 
 
 extern void free_emitente(EMITENTE *e);
 
+extern void free_destinatario(DESTINATARIO *d);
+
 extern int add_nfe(LOTE *lote, NFE *nfe);
 
 extern int add_evento(LOTE_EVENTO *lote, EVENTO *e);

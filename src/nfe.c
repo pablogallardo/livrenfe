@@ -468,3 +468,8 @@ void free_emitente(EMITENTE *e){
 	free(e);
 }
 
+void free_destinatario(DESTINATARIO *d){
+	free_endereco(d->endereco);
+	free(d);
+}
+
