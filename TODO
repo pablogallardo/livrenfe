@@ -1,7 +1,6 @@
 TODO list for LivreNFE
 ======================
 
-* Fill DESTINATARIO data when placing document id on nfe_manager
 * When having items with values and quantity with floating points the total value is incorrect. Fix it.
 * Free PKCS after using it.
 * Implement service "InutilizacaoNFE"
