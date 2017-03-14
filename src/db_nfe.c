@@ -582,7 +582,7 @@ DESTINATARIO *get_destinatario_by_doc(char *doc){
 		d.bairro, d.id_municipio, d.cep, d.numero, d.complemento, \
 		m.nome, u.cod_ibge, u.nome\
 		FROM destinatarios d LEFT JOIN municipios m \
-			ON m.id_municipio = e.id_municipio\
+			ON m.id_municipio = d.id_municipio\
 		LEFT JOIN uf u ON u.id_uf = m.id_uf\
 		WHERE d.cnpj = %Q", doc);
 	if(db_select(sql, &err, &stmt)){
