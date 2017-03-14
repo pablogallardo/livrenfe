@@ -319,7 +319,7 @@ static void inst_nfe_destinatario(gpointer p, NFEManager *nman){
 		itoa(endereco->municipio->codigo));
 }
 
-static void lookup_destinatario(gpointer p, NFEManager *nman){
+static void lookup_destinatario(gpointer p,  NFEManager *nman){
 	NFEManagerPrivate *priv;
 
 	priv = nfe_manager_get_instance_private(nman);
@@ -331,6 +331,11 @@ static void lookup_destinatario(gpointer p, NFEManager *nman){
 		nman->nfe->destinatario = d;
 		inst_nfe_destinatario(NULL, nman);
 	}
+}
+
+static void lookup_destinatario_focusout(gpointer p, GdkEvent *e,
+		NFEManager *nman){
+	lookup_destinatario(p, nman);
 }
 
 static void inst_nfe_manager(gpointer p, NFEManager *nman){
@@ -383,8 +388,10 @@ static void nfe_manager_init(NFEManager *nman){
 			nman);
 	g_signal_connect(priv->save_nfe, "clicked", G_CALLBACK(save_nfe),
 			nman);
-	g_signal_connect(priv->doc, "activate", G_CALLBACK(lookup_destinatario),
-			nman);
+	g_signal_connect(priv->doc, "focus-out-event", 
+		G_CALLBACK(lookup_destinatario_focusout), nman);
+	g_signal_connect(priv->doc, "activate", 
+		G_CALLBACK(lookup_destinatario), nman);
 	g_signal_connect(G_OBJECT(priv->uf), "changed", G_CALLBACK(list_municipios), priv->municipio);
 	g_signal_connect(G_OBJECT(priv->uf_destinatario), "changed", G_CALLBACK(list_municipios),
 		priv->municipio_destinatario);
