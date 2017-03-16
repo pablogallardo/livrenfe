@@ -357,12 +357,19 @@ static void livrenfe_window_init(LivrenfeWindow *win){
 			G_CALLBACK(on_emitir_nfe_click), win);
 	g_signal_connect((LIVRENFE_WINDOW(win))->cancel_nfe, "activate",
 			G_CALLBACK(on_cancel_nfe_click), win);
+
+	GdkPixbuf *icon;
+	char *error = NULL;
+	icon = gdk_pixbuf_new_from_resource("/br/com/lapagina/livrenfe/icons/livrenfe.png",
+		&error);
+	gtk_window_set_icon(win, icon);
 }
 
 
 static void livrenfe_window_class_init(LivrenfeWindowClass *class){
 	gtk_widget_class_set_template_from_resource(GTK_WIDGET_CLASS (class),
 			"/br/com/lapagina/livrenfe/window.ui");
+
 	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
 		       	treeview);
 	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
