@@ -21,6 +21,7 @@
 #include "nfe_manager.h"
 #include "emitente_manager.h"
 #include "sefaz_response.h"
+#include "about.h"
 #include "livrenfe.h"
 #include "nfe.h"
 #include "db_interface.h"
@@ -35,6 +36,7 @@ struct _LivrenfeWindow{
 	GtkButton *new_nfe;
 	GtkMenuItem *emitente_manager_btn;
 	GtkMenuItem *status_servico_btn;
+	GtkMenuItem *about_btn;
 	GtkMenu *menu_nf;
 	GtkMenuItem *abrir_nfe;
 	GtkMenuItem *emitir_nfe;
@@ -245,6 +247,12 @@ static void emitente_manager_activate(GtkMenuItem *i, gpointer win){
 	gtk_window_present(GTK_WINDOW(eman));
 }
 
+static void about_activate(GtkMenuItem *i, gpointer win){
+	AboutLivrenfe *a;
+	a = about_livrenfe_new(LIVRENFE_WINDOW(win));
+	gtk_window_present(GTK_WINDOW(a));
+}
+
 void view_on_row_activated(GtkTreeView *t, GtkTreePath *path, 
 		GtkTreeViewColumn *col, gpointer win){
 	GtkTreeModel *model;
@@ -341,6 +349,8 @@ static void livrenfe_window_init(LivrenfeWindow *win){
 			G_CALLBACK(nfe_on_popup), win);
 	g_signal_connect((LIVRENFE_WINDOW(win))->emitente_manager_btn, "activate",
 			G_CALLBACK(emitente_manager_activate), win);
+	g_signal_connect((LIVRENFE_WINDOW(win))->about_btn, "activate",
+			G_CALLBACK(about_activate), win);
 	g_signal_connect((LIVRENFE_WINDOW(win))->status_servico_btn, "activate",
 			G_CALLBACK(on_status_servico_click), win);
 	g_signal_connect((LIVRENFE_WINDOW(win))->pw_cancel_btn, "clicked",
@@ -360,8 +370,9 @@ static void livrenfe_window_init(LivrenfeWindow *win){
 
 	GdkPixbuf *icon;
 	char *error = NULL;
-	icon = gdk_pixbuf_new_from_resource("/br/com/lapagina/livrenfe/icons/livrenfe.png",
+	icon = gdk_pixbuf_new_from_resource("/br/com/lapagina/livrenfe/icons/livrenfe_128x128.png",
 		&error);
+	gtk_window_set_default_icon(icon);
 	gtk_window_set_icon(win, icon);
 }
 
@@ -376,6 +387,8 @@ static void livrenfe_window_class_init(LivrenfeWindowClass *class){
 		       	new_nfe);
 	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
 		       	emitente_manager_btn);
+	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
+		       	about_btn);
 	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
 		       	menu_nf);
 	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
