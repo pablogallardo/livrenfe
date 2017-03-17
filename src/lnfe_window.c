@@ -254,6 +254,7 @@ static void about_activate(GtkMenuItem *i, gpointer win){
 		"copyright", LIVRENFE_COPYRIGHT,
 		"comments", LIVRENFE_COMMENT,
 		"website", LIVRENFE_WEBSITE,
+		"website-label", LIVRENFE_WEBSITE,
 		"license_type", GTK_LICENSE_GPL_3_0);
 }
 
