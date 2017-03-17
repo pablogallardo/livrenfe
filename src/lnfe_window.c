@@ -21,7 +21,6 @@
 #include "nfe_manager.h"
 #include "emitente_manager.h"
 #include "sefaz_response.h"
-#include "about.h"
 #include "livrenfe.h"
 #include "nfe.h"
 #include "db_interface.h"
@@ -248,9 +247,14 @@ static void emitente_manager_activate(GtkMenuItem *i, gpointer win){
 }
 
 static void about_activate(GtkMenuItem *i, gpointer win){
-	AboutLivrenfe *a;
-	a = about_livrenfe_new(LIVRENFE_WINDOW(win));
-	gtk_window_present(GTK_WINDOW(a));
+	char version[40];
+	sprintf(version, "%s (%s)", VERSION_NAME, VERSION_TITLE);
+	gtk_show_about_dialog(win, "program-name", LIVRENFE_TITLE, 
+		"version", version, 
+		"copyright", LIVRENFE_COPYRIGHT,
+		"comments", LIVRENFE_COMMENT,
+		"website", LIVRENFE_WEBSITE,
+		"license_type", GTK_LICENSE_GPL_3_0);
 }
 
 void view_on_row_activated(GtkTreeView *t, GtkTreePath *path, 
