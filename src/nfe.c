@@ -224,14 +224,14 @@ int inst_produto(int codigo, char *desc, unsigned int ncm, unsigned int cfop,
 		char *unidade_comercial, float valor, PRODUTO *p){
 	p->codigo = codigo;
 	if(desc != NULL){
-		p->descricao =  malloc(sizeof(char) * strlen(desc));
+		p->descricao =  malloc(sizeof(char) * strlen(desc) + 1);
 		strcpy(p->descricao, desc);
 	}
 	p->ncm = ncm;
 	p->cfop = cfop;
 	p->unidade_comercial = unidade_comercial;
 	if(unidade_comercial != NULL){
-		p->unidade_comercial =  malloc(sizeof(char) * strlen(unidade_comercial));
+		p->unidade_comercial =  malloc(sizeof(char) * strlen(unidade_comercial) + 1);
 		strcpy(p->unidade_comercial, unidade_comercial);
 	}
 	p->valor = valor;
