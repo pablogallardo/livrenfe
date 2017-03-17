@@ -32,9 +32,9 @@
 struct _LivrenfeWindow{
 	GtkApplicationWindow parent;
 	GtkTreeView *treeview;
-	GtkButton *new_nfe;
 	GtkMenuItem *emitente_manager_btn;
 	GtkMenuItem *status_servico_btn;
+	GtkMenuItem *new_nfe_btn;
 	GtkMenuItem *about_btn;
 	GtkMenu *menu_nf;
 	GtkMenuItem *abrir_nfe;
@@ -231,7 +231,7 @@ void list_nfe(LivrenfeWindow *win){
 }
 
 
-static void nfe_manager_activate(GtkButton *b, gpointer win){
+static void nfe_manager_activate(GtkMenuItem *b, gpointer win){
 	NFEManager *nman;
 
 	nman = nfe_manager_new(LIVRENFE_WINDOW(win));
@@ -344,8 +344,8 @@ static void livrenfe_window_init(LivrenfeWindow *win){
 	win->passwd_key_signal_handler = 0;
 	g_signal_connect(win, "show", G_CALLBACK(list_nfe),
 			NULL);
-	g_signal_connect((LIVRENFE_WINDOW(win))->new_nfe, "clicked", G_CALLBACK(nfe_manager_activate),
-			win);
+	g_signal_connect((LIVRENFE_WINDOW(win))->new_nfe_btn, "activate", 
+		G_CALLBACK(nfe_manager_activate), win);
 	g_signal_connect((LIVRENFE_WINDOW(win))->treeview, "row-activated",
 			G_CALLBACK(view_on_row_activated), win);
 	g_signal_connect((LIVRENFE_WINDOW(win))->treeview, "button-press-event",
@@ -389,7 +389,7 @@ static void livrenfe_window_class_init(LivrenfeWindowClass *class){
 	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
 		       	treeview);
 	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
-		       	new_nfe);
+		       	new_nfe_btn);
 	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
 		       	emitente_manager_btn);
 	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
