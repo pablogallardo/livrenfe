@@ -404,6 +404,11 @@ static void nfe_manager_init(NFEManager *nman){
 	list_forma_pagamento(priv->forma_pagamento);
 	list_tipo_doc(priv->t_doc);
 	list_tipo_contribuinte(priv->tipo_contribuinte);
+	time_t now;
+	time(&now);
+	char *today = timef(now, "%d/%m/%y %H:%M:%S", 19);
+	gtk_entry_set_text(priv->dh_emis, today);
+	free(today);
 
 }
 
