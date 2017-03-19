@@ -128,7 +128,8 @@ typedef struct {
  * Product information
  */
 typedef struct {
-	unsigned int codigo;
+	int id;
+	char *codigo;
 	char *descricao;
 	unsigned int ncm;
 	unsigned int cfop;

@@ -102,17 +102,18 @@ static GtkListStore *get_item_list(NFE *nfe){
 	GtkTreeIter iter;
 	ITEM *i;
 
-	enum{ ID_PRODUTO, DESCRICAO, QTD, VALOR, N_COLS };
+	enum{ COD_PRODUTO, DESCRICAO, QTD, VALOR, N_COLS };
 
-	list_store = gtk_list_store_new(N_COLS, G_TYPE_INT, G_TYPE_STRING,
+	list_store = gtk_list_store_new(N_COLS, G_TYPE_STRING, G_TYPE_STRING,
 		G_TYPE_INT, G_TYPE_FLOAT);
 	i = nfe->itens;
 	while(i){
 		gtk_list_store_append(list_store, &iter);
-		gtk_list_store_set(list_store, &iter, ID_PRODUTO, i->produto->codigo, 
-				DESCRICAO, i->produto->descricao,
-				QTD, i->quantidade,
-				VALOR, i->valor, -1);
+		gtk_list_store_set(list_store, &iter, 
+			COD_PRODUTO, i->produto->codigo, 
+			DESCRICAO, i->produto->descricao,
+			QTD, i->quantidade,
+			VALOR, i->valor, -1);
 		
 		i = i->pointer;
 	}
@@ -331,6 +332,9 @@ static void lookup_destinatario(gpointer p,  NFEManager *nman){
 		nman->nfe->destinatario = d;
 		inst_nfe_destinatario(NULL, nman);
 	}
+	// Set id to 0 to save it with another id
+	if(d)
+		d->id = 0;
 }
 
 static void lookup_destinatario_focusout(gpointer p, GdkEvent *e,

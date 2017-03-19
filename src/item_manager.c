@@ -66,7 +66,7 @@ static void set_item(GtkButton *b, GtkWidget *iman){
 	ItemManagerPrivate *priv = item_manager_get_instance_private(ITEM_MANAGER(iman));
 	ITEM *item = new_item();
 	NFE *nfe = (ITEM_MANAGER(iman))->nfe;
-	inst_produto(atoi(gtk_entry_get_text(priv->codigo)),
+	inst_produto(0, gtk_entry_get_text(priv->codigo),
 		gtk_entry_get_text(priv->descricao),
 		atoi(gtk_entry_get_text(priv->ncm)),
 		atoi(gtk_entry_get_text(priv->cfop)),

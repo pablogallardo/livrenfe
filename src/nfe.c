@@ -220,9 +220,14 @@ LOTE_EVENTO *new_lote_evento(){
 	return l;
 }
 
-int inst_produto(int codigo, char *desc, unsigned int ncm, unsigned int cfop,
-		char *unidade_comercial, float valor, PRODUTO *p){
-	p->codigo = codigo;
+int inst_produto(int id, char *codigo, char *desc, unsigned int ncm, 
+		unsigned int cfop, char *unidade_comercial, float valor, 
+		PRODUTO *p){
+	p->id = id;
+	if(desc != NULL){
+		p->codigo =  malloc(sizeof(char) * strlen(codigo) + 1);
+		strcpy(p->codigo, codigo);
+	}
 	if(desc != NULL){
 		p->descricao =  malloc(sizeof(char) * strlen(desc) + 1);
 		strcpy(p->descricao, desc);
@@ -262,14 +267,14 @@ static int inst_imposto(ICMS *i, PIS *p, COFINS *c, IMPOSTO *imp){
 }
 
 int inst_item(float valor, float quantidade, 
-		unsigned int ordem, int id_produto, int icms_origem,
-		int icms_tipo, int pis_quantidade, int pis_nt,
+		unsigned int ordem, int id_produto, char *cod_produto, 
+		int icms_origem, int icms_tipo, int pis_quantidade, int pis_nt,
 		int cofins_quantidade, int cofins_nt, int ncm, int cfop,
 		float icms_aliquota, float icms_valor, float pis_aliquota,
 		float cofins_aliquota, int ipi_sit_trib, char *ipi_classe,
 		char *ipi_codigo, char *descricao, char *unidade, ITEM *i){
-	inst_produto(id_produto, descricao, ncm, cfop, unidade, valor,
-		i->produto);
+	inst_produto(id_produto, cod_produto, descricao, ncm, cfop, unidade, 
+		valor, i->produto);
 	inst_icms(ordem, icms_tipo, icms_aliquota, icms_valor,i->imposto->icms);
 	inst_ipi(ipi_sit_trib, ipi_classe, ipi_codigo, i->imposto->ipi);
 	i->ordem = ordem;

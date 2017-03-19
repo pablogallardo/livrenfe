@@ -150,9 +150,11 @@ int register_nfe(NFE *nfe){
 		PIS *pis = imp->pis;
 		COFINS *cofins = imp->cofins;
 		IPI *ipi = imp->ipi;
-		sql = sqlite3_mprintf("REPLACE INTO  produtos (id_produto, descricao, ncm, cfop, unidade,\
-			valor) VALUES (%d, %Q, %d, %d, %Q, %f);",
-		       p->codigo, p->descricao, p->ncm, p->cfop, p->unidade_comercial,
+		sql = sqlite3_mprintf("REPLACE INTO  produtos (id_produto, \
+			codigo, descricao, ncm, cfop, unidade,\
+			valor) VALUES (%Q, %Q, %Q, %d, %d, %Q, %f);",
+		       p->id == 0? NULL : itoa(p->id), p->codigo, 
+		       p->descricao, p->ncm, p->cfop, p->unidade_comercial,
 		       p->valor);
 		db_exec(sql, &err);
 		if(err){
@@ -275,7 +277,7 @@ static int get_itens(NFE *n){
 		ID_NFE, ORDEM, ID_PRODUTO, ICMS_ORIGEM, ICMS_TIPO, ICMS_ALIQ,
 		ICMS_VALOR, PIS_ALIQ, PIS_QTD, PIS_NT, COFINS_ALIQ,
 		COFINS_QTD, COFINS_NT, IPI_SIT_TRIB, IPI_CLASSE, IPI_CODIGO,
-		QTD, DESC, NCM, CFOP, UNIDADE, VALOR, N_COLS
+		QTD, DESC, NCM, CFOP, UNIDADE, VALOR, COD_PROD, N_COLS
 	};
 
 	char *sql = sqlite3_mprintf("SELECT ni.id_nfe, ni.ordem, ni.id_produto,\
@@ -283,7 +285,7 @@ static int get_itens(NFE *n){
 		ni.pis_aliquota, ni.pis_quantidade, ni.pis_nt, ni.cofins_aliquota,\
 		ni.cofins_quantidade, ni.cofins_nt, ni.ipi_sit_trib,\
 		ni.ipi_classe, ni.ipi_codigo, ni.qtd, p.descricao, p.ncm,\
-		p.cfop, p.unidade, p.valor\
+		p.cfop, p.unidade, p.valor, p.codigo\
 		FROM produtos p LEFT JOIN nfe_itens ni\
 			ON ni.id_produto = p.id_produto\
 		WHERE ni.id_nfe = %d", n->idnfe->id_nfe);
@@ -300,7 +302,8 @@ static int get_itens(NFE *n){
 				cofins_nt, ipi_sit_trib, ncm, cfop;
 			float icms_aliquota, icms_valor, pis_aliquota,
 				cofins_aliquota, valor, quantidade;
-			char *descricao, *unidade, *ipi_classe, *ipi_codigo; 
+			char *descricao, *unidade, *ipi_classe, *ipi_codigo,
+				*cod_prod; 
 
 			id_nfe = sqlite3_column_int(stmt, ID_NFE);
 			ordem = sqlite3_column_int(stmt, ORDEM);
@@ -329,9 +332,11 @@ static int get_itens(NFE *n){
 				IPI_CLASSE));
 			ipi_codigo = strdup(sqlite3_column_text(stmt, 
 				IPI_CODIGO));
+			cod_prod = strdup(sqlite3_column_text(stmt, 
+				COD_PROD));
 
 			inst_item(valor, quantidade, 
-				ordem, id_produto, icms_origem,
+				ordem, id_produto, cod_prod, icms_origem,
 				icms_tipo, pis_quantidade, pis_nt,
 				cofins_quantidade, cofins_nt, ncm, cfop,
 				icms_aliquota, icms_valor, pis_aliquota,
@@ -584,7 +589,7 @@ DESTINATARIO *get_destinatario_by_doc(char *doc){
 		FROM destinatarios d LEFT JOIN municipios m \
 			ON m.id_municipio = d.id_municipio\
 		LEFT JOIN uf u ON u.id_uf = m.id_uf\
-		WHERE d.cnpj = %Q", doc);
+		WHERE d.cnpj = %Q ORDER BY d.id_destinatario desc", doc);
 	if(db_select(sql, &err, &stmt)){
 		return NULL;
 	}

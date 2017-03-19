@@ -46,10 +46,10 @@ CREATE TABLE destinatarios (id_destinatario integer, nome varchar(200),\
 	cep varchar(9), numero integer, inscricao_estadual varchar(20),\
 	tipo_doc varchar(4),\
 	CONSTRAINT destinatario_pk PRIMARY KEY (id_destinatario),\
-	CONSTRAINT destinatarios_uq UNIQUE (cnpj),\
 	CONSTRAINT destinatario_munic_fk FOREIGN KEY (id_municipio)\
 		REFERENCES municipios(id_municipio));\
-CREATE TABLE produtos (id_produto integer, descricao varchar(200), ncm integer,\
+CREATE TABLE produtos (id_produto integer, codigo varchar(40),\
+	descricao varchar(200), ncm integer,\
 	cfop integer, unidade varchar(10), valor real,\
 	CONSTRAINT produto_pk PRIMARY KEY (id_produto));\
 CREATE TABLE transportadoras (id_transportadora varchar(20), modfrete char(1), \
