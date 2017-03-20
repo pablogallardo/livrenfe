@@ -381,6 +381,25 @@ static void inst_nfe_manager(gpointer p, NFEManager *nman){
 	}
 }
 
+static void default_emis(NFEManagerPrivate *priv){
+	time_t now;
+	time(&now);
+	char *today = timef(now, "%d/%m/%Y %H:%M:%S", 19);
+	gtk_entry_set_text(priv->dh_emis, today);
+	free(today);
+}
+
+static void default_nfe_number(NFEManagerPrivate *priv){
+	int num, serie, rc;
+	rc = get_next_nfe_number(&num, &serie);
+	if(num == 0){
+		num = 1;
+		serie = 1;
+	}
+	gtk_entry_set_text(priv->num, itoa(num));
+	gtk_entry_set_text(priv->serie, itoa(serie));
+}
+
 static void nfe_manager_init(NFEManager *nman){
 	NFEManagerPrivate *priv;
 
@@ -404,12 +423,8 @@ static void nfe_manager_init(NFEManager *nman){
 	list_forma_pagamento(priv->forma_pagamento);
 	list_tipo_doc(priv->t_doc);
 	list_tipo_contribuinte(priv->tipo_contribuinte);
-	time_t now;
-	time(&now);
-	char *today = timef(now, "%d/%m/%y %H:%M:%S", 19);
-	gtk_entry_set_text(priv->dh_emis, today);
-	free(today);
-
+	default_emis(priv);
+	default_nfe_number(priv);
 }
 
 

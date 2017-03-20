@@ -671,6 +671,25 @@ int get_lote_evento_id(){
 	return ++id;
 }
 
+int get_next_nfe_number(int *number, int *serie){
+	char *err;
+	sqlite3_stmt *stmt;
+	int rc;
+	char *sql = sqlite3_mprintf("SELECT max(num_nf) + 1, serie\
+		FROM nfe");
+	if(db_select(sql, &err, &stmt)){
+		return -ESQL;	
+	}
+
+	rc = sqlite3_step(stmt);
+	if(rc != SQLITE_ROW){
+		return -1;
+	}
+	*number = sqlite3_column_int(stmt, 0);
+	*serie = sqlite3_column_int(stmt, 1);
+	return 0;
+}
+
 int db_save_lote(LOTE *lote){
 	char *sql, *err;
 	err = NULL;
