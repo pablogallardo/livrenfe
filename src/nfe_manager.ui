@@ -453,7 +453,7 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Numero</property>
+                    <property name="label" translatable="yes">Número</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
