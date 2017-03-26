@@ -230,20 +230,34 @@ void list_nfe(LivrenfeWindow *win){
 	}
 }
 
-
-static void nfe_manager_activate(GtkMenuItem *b, gpointer win){
-	NFEManager *nman;
-
-	nman = nfe_manager_new(LIVRENFE_WINDOW(win));
-	nman->nfe = new_nfe();
-	g_signal_connect(nman, "destroy", G_CALLBACK(on_nfe_manager_destroy), win);
-	gtk_window_present(GTK_WINDOW(nman));
-}
-
 static void emitente_manager_activate(GtkMenuItem *i, gpointer win){
 	EmitenteManager *eman;
 	eman = emitente_manager_new(LIVRENFE_WINDOW(win));
 	gtk_window_present(GTK_WINDOW(eman));
+}
+
+static void nfe_manager_activate(GtkMenuItem *b, gpointer win){
+	NFEManager *nman;
+
+	EMITENTE *e = get_emitente(1);
+	if(e){
+		free_emitente(e);
+		nman = nfe_manager_new(LIVRENFE_WINDOW(win));
+		nman->nfe = new_nfe();
+		g_signal_connect(nman, "destroy", 
+			G_CALLBACK(on_nfe_manager_destroy), win);
+		gtk_window_present(GTK_WINDOW(nman));
+	} else {
+		GtkMessageDialog *dialog;
+		dialog = gtk_message_dialog_new(win,
+			GTK_DIALOG_DESTROY_WITH_PARENT,
+			GTK_MESSAGE_ERROR,
+			GTK_BUTTONS_CLOSE,
+			"Cadastre primeiro o emitente");
+		gtk_dialog_run(dialog);
+		gtk_widget_destroy(dialog);
+		emitente_manager_activate(NULL, win);
+	}
 }
 
 static void about_activate(GtkMenuItem *i, gpointer win){

@@ -545,12 +545,15 @@ EMITENTE *get_emitente(int id){
 		LEFT JOIN uf u ON u.id_uf = m.id_uf\
 		WHERE e.id_emitente = %d", id);
 	if(db_select(sql, &err, &stmt)){
+		free_emitente(e);
 		return NULL;
 	}
 
 	rc = sqlite3_step(stmt);
-	if(rc != SQLITE_ROW)
+	if(rc != SQLITE_ROW){
+		free_emitente(e);
 		return NULL;
+	}
 	crt = sqlite3_column_int(stmt, CRT);
 	num = sqlite3_column_int(stmt, NUM);
 	id_uf = sqlite3_column_int(stmt, ID_UF);
