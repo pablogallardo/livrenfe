@@ -37,7 +37,7 @@ struct _PrefsPrivate{
 	GtkRadioButton *ambiente_p;
 	GtkRadioButton *ambiente_h;
 	GtkRadioButton *cert_a1;
-	GtkRadioButton *cert_a2;
+	GtkRadioButton *cert_a3;
 
 	GtkEntry *public_key;
 	GtkEntry *private_key;
@@ -85,6 +85,44 @@ static void prefs_class_init(PrefsClass *class){
 		Prefs, ambiente_p);
 	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
 		Prefs, ambiente_h);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		Prefs, cert_a1);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		Prefs, cert_a3);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		Prefs, public_key);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		Prefs, private_key);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		Prefs, card_reader_lib);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		Prefs, recepcaoevento_prod);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		Prefs, recepcaoevento_cert);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		Prefs, nfeconsultacadastro_prod);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		Prefs, nfeconsultacadastro_cert);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		Prefs, nfeconsultaprotocolo_prod);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		Prefs, nfeconsultaprotocolo_cert);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		Prefs, nfeinutilizacao_prod);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		Prefs, nfeinutilizacao_cert);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		Prefs, nfeautorizacao_prod);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		Prefs, nfeautorizacao_cert);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		Prefs, nferetautorizacao_prod);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		Prefs, nferetautorizacao_cert);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		Prefs, nfestatusservico_prod);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		Prefs, nfestatusservico_cert);
 }
 
 Prefs *prefs_new(LivrenfeWindow *win){
