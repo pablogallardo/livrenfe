@@ -21,6 +21,7 @@
 #include "nfe_manager.h"
 #include "emitente_manager.h"
 #include "sefaz_response.h"
+#include "prefs.h"
 #include "livrenfe.h"
 #include "nfe.h"
 #include "db_interface.h"
@@ -36,6 +37,7 @@ struct _LivrenfeWindow{
 	GtkMenuItem *status_servico_btn;
 	GtkMenuItem *new_nfe_btn;
 	GtkMenuItem *about_btn;
+	GtkMenuItem *pref_btn;
 	GtkMenu *menu_nf;
 	GtkMenuItem *abrir_nfe;
 	GtkMenuItem *emitir_nfe;
@@ -272,6 +274,12 @@ static void about_activate(GtkMenuItem *i, gpointer win){
 		"license_type", GTK_LICENSE_GPL_3_0);
 }
 
+static void pref_activate(GtkMenuItem *i, gpointer win){
+	Prefs *prefs;
+	prefs = prefs_new(LIVRENFE_WINDOW(win));
+	gtk_window_present(GTK_WINDOW(prefs));
+}
+
 void view_on_row_activated(GtkTreeView *t, GtkTreePath *path, 
 		GtkTreeViewColumn *col, gpointer win){
 	GtkTreeModel *model;
@@ -370,6 +378,8 @@ static void livrenfe_window_init(LivrenfeWindow *win){
 			G_CALLBACK(emitente_manager_activate), win);
 	g_signal_connect((LIVRENFE_WINDOW(win))->about_btn, "activate",
 			G_CALLBACK(about_activate), win);
+	g_signal_connect((LIVRENFE_WINDOW(win))->pref_btn, "activate",
+			G_CALLBACK(pref_activate), win);
 	g_signal_connect((LIVRENFE_WINDOW(win))->status_servico_btn, "activate",
 			G_CALLBACK(on_status_servico_click), win);
 	g_signal_connect((LIVRENFE_WINDOW(win))->pw_cancel_btn, "clicked",
@@ -408,6 +418,8 @@ static void livrenfe_window_class_init(LivrenfeWindowClass *class){
 		       	emitente_manager_btn);
 	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
 		       	about_btn);
+	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
+		       	pref_btn);
 	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
 		       	menu_nf);
 	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
