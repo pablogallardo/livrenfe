@@ -25,6 +25,33 @@
 #include "livrenfe.h"
 #include <gtk/gtk.h>
 
+
+typedef struct {
+	char *recepcaoevento_prod;
+	char *recepcaoevento_cert;
+	char *nfeconsultacadastro_prod;
+	char *nfeconsultacadastro_cert;
+	char *nfeinutilizacao_prod;
+	char *nfeinutilizacao_cert;
+	char *nfeconsultaprotocolo_prod;
+	char *nfeconsultaprotocolo_cert;
+	char *nfestatusservico_prod;
+	char *nfestatusservico_cert;
+	char *nferetautorizacao_prod;
+	char *nferetautorizacao_cert;
+	char *nfeautorizacao_prod;
+	char *nfeautorizacao_cert;
+} URLS;
+
+typedef struct {
+	URLS *urls;
+	char *public_key;
+	char *private_key;
+	char *card_reader_lib;
+	int ambiente;
+	int tipo_cert;
+} PREFS;
+
 /**
  * Creates an empty app DB
  */
@@ -100,5 +127,10 @@ extern int db_save_lote_evento(LOTE_EVENTO *lote);
  * Get Webservice ID
  */
 extern int get_url_id(char *service);
+
+/**
+ * Get preferences data
+ */
+extern PREFS *get_prefs();
 
 #endif
