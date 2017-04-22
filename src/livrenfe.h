@@ -300,6 +300,51 @@ typedef struct {
 	char *xml_response;
 } LOTE_EVENTO;
 
+/**
+ * URLs for preferences window
+ */
+typedef struct {
+	char *recepcaoevento_prod;
+	char *recepcaoevento_cert;
+	char *nfeconsultacadastro_prod;
+	char *nfeconsultacadastro_cert;
+	char *nfeinutilizacao_prod;
+	char *nfeinutilizacao_cert;
+	char *nfeconsultaprotocolo_prod;
+	char *nfeconsultaprotocolo_cert;
+	char *nfestatusservico_prod;
+	char *nfestatusservico_cert;
+	char *nferetautorizacao_prod;
+	char *nferetautorizacao_cert;
+	char *nfeautorizacao_prod;
+	char *nfeautorizacao_cert;
+} PREFS_URLS;
+
+/**
+ * Urls
+ */
+typedef struct {
+	char *recepcaoevento;
+	char *nfeconsultacadastro;
+	char *nfeinutilizacao;
+	char *nfeconsultaprotocolo;
+	char *nfestatusservico;
+	char *nferetautorizacao;
+	char *nfeautorizacao;
+} URLS;
+
+/**
+ * User preferences
+ */
+typedef struct {
+	URLS *urls;
+	char *public_key;
+	char *private_key;
+	char *card_reader_lib;
+	int ambiente;
+	int tipo_cert;
+} PREFS;
+
 
 #define LIVRENFE_TYPE	(livrenfe_get_type())
 #define	LIVRENFE_APP(obj)	(G_TYPE_CHECK_INSTANCE_CAST ((obj), LIVRENFE_TYPE, Livrenfe))

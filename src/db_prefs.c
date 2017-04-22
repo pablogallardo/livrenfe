@@ -4,8 +4,7 @@
  *
  * LivreNFE is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * the Free Software Foundation, either version 3 of the License, or * (at your option) any later version.
  *
  * LivreNFE is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -21,6 +20,7 @@
 #include "db.h"
 #include <sqlite3.h>
 #include <string.h>
+#include <stdlib.h>
 
 char *get_ws_url(char *service, int ambiente, char **url_header, 
 		char **url_body){
@@ -51,7 +51,7 @@ char *get_ws_url(char *service, int ambiente, char **url_header,
 
 int get_url_id(char *service){
 	sqlite3_stmt *stmt;
-	char *err, *s;
+	char *err;
 	err = malloc(sizeof(char) * 200);
 	int rc, id;
 	char *sql = sqlite3_mprintf("SELECT id_url  FROM urls \
@@ -65,4 +65,65 @@ int get_url_id(char *service){
 		id = sqlite3_column_int(stmt, 0);
 	}
 	return id;
+}
+
+PREFS_URLS *get_prefs_urls(){
+	PREFS_URLS *p = malloc(sizeof(PREFS_URLS));
+	sqlite3_stmt *stmt;
+	char *err;
+	int rc;
+	err = malloc(sizeof(char) * 200);
+	
+	char *sql = sqlite3_mprintf("SELECT id_url, url_prod, url_cert \
+		FROM urls");
+	if(db_select(sql, &err, &stmt)){
+		free(p);
+		return NULL;
+	}
+	
+	do{
+		rc = sqlite3_step(stmt);
+		if(rc == SQLITE_ROW){
+			int id_url = sqlite3_column_int(stmt, 0);
+			char *prod = sqlite3_column_text(stmt, 1);
+			char *cert = sqlite3_column_text(stmt, 2);
+			switch(id_url){
+				case 1: //RecepcaoEvento
+					p->recepcaoevento_prod = strdup(prod);
+					p->recepcaoevento_cert = strdup(cert);
+					break;
+				case 2: //NfeConsultaCadastro
+					p->nfeconsultacadastro_prod = strdup(prod);
+					p->nfeconsultacadastro_cert = strdup(cert);
+					break;
+				case 3: //NfeInutilizacao
+					p->nfeinutilizacao_prod = strdup(prod);
+					p->nfeinutilizacao_cert = strdup(cert);
+					break;
+				case 4: //NfeConsultaProtocolo
+					p->nfeconsultaprotocolo_prod = strdup(prod);
+					p->nfeconsultacadastro_cert = strdup(cert);
+					break;
+				case 5: //NfeStatusServico
+					p->nfestatusservico_prod = strdup(prod);
+					p->nfestatusservico_cert = strdup(cert);
+					break;
+				case 6: //NfeAutorizacao
+					p->nfeautorizacao_prod = strdup(prod);
+					p->nfeautorizacao_cert = strdup(cert);
+					break;
+				case 7: //NFeRetAutorizacao
+					p->nferetautorizacao_prod = strdup(prod);
+					p->nferetautorizacao_cert = strdup(cert);
+					break;
+			}
+		} else if(rc == SQLITE_DONE){
+			break;
+		} else {
+			free(p);
+			return NULL;
+		}
+	} while(rc == SQLITE_ROW);
+
+	return p;
 }
