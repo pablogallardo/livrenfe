@@ -35,6 +35,9 @@
 #define CANCELAMENTO_TYPE	110111
 #define	CARTA_CORRECAO_TYPE	110110
 
+#define	DEFAULT_AMBIENTE	2
+#define	DEFAULT_CERT_TYPE	2
+
 typedef int evento_t;
 
 /*
@@ -342,7 +345,7 @@ typedef struct {
 	char *private_key;
 	char *card_reader_lib;
 	int ambiente;
-	int tipo_cert;
+	int cert_type;
 } PREFS;
 
 

@@ -127,3 +127,43 @@ PREFS_URLS *get_prefs_urls(){
 
 	return p;
 }
+
+PREFS *get_prefs(){
+	PREFS *p = malloc(sizeof(PREFS));
+	sqlite3_stmt *stmt;
+	char *err;
+	int rc;
+	err = malloc(sizeof(char) * 200);
+	
+	char *sql = sqlite3_mprintf("SELECT ambiente, cert_type, a1_public_key,\
+		a1_private_key, a3_library\
+		FROM prefs");
+	if(db_select(sql, &err, &stmt)){
+		free(p);
+		return NULL;
+	}
+	do{
+		rc = sqlite3_step(stmt);
+		if(rc == SQLITE_ROW){
+			int ambiente = sqlite3_column_int(stmt, 0);
+			int cert_type = sqlite3_column_int(stmt, 1);
+			char *a1_pub = sqlite3_column_int(stmt, 2);
+			char *a1_priv = sqlite3_column_int(stmt, 3);
+			char *a3_lib = sqlite3_column_int(stmt, 4);
+
+			p->public_key = strdup(a1_pub);
+			p->private_key = strdup(a1_priv);
+			p->card_reader_lib = strdup(a3_lib);
+			p->ambiente = ambiente;
+			p->cert_type = cert_type;
+		} else if(rc == SQLITE_DONE){
+			p->ambiente = DEFAULT_AMBIENTE;
+			p->cert_type = DEFAULT_CERT_TYPE;
+			break;
+		} else {
+			free(p);
+			return NULL;
+		}
+	} while(rc == SQLITE_ROW);
+	return p;
+}
