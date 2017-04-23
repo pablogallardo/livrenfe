@@ -128,6 +128,57 @@ PREFS_URLS *get_prefs_urls(){
 	return p;
 }
 
+static URLS *get_ambiente_urls(int ambiente){
+	URLS *u = malloc(sizeof(URLS));
+	sqlite3_stmt *stmt;
+	char *err;
+	int rc;
+	err = malloc(sizeof(char) * 200);
+	
+	char *sql = sqlite3_mprintf("SELECT id_url, url_prod, url_cert \
+		FROM urls");
+	if(db_select(sql, &err, &stmt)){
+		free(u);
+		return NULL;
+	}
+	do{
+		rc = sqlite3_step(stmt);
+		if(rc == SQLITE_ROW){
+			int id_url = sqlite3_column_int(stmt, 0);
+			char *link = sqlite3_column_text(stmt, ambiente);
+			switch(id_url){
+				case 1: //RecepcaoEvento
+					u->recepcaoevento = strdup(link);
+					break;
+				case 2: //NfeConsultaCadastro
+					u->nfeconsultacadastro = strdup(link);
+					break;
+				case 3: //NfeInutilizacao
+					u->nfeinutilizacao = strdup(link);
+					break;
+				case 4: //NfeConsultaProtocolo
+					u->nfeconsultaprotocolo = strdup(link);
+					break;
+				case 5: //NfeStatusServico
+					u->nfestatusservico = strdup(link);
+					break;
+				case 6: //NfeAutorizacao
+					u->nfeautorizacao = strdup(link);
+					break;
+				case 7: //NFeRetAutorizacao
+					u->nferetautorizacao = strdup(link);
+					break;
+			}
+		} else if(rc == SQLITE_DONE){
+			break;
+		} else {
+			free(u);
+			return NULL;
+		}
+	} while(rc == SQLITE_ROW);
+	return u;
+}
+
 PREFS *get_prefs(){
 	PREFS *p = malloc(sizeof(PREFS));
 	sqlite3_stmt *stmt;
@@ -156,9 +207,11 @@ PREFS *get_prefs(){
 			p->card_reader_lib = strdup(a3_lib);
 			p->ambiente = ambiente;
 			p->cert_type = cert_type;
+			p->urls = get_ambiente_urls(ambiente);
 		} else if(rc == SQLITE_DONE){
 			p->ambiente = DEFAULT_AMBIENTE;
 			p->cert_type = DEFAULT_CERT_TYPE;
+			p->urls = get_ambiente_urls(DEFAULT_AMBIENTE);
 			break;
 		} else {
 			free(p);
