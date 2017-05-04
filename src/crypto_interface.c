@@ -31,7 +31,8 @@
 #include <openssl/x509.h>
 
 
-static int smartcard_login(char *password, PKCS11_SLOT **s, unsigned int *nc){
+static int smartcard_login(const char *password, PKCS11_SLOT **s, 
+		unsigned int *nc){
 
 	PKCS11_CTX *ctx;
 	PKCS11_SLOT *slots;
@@ -96,7 +97,7 @@ int encrypt(char *in, char **out, char *password){
 	return 0;
 }
 
-int get_private_key(EVP_PKEY **k, X509 **c, char *password){
+int get_private_key(EVP_PKEY **k, X509 **c, const char *password){
 	unsigned int ncerts;
 	int rc;
 	PKCS11_SLOT *slot;
@@ -105,24 +106,24 @@ int get_private_key(EVP_PKEY **k, X509 **c, char *password){
 
 	rc = smartcard_login(password, &slot, &ncerts);
 	if(rc)
-		return NULL;
+		return -ELIBP11;
 
 	/* get all certs */
 	rc = PKCS11_enumerate_certs(slot->token, &certs, &ncerts);
 	if (rc) {
 		fprintf(stderr, "PKCS11_enumerate_certs failed\n");
-		return NULL;
+		return -ELIBP11;
 	}
 	if (ncerts <= 0) {
 		fprintf(stderr, "no certificates found\n");
-		return NULL;
+		return -ELIBP11;
 	}
 	authcert=&certs[3];
 	*c = X509_dup(authcert->x509);
 	authkey = PKCS11_find_key(authcert);
 	if (authkey == NULL) {
 		fprintf(stderr, "no key matching certificate available\n");
-		return NULL;
+		return -ELIBP11;
 	}
 	*k = PKCS11_get_private_key(authkey);
 	return 0;

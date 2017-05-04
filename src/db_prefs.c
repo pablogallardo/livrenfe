@@ -18,6 +18,7 @@
 
 #include "db_interface.h"
 #include "db.h"
+#include "errno.h"
 #include <sqlite3.h>
 #include <string.h>
 #include <stdlib.h>
@@ -38,7 +39,7 @@ char *get_ws_url(char *service, int ambiente, char **url_header,
 	}
 	rc = sqlite3_step(stmt);
 	if(rc == SQLITE_ROW){
-		char *aux = NULL;
+		const char *aux = NULL;
 		aux = sqlite3_column_text(stmt, 0);
 		url = aux == NULL? NULL:strdup(aux);
 		aux = sqlite3_column_text(stmt, 1);
@@ -58,7 +59,7 @@ int get_url_id(char *service){
 		WHERE service = %Q", service);
 	if(db_select(sql, &err, &stmt)){
 	fprintf(stdout, "SQL: %s\n", err);
-		return NULL;
+		return -EIDNFOUND;
 	}
 	rc = sqlite3_step(stmt);
 	if(rc == SQLITE_ROW){
@@ -85,8 +86,8 @@ PREFS_URLS *get_prefs_urls(){
 		rc = sqlite3_step(stmt);
 		if(rc == SQLITE_ROW){
 			int id_url = sqlite3_column_int(stmt, 0);
-			char *prod = sqlite3_column_text(stmt, 1);
-			char *cert = sqlite3_column_text(stmt, 2);
+			const char *prod = sqlite3_column_text(stmt, 1);
+			const char *cert = sqlite3_column_text(stmt, 2);
 			switch(id_url){
 				case 1: //RecepcaoEvento
 					p->recepcaoevento_prod = strdup(prod);
@@ -145,7 +146,7 @@ static URLS *get_ambiente_urls(int ambiente){
 		rc = sqlite3_step(stmt);
 		if(rc == SQLITE_ROW){
 			int id_url = sqlite3_column_int(stmt, 0);
-			char *link = sqlite3_column_text(stmt, ambiente);
+			const char *link = sqlite3_column_text(stmt, ambiente);
 			switch(id_url){
 				case 1: //RecepcaoEvento
 					u->recepcaoevento = strdup(link);
@@ -198,9 +199,9 @@ PREFS *get_prefs(){
 		if(rc == SQLITE_ROW){
 			int ambiente = sqlite3_column_int(stmt, 0);
 			int cert_type = sqlite3_column_int(stmt, 1);
-			char *a1_pub = sqlite3_column_int(stmt, 2);
-			char *a1_priv = sqlite3_column_int(stmt, 3);
-			char *a3_lib = sqlite3_column_int(stmt, 4);
+			const char *a1_pub = sqlite3_column_text(stmt, 2);
+			const char *a1_priv = sqlite3_column_text(stmt, 3);
+			const char *a3_lib = sqlite3_column_text(stmt, 4);
 
 			p->public_key = strdup(a1_pub);
 			p->private_key = strdup(a1_priv);

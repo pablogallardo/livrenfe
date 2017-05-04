@@ -24,7 +24,7 @@
 
 extern char *timetostr(time_t);
 
-extern time_t strtotime(char *);
+extern time_t strtotime(const char *);
 
 extern char *itoa(int);
 

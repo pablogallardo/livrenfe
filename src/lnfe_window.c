@@ -66,12 +66,12 @@ static void on_nfe_manager_destroy(gpointer p, LivrenfeWindow *win){
 
 static void password_modal_dismiss(GtkWidget *p, LivrenfeWindow *win){
 	gtk_entry_set_text(win->password, "");
-	gtk_widget_set_visible(win->password_modal, FALSE);
+	gtk_widget_set_visible(GTK_WIDGET(win->password_modal), FALSE);
 }
 
 static void just_modal_dismiss(GtkWidget *p, LivrenfeWindow *win){
 	gtk_entry_set_text(win->justificativa, "");
-	gtk_widget_set_visible(win->just_modal, FALSE);
+	gtk_widget_set_visible(GTK_WIDGET(win->just_modal), FALSE);
 }
 
 static void on_abrir_nfe_click(GtkMenuItem *m, LivrenfeWindow *win){
@@ -147,7 +147,7 @@ static void sefaz_cancelar(gpointer *b, LivrenfeWindow *win){
 		char *j = strdup(gtk_entry_get_text(win->justificativa));
 		gtk_entry_set_text(win->justificativa, "");
 		ec->justificativa = j;
-		add_evento(lote, ec);
+		add_evento(lote, (EVENTO*)ec);
 	}
 	char *password = strdup(gtk_entry_get_text(win->password));
 	password_modal_dismiss(NULL, win);
@@ -159,8 +159,8 @@ static void sefaz_cancelar(gpointer *b, LivrenfeWindow *win){
 }
 
 static void on_emitir_nfe_click(GtkMenuItem *m, LivrenfeWindow *win){
-	gtk_widget_set_visible(win->password_modal, TRUE);
-	gtk_widget_grab_focus(win->password);
+	gtk_widget_set_visible(GTK_WIDGET(win->password_modal), TRUE);
+	gtk_widget_grab_focus(GTK_WIDGET(win->password));
 	if(win->passwd_click_signal_handler != 0){
 		g_signal_handler_disconnect(win->pw_ok_btn, 
 			win->passwd_click_signal_handler);
@@ -174,9 +174,9 @@ static void on_emitir_nfe_click(GtkMenuItem *m, LivrenfeWindow *win){
 }
 
 static void on_just_ok_click(GtkButton *m, LivrenfeWindow *win){
-	gtk_widget_set_visible(win->just_modal, FALSE);
-	gtk_widget_set_visible(win->password_modal, TRUE);
-	gtk_widget_grab_focus(win->password);
+	gtk_widget_set_visible(GTK_WIDGET(win->just_modal), FALSE);
+	gtk_widget_set_visible(GTK_WIDGET(win->password_modal), TRUE);
+	gtk_widget_grab_focus(GTK_WIDGET(win->password));
 	if(win->passwd_click_signal_handler != 0){
 		g_signal_handler_disconnect(win->pw_ok_btn, 
 			win->passwd_click_signal_handler);
@@ -190,8 +190,8 @@ static void on_just_ok_click(GtkButton *m, LivrenfeWindow *win){
 }
 
 static void on_cancel_nfe_click(GtkMenuItem *m, LivrenfeWindow *win){
-	gtk_widget_set_visible(win->just_modal, TRUE);
-	gtk_widget_grab_focus(win->justificativa);
+	gtk_widget_set_visible(GTK_WIDGET(win->just_modal), TRUE);
+	gtk_widget_grab_focus(GTK_WIDGET(win->justificativa));
 }
 
 void list_nfe(LivrenfeWindow *win){
@@ -250,14 +250,14 @@ static void nfe_manager_activate(GtkMenuItem *b, gpointer win){
 			G_CALLBACK(on_nfe_manager_destroy), win);
 		gtk_window_present(GTK_WINDOW(nman));
 	} else {
-		GtkMessageDialog *dialog;
+		GtkWidget *dialog;
 		dialog = gtk_message_dialog_new(win,
 			GTK_DIALOG_DESTROY_WITH_PARENT,
 			GTK_MESSAGE_ERROR,
 			GTK_BUTTONS_CLOSE,
 			"Cadastre primeiro o emitente");
-		gtk_dialog_run(dialog);
-		gtk_widget_destroy(dialog);
+		gtk_dialog_run(GTK_DIALOG(dialog));
+		gtk_widget_destroy(GTK_WIDGET(dialog));
 		emitente_manager_activate(NULL, win);
 	}
 }
@@ -309,14 +309,16 @@ static gint popup_menu_nfe(GtkTreeView *t, GdkEventButton *e, LivrenfeWindow *wi
 		gtk_tree_model_get(model, &iter, 5, &cancelada, -1);
 		gtk_tree_model_get(model, &iter, 6, &emitida, -1);
 		if(cancelada || !emitida){
-			gtk_widget_set_sensitive(win->cancel_nfe, FALSE);
+			gtk_widget_set_sensitive(GTK_WIDGET(win->cancel_nfe),
+				FALSE);
 		} else {
-			gtk_widget_set_sensitive(win->cancel_nfe, TRUE);
+			gtk_widget_set_sensitive(GTK_WIDGET(win->cancel_nfe),
+				TRUE);
 		}
 	}
 
-	gtk_menu_popup((LIVRENFE_WINDOW(win))->menu_nf, NULL, 
-		NULL, NULL, NULL, e->button, e->time);
+	gtk_menu_popup_at_pointer((LIVRENFE_WINDOW(win))->menu_nf, 
+		(GdkEvent*) e);
 	return TRUE;
 }
 
@@ -346,8 +348,8 @@ static gint nfe_on_popup(GtkTreeView *t, gpointer win){
 }
 
 static void on_status_servico_click(gpointer p, LivrenfeWindow *win){
-	gtk_widget_set_visible(win->password_modal, TRUE);
-	gtk_widget_grab_focus(win->password);
+	gtk_widget_set_visible(GTK_WIDGET(win->password_modal), TRUE);
+	gtk_widget_grab_focus(GTK_WIDGET(win->password));
 	if(win->passwd_click_signal_handler != 0){
 		g_signal_handler_disconnect(win->pw_ok_btn, 
 			win->passwd_click_signal_handler);
@@ -398,11 +400,11 @@ static void livrenfe_window_init(LivrenfeWindow *win){
 			G_CALLBACK(on_cancel_nfe_click), win);
 
 	GdkPixbuf *icon;
-	char *error = NULL;
+	GError *error = NULL;
 	icon = gdk_pixbuf_new_from_resource("/br/com/lapagina/livrenfe/icons/livrenfe_128x128.png",
 		&error);
 	gtk_window_set_default_icon(icon);
-	gtk_window_set_icon(win, icon);
+	gtk_window_set_icon(GTK_WINDOW(win), icon);
 }
 
 

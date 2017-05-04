@@ -36,6 +36,7 @@
 #include <xmlsec/xmltree.h>
 #include <xmlsec/xmldsig.h>
 #include <xmlsec/crypto.h>
+#include <xmlsec/templates.h>
 #include <openssl/rsa.h>
 #include <openssl/x509.h>
 

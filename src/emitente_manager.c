@@ -56,10 +56,10 @@ G_DEFINE_TYPE_WITH_PRIVATE(EmitenteManager, emitente_manager, GTK_TYPE_DIALOG)
 static void save_emitente(GtkButton *b, GtkWidget *win){
 	EmitenteManagerPrivate *priv;
 
-	priv = emitente_manager_get_instance_private(win);
+	priv = emitente_manager_get_instance_private(EMITENTE_MANAGER(win));
 	EMITENTE *e = new_emitente();
 	unsigned int id, crt, num, cod_mun, cod_uf, cep;
-	char *nome, *ie, *cnpj, *rua, *complemento, *bairro;
+	const char *nome, *ie, *cnpj, *rua, *complemento, *bairro;
 	id = 1;
 	num = atoi(gtk_entry_get_text(priv->num));
 	cep = atoi(gtk_entry_get_text(priv->cep));
@@ -103,7 +103,7 @@ static void list_municipios(GtkComboBox *uf, GtkComboBox *municipio){
 	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(municipio), r_mun, TRUE);
 	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(municipio),
 				r_mun, "text", 1, NULL);
-	char *active_uf = gtk_combo_box_get_active_id(uf);
+	char *active_uf = (char*)gtk_combo_box_get_active_id(uf);
 	gtk_combo_box_set_model(municipio, GTK_TREE_MODEL(db_list_municipios(active_uf)));
 	gtk_combo_box_set_id_column(municipio, 0);
 }

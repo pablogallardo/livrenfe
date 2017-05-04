@@ -32,5 +32,6 @@
 #define ENOSLOT		7;
 #define ELIBP11		8;
 #define ESEFAZ		9;
+#define EIDNFOUND	10;
 
 #endif

@@ -220,24 +220,21 @@ LOTE_EVENTO *new_lote_evento(){
 	return l;
 }
 
-int inst_produto(int id, char *codigo, char *desc, unsigned int ncm, 
-		unsigned int cfop, char *unidade_comercial, float valor, 
+int inst_produto(int id, const char *codigo, const char *desc, unsigned int ncm, 
+		unsigned int cfop, const char *unidade_comercial, float valor, 
 		PRODUTO *p){
 	p->id = id;
 	if(desc != NULL){
-		p->codigo =  malloc(sizeof(char) * strlen(codigo) + 1);
-		strcpy(p->codigo, codigo);
+		p->codigo = strdup(codigo);
 	}
 	if(desc != NULL){
-		p->descricao =  malloc(sizeof(char) * strlen(desc) + 1);
-		strcpy(p->descricao, desc);
+		p->descricao = strdup(desc);
 	}
 	p->ncm = ncm;
 	p->cfop = cfop;
 	p->unidade_comercial = unidade_comercial;
 	if(unidade_comercial != NULL){
-		p->unidade_comercial =  malloc(sizeof(char) * strlen(unidade_comercial) + 1);
-		strcpy(p->unidade_comercial, unidade_comercial);
+		p->unidade_comercial = strdup(unidade_comercial);
 	}
 	p->valor = valor;
 	return 0;
@@ -252,7 +249,7 @@ int inst_icms(int origem, unsigned int tipo, float aliquota, float valor,
 	return 0;
 }
 
-int inst_ipi(int sit_trib, char *classe, char *codigo, IPI *i){
+int inst_ipi(int sit_trib, const char *classe, const char *codigo, IPI *i){
 	i->sit_trib = sit_trib;
 	i->classe = strdup(classe);
 	i->codigo = strdup(codigo);
@@ -362,7 +359,7 @@ void set_chave(NFE *nfe){
 	sprintf(nfe->idnfe->chave, "%s%c", base , nfe->idnfe->div);
 }
 
-static int inst_municipio(char *uf, char *nome, unsigned int codigo,
+static int inst_municipio(const char *uf, const char *nome, unsigned int codigo,
 		unsigned int cod_uf, MUNICIPIO *m){
 	m->uf = uf;		
 	m->municipio = nome;
@@ -371,8 +368,9 @@ static int inst_municipio(char *uf, char *nome, unsigned int codigo,
 	return 0;
 }
 
-static int inst_endereco(char *rua, unsigned int num, char *complemento,
-		char *bairro, unsigned int cep, ENDERECO *e){
+static int inst_endereco(const char *rua, unsigned int num, 
+		const char *complemento, const char *bairro, unsigned int cep, 
+		ENDERECO *e){
 	e->rua = rua;
 	e->num = num;
 	e->complemento = complemento;
@@ -381,10 +379,11 @@ static int inst_endereco(char *rua, unsigned int num, char *complemento,
 	return 0;
 }
 
-int inst_emitente(int id, char *nome, char *ie, int crt, char *cnpj,
-		char *rua, unsigned int num, char *complemento,
-		char *bairro, char *uf, char *nome_mun, unsigned int codigo,
-		unsigned int cod_uf, unsigned int cep, EMITENTE *e){
+int inst_emitente(int id, const char *nome, const char *ie, int crt, 
+		const char *cnpj, const char *rua, unsigned int num, 
+		const char *complemento, const char *bairro, const char *uf, 
+		const char *nome_mun, unsigned int codigo, unsigned int cod_uf, 
+		unsigned int cep, EMITENTE *e){
 	e->id = id;
 	e->nome = nome;
 	e->inscricao_estadual = ie;

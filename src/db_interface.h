@@ -72,6 +72,11 @@ extern NFE *get_nfe(int);
 extern EMITENTE *get_emitente(int id);
 
 /**
+ * Get RECIPIENT from DB
+ */
+extern DESTINATARIO *get_destinatario_by_doc(const char *doc);
+
+/**
  * Get WebService URL
  */
 extern char *get_ws_url(char *service, int ambiente, char **url_header,

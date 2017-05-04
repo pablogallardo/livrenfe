@@ -196,7 +196,7 @@ static void list_municipios(GtkComboBox *uf, GtkComboBox *municipio){
 	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(municipio), r_mun, TRUE);
 	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(municipio),
 				r_mun, "text", 1, NULL);
-	char *active_uf = gtk_combo_box_get_active_id(uf);
+	char *active_uf = (char *)gtk_combo_box_get_active_id(uf);
 	gtk_combo_box_set_model(municipio, GTK_TREE_MODEL(db_list_municipios(active_uf)));
 	gtk_combo_box_set_id_column(municipio, 0);
 }
@@ -205,7 +205,7 @@ static void list_items(gpointer p, NFEManager *win){
 	NFEManagerPrivate *priv;
 	GtkListStore *l;
 
-	priv = nfe_manager_get_instance_private(win);
+	priv = nfe_manager_get_instance_private(NFE_MANAGER(win));
 	NFE *nfe = (NFE_MANAGER(win))->nfe;
 	l = get_item_list(nfe);	
 	GtkCellRenderer *r_id_prod;
@@ -250,7 +250,7 @@ static void item_manager_activate(GtkButton *b, gpointer win){
 static void save_nfe(GtkButton *b, GtkWidget *win){
 	NFEManagerPrivate *priv;
 
-	priv = nfe_manager_get_instance_private(win);
+	priv = nfe_manager_get_instance_private(NFE_MANAGER(win));
 	NFE *nfe = (NFE_MANAGER(win))->nfe;
 	IDNFE *idnfe = nfe->idnfe;
 	DESTINATARIO *destinatario = nfe->destinatario;
@@ -276,7 +276,7 @@ static void save_nfe(GtkButton *b, GtkWidget *win){
 	endereco->num = atoi(gtk_entry_get_text(priv->numero_endereco));
 	endereco->complemento = gtk_entry_get_text(priv->complemento);
 	endereco->bairro = gtk_entry_get_text(priv->bairro);
-	endereco->cep = gtk_entry_get_text(priv->cep);
+	endereco->cep = atoi(gtk_entry_get_text(priv->cep));
 	endereco->municipio->cod_uf = atoi(gtk_combo_box_get_active_id(priv->uf_destinatario));
 	endereco->municipio->codigo = atoi(gtk_combo_box_get_active_id(priv->municipio_destinatario));
 
@@ -324,7 +324,7 @@ static void lookup_destinatario(gpointer p,  NFEManager *nman){
 	NFEManagerPrivate *priv;
 
 	priv = nfe_manager_get_instance_private(nman);
-	char *doc = gtk_entry_get_text(priv->doc);
+	const char *doc = gtk_entry_get_text(priv->doc);
 	DESTINATARIO *d = get_destinatario_by_doc(doc);
 	
 	if(d){
@@ -372,7 +372,7 @@ static void inst_nfe_manager(gpointer p, NFEManager *nman){
 			itoa(idnfe->municipio->codigo));
 
 		inst_nfe_destinatario(NULL, nman);
-		gtk_widget_set_sensitive(priv->chave_nfe, TRUE);
+		gtk_widget_set_sensitive(GTK_WIDGET(priv->chave_nfe), TRUE);
 		gtk_entry_set_text(priv->chave_nfe, nfe->idnfe->chave);
 		if(nfe->inf_ad_fisco)
 			gtk_entry_set_text(priv->inf_ad_fisco, nfe->inf_ad_fisco);

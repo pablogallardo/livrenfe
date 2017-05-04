@@ -47,8 +47,8 @@ typedef int evento_t;
  * City information
  */
 typedef struct {
-	char *uf;
-	char *municipio;
+	const char *uf;
+	const char *municipio;
 	unsigned int codigo;
 	unsigned int cod_uf;
 } MUNICIPIO;
@@ -59,7 +59,7 @@ typedef struct {
 typedef struct {
 	MUNICIPIO *municipio;
 	unsigned int id_nfe;
-	char *nat_op;
+	const char *nat_op;
 	enum t_ind_pag {A_VISTA, A_PRAZO, OUTRO} ind_pag;
 	enum t_mod {MOD_NFE=55, MOD_NFCE=65} mod;
 	int serie;
@@ -89,17 +89,17 @@ typedef struct {
  */
 typedef struct {
 	unsigned int codigo;
-	char *nome;
+	const char *nome;
 } PAIS;
 
 /*
  * Address information
  */
 typedef struct {
-	char *rua;
+	const char *rua;
 	unsigned int num;
-	char *complemento;
-	char *bairro;
+	const char *complemento;
+	const char *bairro;
 	MUNICIPIO *municipio;
 	unsigned int cep;
 	PAIS *pais;
@@ -110,11 +110,11 @@ typedef struct {
  */
 typedef struct {
 	int id;
-	char *nome;
-	char *inscricao_estadual;
+	const char *nome;
+	const char *inscricao_estadual;
 	ENDERECO *endereco;
 	enum t_crt {CRT_SNAC=1, CRT_SNAC_EXC=2, CRT_NORMAL=3} crt;
-	char *cnpj;
+	const char *cnpj;
 } EMITENTE;
 
 /*
@@ -122,12 +122,12 @@ typedef struct {
  */
 typedef struct {
 	int id;
-	char *nome;
+	const char *nome;
 	ENDERECO *endereco;
 	enum t_tipo_ie {CONT_AV=1, CONT_IS=2, NAO_CONT=9} tipo_ie;
-	char *cnpj;
-	char *tipo_doc;
-	char *inscricao_estadual;
+	const char *cnpj;
+	const char *tipo_doc;
+	const char *inscricao_estadual;
 } DESTINATARIO;
 
 /*
@@ -135,11 +135,11 @@ typedef struct {
  */
 typedef struct {
 	int id;
-	char *codigo;
-	char *descricao;
+	const char *codigo;
+	const char *descricao;
 	unsigned int ncm;
 	unsigned int cfop;
-	char *unidade_comercial;
+	const char *unidade_comercial;
 	float valor;
 } PRODUTO;
 
@@ -159,7 +159,7 @@ typedef struct {
 typedef struct {
 	float aliquota;
 	unsigned int quantidade;
-	char *nt;
+	const char *nt;
 } PIS;
 
 /* 
@@ -168,7 +168,7 @@ typedef struct {
 typedef struct {
 	float aliquota;
 	unsigned int quantidade;
-	char *nt;
+	const char *nt;
 } COFINS;
 
 /* 
@@ -176,8 +176,8 @@ typedef struct {
  */
 typedef struct {
 	int sit_trib;
-	char *classe;
-	char *codigo;
+	const char *classe;
+	const char *codigo;
 } IPI;
 
 /*
@@ -217,11 +217,11 @@ typedef struct {
  * SEFAZ record information
  */
 typedef struct {
-	char *dh_recib;
-	char *numero;
+	const char *dh_recib;
+	const char *numero;
 	int cod_status;
-	char *xml;
-	char *xmot;
+	const char *xml;
+	const char *xmot;
 } PROTOCOLO;
 
 /*
@@ -236,10 +236,10 @@ typedef struct {
 	float total;
 	TRANSP *transp;
 	PROTOCOLO *protocolo;
-	char *xml;
+	const char *xml;
 	int canceled;
-	char *inf_ad_fisco;
-	char *inf_ad_contrib;
+	const char *inf_ad_fisco;
+	const char *inf_ad_contrib;
 } NFE;
 
 typedef struct LOTE_ITEM LOTE_ITEM;
@@ -257,25 +257,25 @@ struct LOTE_ITEM{
  */
 typedef struct {
 	unsigned int id;
-	char *recibo;
+	const char *recibo;
 	unsigned int qtd;
 	LOTE_ITEM *nfes;
-	char *xml_response;
+	const char *xml_response;
 } LOTE;
 
 /**
  * Evento
  */
 typedef struct {
-	char *id;
+	const char *id;
 	int seq;
 	NFE *nfe;
 	evento_t type;
 	int cStat;
-	char *xmot;
-	char *protocolo;
-	char *xml;
-	char *xml_response;
+	const char *xmot;
+	const char *protocolo;
+	const char *xml;
+	const char *xml_response;
 } EVENTO;
 
 /**
@@ -283,7 +283,7 @@ typedef struct {
  */
 typedef struct {
 	EVENTO evento;
-	char *justificativa;
+	const char *justificativa;
 } EVENTO_CANCELAMENTO;
 
 /**
@@ -292,7 +292,7 @@ typedef struct {
 typedef struct LOTE_EVENTO_ITEM LOTE_EVENTO_ITEM;
 struct LOTE_EVENTO_ITEM {
 	EVENTO *evento;
-	LOTE_ITEM *next;
+	LOTE_EVENTO_ITEM *next;
 };
 
 /**
@@ -300,30 +300,30 @@ struct LOTE_EVENTO_ITEM {
  */
 typedef struct {
 	unsigned int id;
-	char *recibo;
+	const char *recibo;
 	unsigned int qtd;
 	LOTE_EVENTO_ITEM *eventos;
-	char *xml_response;
+	const char *xml_response;
 } LOTE_EVENTO;
 
 /**
  * URLs for preferences window
  */
 typedef struct {
-	char *recepcaoevento_prod;
-	char *recepcaoevento_cert;
-	char *nfeconsultacadastro_prod;
-	char *nfeconsultacadastro_cert;
-	char *nfeinutilizacao_prod;
-	char *nfeinutilizacao_cert;
-	char *nfeconsultaprotocolo_prod;
-	char *nfeconsultaprotocolo_cert;
-	char *nfestatusservico_prod;
-	char *nfestatusservico_cert;
-	char *nferetautorizacao_prod;
-	char *nferetautorizacao_cert;
-	char *nfeautorizacao_prod;
-	char *nfeautorizacao_cert;
+	const char *recepcaoevento_prod;
+	const char *recepcaoevento_cert;
+	const char *nfeconsultacadastro_prod;
+	const char *nfeconsultacadastro_cert;
+	const char *nfeinutilizacao_prod;
+	const char *nfeinutilizacao_cert;
+	const char *nfeconsultaprotocolo_prod;
+	const char *nfeconsultaprotocolo_cert;
+	const char *nfestatusservico_prod;
+	const char *nfestatusservico_cert;
+	const char *nferetautorizacao_prod;
+	const char *nferetautorizacao_cert;
+	const char *nfeautorizacao_prod;
+	const char *nfeautorizacao_cert;
 } PREFS_URLS;
 
 /**

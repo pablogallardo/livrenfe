@@ -404,7 +404,7 @@ NFE *get_nfe(int id){
 		LEFT JOIN emitentes e ON e.id_emitente = n.id_emitente \
 		LEFT JOIN municipios m_e ON m_e.id_municipio = e.id_municipio \
 		LEFT JOIN uf u_e ON u_e.id_uf = m_e.id_uf \
-		LEFT JOIN destinatarios d ON d.id_destinatario = n.id_destinatario \ 
+		LEFT JOIN destinatarios d ON d.id_destinatario = n.id_destinatario \
 		LEFT JOIN municipios m_d ON m_d.id_municipio = d.id_municipio \
 		LEFT JOIN uf u_d ON u_d.id_uf = m_d.id_uf \
 		WHERE n.id_nfe = %d", id);
@@ -575,7 +575,7 @@ EMITENTE *get_emitente(int id){
 
 }
 
-DESTINATARIO *get_destinatario_by_doc(char *doc){
+DESTINATARIO *get_destinatario_by_doc(const char *doc){
 	DESTINATARIO *d = new_destinatario();
 	char *err;
 	sqlite3_stmt *stmt;
@@ -764,7 +764,7 @@ int register_evento(EVENTO *e){
 	sql = sqlite3_mprintf("REPLACE INTO evento (id_evento, id_nfe, type,\
 		xml, xml_response, xmot)\
 		VALUES ($Q, %d, %d, %Q, %Q, %Q);",
-		e->id == 0? NULL : itoa(e->id), e->nfe->idnfe->id_nfe,
+		e->id == 0? NULL : e->id, e->nfe->idnfe->id_nfe,
 		e->nfe->idnfe->id_nfe, e->type, e->xml, e->xml_response,
 		e->xmot);
 	db_exec(sql, &err);
@@ -775,7 +775,7 @@ int register_evento(EVENTO *e){
 	}
 	switch(e->type){
 		case CANCELAMENTO_TYPE:{
-			EVENTO_CANCELAMENTO *ec = e;
+			EVENTO_CANCELAMENTO *ec = (EVENTO_CANCELAMENTO*) e;
 			sql = sqlite3_mprintf("UPDATE evento SET \
 				justificativa = %Q WHERE id_evento = %d;", 
 				ec->justificativa, last_id);

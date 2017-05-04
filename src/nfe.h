@@ -37,14 +37,15 @@ extern int rm_item(NFE *nfe, ITEM *i);
 
 extern void set_chave(NFE *nfe);
 
-extern int inst_produto(int id, char *codigo, char *desc, unsigned int ncm, 
-		unsigned int cfop, char *unidade_comercial, float valor, 
-		PRODUTO *p);
+extern int inst_produto(int id, const char *codigo, const char *desc, 
+		unsigned int ncm, unsigned int cfop, 
+		const char *unidade_comercial, float valor, PRODUTO *p);
 
 extern int inst_icms(int origem, unsigned int tipo, float aliquota, float valor,
 		ICMS *i);
 
-extern int inst_ipi(int sit_trib, char *classe, char *codigo, IPI *i);
+extern int inst_ipi(int sit_trib, const char *classe, 
+		const char *codigo, IPI *i);
 
 extern int inst_item(float valor, float quantidade, 
 		unsigned int ordem, int id_produto, char *cod_prod,
@@ -73,9 +74,10 @@ extern int inst_nfe(int id_nfe, int id_mun, int id_uf, int ind_pag, int mod_nfe,
 		char *tipo_doc_dest, char *inf_ad_fisco, char *inf_ad_contrib,
 		char *protocolo, NFE *nfe);
 
-extern int inst_emitente(int id, char *nome, char *ie, int crt, char *cnpj,
-		char *rua, unsigned int num, char *complemento,
-		char *bairro, char *uf, char *nome_mun, unsigned int codigo,
+extern int inst_emitente(int id, const char *nome, const char *ie, int crt, 
+		const char *cnpj, const char *rua, unsigned int num, 
+		const char *complemento, const char *bairro, const char *uf, 
+		const char *nome_mun, unsigned int codigo,
 		unsigned int cod_uf, unsigned int cep, EMITENTE *e);
 
 extern int inst_destinatario(int id, char *nome, int t_ie, char *tipo_doc, char *ie,

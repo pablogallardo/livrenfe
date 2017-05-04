@@ -33,7 +33,6 @@ int _gen_det(xmlTextWriterPtr, ITEM *);
 int _gen_prod(xmlTextWriterPtr, ITEM *);
 int _gen_imposto(xmlTextWriterPtr, IMPOSTO *, float);
 int _gen_total(xmlTextWriterPtr, float );
-int is_cpf(char *);
 static char *generate_evento_xml(EVENTO *e, char *password);
 
 char *gen_cons_status(int ambiente, int cuf){
@@ -52,11 +51,11 @@ char *gen_cons_status(int ambiente, int cuf){
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
 			BAD_CAST "http://www.portalfiscal.inf.br/nfe");
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "versao",
 			BAD_CAST NFE_VERSAO);
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "tpAmb",
 			"%d", ambiente);
 	if (rc < 0)
@@ -93,11 +92,11 @@ char *gen_cons_nfe(LOTE *lote, int ambiente){
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
 			BAD_CAST "http://www.portalfiscal.inf.br/nfe");
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "versao",
 			BAD_CAST NFE_VERSAO);
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "tpAmb",
 			"%d", ambiente);
 	if (rc < 0)
@@ -134,7 +133,7 @@ char *gen_lote_xml(LOTE *lote, char *password){
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "versao",
 			BAD_CAST NFE_VERSAO);
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "idLote",
 			"%d", lote->id);
 	if (rc < 0)
@@ -398,12 +397,8 @@ int _gen_emit(xmlTextWriterPtr writer, NFE *nfe){
 	if (rc < 0)
 		return -EXML;
 
-	if (is_cpf(nfe->emitente->id))
-		rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "CPF",
-				"%s", nfe->emitente->cnpj);
-	else
-		rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "CNPJ",
-				"%s", nfe->emitente->cnpj);
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "CNPJ",
+			"%s", nfe->emitente->cnpj);
 	if (rc < 0)
 		return -EXML;
 
@@ -884,13 +879,6 @@ int _gen_total(xmlTextWriterPtr writer, float v){
 	return 0;
 }
 
-int is_cpf(char *v) {
-	//int i = strlen(v);
-	//if (i == 11)
-	//	return 1;
-	return 0;
-}
-
 char *gen_lote_evento_xml(LOTE_EVENTO *lote, char *password){
 	int rc;
 	xmlTextWriterPtr writer;
@@ -911,7 +899,7 @@ char *gen_lote_evento_xml(LOTE_EVENTO *lote, char *password){
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "versao",
 			BAD_CAST "1.00");
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "idLote",
 			"%d", lote->id);
 	if (rc < 0)
@@ -960,7 +948,7 @@ char *generate_evento_xml(EVENTO *e, char *password) {
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "versao",
 			BAD_CAST "1.00");
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "infEvento");
 	if (rc < 0)
@@ -972,7 +960,7 @@ char *generate_evento_xml(EVENTO *e, char *password) {
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "Id",
 			BAD_CAST id);
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cOrgao",
 			"%d", nfe->idnfe->municipio->cod_uf);
 	if (rc < 0)
@@ -999,7 +987,7 @@ char *generate_evento_xml(EVENTO *e, char *password) {
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "dhEvento",
 			"%s", buffer);
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "tpEvento",
 			"%d", e->type);
 	if (rc < 0)
@@ -1019,7 +1007,7 @@ char *generate_evento_xml(EVENTO *e, char *password) {
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "versao",
 			BAD_CAST "1.00");
 	if (rc < 0)
-		return -EXML;
+		return NULL;
 
 	switch(e->type){
 		case CANCELAMENTO_TYPE: {

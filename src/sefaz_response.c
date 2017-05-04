@@ -40,7 +40,7 @@ struct _SefazResponsePrivate{
 
 G_DEFINE_TYPE_WITH_PRIVATE(SefazResponse, sefaz_response, GTK_TYPE_DIALOG)
 
-static void sefaz_thread(void *arg){
+static void *sefaz_thread(void *arg){
 	SefazResponse *sr = SEFAZ_RESPONSE(arg);
 	SefazResponsePrivate *priv;
 	pthread_t tid;
@@ -61,8 +61,9 @@ static void sefaz_thread(void *arg){
 
 	gtk_spinner_stop(priv->spinner);
 	gtk_label_set_text(priv->resposta, msg);
-	gtk_overlay_reorder_overlay(priv->overlay, priv->resposta, -1);
-	gtk_widget_set_visible(priv->ok_btn, TRUE);
+	gtk_overlay_reorder_overlay(priv->overlay, GTK_WIDGET(priv->resposta),
+		-1);
+	gtk_widget_set_visible(GTK_WIDGET(priv->ok_btn), TRUE);
 	free(msg);
 }
 
@@ -76,7 +77,7 @@ static void get_response(SefazResponse *sr){
 }
 
 static void ok_click(GtkButton *b, SefazResponse *sr){
-	gtk_widget_destroy(sr);
+	gtk_widget_destroy(GTK_WIDGET(sr));
 }
 
 static void sefaz_response_dispose(GObject *object){

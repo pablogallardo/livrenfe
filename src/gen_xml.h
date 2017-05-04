@@ -57,4 +57,9 @@ extern char *gen_cons_status(int ambiente, int cuf);
  */
 extern char *gen_cons_nfe(LOTE *, int ambiente);
 
+/**
+ * Get XML message version for service
+ */
+extern char *get_versao(char *service);
+
 #endif

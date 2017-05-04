@@ -36,7 +36,7 @@ char *timetostr(time_t t){
 	return buffer;
 }
 
-time_t strtotime(char *s){
+time_t strtotime(const char *s){
 	struct tm mytm;
 	time_t t;
 	strptime(s, "%d/%m/%Y %H:%M:%S", &mytm);
