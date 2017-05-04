@@ -6,6 +6,7 @@ AC_INIT([LivreNFE], [0.1], [pggllrd@gmail.com])
 AM_INIT_AUTOMAKE([livrenfe], [2.6])
 AC_OUTPUT([Makefile src/Makefile])
 AC_CONFIG_HEADERS([config.h])
+AM_SILENT_RULES([yes])
 
 # Checks for programs.
 AC_PROG_CC
