@@ -19,3 +19,4 @@ install-sh
 missing
 aclocal.m4
 Makefile.in
+compile
