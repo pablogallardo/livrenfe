@@ -12,3 +12,8 @@ stamp-h1
 config.h
 resources.c
 livrenfe
+Makefile.in
+configure
+depcomp
+install-sh
+missing
