@@ -5693,7 +5693,7 @@ const char *insert_sql = "INSERT INTO paises (id_pais, nome) VALUES (1, 'Brasil'
 		    INSERT INTO urls (id_url, service, url_prod, url_cert, url_header,\
 		    	url_body)\
 		    	VALUES (1, 'RecepcaoEvento', 'https://nfe.fazenda.sp.gov.br/ws/recepcaoevento.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/recepcaoevento.asmx', 'http://www.portalfiscal.inf.br/nfe/wsdl/RecepcaoEvento', 'http://www.portalfiscal.inf.br/nfe/wsdl/RecepcaoEvento'),\
-			(2, 'NfeConsultaCadastro', 'https://nfe.fazenda.sp.gov.br/ws/cadconsultacadastro2.asmx', '	https://homologacao.nfe.fazenda.sp.gov.br/ws/cadconsultacadastro2.asmx', NULL, NULL),\
+			(2, 'NfeConsultaCadastro', 'https://nfe.fazenda.sp.gov.br/ws/cadconsultacadastro2.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/cadconsultacadastro2.asmx', NULL, NULL),\
 			(3, 'NfeInutilizacao', 'https://nfe.fazenda.sp.gov.br/ws/nfeinutilizacao2.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeinutilizacao2.asmx', NULL, NULL),\
 			(4, 'NfeConsultaProtocolo', 'https://nfe.fazenda.sp.gov.br/ws/nfeconsulta2.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeconsulta2.asmx', NULL, NULL),\
 			(5, 'NfeStatusServico', 'https://nfe.fazenda.sp.gov.br/ws/nfestatusservico2.asmx', 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfestatusservico2.asmx', 'http://www.portalfiscal.inf.br/nfe/wsdl/NfeStatusServico2', 'http://www.portalfiscal.inf.br/nfe/wsdl/NfeStatusServico2'),\

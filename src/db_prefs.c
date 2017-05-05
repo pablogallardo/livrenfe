@@ -103,7 +103,7 @@ PREFS_URLS *get_prefs_urls(){
 					break;
 				case 4: //NfeConsultaProtocolo
 					p->nfeconsultaprotocolo_prod = strdup(prod);
-					p->nfeconsultacadastro_cert = strdup(cert);
+					p->nfeconsultaprotocolo_cert = strdup(cert);
 					break;
 				case 5: //NfeStatusServico
 					p->nfestatusservico_prod = strdup(prod);

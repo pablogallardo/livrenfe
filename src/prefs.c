@@ -60,6 +60,30 @@ struct _PrefsPrivate{
 
 G_DEFINE_TYPE_WITH_PRIVATE(Prefs, prefs, GTK_TYPE_DIALOG)
 
+static void inst_urls(PrefsPrivate *priv){
+	PREFS_URLS *url = get_prefs_urls();
+	gtk_entry_set_text(priv->recepcaoevento_prod, url->recepcaoevento_prod);
+	gtk_entry_set_text(priv->nfeconsultacadastro_prod, url->nfeconsultacadastro_prod);
+	gtk_entry_set_text(priv->nfeinutilizacao_prod, url->nfeinutilizacao_prod);
+	gtk_entry_set_text(priv->nfeconsultaprotocolo_prod, url->nfeconsultaprotocolo_prod);
+	gtk_entry_set_text(priv->nfestatusservico_prod, url->nfestatusservico_prod);
+	gtk_entry_set_text(priv->nfeautorizacao_prod, url->nfeautorizacao_prod);
+	gtk_entry_set_text(priv->nferetautorizacao_prod, url->nferetautorizacao_prod);
+
+	gtk_entry_set_text(priv->recepcaoevento_cert, url->recepcaoevento_cert);
+	gtk_entry_set_text(priv->nfeconsultacadastro_cert, url->nfeconsultacadastro_cert);
+	gtk_entry_set_text(priv->nfeinutilizacao_cert, url->nfeinutilizacao_cert);
+	gtk_entry_set_text(priv->nfeconsultaprotocolo_cert, url->nfeconsultaprotocolo_cert);
+	gtk_entry_set_text(priv->nfestatusservico_cert, url->nfestatusservico_cert);
+	gtk_entry_set_text(priv->nfeautorizacao_cert, url->nfeautorizacao_cert);
+	gtk_entry_set_text(priv->nferetautorizacao_cert, url->nferetautorizacao_cert);
+}
+
+static void inst_window(gpointer p, Prefs *pref){
+	PrefsPrivate *priv;
+	priv = prefs_get_instance_private(PREFS(pref));
+	inst_urls(priv);
+}
 
 static void prefs_dispose(GObject *object){
 	PrefsPrivate *priv;
@@ -73,6 +97,7 @@ static void prefs_init(Prefs *p){
 
 	priv = prefs_get_instance_private(p);
 	gtk_widget_init_template(GTK_WIDGET(p));
+	g_signal_connect(p, "show", G_CALLBACK(inst_window), p);
 }
 
 
