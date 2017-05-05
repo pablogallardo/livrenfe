@@ -92,6 +92,8 @@ static void inst_urls(PrefsPrivate *priv){
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(priv->cert_a1), TRUE);
 	else
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(priv->cert_a3), TRUE);
+
+	free(pref_data);
 }
 
 static void inst_window(gpointer p, Prefs *pref){
