@@ -93,6 +93,11 @@ extern int set_emitente(EMITENTE *e);
 extern int get_lote_id();
 
 /**
+ * Get next lote evento ID
+ */
+extern int get_lote_evento_id();
+
+/**
  * Save lote on DB
  */
 extern int db_save_lote(LOTE *lote);
@@ -116,5 +121,10 @@ extern PREFS *get_prefs();
  * Get URLS for preferences window
  */
 extern PREFS_URLS *get_prefs_urls();
+
+/**
+ * Get next NF number
+ */
+extern int get_next_nfe_number(int *number, int *serie);
 
 #endif

@@ -34,6 +34,7 @@
 #include <xmlsec/xmlsec.h>
 #include <xmlsec/openssl/evp.h>
 #include <xmlsec/xmltree.h>
+#include <xmlsec/base64.h>
 #include <xmlsec/xmldsig.h>
 #include <xmlsec/crypto.h>
 #include <xmlsec/templates.h>
