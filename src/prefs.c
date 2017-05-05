@@ -62,6 +62,7 @@ G_DEFINE_TYPE_WITH_PRIVATE(Prefs, prefs, GTK_TYPE_DIALOG)
 
 static void inst_urls(PrefsPrivate *priv){
 	PREFS_URLS *url = get_prefs_urls();
+	PREFS *pref_data = get_prefs();
 	gtk_entry_set_text(priv->recepcaoevento_prod, url->recepcaoevento_prod);
 	gtk_entry_set_text(priv->nfeconsultacadastro_prod, url->nfeconsultacadastro_prod);
 	gtk_entry_set_text(priv->nfeinutilizacao_prod, url->nfeinutilizacao_prod);
@@ -77,6 +78,20 @@ static void inst_urls(PrefsPrivate *priv){
 	gtk_entry_set_text(priv->nfestatusservico_cert, url->nfestatusservico_cert);
 	gtk_entry_set_text(priv->nfeautorizacao_cert, url->nfeautorizacao_cert);
 	gtk_entry_set_text(priv->nferetautorizacao_cert, url->nferetautorizacao_cert);
+
+	gtk_entry_set_text(priv->public_key, pref_data->public_key);
+	gtk_entry_set_text(priv->private_key, pref_data->private_key);
+	gtk_entry_set_text(priv->card_reader_lib, pref_data->card_reader_lib);
+
+	if(pref_data->ambiente == AMBIENTE_PRODUCAO)
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(priv->ambiente_p), TRUE);
+	else
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(priv->ambiente_h), TRUE);
+
+	if(pref_data->cert_type == CERT_TYPE_A1)
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(priv->cert_a1), TRUE);
+	else
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(priv->cert_a3), TRUE);
 }
 
 static void inst_window(gpointer p, Prefs *pref){

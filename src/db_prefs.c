@@ -213,6 +213,9 @@ PREFS *get_prefs(){
 			p->ambiente = DEFAULT_AMBIENTE;
 			p->cert_type = DEFAULT_CERT_TYPE;
 			p->urls = get_ambiente_urls(DEFAULT_AMBIENTE);
+			p->public_key = "";
+			p->private_key = "";
+			p->card_reader_lib = "";
 			break;
 		} else {
 			free(p);
