@@ -53,8 +53,8 @@ char *get_xml_element(xmlDocPtr doc, char *element){
 	xmlChar *xpath = malloc(sizeof(xmlChar) * strlen(element) + 3);
 	xmlNodeSetPtr nodeset;
 	xmlXPathObjectPtr result;
-	strcpy(xpath, "//");
-	strcat(xpath, element);
+	strcpy((char*)xpath, "//");
+	strcat((char*)xpath, element);
 	xmlChar *content = NULL;
 
 	result = getnodeset(doc, xpath);
@@ -66,7 +66,7 @@ char *get_xml_element(xmlDocPtr doc, char *element){
 	free(xpath);
 	//xmlFreeDoc(doc);
 	xmlCleanupParser();
-	return content;
+	return (char*)content;
 }
 
 char *get_xml_subtree(xmlDocPtr doc, char *xpath){
@@ -83,12 +83,12 @@ char *get_xml_subtree(xmlDocPtr doc, char *xpath){
 	}
 	xmlXPathRegisterNs(context, BAD_CAST "nfe", 
 		BAD_CAST "http://www.portalfiscal.inf.br/nfe");
-	result = xmlXPathEvalExpression(xpath, context);
+	result = xmlXPathEvalExpression((xmlChar*)xpath, context);
 	if(result) {
 		nodeset = result->nodesetval;
 		buf = xmlBufferCreate();
-		int size = xmlNodeDump(buf, doc, nodeset->nodeTab[0], 0, 0);
-		subtree = strdup(buf->content);
+		xmlNodeDump(buf, doc, nodeset->nodeTab[0], 0, 0);
+		subtree = strdup((char*)buf->content);
 	}
 	
 	xmlXPathFreeContext(context);
@@ -100,7 +100,7 @@ xmlNodePtr get_xml_node(xmlDocPtr doc, char *xpath){
 	xmlXPathObjectPtr result;
 	xmlNodePtr node = NULL;
 
-	result = getnodeset(doc, xpath);
+	result = getnodeset(doc, (xmlChar*)xpath);
 	if(result) {
 		nodeset = result->nodesetval;
 		node =  nodeset->nodeTab[0];

@@ -28,7 +28,9 @@
 
 
 static MUNICIPIO *new_municipio(){
-	MUNICIPIO m = {};
+	MUNICIPIO m = {
+		.codigo = 0
+	};
 	MUNICIPIO *p = malloc(sizeof(MUNICIPIO));
 	memcpy(p, &m, sizeof(MUNICIPIO));
 	return p;
@@ -92,35 +94,45 @@ DESTINATARIO *new_destinatario(){
 }
 
 static PRODUTO *new_produto(){
-	PRODUTO m = {};
+	PRODUTO m = {
+		.id = 0
+	};
 	PRODUTO *p = malloc(sizeof(PRODUTO));
 	memcpy(p, &m, sizeof(PRODUTO));
 	return p;
 }
 
 static ICMS *new_icms(){
-	ICMS m = {};
+	ICMS m = {
+		.valor = 0
+	};
 	ICMS *p = malloc(sizeof(ICMS));
 	memcpy(p, &m, sizeof(ICMS));
 	return p;
 }
 
 static PIS *new_pis(){
-	PIS m = {};
+	PIS m = {
+		.quantidade = 0
+	};
 	PIS *p = malloc(sizeof(PIS));
 	memcpy(p, &m, sizeof(PIS));
 	return p;
 }
 
 static COFINS *new_cofins(){
-	COFINS m = {};
+	COFINS m = {
+		.quantidade = 0
+	};
 	COFINS *p = malloc(sizeof(COFINS));
 	memcpy(p, &m, sizeof(COFINS));
 	return p;
 }
 
 static IPI *new_ipi(){
-	IPI m = {};
+	IPI m = {
+		.codigo = 0
+	};
 	IPI *p = malloc(sizeof(IPI));
 	memcpy(p, &m, sizeof(IPI));
 	return p;
@@ -139,21 +151,27 @@ static IMPOSTO *new_imposto(){
 }
 
 static TRANSP *new_transp(){
-	TRANSP m = {};
+	TRANSP m = {
+		.modfrete = 0
+	};
 	TRANSP *p = malloc(sizeof(TRANSP));
 	memcpy(p, &m, sizeof(TRANSP));
 	return p;
 }
 
 static PROTOCOLO *new_protocolo(){
-	PROTOCOLO m = {};
+	PROTOCOLO m = {
+		.numero = NULL
+	};
 	PROTOCOLO *p = malloc(sizeof(PROTOCOLO));
 	memcpy(p, &m, sizeof(PROTOCOLO));
 	return p;
 }
 
 static LOTE_ITEM *new_lote_item(){
-	LOTE_ITEM m = {};
+	LOTE_ITEM m = {
+		.nfe = NULL
+	};
 	LOTE_ITEM *l = malloc(sizeof(LOTE_ITEM));
 	memcpy(l, &m, sizeof(LOTE_ITEM));
 	return l;
@@ -205,7 +223,9 @@ EVENTO_CANCELAMENTO *new_evento_cancelamento(){
 }
 
 static LOTE_EVENTO_ITEM *new_lote_evento_item(){
-	LOTE_EVENTO_ITEM m = {};
+	LOTE_EVENTO_ITEM m = {
+		.evento = NULL
+	};
 	LOTE_EVENTO_ITEM *l = malloc(sizeof(LOTE_EVENTO_ITEM));
 	memcpy(l, &m, sizeof(LOTE_EVENTO_ITEM));
 	return l;
@@ -343,7 +363,6 @@ static char get_dv(char *base){
 }
 
 void set_chave(NFE *nfe){
-	int i, j, div, sum = 0;
 	char *base = malloc(sizeof(char) * 60);
 	sprintf(base, "%02d%s%s%02d%03d%09d%d%08d",
 		nfe->idnfe->municipio->cod_uf,

@@ -41,7 +41,7 @@ struct _LivrenfeClass{
 	GtkApplicationClass parent_class;
 };
 
-G_DEFINE_TYPE(Livrenfe, livrenfe, GTK_TYPE_APPLICATION);
+G_DEFINE_TYPE(Livrenfe, livrenfe, GTK_TYPE_APPLICATION)
 
 static void livrenfe_init(Livrenfe *app){
 }

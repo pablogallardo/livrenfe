@@ -73,7 +73,7 @@ char *gen_cons_status(int ambiente, int cuf){
 		return NULL;
 	xmlTextWriterEndDocument(writer);
 	xmlNodeDump(buf, NULL, xmlDocGetRootElement(doc), 0, 0);
-	return buf->content;
+	return (char*) buf->content;
 }
 
 char *gen_cons_nfe(LOTE *lote, int ambiente){
@@ -110,7 +110,7 @@ char *gen_cons_nfe(LOTE *lote, int ambiente){
 		return NULL;
 	xmlTextWriterEndDocument(writer);
 	xmlNodeDump(buf, NULL, xmlDocGetRootElement(doc), 0, 0);
-	return buf->content;
+	return (char*)buf->content;
 }
 
 char *gen_lote_xml(LOTE *lote, char *password){
@@ -158,7 +158,7 @@ char *gen_lote_xml(LOTE *lote, char *password){
 		return NULL;
 	xmlTextWriterEndDocument(writer);
 	xmlNodeDump(buf, NULL, xmlDocGetRootElement(doc), 0, 0);
-	return buf->content;
+	return (char*)buf->content;
 }
 
 char *generate_xml(NFE *nfe, char *password) {
@@ -182,8 +182,8 @@ char *generate_xml(NFE *nfe, char *password) {
 	strcat(URI, nfe->idnfe->chave);
 	sign_xml(doc, password, URI);
 	xmlNodeDump(buf, NULL, xmlDocGetRootElement(doc), 0, 0);
-	nfe->xml = strdup(buf->content);
-	return buf->content;
+	nfe->xml = strdup((char*)buf->content);
+	return (char*)buf->content;
 }
 
 
@@ -480,7 +480,7 @@ int _gen_dest(xmlTextWriterPtr writer, NFE *nfe){
 
 	if (strlen(nfe->destinatario->tipo_doc) == 3)
 		rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "CPF",
-				"%s", nfe->destinatario->id);
+				"%s", nfe->destinatario->cnpj);
 	else
 		rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "CNPJ",
 				"%s", nfe->destinatario->cnpj);
@@ -584,7 +584,7 @@ int _gen_prod(xmlTextWriterPtr writer, ITEM *i){
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cProd",
-			"%d", p->codigo);
+			"%s", p->codigo);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "cEAN");
@@ -639,8 +639,8 @@ int _gen_prod(xmlTextWriterPtr writer, ITEM *i){
 			"%.10f", p->valor);
 	if (rc < 0)
 		return -EXML;
-	rc = xmlTextWriterWriteElement(writer, BAD_CAST "indTot",
-			"1");
+	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "indTot",
+			"%d", 1);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterEndElement(writer);
@@ -679,7 +679,6 @@ int _gen_imposto(xmlTextWriterPtr writer, IMPOSTO *i, float v){
 					"%.4f", i->icms->aliquota);
 			if (rc < 0)
 				return -EXML;
-			float valor_icms = (v) * (i->icms->aliquota);
 			rc = xmlTextWriterWriteFormatElement(writer, 
 				BAD_CAST "vCredICMSSN",
 					"%.2f", i->icms->aliquota);
@@ -922,7 +921,7 @@ char *gen_lote_evento_xml(LOTE_EVENTO *lote, char *password){
 
 	xmlTextWriterEndDocument(writer);
 	xmlNodeDump(buf, NULL, xmlDocGetRootElement(doc), 0, 0);
-	return buf->content;
+	return (char*)buf->content;
 
 }
 
@@ -1048,7 +1047,7 @@ char *generate_evento_xml(EVENTO *e, char *password) {
 	strcat(URI, id);
 	sign_xml(doc, password, URI);
 	xmlNodeDump(buf, NULL, xmlDocGetRootElement(doc), 0, 0);
-	return buf->content;
+	return (char*)buf->content;
 }
 
 char *get_versao(char *service){

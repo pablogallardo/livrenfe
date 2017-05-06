@@ -148,7 +148,7 @@ static char *format_soap(char *service, char *xml, int cuf, char *url_cabec,
 	//char *xml_inline = str_replace(">\n<","><", xmlbuf);
 	free(url_cabec);
 	free(url_dados);
-	return xmlbuf;
+	return (char*) xmlbuf;
 }
 
 char *send_sefaz(char *service, int ambiente, int cuf, char *xml,

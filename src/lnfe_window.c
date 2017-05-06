@@ -58,7 +58,7 @@ struct _LivrenfeWindowClass{
 	GtkApplicationWindowClass parent_class;
 };
 
-G_DEFINE_TYPE(LivrenfeWindow, livrenfe_window, GTK_TYPE_APPLICATION_WINDOW);
+G_DEFINE_TYPE(LivrenfeWindow, livrenfe_window, GTK_TYPE_APPLICATION_WINDOW)
 
 static void on_nfe_manager_destroy(gpointer p, LivrenfeWindow *win){
 	list_nfe(win);
@@ -77,7 +77,6 @@ static void just_modal_dismiss(GtkWidget *p, LivrenfeWindow *win){
 static void on_abrir_nfe_click(GtkMenuItem *m, LivrenfeWindow *win){
 	GtkTreeView *t = win->treeview;
 	GtkTreeSelection *s;
-	GtkTreePath *p;
 	s = gtk_tree_view_get_selection(t);
 	GtkTreeModel *model;
 	GtkTreeIter iter;
@@ -106,11 +105,10 @@ static void sefaz_status(gpointer *b, LivrenfeWindow *win){
 static void sefaz_emitir(gpointer *b, LivrenfeWindow *win){
 	GtkTreeView *t = win->treeview;
 	GtkTreeSelection *s;
-	GtkTreePath *p;
 	s = gtk_tree_view_get_selection(t);
 	GtkTreeModel *model;
 	GtkTreeIter iter;
-	LOTE *lote;
+	LOTE *lote = NULL;
 
 	if(gtk_tree_selection_get_selected(s, &model, &iter)){
 		int idnfe;
@@ -131,11 +129,10 @@ static void sefaz_emitir(gpointer *b, LivrenfeWindow *win){
 static void sefaz_cancelar(gpointer *b, LivrenfeWindow *win){
 	GtkTreeView *t = win->treeview;
 	GtkTreeSelection *s;
-	GtkTreePath *p;
 	s = gtk_tree_view_get_selection(t);
 	GtkTreeModel *model;
 	GtkTreeIter iter;
-	LOTE_EVENTO *lote;
+	LOTE_EVENTO *lote = NULL;
 
 	if(gtk_tree_selection_get_selected(s, &model, &iter)){
 		int idnfe;
@@ -271,7 +268,7 @@ static void about_activate(GtkMenuItem *i, gpointer win){
 		"comments", LIVRENFE_COMMENT,
 		"website", LIVRENFE_WEBSITE,
 		"website-label", LIVRENFE_WEBSITE,
-		"license_type", GTK_LICENSE_GPL_3_0);
+		"license_type", GTK_LICENSE_GPL_3_0, NULL);
 }
 
 static void pref_activate(GtkMenuItem *i, gpointer win){
@@ -298,7 +295,6 @@ void view_on_row_activated(GtkTreeView *t, GtkTreePath *path,
 
 static gint popup_menu_nfe(GtkTreeView *t, GdkEventButton *e, LivrenfeWindow *win){
 	GtkTreeSelection *s;
-	GtkTreePath *p;
 	s = gtk_tree_view_get_selection(t);
 	GtkTreeModel *model;
 	GtkTreeIter iter;

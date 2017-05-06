@@ -140,9 +140,6 @@ static void list_crt(GtkComboBox *fp){
 }
 
 static void emitente_manager_dispose(GObject *object){
-	EmitenteManagerPrivate *priv;
-
-	priv = emitente_manager_get_instance_private(EMITENTE_MANAGER(object));
 	G_OBJECT_CLASS(emitente_manager_parent_class)->dispose(object);
 }
 

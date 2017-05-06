@@ -43,20 +43,19 @@ G_DEFINE_TYPE_WITH_PRIVATE(SefazResponse, sefaz_response, GTK_TYPE_DIALOG)
 static void *sefaz_thread(void *arg){
 	SefazResponse *sr = SEFAZ_RESPONSE(arg);
 	SefazResponsePrivate *priv;
-	pthread_t tid;
 
 	priv = sefaz_response_get_instance_private(sr);
 	char *msg = malloc(sizeof(char) * 255);
 
 	if(sr->lote){
-		int rc = send_lote(sr->lote, 2, sr->password, &msg);
-		rc = cons_lote(sr->lote, 2, sr->password, &msg);
+		send_lote(sr->lote, 2, sr->password, &msg);
+		cons_lote(sr->lote, 2, sr->password, &msg);
 
 	} else if(sr->lote_evento){
-		int rc = send_lote_evento(sr->lote_evento, 2, sr->password, 
+		send_lote_evento(sr->lote_evento, 2, sr->password, 
 			&msg);
 	} else {
-		int rc = get_status_servico(2, 35, sr->password, &msg);
+		get_status_servico(2, 35, sr->password, &msg);
 	}
 
 	gtk_spinner_stop(priv->spinner);
@@ -65,6 +64,7 @@ static void *sefaz_thread(void *arg){
 		-1);
 	gtk_widget_set_visible(GTK_WIDGET(priv->ok_btn), TRUE);
 	free(msg);
+	return NULL;
 }
 
 static void get_response(SefazResponse *sr){
@@ -81,9 +81,6 @@ static void ok_click(GtkButton *b, SefazResponse *sr){
 }
 
 static void sefaz_response_dispose(GObject *object){
-	SefazResponsePrivate *priv;
-
-	priv = sefaz_response_get_instance_private(SEFAZ_RESPONSE(object));
 	G_OBJECT_CLASS(sefaz_response_parent_class)->dispose(object);
 }
 

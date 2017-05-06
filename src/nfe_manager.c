@@ -295,7 +295,6 @@ static void inst_nfe_destinatario(gpointer p, NFEManager *nman){
 
 	priv = nfe_manager_get_instance_private(nman);
 	NFE *nfe = nman->nfe;
-	IDNFE *idnfe = nfe->idnfe;
 	DESTINATARIO *destinatario = nfe->destinatario;
 	ENDERECO *endereco = destinatario->endereco;
 
@@ -349,8 +348,6 @@ static void inst_nfe_manager(gpointer p, NFEManager *nman){
 	NFE *nfe = nman->nfe;
 	if(nfe->idnfe->id_nfe != 0){
 		IDNFE *idnfe = nfe->idnfe;
-		DESTINATARIO *destinatario = nfe->destinatario;
-		ENDERECO *endereco = destinatario->endereco;
 
 		gtk_entry_set_text(priv->serie, itoa(idnfe->serie));
 		gtk_entry_set_text(priv->num, itoa(idnfe->num_nf));
@@ -390,8 +387,8 @@ static void default_emis(NFEManagerPrivate *priv){
 }
 
 static void default_nfe_number(NFEManagerPrivate *priv){
-	int num, serie, rc;
-	rc = get_next_nfe_number(&num, &serie);
+	int num, serie;
+	get_next_nfe_number(&num, &serie);
 	if(num == 0){
 		num = 1;
 		serie = 1;
@@ -429,9 +426,6 @@ static void nfe_manager_init(NFEManager *nman){
 
 
 static void nfe_manager_dispose(GObject *object){
-	NFEManagerPrivate *priv;
-
-	priv = nfe_manager_get_instance_private(NFE_MANAGER(object));
 	G_OBJECT_CLASS(nfe_manager_parent_class)->dispose(object);
 }
 

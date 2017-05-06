@@ -103,16 +103,10 @@ static void inst_window(gpointer p, Prefs *pref){
 }
 
 static void prefs_dispose(GObject *object){
-	PrefsPrivate *priv;
-
-	priv = prefs_get_instance_private(PREFS(object));
 	G_OBJECT_CLASS(prefs_parent_class)->dispose(object);
 }
 
 static void prefs_init(Prefs *p){
-	PrefsPrivate *priv;
-
-	priv = prefs_get_instance_private(p);
 	gtk_widget_init_template(GTK_WIDGET(p));
 	g_signal_connect(p, "show", G_CALLBACK(inst_window), p);
 }

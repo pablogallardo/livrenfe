@@ -297,7 +297,7 @@ static int get_itens(NFE *n){
 		ITEM *i = new_item();
 		rc = sqlite3_step(stmt);
 		if(rc == SQLITE_ROW){
-			int id_nfe, ordem, id_produto, icms_origem, icms_tipo,
+			int ordem, id_produto, icms_origem, icms_tipo,
 				pis_quantidade, pis_nt, cofins_quantidade,
 				cofins_nt, ipi_sit_trib, ncm, cfop;
 			float icms_aliquota, icms_valor, pis_aliquota,
@@ -305,7 +305,6 @@ static int get_itens(NFE *n){
 			char *descricao, *unidade, *ipi_classe, *ipi_codigo,
 				*cod_prod; 
 
-			id_nfe = sqlite3_column_int(stmt, ID_NFE);
 			ordem = sqlite3_column_int(stmt, ORDEM);
 			id_produto = sqlite3_column_int(stmt, ID_PRODUTO);
 			icms_origem = sqlite3_column_int(stmt, ICMS_ORIGEM);
@@ -326,13 +325,13 @@ static int get_itens(NFE *n){
 			valor = sqlite3_column_double(stmt, VALOR);
 			quantidade = sqlite3_column_double(stmt, QTD);
 
-			descricao = strdup(sqlite3_column_text(stmt, DESC));
-			unidade = strdup(sqlite3_column_text(stmt, UNIDADE));
-			ipi_classe = strdup(sqlite3_column_text(stmt, 
+			descricao = strdup((char*)sqlite3_column_text(stmt, DESC));
+			unidade = strdup((char*)sqlite3_column_text(stmt, UNIDADE));
+			ipi_classe = strdup((char*)sqlite3_column_text(stmt, 
 				IPI_CLASSE));
-			ipi_codigo = strdup(sqlite3_column_text(stmt, 
+			ipi_codigo = strdup((char*)sqlite3_column_text(stmt, 
 				IPI_CODIGO));
-			cod_prod = strdup(sqlite3_column_text(stmt, 
+			cod_prod = strdup((char*)sqlite3_column_text(stmt, 
 				COD_PROD));
 
 			inst_item(valor, quantidade, 
@@ -356,7 +355,7 @@ NFE *get_nfe(int id){
 	sqlite3_stmt *stmt;
 	char *err;
 	int rc;
-	NFE *nfe;
+	NFE *nfe = NULL;
 	int id_nfe, id_mun, id_uf, ind_pag, mod_nfe, serie,
 		num_nf, tipo, local_destino, tipo_impressao,
 		tipo_emissao, tipo_ambiente, finalidade, 
@@ -365,14 +364,29 @@ NFE *get_nfe(int id){
 		id_uf_emit, cep_emit, id_dest, t_ie_dest,
 		id_mun_dest, id_uf_dest, cod_nfe,
 		num_e_emit, num_e_dest, cep_dest, canceled;
-	time_t dh_emis, *dh_saida;
-	float total;
+	id_nfe = id_mun = id_uf = ind_pag = mod_nfe = serie =
+		num_nf = tipo = local_destino = tipo_impressao =
+		tipo_emissao = tipo_ambiente = finalidade = 
+		consumidor_final = presencial = q_itens =
+		id_emit = crt_emit = id_mun_emit =
+		id_uf_emit = cep_emit = id_dest = t_ie_dest =
+		id_mun_dest = id_uf_dest = cod_nfe =
+		num_e_emit = num_e_dest = cep_dest = canceled = 0;
+	time_t dh_emis = 0, *dh_saida = NULL;
+	float total = 0;
 	char *nome_mun, *uf, *nat_op, *versao,  *nome_emit, 
 		*cnpj_emit, *rua_emit, *comp_emit, *bairro_emit,
 		*mun_emit, *uf_emit, *nome_dest, *cnpj_dest,
 		*rua_dest, *comp_dest,*bairro_dest, *mun_dest,
 		*uf_dest, *chave, div, *ie_emit, *ie_dest,
 		*inf_ad_fisco, *inf_ad_contrib, *tipo_doc_dest, *protocolo;
+	nome_mun = uf = nat_op = versao =  nome_emit = 
+		cnpj_emit = rua_emit = comp_emit = bairro_emit =
+		mun_emit = uf_emit = nome_dest = cnpj_dest =
+		rua_dest = comp_dest =bairro_dest = mun_dest =
+		uf_dest = chave = ie_emit = ie_dest = inf_ad_fisco 
+		= inf_ad_contrib = tipo_doc_dest = protocolo = NULL;
+	div = 0;
 
 	enum{
 		ID_NFE, ID_MUN, MUN, ID_UF, UF, NAT_OP, IND_PAG, MOD_NFE,
@@ -461,44 +475,44 @@ NFE *get_nfe(int id){
 			}
 			total = sqlite3_column_double(stmt, TOTAL);
 
-			nome_mun = strdup(sqlite3_column_text(stmt, MUN)); 
-			uf = strdup(sqlite3_column_text(stmt, UF)); 
-			nat_op = strdup(sqlite3_column_text(stmt, NAT_OP)); 
-			versao = strdup(sqlite3_column_text(stmt, VERSAO)); 
-			nome_emit = strdup(sqlite3_column_text(stmt, NOME_EMIT)); 
-			cnpj_emit = strdup(sqlite3_column_text(stmt, CNPJ_EMIT)); 
-			rua_emit = strdup(sqlite3_column_text(stmt, RUA_EMIT)); 
+			nome_mun = strdup((char*)sqlite3_column_text(stmt, MUN)); 
+			uf = strdup((char*)sqlite3_column_text(stmt, UF)); 
+			nat_op = strdup((char*)sqlite3_column_text(stmt, NAT_OP)); 
+			versao = strdup((char*)sqlite3_column_text(stmt, VERSAO)); 
+			nome_emit = strdup((char*)sqlite3_column_text(stmt, NOME_EMIT)); 
+			cnpj_emit = strdup((char*)sqlite3_column_text(stmt, CNPJ_EMIT)); 
+			rua_emit = strdup((char*)sqlite3_column_text(stmt, RUA_EMIT)); 
 			//comp_emit = strdup(sqlite3_column_text(stmt, COMP_EMIT)); 
-			bairro_emit = strdup(sqlite3_column_text(stmt, BAIRRO_EMIT)); 
-			mun_emit = strdup(sqlite3_column_text(stmt, MUN_EMIT)); 
-			uf_emit = strdup(sqlite3_column_text(stmt, UF_EMIT)); 
-			ie_emit = strdup(sqlite3_column_text(stmt, IE_EMIT));
+			bairro_emit = strdup((char*)sqlite3_column_text(stmt, BAIRRO_EMIT)); 
+			mun_emit = strdup((char*)sqlite3_column_text(stmt, MUN_EMIT)); 
+			uf_emit = strdup((char*)sqlite3_column_text(stmt, UF_EMIT)); 
+			ie_emit = strdup((char*)sqlite3_column_text(stmt, IE_EMIT));
 			//ie_dest = strdup(sqlite3_column_text(stmt, IE_DEST));
-			nome_dest = strdup(sqlite3_column_text(stmt, NOME_DEST)); 
-			cnpj_dest = strdup(sqlite3_column_text(stmt, CNPJ_DEST)); 
-			rua_dest = strdup(sqlite3_column_text(stmt, RUA_DEST)); 
-			comp_dest = strdup(sqlite3_column_text(stmt, COMP_DEST)); 
-			bairro_dest = strdup(sqlite3_column_text(stmt, BAIRRO_DEST)); 
-			mun_dest = strdup(sqlite3_column_text(stmt, MUN_DEST)); 
-			uf_dest = strdup(sqlite3_column_text(stmt, UF_DEST)); 
-			tipo_doc_dest = strdup(sqlite3_column_text(stmt, TIPO_DOC_DEST));
-			chave = strdup(sqlite3_column_text(stmt, CHAVE)); 
+			nome_dest = strdup((char*)sqlite3_column_text(stmt, NOME_DEST)); 
+			cnpj_dest = strdup((char*)sqlite3_column_text(stmt, CNPJ_DEST)); 
+			rua_dest = strdup((char*)sqlite3_column_text(stmt, RUA_DEST)); 
+			comp_dest = strdup((char*)sqlite3_column_text(stmt, COMP_DEST)); 
+			bairro_dest = strdup((char*)sqlite3_column_text(stmt, BAIRRO_DEST)); 
+			mun_dest = strdup((char*)sqlite3_column_text(stmt, MUN_DEST)); 
+			uf_dest = strdup((char*)sqlite3_column_text(stmt, UF_DEST)); 
+			tipo_doc_dest = strdup((char*)sqlite3_column_text(stmt, TIPO_DOC_DEST));
+			chave = strdup((char*)sqlite3_column_text(stmt, CHAVE)); 
 			if(sqlite3_column_type(stmt, PROTOCOLO) == SQLITE_NULL){
 				protocolo = NULL;
 			} else {
-				protocolo = strdup(sqlite3_column_text(stmt,
+				protocolo = strdup((char*)sqlite3_column_text(stmt,
 					PROTOCOLO)); 
 			}
 			if(sqlite3_column_type(stmt, INF_AD_FISCO) == SQLITE_NULL){
 				inf_ad_fisco = NULL;
 			} else {
-				inf_ad_fisco = strdup(sqlite3_column_text(stmt,
+				inf_ad_fisco = strdup((char*)sqlite3_column_text(stmt,
 					INF_AD_FISCO)); 
 			}
 			if(sqlite3_column_type(stmt, INF_AD_CONTRIB) == SQLITE_NULL){
 				inf_ad_contrib = NULL;
 			} else {
-				inf_ad_contrib = strdup(sqlite3_column_text(stmt,
+				inf_ad_contrib = strdup((char*)sqlite3_column_text(stmt,
 					INF_AD_CONTRIB)); 
 			}
 		} else if(rc == SQLITE_DONE){
@@ -560,15 +574,15 @@ EMITENTE *get_emitente(int id){
 	id_mun = sqlite3_column_int(stmt, ID_MUN);
 	cep = sqlite3_column_int(stmt, CEP);
 
-	nome = strdup(sqlite3_column_text(stmt, NOME));
-	ie = strdup(sqlite3_column_text(stmt, IE));
-	cnpj = strdup(sqlite3_column_text(stmt, CNPJ));
-	rua = strdup(sqlite3_column_text(stmt, RUA));
-	bairro = strdup(sqlite3_column_text(stmt, BAIRRO));
-	mun = strdup(sqlite3_column_text(stmt, MUN));
-	uf = strdup(sqlite3_column_text(stmt, UF));
+	nome = strdup((char*)sqlite3_column_text(stmt, NOME));
+	ie = strdup((char*)sqlite3_column_text(stmt, IE));
+	cnpj = strdup((char*)sqlite3_column_text(stmt, CNPJ));
+	rua = strdup((char*)sqlite3_column_text(stmt, RUA));
+	bairro = strdup((char*)sqlite3_column_text(stmt, BAIRRO));
+	mun = strdup((char*)sqlite3_column_text(stmt, MUN));
+	uf = strdup((char*)sqlite3_column_text(stmt, UF));
 	comp = sqlite3_column_text(stmt, COMP)? 
-		strdup(sqlite3_column_text(stmt, COMP)) : NULL;
+		strdup((char*)sqlite3_column_text(stmt, COMP)) : NULL;
 	inst_emitente(id, nome, ie, crt, cnpj, rua, num, comp,
 		bairro, uf, mun, id_mun, id_uf, cep, e);
 	return e;
@@ -608,16 +622,16 @@ DESTINATARIO *get_destinatario_by_doc(const char *doc){
 	cep = sqlite3_column_int(stmt, CEP);
 	t_ie = sqlite3_column_int(stmt, TIPO_IE);
 
-	nome = strdup(sqlite3_column_text(stmt, NOME));
-	ie = strdup(sqlite3_column_text(stmt, IE));
-	cnpj = strdup(sqlite3_column_text(stmt, CNPJ));
-	rua = strdup(sqlite3_column_text(stmt, RUA));
-	bairro = strdup(sqlite3_column_text(stmt, BAIRRO));
-	mun = strdup(sqlite3_column_text(stmt, MUN));
-	uf = strdup(sqlite3_column_text(stmt, UF));
-	tipo_doc = strdup(sqlite3_column_text(stmt, TIPO_DOC));
+	nome = strdup((char*)sqlite3_column_text(stmt, NOME));
+	ie = strdup((char*)sqlite3_column_text(stmt, IE));
+	cnpj = strdup((char*)sqlite3_column_text(stmt, CNPJ));
+	rua = strdup((char*)sqlite3_column_text(stmt, RUA));
+	bairro = strdup((char*)sqlite3_column_text(stmt, BAIRRO));
+	mun = strdup((char*)sqlite3_column_text(stmt, MUN));
+	uf = strdup((char*)sqlite3_column_text(stmt, UF));
+	tipo_doc = strdup((char*)sqlite3_column_text(stmt, TIPO_DOC));
 	comp = sqlite3_column_text(stmt, COMP)? 
-		strdup(sqlite3_column_text(stmt, COMP)) : NULL;
+		strdup((char*)sqlite3_column_text(stmt, COMP)) : NULL;
 	inst_destinatario(id, nome, t_ie, tipo_doc, ie, cnpj, rua, 
 		num, comp, bairro, uf, mun, id_mun, id_uf, cep, d);
 	return d;

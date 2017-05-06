@@ -164,14 +164,16 @@ int sign_xml(xmlDocPtr doc, char *password, char *id) {
     /* add <dsig:Signature/> node to the doc */
     xmlAddChild(xmlDocGetRootElement(doc), signNode);
     idNode = get_xml_node(doc, "//@Id/..");
-    xmlAttrPtr attr = xmlHasProp(idNode, "Id");
+    const char *id_prefix = "Id";
+    xmlAttrPtr attr = xmlHasProp(idNode, (xmlChar*)id_prefix);
     if(attr){
-	xmlAddID(NULL, doc, str_replace("#", "" ,id), attr);
+    	const xmlChar *id_only = (xmlChar*)str_replace("#", "" ,id);
+	xmlAddID(NULL, doc, id_only, attr);
     }
     
     /* add reference */
     refNode = xmlSecTmplSignatureAddReference(signNode, xmlSecTransformSha1Id,
-                                        NULL, id, NULL);
+                                        NULL, (xmlChar*) id, NULL);
     if(refNode == NULL) {
         fprintf(stderr, "Error: failed to add reference to signature template\n");
         goto done;              

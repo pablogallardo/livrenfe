@@ -56,9 +56,6 @@ struct _ItemManagerPrivate{
 G_DEFINE_TYPE_WITH_PRIVATE(ItemManager, item_manager, GTK_TYPE_DIALOG)
 
 static void item_manager_dispose(GObject *object){
-	ItemManagerPrivate *priv;
-
-	priv = item_manager_get_instance_private(ITEM_MANAGER(object));
 	G_OBJECT_CLASS(item_manager_parent_class)->dispose(object);
 }
 

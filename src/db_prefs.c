@@ -26,7 +26,7 @@
 char *get_ws_url(char *service, int ambiente, char **url_header, 
 		char **url_body){
 	sqlite3_stmt *stmt;
-	char *err, *url, *s;
+	char *err, *url = NULL , *s;
 	err = malloc(sizeof(char) * 200);
 	int rc;
 	s = ambiente == 1? "url_prod" : "url_cert";
@@ -40,11 +40,11 @@ char *get_ws_url(char *service, int ambiente, char **url_header,
 	rc = sqlite3_step(stmt);
 	if(rc == SQLITE_ROW){
 		const char *aux = NULL;
-		aux = sqlite3_column_text(stmt, 0);
+		aux = (char*)sqlite3_column_text(stmt, 0);
 		url = aux == NULL? NULL:strdup(aux);
-		aux = sqlite3_column_text(stmt, 1);
+		aux = (char*)sqlite3_column_text(stmt, 1);
 		*url_header = aux == NULL? NULL:strdup(aux);
-		aux = sqlite3_column_text(stmt, 2);
+		aux = (char*)sqlite3_column_text(stmt, 2);
 		*url_body = aux == NULL? NULL:strdup(aux);
 	}
 	return url;
@@ -54,7 +54,7 @@ int get_url_id(char *service){
 	sqlite3_stmt *stmt;
 	char *err;
 	err = malloc(sizeof(char) * 200);
-	int rc, id;
+	int rc, id = 0;
 	char *sql = sqlite3_mprintf("SELECT id_url  FROM urls \
 		WHERE service = %Q", service);
 	if(db_select(sql, &err, &stmt)){
@@ -86,8 +86,8 @@ PREFS_URLS *get_prefs_urls(){
 		rc = sqlite3_step(stmt);
 		if(rc == SQLITE_ROW){
 			int id_url = sqlite3_column_int(stmt, 0);
-			const char *prod = sqlite3_column_text(stmt, 1);
-			const char *cert = sqlite3_column_text(stmt, 2);
+			const char *prod = (char*)sqlite3_column_text(stmt, 1);
+			const char *cert = (char*)sqlite3_column_text(stmt, 2);
 			switch(id_url){
 				case 1: //RecepcaoEvento
 					p->recepcaoevento_prod = strdup(prod);
@@ -146,7 +146,7 @@ static URLS *get_ambiente_urls(int ambiente){
 		rc = sqlite3_step(stmt);
 		if(rc == SQLITE_ROW){
 			int id_url = sqlite3_column_int(stmt, 0);
-			const char *link = sqlite3_column_text(stmt, ambiente);
+			const char *link = (char*)sqlite3_column_text(stmt, ambiente);
 			switch(id_url){
 				case 1: //RecepcaoEvento
 					u->recepcaoevento = strdup(link);
@@ -199,9 +199,9 @@ PREFS *get_prefs(){
 		if(rc == SQLITE_ROW){
 			int ambiente = sqlite3_column_int(stmt, 0);
 			int cert_type = sqlite3_column_int(stmt, 1);
-			const char *a1_pub = sqlite3_column_text(stmt, 2);
-			const char *a1_priv = sqlite3_column_text(stmt, 3);
-			const char *a3_lib = sqlite3_column_text(stmt, 4);
+			const char *a1_pub = (char*)sqlite3_column_text(stmt, 2);
+			const char *a1_priv = (char*)sqlite3_column_text(stmt, 3);
+			const char *a3_lib = (char*)sqlite3_column_text(stmt, 4);
 
 			p->public_key = strdup(a1_pub);
 			p->private_key = strdup(a1_priv);

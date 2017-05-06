@@ -94,6 +94,7 @@ static int sefaz_response_protocolos(LOTE *lote, xmlDocPtr doc){
 		it = it->next;
 		free(xp);
 	}
+	return 0;
 }
 
 static int sefaz_response_eventos(LOTE_EVENTO *lote, xmlDocPtr doc){
@@ -138,6 +139,7 @@ static int sefaz_response_eventos(LOTE_EVENTO *lote, xmlDocPtr doc){
 		it = it->next;
 		free(xp);
 	}
+	return 0;
 }
 
 int send_lote(LOTE *lote, int ambiente, char *passwd, char **msg){
@@ -173,7 +175,7 @@ int send_lote(LOTE *lote, int ambiente, char *passwd, char **msg){
 	rc = db_save_lote(lote);
 	if(rc){
 		*msg = malloc(sizeof(char) * 200);
-		sprintf(*msg, "Erro ao salvar lote\nNúmero de recibo: %d",
+		sprintf(*msg, "Erro ao salvar lote\nNúmero de recibo: %s",
 			nRec);
 		return -ESQL;
 	}
@@ -182,7 +184,7 @@ int send_lote(LOTE *lote, int ambiente, char *passwd, char **msg){
 
 int send_lote_evento(LOTE_EVENTO *lote, int ambiente, char *passwd, char **msg){
 	char *response, *status;
-	int cStat, rc;
+	int cStat, rc = 0;
 	xmlDocPtr doc;
 	char *xml = gen_lote_evento_xml(lote, passwd);
 	response = send_sefaz("RecepcaoEvento", 2, 35, 
@@ -206,7 +208,7 @@ int send_lote_evento(LOTE_EVENTO *lote, int ambiente, char *passwd, char **msg){
 	*msg = strdup(motivo);
 
 	if(cStat == 128)
-		sefaz_response_eventos(lote, doc);
+		rc = sefaz_response_eventos(lote, doc);
 	db_save_lote_evento(lote);
 	xmlFree(motivo);
 	xmlFree(status);
@@ -221,7 +223,7 @@ int send_lote_evento(LOTE_EVENTO *lote, int ambiente, char *passwd, char **msg){
 
 int cons_lote(LOTE *lote, int ambiente, char *passwd, char **msg){
 	char *response, *status;
-	int cStat, rc;
+	int cStat;
 	xmlDocPtr doc;
 	char *xml = gen_cons_nfe(lote, ambiente);
 	response = send_sefaz("NFeRetAutorizacao", 2, 35, 

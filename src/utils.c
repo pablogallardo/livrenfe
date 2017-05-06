@@ -17,10 +17,12 @@
  *
  */
 
+#define _XOPEN_SOURCE
+#define _GNU_SOURCE
+#define __USE_XOPEN
 #include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
-#define _XOPEN_SOURCE
 #include <time.h>
 #include <string.h>
 
