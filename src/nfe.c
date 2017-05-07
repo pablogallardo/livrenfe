@@ -510,7 +510,10 @@ void free_urls(URLS *u){
 
 void free_prefs(PREFS *p){
 	free_urls(p->urls);
-	free(p->public_key);
-	free(p->private_key);
-	free(p->card_reader_lib);
+	if(strcmp(p->public_key, ""))
+		free(p->public_key);
+	if(strcmp(p->private_key, ""))
+		free(p->private_key);
+	if(strcmp(p->card_reader_lib, ""))
+		free(p->card_reader_lib);
 }

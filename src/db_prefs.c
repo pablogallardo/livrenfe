@@ -203,12 +203,22 @@ PREFS *get_prefs(){
 			const char *a1_priv = (char*)sqlite3_column_text(stmt, 3);
 			const char *a3_lib = (char*)sqlite3_column_text(stmt, 4);
 
-			p->public_key = strdup(a1_pub);
-			p->private_key = strdup(a1_priv);
-			p->card_reader_lib = strdup(a3_lib);
+			if(a1_pub)
+				p->public_key = strdup(a1_pub);
+			else
+				p->public_key = "";
+			if(a1_priv)
+				p->private_key = strdup(a1_priv);
+			else
+				p->private_key = "";
+			if(a3_lib)
+				p->card_reader_lib = strdup(a3_lib);
+			else
+				p->card_reader_lib = "";
 			p->ambiente = ambiente;
 			p->cert_type = cert_type;
 			p->urls = get_ambiente_urls(ambiente);
+			break;
 		} else if(rc == SQLITE_DONE){
 			p->ambiente = DEFAULT_AMBIENTE;
 			p->cert_type = DEFAULT_CERT_TYPE;

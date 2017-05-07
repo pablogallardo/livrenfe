@@ -1,4 +1,4 @@
-/* Copyright (c) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
+/* Copyright (c) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
  *
  * This file is part of LivreNFE.
  *
@@ -19,6 +19,8 @@
 
 #include "crypto_interface.h"
 #include "errno.h"
+#include "db_interface.h"
+#include "nfe.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -36,14 +38,16 @@ static int smartcard_login(const char *password, PKCS11_SLOT **s,
 
 	PKCS11_CTX *ctx;
 	PKCS11_SLOT *slots;
+	PREFS *prefs;
 	
 	int rc = 0, logged_in;
 	unsigned int nslots;
 
 	ctx = PKCS11_CTX_new();
 
+	prefs = get_prefs();
 	/* load pkcs #11 module */
-	rc = PKCS11_CTX_load(ctx, "/usr/lib/libaetpkss.so.3");
+	rc = PKCS11_CTX_load(ctx, prefs->card_reader_lib);
 	if (rc) {
 		fprintf(stderr, "loading pkcs11 engine failed: %s\n",
 			ERR_reason_error_string(ERR_get_error()));
