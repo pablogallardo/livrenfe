@@ -35,7 +35,7 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="cancel_btn">
                 <property name="label" translatable="yes">Cancelar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -48,7 +48,7 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
               </packing>
             </child>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="ok_btn">
                 <property name="label" translatable="yes">OK</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -94,7 +94,6 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
                   <object class="GtkRadioButton" id="ambiente_p">
                     <property name="label" translatable="yes">Produção</property>
                     <property name="visible">True</property>
-                    <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="active">True</property>

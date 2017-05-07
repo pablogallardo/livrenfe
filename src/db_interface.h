@@ -127,4 +127,14 @@ extern PREFS_URLS *get_prefs_urls();
  */
 extern int get_next_nfe_number(int *number, int *serie);
 
+/**
+ * Save urls into DB
+ */
+extern int set_prefs_urls(PREFS_URLS *urls);
+
+/**
+ * Save prefs into DB
+ */
+extern int set_prefs(PREFS *prefs);
+
 #endif

@@ -68,6 +68,96 @@ int get_url_id(char *service){
 	return id;
 }
 
+int set_prefs_urls(PREFS_URLS *urls){
+	char *sql, *err;
+	err = NULL;
+	if(urls){
+		sql = sqlite3_mprintf("REPLACE INTO urls (id_url, url_prod,\
+			url_cert) VALUES  (%d, %Q, %Q);",
+			1, urls->recepcaoevento_prod, 
+			urls->recepcaoevento_cert);
+		db_exec(sql, &err);
+		if(err){
+			fprintf(stderr, "livrenfe: Error: %s", err);
+			return -ESQL;
+		}
+		sql = sqlite3_mprintf("REPLACE INTO urls (id_url, url_prod,\
+			url_cert) VALUES  (%d, %Q, %Q);",
+			2, urls->nfeconsultacadastro_prod, 
+			urls->nfeconsultacadastro_cert);
+		db_exec(sql, &err);
+		if(err){
+			fprintf(stderr, "livrenfe: Error: %s", err);
+			return -ESQL;
+		}
+		sql = sqlite3_mprintf("REPLACE INTO urls (id_url, url_prod,\
+			url_cert) VALUES  (%d, %Q, %Q);",
+			3, urls->nfeinutilizacao_prod, 
+			urls->nfeinutilizacao_cert);
+		db_exec(sql, &err);
+		if(err){
+			fprintf(stderr, "livrenfe: Error: %s", err);
+			return -ESQL;
+		}
+		sql = sqlite3_mprintf("REPLACE INTO urls (id_url, url_prod,\
+			url_cert) VALUES  (%d, %Q, %Q);",
+			4, urls->nfeconsultaprotocolo_prod, 
+			urls->nfeconsultaprotocolo_cert);
+		db_exec(sql, &err);
+		if(err){
+			fprintf(stderr, "livrenfe: Error: %s", err);
+			return -ESQL;
+		}
+		sql = sqlite3_mprintf("REPLACE INTO urls (id_url, url_prod,\
+			url_cert) VALUES  (%d, %Q, %Q);",
+			5, urls->nfestatusservico_prod, 
+			urls->nfestatusservico_cert);
+		db_exec(sql, &err);
+		if(err){
+			fprintf(stderr, "livrenfe: Error: %s", err);
+			return -ESQL;
+		}
+		sql = sqlite3_mprintf("REPLACE INTO urls (id_url, url_prod,\
+			url_cert) VALUES  (%d, %Q, %Q);",
+			6, urls->nfeautorizacao_prod, 
+			urls->nfeautorizacao_cert);
+		db_exec(sql, &err);
+		if(err){
+			fprintf(stderr, "livrenfe: Error: %s", err);
+			return -ESQL;
+		}
+		sql = sqlite3_mprintf("REPLACE INTO urls (id_url, url_prod,\
+			url_cert) VALUES  (%d, %Q, %Q);",
+			7, urls->nferetautorizacao_prod, 
+			urls->nferetautorizacao_cert);
+		db_exec(sql, &err);
+		if(err){
+			fprintf(stderr, "livrenfe: Error: %s", err);
+			return -ESQL;
+		}
+	}
+	return 0;
+}
+
+int set_prefs(PREFS *prefs){
+	char *sql, *err;
+	err = NULL;
+	if(prefs){
+		sql = sqlite3_mprintf("REPLACE INTO prefs (id, ambiente,\
+			cert_type, a1_public_key, a1_private_key, a3_library)\
+			VALUES  (%d, %d, %d, %Q, %Q, %Q);",
+			1, prefs->ambiente, prefs->cert_type,
+			prefs->public_key, prefs->private_key,
+			prefs->card_reader_lib);
+		db_exec(sql, &err);
+		if(err){
+			fprintf(stderr, "livrenfe: Error: %s", err);
+			return -ESQL;
+		}
+	}
+	return 0;
+}
+
 PREFS_URLS *get_prefs_urls(){
 	PREFS_URLS *p = malloc(sizeof(PREFS_URLS));
 	sqlite3_stmt *stmt;
@@ -203,18 +293,9 @@ PREFS *get_prefs(){
 			const char *a1_priv = (char*)sqlite3_column_text(stmt, 3);
 			const char *a3_lib = (char*)sqlite3_column_text(stmt, 4);
 
-			if(a1_pub)
-				p->public_key = strdup(a1_pub);
-			else
-				p->public_key = "";
-			if(a1_priv)
-				p->private_key = strdup(a1_priv);
-			else
-				p->private_key = "";
-			if(a3_lib)
-				p->card_reader_lib = strdup(a3_lib);
-			else
-				p->card_reader_lib = "";
+			p->public_key = a1_pub? strdup(a1_pub):strdup("");
+			p->private_key = a1_priv? strdup(a1_priv):strdup("");
+			p->card_reader_lib = a3_lib? strdup(a3_lib):strdup("");
 			p->ambiente = ambiente;
 			p->cert_type = cert_type;
 			p->urls = get_ambiente_urls(ambiente);

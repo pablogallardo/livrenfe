@@ -25,6 +25,7 @@
 #include "livrenfe.h"
 #include <gtk/gtk.h>
 #include <stdlib.h>
+#include <string.h>
 
 
 struct _PrefsClass{
@@ -56,6 +57,9 @@ struct _PrefsPrivate{
 	GtkEntry *nferetautorizacao_cert;
 	GtkEntry *nfeautorizacao_prod;
 	GtkEntry *nfeautorizacao_cert;
+
+	GtkButton *ok_btn;
+	GtkButton *cancel_btn;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(Prefs, prefs, GTK_TYPE_DIALOG)
@@ -96,6 +100,33 @@ static void inst_urls(PrefsPrivate *priv){
 	free_prefs(pref_data);
 }
 
+static void save_prefs_urls(PrefsPrivate *p){
+	PREFS_URLS *urls = get_prefs_urls();
+	//TODO
+}
+
+static void save_prefs(gpointer btn, Prefs *p){
+	PrefsPrivate *priv;
+	priv = prefs_get_instance_private(PREFS(p));
+	PREFS *prefs = get_prefs();
+	char *pub_key = strdup(gtk_entry_get_text(priv->public_key));
+	char *priv_key = strdup(gtk_entry_get_text(priv->private_key));
+	char *cert_lib = strdup(gtk_entry_get_text(priv->card_reader_lib));
+	free(prefs->private_key);
+	free(prefs->public_key);
+	free(prefs->card_reader_lib);
+	prefs->private_key = priv_key;
+	prefs->public_key = pub_key;
+	prefs->card_reader_lib = cert_lib;
+	if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(priv->ambiente_p))){
+		prefs->ambiente = AMBIENTE_PRODUCAO;
+	} else {
+		prefs->ambiente = AMBIENTE_HOMOLOGACAO;
+	}
+	set_prefs(prefs);
+	gtk_widget_destroy(GTK_WIDGET(p));
+}
+
 static void inst_window(gpointer p, Prefs *pref){
 	PrefsPrivate *priv;
 	priv = prefs_get_instance_private(PREFS(pref));
@@ -106,12 +137,18 @@ static void prefs_dispose(GObject *object){
 	G_OBJECT_CLASS(prefs_parent_class)->dispose(object);
 }
 
-static void prefs_init(Prefs *p){
-	gtk_widget_init_template(GTK_WIDGET(p));
-	g_signal_connect(p, "show", G_CALLBACK(inst_window), p);
+static void prefs_destroy(gpointer po, Prefs *p){
+	gtk_widget_destroy(GTK_WIDGET(p));
 }
 
-
+static void prefs_init(Prefs *p){
+	gtk_widget_init_template(GTK_WIDGET(p));
+	PrefsPrivate *priv;
+	priv = prefs_get_instance_private(PREFS(p));
+	g_signal_connect(p, "show", G_CALLBACK(inst_window), p);
+	g_signal_connect(priv->ok_btn, "clicked", G_CALLBACK(save_prefs), p);
+	g_signal_connect(priv->cancel_btn, "clicked", G_CALLBACK(prefs_destroy), p);
+}
 
 static void prefs_class_init(PrefsClass *class){
 	G_OBJECT_CLASS (class)->dispose = prefs_dispose;
@@ -159,6 +196,10 @@ static void prefs_class_init(PrefsClass *class){
 		Prefs, nfestatusservico_prod);
 	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
 		Prefs, nfestatusservico_cert);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		Prefs, ok_btn);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
+		Prefs, cancel_btn);
 }
 
 Prefs *prefs_new(LivrenfeWindow *win){
