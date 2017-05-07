@@ -20,6 +20,8 @@
 #include "sefaz_response.h"
 #include "lnfe_window.h"
 #include "sefaz.h"
+#include "db_interface.h"
+#include "nfe.h"
 #include <gtk/gtk.h>
 #include <pthread.h>
 #include <stdlib.h>
@@ -47,15 +49,17 @@ static void *sefaz_thread(void *arg){
 	priv = sefaz_response_get_instance_private(sr);
 	char *msg = malloc(sizeof(char) * 255);
 
+	PREFS *prefs = get_prefs();
+	int ambiente = prefs->ambiente;
 	if(sr->lote){
-		send_lote(sr->lote, 2, sr->password, &msg);
-		cons_lote(sr->lote, 2, sr->password, &msg);
+		send_lote(sr->lote, ambiente, sr->password, &msg);
+		cons_lote(sr->lote, ambiente, sr->password, &msg);
 
 	} else if(sr->lote_evento){
-		send_lote_evento(sr->lote_evento, 2, sr->password, 
+		send_lote_evento(sr->lote_evento, ambiente, sr->password, 
 			&msg);
 	} else {
-		get_status_servico(2, 35, sr->password, &msg);
+		get_status_servico(ambiente, 35, sr->password, &msg);
 	}
 
 	gtk_spinner_stop(priv->spinner);
@@ -64,6 +68,7 @@ static void *sefaz_thread(void *arg){
 		-1);
 	gtk_widget_set_visible(GTK_WIDGET(priv->ok_btn), TRUE);
 	free(msg);
+	free_prefs(prefs);
 	return NULL;
 }
 

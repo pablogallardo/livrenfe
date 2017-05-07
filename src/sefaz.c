@@ -30,8 +30,8 @@ int get_status_servico(int ambiente, int cuf, char *passwd, char **msg){
 	char *response, *status;
 	int cStat;
 	xmlDocPtr doc;
-	char *xml = gen_cons_status(2, 35);
-	response = send_sefaz("NfeStatusServico", 2, 35, 
+	char *xml = gen_cons_status(ambiente, cuf);
+	response = send_sefaz("NfeStatusServico", ambiente, cuf, 
 		xml, passwd);
 	if(response == NULL){
 		*msg = strdup("Sem resposta do SEFAZ, tente novamente");
@@ -147,7 +147,7 @@ int send_lote(LOTE *lote, int ambiente, char *passwd, char **msg){
 	int cStat, rc;
 	xmlDocPtr doc;
 	char *xml = gen_lote_xml(lote, passwd);
-	response = send_sefaz("NFeAutorizacao", 2, 35, 
+	response = send_sefaz("NFeAutorizacao", ambiente, 35, 
 		xml, passwd);
 	if(response == NULL){
 		*msg = strdup("Sem resposta do SEFAZ, tente novamente");
@@ -187,7 +187,7 @@ int send_lote_evento(LOTE_EVENTO *lote, int ambiente, char *passwd, char **msg){
 	int cStat, rc = 0;
 	xmlDocPtr doc;
 	char *xml = gen_lote_evento_xml(lote, passwd);
-	response = send_sefaz("RecepcaoEvento", 2, 35, 
+	response = send_sefaz("RecepcaoEvento", ambiente, 35, 
 		xml, passwd);
 	if(response == NULL){
 		*msg = strdup("Sem resposta do SEFAZ, tente novamente");
@@ -226,7 +226,7 @@ int cons_lote(LOTE *lote, int ambiente, char *passwd, char **msg){
 	int cStat;
 	xmlDocPtr doc;
 	char *xml = gen_cons_nfe(lote, ambiente);
-	response = send_sefaz("NFeRetAutorizacao", 2, 35, 
+	response = send_sefaz("NFeRetAutorizacao", ambiente, 35, 
 		xml, passwd);
 	if(response == NULL){
 		*msg = strdup("Sem resposta do SEFAZ, tente novamente");

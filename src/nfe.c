@@ -37,12 +37,13 @@ static MUNICIPIO *new_municipio(){
 }
 
 static IDNFE *new_idnfe(){
+	PREFS *pref = get_prefs();
 	IDNFE i = {
 		.municipio = new_municipio(),
 		.dh_saida = malloc(sizeof(time_t)),
 		.cod_nfe = rand() % 99999999,
 		.tipo_emissao = TE_NORMAL,
-		.tipo_ambiente = HOMOLOGACAO,
+		.tipo_ambiente = pref->ambiente,
 		.local_destino = DEST_INTERNA,
 		.tipo = TIPO_SAIDA,
 		.tipo_impressao = IMP_RET,
@@ -51,6 +52,7 @@ static IDNFE *new_idnfe(){
 	};
 	IDNFE *p = malloc(sizeof(IDNFE));
 	memcpy(p, &i, sizeof(IDNFE));
+	free_prefs(pref);
 	return p;
 }
 
@@ -496,3 +498,19 @@ void free_destinatario(DESTINATARIO *d){
 	free(d);
 }
 
+void free_urls(URLS *u){
+	free(u->recepcaoevento);
+	free(u->nfeconsultaprotocolo);
+	free(u->nfeconsultacadastro);
+	free(u->nfestatusservico);
+	free(u->nfeautorizacao);
+	free(u->nferetautorizacao);
+	free(u->nfeinutilizacao);
+}
+
+void free_prefs(PREFS *p){
+	free_urls(p->urls);
+	free(p->public_key);
+	free(p->private_key);
+	free(p->card_reader_lib);
+}
