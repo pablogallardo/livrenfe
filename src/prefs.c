@@ -102,7 +102,23 @@ static void inst_urls(PrefsPrivate *priv){
 
 static void save_prefs_urls(PrefsPrivate *p){
 	PREFS_URLS *urls = get_prefs_urls();
-	//TODO
+	empty_prefs_urls(urls);
+	urls->recepcaoevento_prod = strdup(gtk_entry_get_text(p->recepcaoevento_prod));
+	urls->recepcaoevento_cert = strdup(gtk_entry_get_text(p->recepcaoevento_cert));
+	urls->nfeconsultacadastro_prod = strdup(gtk_entry_get_text(p->nfeconsultacadastro_prod));
+	urls->nfeconsultacadastro_cert = strdup(gtk_entry_get_text(p->nfeconsultacadastro_cert));
+	urls->nfeinutilizacao_prod = strdup(gtk_entry_get_text(p->nfeinutilizacao_prod));
+	urls->nfeinutilizacao_cert = strdup(gtk_entry_get_text(p->nfeinutilizacao_cert));
+	urls->nfeconsultaprotocolo_prod = strdup(gtk_entry_get_text(p->nfeconsultacadastro_cert));
+	urls->nfeconsultaprotocolo_cert = strdup(gtk_entry_get_text(p->nfeconsultaprotocolo_cert));
+	urls->nfeautorizacao_prod = strdup(gtk_entry_get_text(p->nfeautorizacao_prod));
+	urls->nfeautorizacao_cert = strdup(gtk_entry_get_text(p->nfeautorizacao_cert));
+	urls->nferetautorizacao_prod = strdup(gtk_entry_get_text(p->nferetautorizacao_prod));
+	urls->nferetautorizacao_cert = strdup(gtk_entry_get_text(p->nferetautorizacao_cert));
+	urls->nfestatusservico_prod = strdup(gtk_entry_get_text(p->nfestatusservico_prod));
+	urls->nfestatusservico_cert = strdup(gtk_entry_get_text(p->nfestatusservico_cert));
+	set_prefs_urls(urls);
+	free_prefs_urls(urls);
 }
 
 static void save_prefs(gpointer btn, Prefs *p){
@@ -124,6 +140,7 @@ static void save_prefs(gpointer btn, Prefs *p){
 		prefs->ambiente = AMBIENTE_HOMOLOGACAO;
 	}
 	set_prefs(prefs);
+	save_prefs_urls(priv);
 	gtk_widget_destroy(GTK_WIDGET(p));
 }
 

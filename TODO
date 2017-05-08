@@ -4,6 +4,5 @@ TODO list for LivreNFE
 * When having items with values and quantity with floating points the total value is incorrect. Fix it.
 * Free PKCS after using it.
 * Implement service "InutilizacaoNFE"
-* Add configuration window for LivreNFE parameters
 
 Pablo G. Gallardo

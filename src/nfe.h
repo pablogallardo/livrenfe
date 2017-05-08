@@ -96,3 +96,7 @@ extern int add_evento(LOTE_EVENTO *lote, EVENTO *e);
 extern void free_urls(URLS *u);
 
 extern void free_prefs(PREFS *p);
+
+extern void empty_prefs_urls(PREFS_URLS *u);
+
+extern void free_prefs_urls(PREFS_URLS *u);

@@ -313,20 +313,20 @@ typedef struct {
  * URLs for preferences window
  */
 typedef struct {
-	const char *recepcaoevento_prod;
-	const char *recepcaoevento_cert;
-	const char *nfeconsultacadastro_prod;
-	const char *nfeconsultacadastro_cert;
-	const char *nfeinutilizacao_prod;
-	const char *nfeinutilizacao_cert;
-	const char *nfeconsultaprotocolo_prod;
-	const char *nfeconsultaprotocolo_cert;
-	const char *nfestatusservico_prod;
-	const char *nfestatusservico_cert;
-	const char *nferetautorizacao_prod;
-	const char *nferetautorizacao_cert;
-	const char *nfeautorizacao_prod;
-	const char *nfeautorizacao_cert;
+	char *recepcaoevento_prod;
+	char *recepcaoevento_cert;
+	char *nfeconsultacadastro_prod;
+	char *nfeconsultacadastro_cert;
+	char *nfeinutilizacao_prod;
+	char *nfeinutilizacao_cert;
+	char *nfeconsultaprotocolo_prod;
+	char *nfeconsultaprotocolo_cert;
+	char *nfestatusservico_prod;
+	char *nfestatusservico_cert;
+	char *nferetautorizacao_prod;
+	char *nferetautorizacao_cert;
+	char *nfeautorizacao_prod;
+	char *nfeautorizacao_cert;
 } PREFS_URLS;
 
 /**
