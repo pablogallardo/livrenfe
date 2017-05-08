@@ -72,64 +72,64 @@ int set_prefs_urls(PREFS_URLS *urls){
 	char *sql, *err;
 	err = NULL;
 	if(urls){
-		sql = sqlite3_mprintf("REPLACE INTO urls (id_url, url_prod,\
-			url_cert) VALUES  (%d, %Q, %Q);",
-			1, urls->recepcaoevento_prod, 
-			urls->recepcaoevento_cert);
+		sql = sqlite3_mprintf("UPDATE urls SET url_prod = %Q,\
+			url_cert = %Q WHERE id_url = %d;",
+			urls->recepcaoevento_prod, 
+			urls->recepcaoevento_cert, 1);
 		db_exec(sql, &err);
 		if(err){
 			fprintf(stderr, "livrenfe: Error: %s", err);
 			return -ESQL;
 		}
-		sql = sqlite3_mprintf("REPLACE INTO urls (id_url, url_prod,\
-			url_cert) VALUES  (%d, %Q, %Q);",
-			2, urls->nfeconsultacadastro_prod, 
-			urls->nfeconsultacadastro_cert);
+		sql = sqlite3_mprintf("UPDATE urls SET url_prod = %Q,\
+			url_cert = %Q WHERE id_url = %d;",
+			urls->nfeconsultacadastro_prod, 
+			urls->nfeconsultacadastro_cert, 2);
 		db_exec(sql, &err);
 		if(err){
 			fprintf(stderr, "livrenfe: Error: %s", err);
 			return -ESQL;
 		}
-		sql = sqlite3_mprintf("REPLACE INTO urls (id_url, url_prod,\
-			url_cert) VALUES  (%d, %Q, %Q);",
-			3, urls->nfeinutilizacao_prod, 
-			urls->nfeinutilizacao_cert);
+		sql = sqlite3_mprintf("UPDATE urls SET url_prod = %Q,\
+			url_cert = %Q WHERE id_url = %d;",
+			urls->nfeinutilizacao_prod, 
+			urls->nfeinutilizacao_cert, 3);
 		db_exec(sql, &err);
 		if(err){
 			fprintf(stderr, "livrenfe: Error: %s", err);
 			return -ESQL;
 		}
-		sql = sqlite3_mprintf("REPLACE INTO urls (id_url, url_prod,\
-			url_cert) VALUES  (%d, %Q, %Q);",
-			4, urls->nfeconsultaprotocolo_prod, 
-			urls->nfeconsultaprotocolo_cert);
+		sql = sqlite3_mprintf("UPDATE urls SET url_prod = %Q,\
+			url_cert = %Q WHERE id_url = %d;",
+			urls->nfeconsultaprotocolo_prod, 
+			urls->nfeconsultaprotocolo_cert, 4);
 		db_exec(sql, &err);
 		if(err){
 			fprintf(stderr, "livrenfe: Error: %s", err);
 			return -ESQL;
 		}
-		sql = sqlite3_mprintf("REPLACE INTO urls (id_url, url_prod,\
-			url_cert) VALUES  (%d, %Q, %Q);",
-			5, urls->nfestatusservico_prod, 
-			urls->nfestatusservico_cert);
+		sql = sqlite3_mprintf("UPDATE urls SET url_prod = %Q,\
+			url_cert = %Q WHERE id_url = %d;",
+			urls->nfestatusservico_prod, 
+			urls->nfestatusservico_cert, 5);
 		db_exec(sql, &err);
 		if(err){
 			fprintf(stderr, "livrenfe: Error: %s", err);
 			return -ESQL;
 		}
-		sql = sqlite3_mprintf("REPLACE INTO urls (id_url, url_prod,\
-			url_cert) VALUES  (%d, %Q, %Q);",
-			6, urls->nfeautorizacao_prod, 
-			urls->nfeautorizacao_cert);
+		sql = sqlite3_mprintf("UPDATE urls SET url_prod = %Q,\
+			url_cert = %Q WHERE id_url = %d;",
+			urls->nfeautorizacao_prod, 
+			urls->nfeautorizacao_cert, 6);
 		db_exec(sql, &err);
 		if(err){
 			fprintf(stderr, "livrenfe: Error: %s", err);
 			return -ESQL;
 		}
-		sql = sqlite3_mprintf("REPLACE INTO urls (id_url, url_prod,\
-			url_cert) VALUES  (%d, %Q, %Q);",
-			7, urls->nferetautorizacao_prod, 
-			urls->nferetautorizacao_cert);
+		sql = sqlite3_mprintf("UPDATE urls SET url_prod = %Q,\
+			url_cert = %Q WHERE id_url = %d;",
+			urls->nferetautorizacao_prod, 
+			urls->nferetautorizacao_cert, 7);
 		db_exec(sql, &err);
 		if(err){
 			fprintf(stderr, "livrenfe: Error: %s", err);
