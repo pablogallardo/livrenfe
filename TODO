@@ -1,6 +1,9 @@
 TODO list for LivreNFE
 ======================
 
+* Implement windows fields validation/masks
+* Add popup calendar for selecting dates
+* Implement invoices filter on main window
 * When having items with values and quantity with floating points the total value is incorrect. Fix it.
 * Free PKCS after using it.
 * Implement service "InutilizacaoNFE"
