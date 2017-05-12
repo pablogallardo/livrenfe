@@ -1,4 +1,4 @@
-/* Copyright (c) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
+/* Copyright (c) 2017 Pablo G. Gallardo <pggllrd@gmail.com>
  *
  * This file is part of LivreNFE.
  *
@@ -17,22 +17,25 @@
  *
  */
 
-#ifndef	ERRNO_H
-#define	ERRNO_H
+#ifndef	GTK_COMMON_H
+#define	GTK_COMMON_H
 
-/**
- * Erro na geração de XML
- */
-#define	EXML		1;	
-#define	ESQL		2;	
-#define	EFOL		3;
-#define	EFOP		4;
-#define ENOCRYPTOLIB	5;
-#define ENOTOKEN	6;
-#define ENOSLOT		7;
-#define ELIBP11		8;
-#define ESEFAZ		9;
-#define EIDNFOUND	10;
-#define EINVFIELD	11;
+#include <gtk/gtk.h>
+
+extern int is_integer(GtkEntry *e, gpointer user_data);
+
+extern int is_float(GtkEntry *e, gpointer user_data);
+
+extern int is_date(GtkEntry *e, gpointer user_data);
+
+extern int is_alpha(GtkEntry *e, gpointer user_data);
+
+extern void show_msg(char *msg, GtkWidget *parent);
+
+extern int validate_integer(GtkEntry *e, char *msg, GtkWidget *win, gboolean empty_valid);
+
+extern int validate_float(GtkEntry *e, char *msg, GtkWidget *win, gboolean empty_valid);
+
+extern int validate_date(GtkEntry *e, char *msg, GtkWidget *win, gboolean empty_valid);
 
 #endif

@@ -24,6 +24,8 @@
 #include "nfe.h"
 #include "livrenfe.h"
 #include "utils.h"
+#include "gtk_common.h"
+#include "errno.h"
 #include <gtk/gtk.h>
 #include <string.h>
 #include <stdlib.h>
@@ -247,8 +249,35 @@ static void item_manager_activate(GtkButton *b, gpointer win){
 	g_signal_connect(iman, "destroy", G_CALLBACK(list_items), win);
 }
 
-static void save_nfe(GtkButton *b, GtkWidget *win){
+static int check_fields(GtkWidget *nman){
 	NFEManagerPrivate *priv;
+	int rc;
+
+	priv = nfe_manager_get_instance_private(NFE_MANAGER(nman));
+	if(validate_integer(priv->num, "Número de NF inválido", nman, FALSE))
+		return -EINVFIELD;
+	if(validate_integer(priv->serie, "Número de série inválido", nman, FALSE))
+		return -EINVFIELD;
+	if(validate_integer(priv->doc, "Número de CNPJ/CPF inválido", nman, FALSE))
+		return -EINVFIELD;
+	if(validate_integer(priv->ie, "Número de inscrição estadual inválido", nman, TRUE))
+		return -EINVFIELD;
+	if(validate_integer(priv->numero_endereco, "Número de endereço inválido", nman, FALSE))
+		return -EINVFIELD;
+	if(validate_integer(priv->cep, "Número de CEP inválido", nman, FALSE))
+		return -EINVFIELD;
+	if(validate_date(priv->dh_emis, "Data de emissão inválida\nFormato: DD/MM/AAAA HH:MM:SS", nman, FALSE))
+		return -EINVFIELD;
+	if(validate_date(priv->dh_saida, "Data de saída inválida\nFormato: DD/MM/AAAA HH:MM:SS", nman, TRUE))
+		return -EINVFIELD;
+
+	return 0;
+}
+
+static int save_nfe(GtkButton *b, GtkWidget *win){
+	NFEManagerPrivate *priv;
+	if(check_fields(win))
+		return -EINVFIELD;
 
 	priv = nfe_manager_get_instance_private(NFE_MANAGER(win));
 	NFE *nfe = (NFE_MANAGER(win))->nfe;
@@ -288,6 +317,7 @@ static void save_nfe(GtkButton *b, GtkWidget *win){
 		NULL : nfe->inf_ad_contrib;
 	register_nfe(nfe);
 	gtk_widget_destroy(win);
+	return 0;
 }
 
 static void inst_nfe_destinatario(gpointer p, NFEManager *nman){

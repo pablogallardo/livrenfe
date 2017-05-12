@@ -21,6 +21,8 @@
 #include "nfe_manager.h"
 #include "nfe.h"
 #include "utils.h"
+#include "gtk_common.h"
+#include "errno.h"
 #include <gtk/gtk.h>
 #include <stdlib.h>
 
@@ -59,8 +61,39 @@ static void item_manager_dispose(GObject *object){
 	G_OBJECT_CLASS(item_manager_parent_class)->dispose(object);
 }
 
-static void set_item(GtkButton *b, GtkWidget *iman){
+static int check_fields(GtkWidget *iman){
+	ItemManagerPrivate *priv;
+	int rc;
+
+	priv = item_manager_get_instance_private(ITEM_MANAGER(iman));
+	if(validate_integer(priv->codigo, "Código de produto", iman, FALSE))
+		return -EINVFIELD;
+	if(validate_integer(priv->ncm, "Número de ncm inválido", iman, FALSE))
+		return -EINVFIELD;
+	if(validate_integer(priv->cfop, "Número de CFOP inválido", iman, FALSE))
+		return -EINVFIELD;
+	if(validate_integer(priv->quantidade, "Quantidade inválida", iman, FALSE))
+		return -EINVFIELD;
+	if(validate_integer(priv->ipi_classe, "Classe IPI inválida", iman, TRUE))
+		return -EINVFIELD;
+	if(validate_integer(priv->ipi_codigo, "Código IPI inválido", iman, TRUE))
+		return -EINVFIELD;
+	if(validate_float(priv->valor, "Valor inválido", iman, FALSE))
+		return -EINVFIELD;
+	if(validate_float(priv->icms_aliquota, "Aliquota ICMS inválida", iman, TRUE))
+		return -EINVFIELD;
+	if(validate_float(priv->icms_credito_aproveitado, 
+			"Crédito aproveitado ICMS inválido", iman, TRUE))
+		return -EINVFIELD;
+
+	return 0;
+}
+
+static int set_item(GtkButton *b, GtkWidget *iman){
 	ItemManagerPrivate *priv = item_manager_get_instance_private(ITEM_MANAGER(iman));
+	if(check_fields(iman))
+		return -EINVFIELD;
+
 	ITEM *item = new_item();
 	NFE *nfe = (ITEM_MANAGER(iman))->nfe;
 	inst_produto(0, gtk_entry_get_text(priv->codigo),
@@ -82,6 +115,7 @@ static void set_item(GtkButton *b, GtkWidget *iman){
 	item->ordem = (ITEM_MANAGER(iman))->nfe->q_itens + 1; 
 	add_item(nfe, item);
 	gtk_widget_destroy(iman);
+	return 0;
 }
 
 static void list_icms_regime(GtkComboBox *t){
