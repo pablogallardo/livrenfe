@@ -3,36 +3,37 @@ LivreNFE
 
 Copyright (C) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
 
-**** PROJETO EM CONSTRUÇÃO ****
+**** PROJETO EM CONSTRUÃ‡ÃƒO ****
 
-Descrição
+DescriÃ§Ã£o
 ---------
-LivreNFE é um projeto opensource para a emissão de Notas Ficais Eletrónicas
+LivreNFE Ã© um projeto opensource para a emissÃ£o de Notas Ficais EletrÃ³nicas
 orientado para pequenas e medianas empresas. Este programa se distribui baixo
-a licença GPLv3. Para mais informação veja o documento LICENSE.
+a licenÃ§a GPLv3. Para mais informaÃ§Ã£o veja o documento LICENSE.
 
-Instalação
+InstalaÃ§Ã£o
 ----------
 $ ./configure
 $ make
 # make install
 
-Dependências
+DependÃªncias
 ----------
 - Gtk3
 - cURL 7.51
 - OpenSSL 1.0.2c
 - libp11 0.4.2
 - xmlsec 1.2.23
+- libsqlite3
 
 Erros
 -----
-Se encontrar um bug, por favor, envie a descrição do erro (qualquer output da
-tela) junto com o passo-a-passo de como replicá-lo ao seguinte endereço:
+Se encontrar um bug, por favor, envie a descriÃ§Ã£o do erro (qualquer output da
+tela) junto com o passo-a-passo de como replicÃ¡-lo ao seguinte endereÃ§o:
 pggllrd@gmail.com
 
-Contribuições
+ContribuiÃ§Ãµes
 -------------
-Sinta-se à vontade de criar Pull Requests para contribuir com funcionalidades
-novas ou correção de erros de preferencia acompanhe os PR com um e-mail
+Sinta-se Ã  vontade de criar Pull Requests para contribuir com funcionalidades
+novas ou correÃ§Ã£o de erros de preferencia acompanhe os PR com um e-mail
 descrevendo o patch.
