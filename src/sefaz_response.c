@@ -64,8 +64,12 @@ static void *sefaz_thread(void *arg){
 
 	gtk_spinner_stop(priv->spinner);
 	gtk_label_set_text(priv->resposta, msg);
+#if GTK_CHECK_VERSION(3,18,0)
 	gtk_overlay_reorder_overlay(priv->overlay, GTK_WIDGET(priv->resposta),
 		-1);
+#else
+	gtk_widget_destroy(GTK_WIDGET(priv->spinner));
+#endif
 	gtk_widget_set_visible(GTK_WIDGET(priv->ok_btn), TRUE);
 	free(msg);
 	free_prefs(prefs);
