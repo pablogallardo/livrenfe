@@ -313,8 +313,13 @@ static gint popup_menu_nfe(GtkTreeView *t, GdkEventButton *e, LivrenfeWindow *wi
 		}
 	}
 
+#if GTK_CHECK_VERSION(3,22,0)
 	gtk_menu_popup_at_pointer((LIVRENFE_WINDOW(win))->menu_nf, 
 		(GdkEvent*) e);
+#else
+	gtk_menu_popup((LIVRENFE_WINDOW(win))->menu_nf, NULL,
+		NULL, NULL, NULL, e->button, e->time);
+#endif
 	return TRUE;
 }
 
