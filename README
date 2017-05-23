@@ -52,6 +52,11 @@ $ autoreconf --install
 $ ./configure && make
 $ sudo make install
 
+Após a instalação
+-------------
+* Configurar preferências do sistema (ex. caminho do driver do leitor de cartão
+de certificado A3. libaetpkss.so no caso de leitoras Gemalto)
+* Cadastro de dados de emissor de NF-e
 
 Erros
 -----
