@@ -1,13 +1,20 @@
 TODO list for LivreNFE
 ======================
 
-* Add popup calendar for selecting dates
-* Implement invoices filter on main window
-* When having items with values and quantity with floating points the total value is incorrect. Fix it.
-* Free PKCS after using it.
-* Implement service "InutilizacaoNFE"
-* Implement DANFE export
+For the 1st release
+---------------
 * Implement XML export
+* When having items with values and quantity with floating points the total value is incorrect. Fix it.
+* Implement service "InutilizacaoNFE"
 * Implement A1 certs
+
+
+Others
+---------------
+* Migrate XMLs to layout V4.0
+* Implement invoices filter on main window
+* Add popup calendar for selecting dates
+* Free PKCS after using it.
+* Implement DANFE export
 
 Pablo G. Gallardo
