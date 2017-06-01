@@ -23,6 +23,8 @@
 #include "utils.h"
 #include "nfe.h"
 #include "livrenfe.h"
+#include "gtk_common.h"
+#include "errno.h"
 #include <gtk/gtk.h>
 #include <stdlib.h>
 
@@ -53,8 +55,27 @@ struct _EmitenteManagerPrivate{
 
 G_DEFINE_TYPE_WITH_PRIVATE(EmitenteManager, emitente_manager, GTK_TYPE_DIALOG)
 
-static void save_emitente(GtkButton *b, GtkWidget *win){
+static int check_fields(GtkWidget *eman){
 	EmitenteManagerPrivate *priv;
+	int rc;
+
+	priv = emitente_manager_get_instance_private(EMITENTE_MANAGER(eman));
+	if(validate_integer(priv->cnpj, "Número de CNPJ inválido", eman, FALSE))
+		return -EINVFIELD;
+	if(validate_integer(priv->ie, "Número de IE inválido", eman, TRUE))
+		return -EINVFIELD;
+	if(validate_integer(priv->ie, "Número de endereço inválido", eman, TRUE))
+		return -EINVFIELD;
+	if(validate_integer(priv->cep, "Número de CEP inválido", eman, FALSE))
+		return -EINVFIELD;
+
+	return 0;
+}
+
+static int save_emitente(GtkButton *b, GtkWidget *win){
+	EmitenteManagerPrivate *priv;
+	if(check_fields(win))
+		return -EINVFIELD;
 
 	priv = emitente_manager_get_instance_private(EMITENTE_MANAGER(win));
 	EMITENTE *e = new_emitente();
