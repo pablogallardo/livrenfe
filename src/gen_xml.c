@@ -180,7 +180,9 @@ char *generate_xml(NFE *nfe, char *password) {
 	strcpy(URI, "#");
 	strcat(URI, ID_PREFIX);
 	strcat(URI, nfe->idnfe->chave);
-	sign_xml(doc, password, URI);
+	rc = sign_xml(doc, password, URI);
+	if(rc)
+		return NULL;
 	xmlNodeDump(buf, NULL, xmlDocGetRootElement(doc), 0, 0);
 	nfe->xml = strdup((char*)buf->content);
 	return (char*)buf->content;
