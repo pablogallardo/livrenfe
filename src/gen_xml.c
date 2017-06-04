@@ -175,8 +175,8 @@ char *generate_xml(NFE *nfe, char *password) {
 	if (rc < 0)
 		return NULL;
 	xmlTextWriterEndDocument(writer);
-	char *URI = malloc(sizeof(char) * strlen(nfe->idnfe->chave) +
-		strlen(ID_PREFIX) + 2);
+	char *URI = malloc(sizeof(char) * (strlen(nfe->idnfe->chave) +
+		strlen(ID_PREFIX) + 2));
 	strcpy(URI, "#");
 	strcat(URI, ID_PREFIX);
 	strcat(URI, nfe->idnfe->chave);
@@ -201,7 +201,7 @@ int gen_inf_nfe(xmlTextWriterPtr writer, NFE *nfe){
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "infNFe");
 	if (rc < 0)
 		return -EXML;
-	char *id = malloc(strlen(nfe->idnfe->chave) + strlen(ID_PREFIX) + 1);
+	char *id = malloc(strlen(nfe->idnfe->chave) + strlen(ID_PREFIX) + 2);
 	strcpy(id, ID_PREFIX);
 	strcat(id, nfe->idnfe->chave);
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "Id",
@@ -1044,7 +1044,7 @@ char *generate_evento_xml(EVENTO *e, char *password) {
 	if (rc < 0)
 		return NULL;
 	xmlTextWriterEndDocument(writer);
-	char *URI = malloc(70);
+	char *URI = malloc(sizeof(char) * 70);
 	strcpy(URI, "#");
 	strcat(URI, id);
 	sign_xml(doc, password, URI);
