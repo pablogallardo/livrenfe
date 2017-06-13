@@ -30,7 +30,7 @@ Exemplo de instalação em Debian
 ---------
 * Instalar dependências desde repositório APT
 # apt-get install libsqlite3-dev curl libcurl4-openssl-dev libgtk-3-dev libssl-dev \
-libxml2-dev libxstl1-dev git
+libxml2-dev libxslt1-dev git
 
 * Instalar libp11 versao 0.4.2 que não está disponível no repositório APT
 $ wget https://github.com/OpenSC/libp11/releases/download/libp11-0.4.2/libp11-0.4.2.tar.gz
