@@ -63,7 +63,7 @@ char *get_xml_element(xmlDocPtr doc, char *element){
 		content = xmlNodeListGetString(doc, 
 			nodeset->nodeTab[0]->xmlChildrenNode, 1);
 	}
-	free(xpath);
+	//free(xpath);
 	//xmlFreeDoc(doc);
 	xmlCleanupParser();
 	return (char*)content;
@@ -103,9 +103,9 @@ xmlNodePtr get_xml_node(xmlDocPtr doc, char *xpath){
 	result = getnodeset(doc, (xmlChar*)xpath);
 	if(result) {
 		nodeset = result->nodesetval;
-		node =  nodeset->nodeTab[0];
+		node =  xmlCopyNode(nodeset->nodeTab[0], 1);
 	}
 	//xmlFreeDoc(doc);
-	xmlCleanupParser();
+	//xmlCleanupParser();
 	return node;
 }
