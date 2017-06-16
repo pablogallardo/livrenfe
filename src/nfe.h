@@ -14,7 +14,9 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
- * */ #include "livrenfe.h"
+ * */ 
+
+#include "livrenfe.h"
 #include <time.h>
 
 extern NFE *new_nfe();
