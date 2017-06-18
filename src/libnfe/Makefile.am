@@ -1,4 +1,5 @@
 lib_LTLIBRARIES = libnfe.la
+
 libnfe_la_SOURCES = gen_xml.c nfe.c sefaz.c send.c \
 		    sign.c utils.c xml.c
 
