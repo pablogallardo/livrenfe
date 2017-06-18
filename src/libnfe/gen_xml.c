@@ -18,7 +18,7 @@
  */
 
 #include <libnfe/gen_xml.h>
-#include <libnfe/sign.h>
+#include "sign.h"
 #include <libnfe/errno.h>
 #include <stdio.h>
 #include <string.h>

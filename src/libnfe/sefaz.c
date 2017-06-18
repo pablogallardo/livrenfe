@@ -18,8 +18,8 @@
 
 #include <libnfe/sefaz.h>
 #include <libnfe/libnfe.h>
-#include <libnfe/send.h>
-#include <libnfe/xml.h>
+#include "send.h"
+#include "xml.h"
 #include <libnfe/gen_xml.h>
 #include <libnfe/errno.h>
 #include <libxml/parser.h>

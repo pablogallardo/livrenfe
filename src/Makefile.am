@@ -17,3 +17,5 @@ resources.c: livrenfe.gresource.xml window.ui nfe_manager.ui item_manager.ui \
 
 clean-local:
 	rm -f resources.c
+
+SUBDIRS = libnfe

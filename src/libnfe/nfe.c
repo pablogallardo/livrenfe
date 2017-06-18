@@ -19,7 +19,7 @@
 
 #include <libnfe/nfe.h>
 #include <libnfe/libnfe.h>
-#include <libnfe/utils.h>
+#include "utils.h"
 #define _XOPEN_SOURCE
 #include <time.h>
 #include <stdlib.h>

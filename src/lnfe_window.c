@@ -23,8 +23,9 @@
 #include "sefaz_response.h"
 #include "prefs.h"
 #include "livrenfe.h"
-#include "nfe.h"
 #include "db_interface.h"
+#include <libnfe/nfe.h>
+#include <libnfe/libnfe.h>
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include <string.h>

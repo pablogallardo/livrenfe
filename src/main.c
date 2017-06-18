@@ -18,6 +18,7 @@
  */
 
 #include "livrenfe.h"
+#include <libnfe/libnfe.h> 
 #include <stdio.h>
 #include <gtk/gtk.h>
 

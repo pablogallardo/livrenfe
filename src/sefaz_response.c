@@ -19,9 +19,9 @@
 
 #include "sefaz_response.h"
 #include "lnfe_window.h"
-#include "sefaz.h"
 #include "db_interface.h"
-#include "nfe.h"
+#include <libnfe/nfe.h>
+#include <libnfe/sefaz.h>
 #include <gtk/gtk.h>
 #include <pthread.h>
 #include <stdlib.h>

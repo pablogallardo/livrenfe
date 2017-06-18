@@ -19,7 +19,7 @@
 
 #include "db_interface.h"
 #include "db.h"
-#include "errno.h"
+#include <libnfe/errno.h>
 #include <sqlite3.h>
 
 int set_db(char *path){

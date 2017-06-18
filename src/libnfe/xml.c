@@ -17,7 +17,7 @@
  *
  */
 
-#include <libnfe/xml.h>
+#include "xml.h"
 #include <libxml/parser.h>
 #include <libxml/xpath.h>
 #include <libxml/xpathInternals.h>

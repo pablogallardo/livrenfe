@@ -17,8 +17,8 @@
  *
  */
 
-#include <libnfe/sign.h>
-#include <libnfe/utils.h>
+#include "sign.h"
+#include "utils.h"
 #include <libnfe/xml.h>
 #include <stdlib.h>
 #include <string.h>

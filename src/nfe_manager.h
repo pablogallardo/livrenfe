@@ -22,6 +22,7 @@
 
 #include "livrenfe.h"
 #include "lnfe_window.h"
+#include <libnfe/libnfe.h>
 #include <gtk/gtk.h>
 
 #define NFE_MANAGER_TYPE	(nfe_manager_get_type())

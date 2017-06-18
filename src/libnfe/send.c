@@ -1,4 +1,4 @@
-/* Copyright (c) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
+/* Copyright (c) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
  *
  * This file is part of LivreNFE.
  * LivreNFE is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
  *
  */
 
-#include <libnfe/send.h>
+#include "send.h"
 #include <libnfe/libnfe.h>
 #include <libnfe/errno.h>
 #include <libnfe/gen_xml.h>

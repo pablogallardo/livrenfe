@@ -1,4 +1,4 @@
-/* Copyright (c) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
+/* Copyright (c) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
  *
  * This file is part of LivreNFE.
  *
