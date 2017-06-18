@@ -16,12 +16,10 @@
  *
  */
 
-#include "send.h"
-#include "livrenfe.h"
-#include "errno.h"
-#include "gen_xml.h"
-#include "db_interface.h"
-#include "crypto_interface.h"
+#include <libnfe/send.h>
+#include <libnfe/libnfe.h>
+#include <libnfe/errno.h>
+#include <libnfe/gen_xml.h>
 #include <curl/curl.h>
 #include <openssl/evp.h>
 #include <openssl/ssl.h>

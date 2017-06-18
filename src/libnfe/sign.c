@@ -17,10 +17,9 @@
  *
  */
 
-#include "sign.h"
-#include "crypto_interface.h"
-#include "utils.h"
-#include "xml.h"
+#include <libnfe/sign.h>
+#include <libnfe/utils.h>
+#include <libnfe/xml.h>
 #include <stdlib.h>
 #include <string.h>
 #include <libxml/tree.h>

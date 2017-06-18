@@ -17,10 +17,9 @@
  *
  */
 
-#include "nfe.h"
-#include "livrenfe.h"
-#include "db_interface.h"
-#include "utils.h"
+#include <libnfe/nfe.h>
+#include <libnfe/libnfe.h>
+#include <libnfe/utils.h>
 #define _XOPEN_SOURCE
 #include <time.h>
 #include <stdlib.h>

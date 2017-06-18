@@ -16,13 +16,12 @@
  *
  */
 
-#include "sefaz.h"
-#include "livrenfe.h"
-#include "send.h"
-#include "xml.h"
-#include "gen_xml.h"
-#include "errno.h"
-#include "db_interface.h"
+#include <libnfe/sefaz.h>
+#include <libnfe/libnfe.h>
+#include <libnfe/send.h>
+#include <libnfe/xml.h>
+#include <libnfe/gen_xml.h>
+#include <libnfe/errno.h>
 #include <libxml/parser.h>
 #include <string.h>
 
@@ -172,7 +171,6 @@ int send_lote(LOTE *lote, int ambiente, char *passwd, char **msg){
 	xmlFree(status);
 	xmlFree(nRec);
 
-	rc = db_save_lote(lote);
 	if(rc){
 		*msg = malloc(sizeof(char) * 200);
 		sprintf(*msg, "Erro ao salvar lote\nNúmero de recibo: %s",
@@ -209,7 +207,6 @@ int send_lote_evento(LOTE_EVENTO *lote, int ambiente, char *passwd, char **msg){
 
 	if(cStat == 128)
 		rc = sefaz_response_eventos(lote, doc);
-	db_save_lote_evento(lote);
 	xmlFree(motivo);
 	xmlFree(status);
 
@@ -245,7 +242,6 @@ int cons_lote(LOTE *lote, int ambiente, char *passwd, char **msg){
 	}
 	if(cStat == 104)
 		sefaz_response_protocolos(lote, doc);
-	db_save_lote(lote);
 	*msg = strdup(motivo);
 	xmlFree(motivo);
 	xmlFree(status);

@@ -20,7 +20,7 @@
 #ifndef	SEND_H
 #define	SEND_H
 
-#include "livrenfe.h"
+#include <libnfe/libnfe.h>
 
 /**
  * Send request to SEFAZ

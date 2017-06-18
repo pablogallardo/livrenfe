@@ -16,7 +16,7 @@
  * along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
  * */ 
 
-#include "livrenfe.h"
+#include <libnfe/libnfe.h>
 #include <time.h>
 
 extern NFE *new_nfe();

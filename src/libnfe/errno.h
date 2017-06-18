@@ -17,22 +17,22 @@
  *
  */
 
-#ifndef	SEFAZ_H
-#define	SEFAZ_H
+#ifndef	ERRNO_H
+#define	ERRNO_H
 
-#include "livrenfe.h"
-
-#define	SEFAZ_STATUS_OK	107
-
-extern int get_status_servico(int ambiente, int cuf, char *passwd, char **msg);
-
-extern int send_lote(LOTE *lote, int ambiente, char *passwd, char **msg);
-
-extern int send_lote_evento(LOTE_EVENTO *lote, int ambiente, char *passwd, 
-	char **msg);
-
-extern int cons_lote(LOTE *, int ambiente, char *passwd, char **msg);
-
-extern int canc_nfe(NFE *, int ambiente);
+/**
+ * Erro na geração de XML
+ */
+#define	EXML		1;	
+#define	ESQL		2;	
+#define	EFOL		3;
+#define	EFOP		4;
+#define ENOCRYPTOLIB	5;
+#define ENOTOKEN	6;
+#define ENOSLOT		7;
+#define ELIBP11		8;
+#define ESEFAZ		9;
+#define EIDNFOUND	10;
+#define EINVFIELD	11;
 
 #endif
