@@ -18,7 +18,7 @@
  */
 
 #include "gtk_common.h"
-#include "libnfe/errno.h"
+#include <libnfe/errno.h>
 #include <glib.h>
 #include <gtk/gtk.h>
 

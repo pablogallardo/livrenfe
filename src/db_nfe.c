@@ -18,10 +18,10 @@
 
 #include "db_interface.h"
 #include "db.h"
-#include "utils.h"
 #include <libnfe/nfe.h>
 #include <libnfe/libnfe.h>
 #include <libnfe/errno.h>
+#include "libnfe/utils.h"
 #include <gtk/gtk.h>
 #include <sqlite3.h>
 #include <stdio.h>
