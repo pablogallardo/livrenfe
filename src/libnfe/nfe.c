@@ -23,6 +23,7 @@
 #define _XOPEN_SOURCE
 #include <time.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 
@@ -36,13 +37,11 @@ static MUNICIPIO *new_municipio(){
 }
 
 static IDNFE *new_idnfe(){
-	PREFS *pref = get_prefs();
 	IDNFE i = {
 		.municipio = new_municipio(),
 		.dh_saida = malloc(sizeof(time_t)),
 		.cod_nfe = rand() % 99999999,
 		.tipo_emissao = TE_NORMAL,
-		.tipo_ambiente = pref->ambiente,
 		.local_destino = DEST_INTERNA,
 		.tipo = TIPO_SAIDA,
 		.tipo_impressao = IMP_RET,
@@ -51,7 +50,6 @@ static IDNFE *new_idnfe(){
 	};
 	IDNFE *p = malloc(sizeof(IDNFE));
 	memcpy(p, &i, sizeof(IDNFE));
-	free_prefs(pref);
 	return p;
 }
 
@@ -191,7 +189,7 @@ ITEM *new_item(){
 NFE *new_nfe(){
 	NFE n = {
 		.idnfe = new_idnfe(),
-		.emitente = get_emitente(1),
+		.emitente = new_emitente(),
 		.destinatario = new_destinatario(),
 		.protocolo = new_protocolo()
 	};
@@ -495,47 +493,4 @@ void free_emitente(EMITENTE *e){
 void free_destinatario(DESTINATARIO *d){
 	free_endereco(d->endereco);
 	free(d);
-}
-
-void free_urls(URLS *u){
-	free(u->recepcaoevento);
-	free(u->nfeconsultaprotocolo);
-	free(u->nfeconsultacadastro);
-	free(u->nfestatusservico);
-	free(u->nfeautorizacao);
-	free(u->nferetautorizacao);
-	free(u->nfeinutilizacao);
-	free(u);
-}
-
-void free_prefs(PREFS *p){
-	free_urls(p->urls);
-	if(strcmp(p->public_key, ""))
-		free(p->public_key);
-	if(strcmp(p->private_key, ""))
-		free(p->private_key);
-	if(strcmp(p->card_reader_lib, ""))
-		free(p->card_reader_lib);
-}
-
-void empty_prefs_urls(PREFS_URLS *u){
-	free(u->recepcaoevento_prod);
-	free(u->recepcaoevento_cert);
-	free(u->nfeconsultacadastro_prod);
-	free(u->nfeconsultacadastro_cert);
-	free(u->nfeinutilizacao_prod);
-	free(u->nfeinutilizacao_cert);
-	free(u->nfeconsultaprotocolo_prod);
-	free(u->nfeconsultaprotocolo_cert);
-	free(u->nfeautorizacao_prod);
-	free(u->nfeautorizacao_cert);
-	free(u->nferetautorizacao_prod);
-	free(u->nferetautorizacao_cert);
-	free(u->nfestatusservico_prod);
-	free(u->nfestatusservico_cert);
-}
-
-void free_prefs_urls(PREFS_URLS *u){
-	empty_prefs_urls(u);
-	free(u);
 }

@@ -21,7 +21,7 @@
 #include "nfe_manager.h"
 #include "emitente_manager.h"
 #include "sefaz_response.h"
-#include "prefs.h"
+#include "prefs_dialog.h"
 #include "livrenfe.h"
 #include "db_interface.h"
 #include <libnfe/nfe.h>

@@ -29,7 +29,7 @@
  */
 #define	ID_PREFIX	"NFe"
 
-#include <libnfe.h>
+#include <libnfe/libnfe.h>
 
 /**
  * This function generates a basic XML for the NFE WITH signature 

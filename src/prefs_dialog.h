@@ -1,4 +1,4 @@
-/* Copyright (c) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
+/* Copyright (c) 2017 Pablo G. Gallardo <pggllrd@gmail.com>
  *
  * This file is part of LivreNFE.
  *
@@ -17,22 +17,23 @@
  *
  */
 
-#ifndef	ERRNO_H
-#define	ERRNO_H
+#ifndef	PREFS_DIALOG_H
+#define	PREFS_DIALOG_H
 
-/**
- * Erro na geração de XML
- */
-#define	EXML		1;	
-#define	ESQL		2;	
-#define	EFOL		3;
-#define	EFOP		4;
-#define ENOCRYPTOLIB	5;
-#define ENOTOKEN	6;
-#define ENOSLOT		7;
-#define ELIBP11		8;
-#define ESEFAZ		9;
-#define EIDNFOUND	10;
-#define EINVFIELD	11;
+#include "lnfe_window.h"
+#include <gtk/gtk.h>
+
+#define PREFS_TYPE	(prefs_get_type())
+#define	PREFS(obj)	(G_TYPE_CHECK_INSTANCE_CAST((obj), PREFS_TYPE, Prefs))
+
+typedef struct _Prefs Prefs;
+typedef struct _PrefsClass PrefsClass;
+
+GType pregs_get_type(void);
+Prefs *prefs_new(LivrenfeWindow *win);
+
+struct _Prefs{
+	GtkDialog parent;
+};
 
 #endif

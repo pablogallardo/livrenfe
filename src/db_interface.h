@@ -22,7 +22,8 @@
 
 #define DB_VERSION	1
 
-#include "libnfe/libnfe.h"
+#include "livrenfe.h"
+#include <libnfe/libnfe.h>
 #include <gtk/gtk.h>
 
 

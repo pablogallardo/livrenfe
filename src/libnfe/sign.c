@@ -19,7 +19,7 @@
 
 #include "sign.h"
 #include "utils.h"
-#include <libnfe/xml.h>
+#include "xml.h"
 #include <stdlib.h>
 #include <string.h>
 #include <libxml/tree.h>

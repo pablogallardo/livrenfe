@@ -20,20 +20,14 @@
 #ifndef	PREFS_H
 #define	PREFS_H
 
-#include "lnfe_window.h"
-#include <gtk/gtk.h>
+#include "livrenfe.h"
 
-#define PREFS_TYPE	(prefs_get_type())
-#define	PREFS(obj)	(G_TYPE_CHECK_INSTANCE_CAST((obj), PREFS_TYPE, Prefs))
+extern void free_urls(URLS *u);
 
-typedef struct _Prefs Prefs;
-typedef struct _PrefsClass PrefsClass;
+extern void free_prefs(PREFS *p);
 
-GType pregs_get_type(void);
-Prefs *prefs_new(LivrenfeWindow *win);
+extern void empty_prefs_urls(PREFS_URLS *u);
 
-struct _Prefs{
-	GtkDialog parent;
-};
+extern void free_prefs_urls(PREFS_URLS *u);
 
 #endif

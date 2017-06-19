@@ -20,6 +20,8 @@
 #include "sefaz_response.h"
 #include "lnfe_window.h"
 #include "db_interface.h"
+#include "livrenfe.h"
+#include "prefs.h"
 #include <libnfe/nfe.h>
 #include <libnfe/sefaz.h>
 #include <gtk/gtk.h>
