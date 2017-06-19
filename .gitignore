@@ -5,6 +5,8 @@ Makefile
 *.cache
 *.status
 *.o
+*.la
+*.lo
 *~
 \#*\#
 stamp-h1
@@ -20,3 +22,9 @@ missing
 aclocal.m4
 Makefile.in
 compile
+libtool
+config.guess
+config.sub
+ltmain.sh
+.libs
+m4
