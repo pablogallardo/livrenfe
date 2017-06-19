@@ -19,6 +19,8 @@
 
 #include "prefs.h"
 #include "livrenfe.h"
+#include <stdlib.h>
+#include <string.h>
 
 void free_urls(URLS *u){
 	free(u->recepcaoevento);
