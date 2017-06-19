@@ -28,3 +28,4 @@ config.sub
 ltmain.sh
 .libs
 m4
+config.lt
