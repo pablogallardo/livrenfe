@@ -41,8 +41,10 @@ char *gen_cons_status(int ambiente, int cuf){
 	xmlBufferPtr buf = xmlBufferCreate();
 	
 	writer = xmlNewTextWriterDoc(&doc, 0);
-	if (writer == NULL)
+	if (writer == NULL) {
+	printf("Error NewDoc");
 		return NULL;
+	}
 	xmlTextWriterStartDocument(writer, NULL, "utf-8", NULL);
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "consStatServ");
 	if (rc < 0)
