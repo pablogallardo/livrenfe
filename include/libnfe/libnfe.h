@@ -21,25 +21,30 @@
 
 #include <time.h>
 
-#define	VERSION_NAME		"0.1.0"
-#define	VERSION_COUNTER		1
-#define VERSION_TITLE		"Tartagal"
-#define LIBNFE_COPYRIGHT	"© 2016, 2017 Pablo G. Gallardo"
-#define LIBNFE_COMMENT		"Emissor Código Aberto de Notas Fiscais Eletrónicas"
-#define LIBNFE_WEBSITE		"https://github.com/pablogallardo/livrenfe"
-#define LIBNFE_TITLE		"LivreNFE"
+#define	VERSION_NAME			"0.1.0"
+#define	VERSION_COUNTER			1
+#define VERSION_TITLE			"Tartagal"
+#define LIBNFE_COPYRIGHT		"© 2016, 2017 Pablo G. Gallardo"
+#define LIBNFE_COMMENT			"Emissor Código Aberto de Notas Fiscais Eletrónicas"
+#define LIBNFE_WEBSITE			"https://github.com/pablogallardo/livrenfe"
+#define LIBNFE_TITLE			"LivreNFE"
 
-#define CANCELAMENTO_TYPE	110111
-#define	CARTA_CORRECAO_TYPE	110110
+#define CANCELAMENTO_TYPE		110111
+#define	CARTA_CORRECAO_TYPE		110110
 
-#define	AMBIENTE_PRODUCAO	1
-#define	AMBIENTE_HOMOLOGACAO	2
+#define	AMBIENTE_PRODUCAO		1
+#define	AMBIENTE_HOMOLOGACAO		2
 
-#define	CERT_TYPE_A1		1
-#define	CERT_TYPE_A3		2
+#define	CERT_TYPE_A1			1
+#define	CERT_TYPE_A3			2
 
-#define	DEFAULT_AMBIENTE	AMBIENTE_HOMOLOGACAO
-#define	DEFAULT_CERT_TYPE	CERT_TYPE_A3
+#define	DEFAULT_AMBIENTE		AMBIENTE_HOMOLOGACAO
+#define	DEFAULT_CERT_TYPE		CERT_TYPE_A3
+
+#define RECEPCAO_EVENTO_WSDL		"http://www.portalfiscal.inf.br/nfe/wsdl/RecepcaoEvento"
+#define NFE_STATUS_SERVICE_WSDL		"http://www.portalfiscal.inf.br/nfe/wsdl/NfeStatusServico2"
+#define NFE_AUTORIZACAO_WSDL		"http://www.portalfiscal.inf.br/nfe/wsdl/NfeAutorizacao"
+#define NFE_RET_AUTORIZACAO_WSDL	"http://www.portalfiscal.inf.br/nfe/wsdl/NfeRetAutorizacao"
 
 typedef int evento_t;
 
