@@ -64,8 +64,7 @@ CURLcode sslctx_function(CURL *curl, void *sslctx, char *pwd){
 	return CURLE_OK;
 }
 
-static char *format_soap(char *service, char *xml, int cuf, char *url_cabec,
-			char *url_dados){
+static char *format_soap(char *service, char *xml, int cuf, char *url_cabec){
 	int rc, buffersize;
 	xmlTextWriterPtr writer;
 	xmlDocPtr doc;
@@ -123,7 +122,7 @@ static char *format_soap(char *service, char *xml, int cuf, char *url_cabec,
 	if (rc < 0)
 		return NULL;
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
-			BAD_CAST url_dados);
+			BAD_CAST url_cabec);
 	if (rc < 0)
 		return NULL;
 	rc = xmlTextWriterWriteRaw(writer, BAD_CAST xml);
@@ -143,9 +142,8 @@ static char *format_soap(char *service, char *xml, int cuf, char *url_cabec,
 		return NULL;
 	xmlTextWriterEndDocument(writer);
 	xmlDocDumpMemory(doc, &xmlbuf, &buffersize);
-	//char *xml_inline = str_replace(">\n<","><", xmlbuf);
+
 	free(url_cabec);
-	free(url_dados);
 	return (char*) xmlbuf;
 }
 
@@ -165,11 +163,11 @@ char *send_sefaz(char *service, int ambiente, int cuf, char *xml,
 	rv = curl_easy_setopt(ch, CURLOPT_NOSIGNAL, 1L);
 	rv = curl_easy_setopt(ch, CURLOPT_WRITEFUNCTION, writefunction);
 	rv = curl_easy_setopt(ch, CURLOPT_WRITEDATA, &server_response);
-	//rv = curl_easy_setopt(ch, CURLOPT_HEADERDATA, stderr);
+
 	char *URL, *url_cabec, *url_body;
 	URL = get_ws_url(service, ambiente, &url_cabec, &url_body);
-	char *h = format_soap(service, xml, cuf, url_cabec, url_body);
-	fprintf(stdout, "%s\n", h);
+	char *h = format_soap(service, xml, cuf, url_cabec);
+
 	rv = curl_easy_setopt(ch, CURLOPT_POSTFIELDS, h);
 
 	/* both VERIFYPEER and VERIFYHOST are set to 0 in this case because there is
