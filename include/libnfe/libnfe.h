@@ -49,10 +49,13 @@
 #define SEFAZ_NFE_AUTORIZACAO		5
 #define SEFAZ_NFE_RET_AUTORIZACAO	6
 
-#define RECEPCAO_EVENTO_WSDL		"http://www.portalfiscal.inf.br/nfe/wsdl/RecepcaoEvento"
-#define NFE_STATUS_SERVICE_WSDL		"http://www.portalfiscal.inf.br/nfe/wsdl/NfeStatusServico2"
-#define NFE_AUTORIZACAO_WSDL		"http://www.portalfiscal.inf.br/nfe/wsdl/NfeAutorizacao"
-#define NFE_RET_AUTORIZACAO_WSDL	"http://www.portalfiscal.inf.br/nfe/wsdl/NfeRetAutorizacao"
+#define WSDL_RECEPCAO_EVENTO		"http://www.portalfiscal.inf.br/nfe/wsdl/RecepcaoEvento"
+#define WSDL_NFE_CONSULTA_CADASTRO	"http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro2"
+#define WSDL_NFE_INUTILIZACAO		"http://www.portalfiscal.inf.br/nfe/wsdl/NfeInutilizacao"
+#define WSDL_NFE_CONSULTA_PROTOCOLO	"http://www.portalfiscal.inf.br/nfe/wsdl/NfeConsulta2"
+#define WSDL_NFE_STATUS_SERVICO		"http://www.portalfiscal.inf.br/nfe/wsdl/NfeStatusServico2"
+#define WSDL_NFE_AUTORIZACAO		"http://www.portalfiscal.inf.br/nfe/wsdl/NfeAutorizacao"
+#define WSDL_NFE_RET_AUTORIZACAO	"http://www.portalfiscal.inf.br/nfe/wsdl/NfeRetAutorizacao"
 
 /**
  * Array com URL WSDL de cada serviço do SEFAZ
