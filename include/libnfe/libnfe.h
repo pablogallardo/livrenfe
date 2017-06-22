@@ -3,7 +3,7 @@
  * This file is part of LivreNFE.
  *
  * LivreNFE is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
@@ -12,7 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
  * */
 
@@ -41,10 +41,23 @@
 #define	DEFAULT_AMBIENTE		AMBIENTE_HOMOLOGACAO
 #define	DEFAULT_CERT_TYPE		CERT_TYPE_A3
 
+#define	SEFAZ_RECEPCAO_EVENTO		0
+#define SEFAZ_NFE_CONSULTA_CADASTRO	1
+#define SEFAZ_NFE_INUTILIZACAO		2
+#define SEFAZ_NFE_CONSULTA_PROTOCOLO	3
+#define SEFAZ_NFE_STATUS_SERVICO	4
+#define SEFAZ_NFE_AUTORIZACAO		5
+#define SEFAZ_NFE_RET_AUTORIZACAO	6
+
 #define RECEPCAO_EVENTO_WSDL		"http://www.portalfiscal.inf.br/nfe/wsdl/RecepcaoEvento"
 #define NFE_STATUS_SERVICE_WSDL		"http://www.portalfiscal.inf.br/nfe/wsdl/NfeStatusServico2"
 #define NFE_AUTORIZACAO_WSDL		"http://www.portalfiscal.inf.br/nfe/wsdl/NfeAutorizacao"
 #define NFE_RET_AUTORIZACAO_WSDL	"http://www.portalfiscal.inf.br/nfe/wsdl/NfeRetAutorizacao"
+
+/**
+ * Array com URL WSDL de cada serviço do SEFAZ
+ */
+extern const char *SEFAZ_WSDL[7];
 
 typedef int evento_t;
 
