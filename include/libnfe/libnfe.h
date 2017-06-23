@@ -41,14 +41,6 @@
 #define	DEFAULT_AMBIENTE		AMBIENTE_HOMOLOGACAO
 #define	DEFAULT_CERT_TYPE		CERT_TYPE_A3
 
-#define	SEFAZ_RECEPCAO_EVENTO		0
-#define SEFAZ_NFE_CONSULTA_CADASTRO	1
-#define SEFAZ_NFE_INUTILIZACAO		2
-#define SEFAZ_NFE_CONSULTA_PROTOCOLO	3
-#define SEFAZ_NFE_STATUS_SERVICO	4
-#define SEFAZ_NFE_AUTORIZACAO		5
-#define SEFAZ_NFE_RET_AUTORIZACAO	6
-
 #define WSDL_RECEPCAO_EVENTO		"http://www.portalfiscal.inf.br/nfe/wsdl/RecepcaoEvento"
 #define WSDL_NFE_CONSULTA_CADASTRO	"http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro2"
 #define WSDL_NFE_INUTILIZACAO		"http://www.portalfiscal.inf.br/nfe/wsdl/NfeInutilizacao"
@@ -56,6 +48,16 @@
 #define WSDL_NFE_STATUS_SERVICO		"http://www.portalfiscal.inf.br/nfe/wsdl/NfeStatusServico2"
 #define WSDL_NFE_AUTORIZACAO		"http://www.portalfiscal.inf.br/nfe/wsdl/NfeAutorizacao"
 #define WSDL_NFE_RET_AUTORIZACAO	"http://www.portalfiscal.inf.br/nfe/wsdl/NfeRetAutorizacao"
+
+typedef enum {
+	SEFAZ_RECEPCAO_EVENTO,
+	SEFAZ_NFE_CONSULTA_CADASTRO,
+	SEFAZ_NFE_INUTILIZACAO,
+	SEFAZ_NFE_CONSULTA_PROTOCOLO,
+	SEFAZ_NFE_STATUS_SERVICO,
+	SEFAZ_NFE_AUTORIZACAO,
+	SEFAZ_NFE_RET_AUTORIZACAO
+} sefaz_servico_t;
 
 /**
  * Array com URL WSDL de cada serviço do SEFAZ

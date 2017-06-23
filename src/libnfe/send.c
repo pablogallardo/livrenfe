@@ -64,7 +64,8 @@ CURLcode sslctx_function(CURL *curl, void *sslctx, char *pwd){
 	return CURLE_OK;
 }
 
-static char *format_soap(char *service, char *xml, int cuf, char *url_cabec){
+static char *format_soap(sefaz_servico_t service, char *xml, int cuf, 
+		const char *wsdl){
 	int rc, buffersize;
 	xmlTextWriterPtr writer;
 	xmlDocPtr doc;
@@ -98,7 +99,7 @@ static char *format_soap(char *service, char *xml, int cuf, char *url_cabec){
 		return NULL;
 
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
-		BAD_CAST url_cabec);
+		BAD_CAST wsdl);
 	if (rc < 0)
 		return NULL;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "versaoDados",
@@ -122,7 +123,7 @@ static char *format_soap(char *service, char *xml, int cuf, char *url_cabec){
 	if (rc < 0)
 		return NULL;
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
-			BAD_CAST url_cabec);
+			BAD_CAST wsdl);
 	if (rc < 0)
 		return NULL;
 	rc = xmlTextWriterWriteRaw(writer, BAD_CAST xml);
@@ -143,12 +144,11 @@ static char *format_soap(char *service, char *xml, int cuf, char *url_cabec){
 	xmlTextWriterEndDocument(writer);
 	xmlDocDumpMemory(doc, &xmlbuf, &buffersize);
 
-	free(url_cabec);
 	return (char*) xmlbuf;
 }
 
-char *send_sefaz(char *service, int ambiente, int cuf, char *xml,
-		char *password){
+char *send_sefaz(sefaz_servico_t service, char *URL, int ambiente, int cuf, 
+		char *xml, char *password){
 	CURL *ch;
 	CURLcode rv;
 	rv = curl_global_init(CURL_GLOBAL_ALL);
@@ -164,9 +164,7 @@ char *send_sefaz(char *service, int ambiente, int cuf, char *xml,
 	rv = curl_easy_setopt(ch, CURLOPT_WRITEFUNCTION, writefunction);
 	rv = curl_easy_setopt(ch, CURLOPT_WRITEDATA, &server_response);
 
-	char *URL, *url_cabec, *url_body;
-	URL = get_ws_url(service, ambiente, &url_cabec, &url_body);
-	char *h = format_soap(service, xml, cuf, url_cabec);
+	char *h = format_soap(service, xml, cuf, SEFAZ_WSDL[service]);
 
 	rv = curl_easy_setopt(ch, CURLOPT_POSTFIELDS, h);
 
@@ -179,7 +177,7 @@ char *send_sefaz(char *service, int ambiente, int cuf, char *xml,
 	rv = curl_easy_setopt(ch, CURLOPT_SSL_CTX_FUNCTION, *sslctx_function);
 	rv = curl_easy_setopt(ch, CURLOPT_SSL_CTX_DATA, password);
 	rv = curl_easy_perform(ch);
-	free(URL);
+
 	free(h);
 	if(rv!=CURLE_OK) {
 		return NULL;

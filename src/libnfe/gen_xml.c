@@ -1051,16 +1051,15 @@ char *generate_evento_xml(EVENTO *e, char *password) {
 	return (char*)buf->content;
 }
 
-char *get_versao(char *service){
+char *get_versao(sefaz_servico_t service){
 	char *versao = malloc(sizeof(char) * 5);
-	int id_versao = get_url_id(service);
-	switch(id_versao){
-		case 1:
+	switch(service){
+		case SEFAZ_RECEPCAO_EVENTO:
 			versao = "1.00";
 			break;
-		case 5:
-		case 6:
-		case 7:
+		case SEFAZ_NFE_STATUS_SERVICO:
+		case SEFAZ_NFE_AUTORIZACAO:
+		case SEFAZ_NFE_RET_AUTORIZACAO:
 		default:
 			versao = "3.10";
 			break;

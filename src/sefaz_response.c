@@ -53,15 +53,19 @@ static void *sefaz_thread(void *arg){
 
 	PREFS *prefs = get_prefs();
 	int ambiente = prefs->ambiente;
+	URLS *urls = prefs->urls;
 	if(sr->lote){
-		send_lote(sr->lote, ambiente, sr->password, &msg);
-		cons_lote(sr->lote, ambiente, sr->password, &msg);
+		send_lote(sr->lote, urls->recepcaoevento, prefs->ambiente, 
+			sr->password, &msg);
+		cons_lote(sr->lote, urls->nferetautorizacao, ambiente, 
+			sr->password, &msg);
 
 	} else if(sr->lote_evento){
-		send_lote_evento(sr->lote_evento, ambiente, sr->password, 
-			&msg);
+		send_lote_evento(sr->lote_evento, urls->nfeconsultaprotocolo, 
+			ambiente, sr->password, &msg);
 	} else {
-		get_status_servico(ambiente, 35, sr->password, &msg);
+		get_status_servico(ambiente, urls->nfestatusservico, 35, 
+			sr->password, &msg);
 	}
 
 	gtk_spinner_stop(priv->spinner);

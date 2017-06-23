@@ -60,6 +60,6 @@ extern char *gen_cons_nfe(LOTE *, int ambiente);
 /**
  * Get XML message version for service
  */
-extern char *get_versao(char *service);
+extern char *get_versao(sefaz_servico_t service);
 
 #endif
