@@ -21,19 +21,22 @@
 #define	SEFAZ_H
 
 #include <libnfe/libnfe.h>
+#include <openssl/x509.h>
+#include <openssl/evp.h>
 
 #define	SEFAZ_STATUS_OK	107
 
-extern int get_status_servico(int ambiente, char *URL, int cuf, char *passwd, 
-	char **msg);
+extern int get_status_servico(int ambiente, char *URL, int cuf, EVP_PKEY *, 
+	X509 *, char **msg);
 
-extern int send_lote(LOTE *lote, char *URL, int ambiente, char *passwd, 
+extern int send_lote(LOTE *lote, char *URL, int ambiente, EVP_PKEY *, X509 *, 
 	char **msg);
 
 extern int send_lote_evento(LOTE_EVENTO *lote, char *URL, int ambiente, 
-	char *passwd, char **msg);
+	EVP_PKEY *, X509 *, char **msg);
 
-extern int cons_lote(LOTE *, char *URL, int ambiente, char *passwd, char **msg);
+extern int cons_lote(LOTE *, char *URL, int ambiente, EVP_PKEY *, X509 *,
+	char **msg);
 
 extern int canc_nfe(NFE *, char *URL, int ambiente);
 

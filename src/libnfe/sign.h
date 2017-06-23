@@ -21,7 +21,9 @@
 #define SIGN_H
 
 #include <libxml/tree.h>
+#include <openssl/x509.h>
+#include <openssl/evp.h>
 
-extern int sign_xml(xmlDocPtr, char *password, char*id);
+extern int sign_xml(xmlDocPtr, EVP_PKEY *, X509 *, char*id);
 
 #endif

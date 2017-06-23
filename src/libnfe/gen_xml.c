@@ -23,6 +23,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <libxml/xmlwriter.h>
+#include <openssl/x509.h>
+#include <openssl/evp.h>
 
 int gen_inf_nfe(xmlTextWriterPtr, NFE *);
 int _gen_ide(xmlTextWriterPtr, NFE *);
@@ -32,7 +34,7 @@ int _gen_det(xmlTextWriterPtr, ITEM *);
 int _gen_prod(xmlTextWriterPtr, ITEM *);
 int _gen_imposto(xmlTextWriterPtr, IMPOSTO *, float);
 int _gen_total(xmlTextWriterPtr, float );
-static char *generate_evento_xml(EVENTO *e, char *password);
+static char *generate_evento_xml(EVENTO *e, EVP_PKEY *key, X509 *cert);
 
 char *gen_cons_status(int ambiente, int cuf){
 	int rc;
@@ -112,7 +114,7 @@ char *gen_cons_nfe(LOTE *lote, int ambiente){
 	return (char*)buf->content;
 }
 
-char *gen_lote_xml(LOTE *lote, char *password){
+char *gen_lote_xml(LOTE *lote, EVP_PKEY *key, X509 *cert){
 	int rc;
 	xmlTextWriterPtr writer;
 	xmlDocPtr doc;
@@ -146,7 +148,7 @@ char *gen_lote_xml(LOTE *lote, char *password){
 	LOTE_ITEM *it = lote->nfes;
 	for (i = 0; i < lote->qtd; i++){
 		char *xml;
-		xml = generate_xml(it->nfe, password);
+		xml = generate_xml(it->nfe, key, cert);
 		rc = xmlTextWriterWriteRaw(writer, BAD_CAST xml);
 		if (rc < 0)
 			return NULL;
@@ -160,7 +162,7 @@ char *gen_lote_xml(LOTE *lote, char *password){
 	return (char*)buf->content;
 }
 
-char *generate_xml(NFE *nfe, char *password) {
+char *generate_xml(NFE *nfe, EVP_PKEY *key, X509 *cert) {
 	int rc;
 	xmlTextWriterPtr writer;
 	xmlDocPtr doc;
@@ -179,7 +181,7 @@ char *generate_xml(NFE *nfe, char *password) {
 	strcpy(URI, "#");
 	strcat(URI, ID_PREFIX);
 	strcat(URI, nfe->idnfe->chave);
-	rc = sign_xml(doc, password, URI);
+	rc = sign_xml(doc, key, cert, URI);
 	if(rc)
 		return NULL;
 	xmlNodeDump(buf, NULL, xmlDocGetRootElement(doc), 0, 0);
@@ -879,7 +881,7 @@ int _gen_total(xmlTextWriterPtr writer, float v){
 	return 0;
 }
 
-char *gen_lote_evento_xml(LOTE_EVENTO *lote, char *password){
+char *gen_lote_evento_xml(LOTE_EVENTO *lote, EVP_PKEY *key, X509 *cert){
 	int rc;
 	xmlTextWriterPtr writer;
 	xmlDocPtr doc;
@@ -909,7 +911,7 @@ char *gen_lote_evento_xml(LOTE_EVENTO *lote, char *password){
 	LOTE_EVENTO_ITEM *it = lote->eventos;
 	for (i = 0; i < lote->qtd; i++){
 		char *xml;
-		xml = generate_evento_xml(it->evento, password);
+		xml = generate_evento_xml(it->evento, key, cert);
 		rc = xmlTextWriterWriteRaw(writer, BAD_CAST xml);
 		if (rc < 0)
 			return NULL;
@@ -926,7 +928,7 @@ char *gen_lote_evento_xml(LOTE_EVENTO *lote, char *password){
 
 }
 
-char *generate_evento_xml(EVENTO *e, char *password) {
+char *generate_evento_xml(EVENTO *e, EVP_PKEY *key, X509 *cert) {
 	int rc;
 	xmlTextWriterPtr writer;
 	xmlDocPtr doc;
@@ -1046,7 +1048,7 @@ char *generate_evento_xml(EVENTO *e, char *password) {
 	char *URI = malloc(sizeof(char) * 70);
 	strcpy(URI, "#");
 	strcat(URI, id);
-	sign_xml(doc, password, URI);
+	sign_xml(doc, key, cert, URI);
 	xmlNodeDump(buf, NULL, xmlDocGetRootElement(doc), 0, 0);
 	return (char*)buf->content;
 }

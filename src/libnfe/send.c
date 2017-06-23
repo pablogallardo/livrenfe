@@ -31,6 +31,11 @@
 #include <libxml/xmlwriter.h>
 #include <string.h>
 
+typedef struct {
+	EVP_PKEY *key;
+	X509 *cert;
+} SSL_KEY;
+
 static size_t writefunction(void *ptr, size_t size,
 		size_t nmemb, void *s){
 	char **r = (char**) s;
@@ -38,14 +43,14 @@ static size_t writefunction(void *ptr, size_t size,
 	return (nmemb*size);
 }
 
-CURLcode sslctx_function(CURL *curl, void *sslctx, char *pwd){
-	X509 *cert = NULL;
+CURLcode sslctx_function(CURL *curl, void *sslctx, SSL_KEY *ssl_key){
 	RSA *rsa = NULL;
-	EVP_PKEY *pKey = NULL;
+	X509 *cert = ssl_key->cert;
+	EVP_PKEY *pKey = ssl_key->key;
 	int rc;
 	(void)curl; //avoid warnings
 
-	get_private_key(&pKey, &cert, pwd);
+	//get_private_key(&pKey, &cert, pwd);
 	if(pKey == NULL){
 		return -1;
 	}
@@ -148,12 +153,16 @@ static char *format_soap(sefaz_servico_t service, char *xml, int cuf,
 }
 
 char *send_sefaz(sefaz_servico_t service, char *URL, int ambiente, int cuf, 
-		char *xml, char *password){
+		char *xml, EVP_PKEY *key, X509 *cert){
 	CURL *ch;
 	CURLcode rv;
 	rv = curl_global_init(CURL_GLOBAL_ALL);
 	ch = curl_easy_init();
 	struct curl_slist *header = NULL;
+	SSL_KEY ssl_key = { 
+		.key = key,
+		.cert = cert
+	};
 	char *server_response;
 	header = curl_slist_append(header, 
 		"Content-type: application/soap+xml; charset=UTF-8");
@@ -175,7 +184,7 @@ char *send_sefaz(sefaz_servico_t service, char *URL, int ambiente, int cuf,
 	rv = curl_easy_setopt(ch, CURLOPT_SSL_VERIFYHOST, 0L);
 	rv = curl_easy_setopt(ch, CURLOPT_URL, URL);
 	rv = curl_easy_setopt(ch, CURLOPT_SSL_CTX_FUNCTION, *sslctx_function);
-	rv = curl_easy_setopt(ch, CURLOPT_SSL_CTX_DATA, password);
+	rv = curl_easy_setopt(ch, CURLOPT_SSL_CTX_DATA, &ssl_key);
 	rv = curl_easy_perform(ch);
 
 	free(h);

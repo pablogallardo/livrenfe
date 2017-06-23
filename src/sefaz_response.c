@@ -22,9 +22,12 @@
 #include "db_interface.h"
 #include "livrenfe.h"
 #include "prefs.h"
+#include "crypto_interface.h"
 #include <libnfe/nfe.h>
 #include <libnfe/sefaz.h>
 #include <gtk/gtk.h>
+#include <openssl/evp.h>
+#include <openssl/x509.h>
 #include <pthread.h>
 #include <stdlib.h>
 
@@ -47,7 +50,10 @@ G_DEFINE_TYPE_WITH_PRIVATE(SefazResponse, sefaz_response, GTK_TYPE_DIALOG)
 static void *sefaz_thread(void *arg){
 	SefazResponse *sr = SEFAZ_RESPONSE(arg);
 	SefazResponsePrivate *priv;
+	X509 *cert = NULL;
+	EVP_PKEY *pKey = NULL;
 
+	get_private_key(&pKey, &cert, sr->password);
 	priv = sefaz_response_get_instance_private(sr);
 	char *msg = malloc(sizeof(char) * 255);
 
@@ -56,16 +62,16 @@ static void *sefaz_thread(void *arg){
 	URLS *urls = prefs->urls;
 	if(sr->lote){
 		send_lote(sr->lote, urls->recepcaoevento, prefs->ambiente, 
-			sr->password, &msg);
+			pKey, cert, &msg);
 		cons_lote(sr->lote, urls->nferetautorizacao, ambiente, 
-			sr->password, &msg);
+			pKey, cert, &msg);
 
 	} else if(sr->lote_evento){
 		send_lote_evento(sr->lote_evento, urls->nfeconsultaprotocolo, 
-			ambiente, sr->password, &msg);
+			ambiente, pKey, cert, &msg);
 	} else {
 		get_status_servico(ambiente, urls->nfestatusservico, 35, 
-			sr->password, &msg);
+			pKey, cert, &msg);
 	}
 
 	gtk_spinner_stop(priv->spinner);

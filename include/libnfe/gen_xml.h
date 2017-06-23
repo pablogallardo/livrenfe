@@ -30,22 +30,24 @@
 #define	ID_PREFIX	"NFe"
 
 #include <libnfe/libnfe.h>
+#include <openssl/x509.h>
+#include <openssl/evp.h>
 
 /**
- * This function generates a basic XML for the NFE WITH signature 
+ * This function generates the XML for the NFE WITH signature 
  */
-extern char *generate_xml(NFE *, char *password);
+extern char *generate_xml(NFE *, EVP_PKEY *key, X509 *cert);
 
 /**
  * This function generates the XML for emitting to SEFAZ
  */
-extern char *gen_lote_xml(LOTE *, char *password);
+extern char *gen_lote_xml(LOTE *, EVP_PKEY *key, X509 *cert);
 
 /**
  * This function generates the events XML used for canceling, correct, etc
  * sent NFe
  */
-extern char *gen_lote_evento_xml(LOTE_EVENTO *, char *password);
+extern char *gen_lote_evento_xml(LOTE_EVENTO *, EVP_PKEY *key, X509 *cert);
 
 /**
  * XML for consulting service status
