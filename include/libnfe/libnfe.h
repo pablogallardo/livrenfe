@@ -3,7 +3,7 @@
  * This file is part of LivreNFE.
  *
  * LivreNFE is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
@@ -12,7 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
  * */
 
@@ -21,25 +21,48 @@
 
 #include <time.h>
 
-#define	VERSION_NAME		"0.1.0"
-#define	VERSION_COUNTER		1
-#define VERSION_TITLE		"Tartagal"
-#define LIBNFE_COPYRIGHT	"© 2016, 2017 Pablo G. Gallardo"
-#define LIBNFE_COMMENT		"Emissor Código Aberto de Notas Fiscais Eletrónicas"
-#define LIBNFE_WEBSITE		"https://github.com/pablogallardo/livrenfe"
-#define LIBNFE_TITLE		"LivreNFE"
+#define	VERSION_NAME			"0.1.0"
+#define	VERSION_COUNTER			1
+#define VERSION_TITLE			"Tartagal"
+#define LIBNFE_COPYRIGHT		"© 2016, 2017 Pablo G. Gallardo"
+#define LIBNFE_COMMENT			"Emissor Código Aberto de Notas Fiscais Eletrónicas"
+#define LIBNFE_WEBSITE			"https://github.com/pablogallardo/livrenfe"
+#define LIBNFE_TITLE			"LivreNFE"
 
-#define CANCELAMENTO_TYPE	110111
-#define	CARTA_CORRECAO_TYPE	110110
+#define CANCELAMENTO_TYPE		110111
+#define	CARTA_CORRECAO_TYPE		110110
 
-#define	AMBIENTE_PRODUCAO	1
-#define	AMBIENTE_HOMOLOGACAO	2
+#define	AMBIENTE_PRODUCAO		1
+#define	AMBIENTE_HOMOLOGACAO		2
 
-#define	CERT_TYPE_A1		1
-#define	CERT_TYPE_A3		2
+#define	CERT_TYPE_A1			1
+#define	CERT_TYPE_A3			2
 
-#define	DEFAULT_AMBIENTE	AMBIENTE_HOMOLOGACAO
-#define	DEFAULT_CERT_TYPE	CERT_TYPE_A3
+#define	DEFAULT_AMBIENTE		AMBIENTE_HOMOLOGACAO
+#define	DEFAULT_CERT_TYPE		CERT_TYPE_A3
+
+#define WSDL_RECEPCAO_EVENTO		"http://www.portalfiscal.inf.br/nfe/wsdl/RecepcaoEvento"
+#define WSDL_NFE_CONSULTA_CADASTRO	"http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro2"
+#define WSDL_NFE_INUTILIZACAO		"http://www.portalfiscal.inf.br/nfe/wsdl/NfeInutilizacao"
+#define WSDL_NFE_CONSULTA_PROTOCOLO	"http://www.portalfiscal.inf.br/nfe/wsdl/NfeConsulta2"
+#define WSDL_NFE_STATUS_SERVICO		"http://www.portalfiscal.inf.br/nfe/wsdl/NfeStatusServico2"
+#define WSDL_NFE_AUTORIZACAO		"http://www.portalfiscal.inf.br/nfe/wsdl/NfeAutorizacao"
+#define WSDL_NFE_RET_AUTORIZACAO	"http://www.portalfiscal.inf.br/nfe/wsdl/NfeRetAutorizacao"
+
+typedef enum {
+	SEFAZ_RECEPCAO_EVENTO,
+	SEFAZ_NFE_CONSULTA_CADASTRO,
+	SEFAZ_NFE_INUTILIZACAO,
+	SEFAZ_NFE_CONSULTA_PROTOCOLO,
+	SEFAZ_NFE_STATUS_SERVICO,
+	SEFAZ_NFE_AUTORIZACAO,
+	SEFAZ_NFE_RET_AUTORIZACAO
+} sefaz_servico_t;
+
+/**
+ * Array com URL WSDL de cada serviço do SEFAZ
+ */
+extern const char *SEFAZ_WSDL[7];
 
 typedef int evento_t;
 

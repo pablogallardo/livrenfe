@@ -40,16 +40,14 @@
 #include <openssl/rsa.h>
 #include <openssl/x509.h>
 
-xmlSecKeyPtr load_key(const char *pwd) {
+xmlSecKeyPtr load_key(EVP_PKEY *pKey, X509 *x509) {
 
 	xmlSecKeyPtr key = NULL;
 	xmlSecKeyDataPtr data;
 	xmlSecKeyDataPtr dataX509;
-	EVP_PKEY *pKey;
-	X509 *x509 = NULL;
 	int ret;
 
-	get_private_key(&pKey, &x509, pwd);
+	//get_private_key(&pKey, &x509, pwd);
 	if(pKey == NULL || x509 == NULL)
 		return NULL;
 
@@ -77,7 +75,7 @@ xmlSecKeyPtr load_key(const char *pwd) {
 	return key;
 }
 
-int sign_xml(xmlDocPtr doc, char *password, char *id) {
+int sign_xml(xmlDocPtr doc, EVP_PKEY *key, X509 *cert, char *id) {
 #ifndef XMLSEC_NO_XSLT
     xsltSecurityPrefsPtr xsltSecPrefs = NULL;
 #endif /* XMLSEC_NO_XSLT */
@@ -214,7 +212,7 @@ int sign_xml(xmlDocPtr doc, char *password, char *id) {
     }
 
     /* load private key */
-    dsigCtx->signKey = load_key(password);
+    dsigCtx->signKey = load_key(key, cert);
     if(dsigCtx->signKey == NULL) {
         fprintf(stderr,"Error: failed to load private key from smartcard\n");
 	goto done;

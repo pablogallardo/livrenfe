@@ -29,3 +29,4 @@ ltmain.sh
 .libs
 m4
 config.lt
+config.h.in

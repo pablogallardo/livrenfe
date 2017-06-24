@@ -1,4 +1,4 @@
-/* Copyright (c) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
+/* Copyright (c) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
  *
  * This file is part of LivreNFE.
  *
@@ -21,11 +21,13 @@
 #define	SEND_H
 
 #include <libnfe/libnfe.h>
+#include <openssl/evp.h>
+#include <openssl/x509.h>
 
 /**
  * Send request to SEFAZ
  */
-extern char *send_sefaz(char *service, int ambiente, int cuf, char *xml,
-		char *password);
+extern char *send_sefaz(sefaz_servico_t service, char *URL, int ambiente, 
+		int cuf, char *xml, EVP_PKEY *, X509 *);
 
 #endif
