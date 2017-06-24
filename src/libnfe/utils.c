@@ -110,3 +110,37 @@ char *str_replace(char *search , char *replace , char *subject){
     strcpy(new_subject + strlen(new_subject) , old);
     return new_subject;
 }
+
+ char  *dhnfe(signed char tzd,signed char hverao){
+	char *aux;
+
+	if (hverao == 1){
+
+		switch (tzd){
+			case -2: /*Fuso de Fernando de Noronha */
+				aux = "%Y-%m-%d-T-%H:%M:%S-2:00";
+				break;
+			case -3:/*Fuso de Brasilia*/
+			default:		
+				aux = "%Y-%m-%d-T-%H:%M:%S-3:00";
+				break;
+			case -4:/*Fuso de manaus*/
+				aux = "%Y-%m-%d-T-%H:%M:%S-4:00";
+				break;
+		}
+	}else if(hverao == 0){
+		switch (tzd){
+			case -2:/*Fuso de Fernando de Noronha Horario de Verao*/
+				aux = "%Y-%m-%d-T-%H:%M:%S-1:00";
+				break;
+			case -3:/*Fuso de Brasilia Horario de Verao*/
+			default:		
+				aux = "%Y-%m-%d-T-%H:%M:%S-2:00";
+				break;
+			case -4:/*Fuso de Manaus Hoario de Verao*/
+				aux = "%Y-%m-%d-T-%H:%M:%S-3:00";
+				break;
+		}
+	}
+	return aux;
+ }
