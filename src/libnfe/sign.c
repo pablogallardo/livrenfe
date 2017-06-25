@@ -230,6 +230,7 @@ int sign_xml(xmlDocPtr doc, EVP_PKEY *key, X509 *cert, char *id) {
 done:    
     /* cleanup */
     if(dsigCtx != NULL) {
+    	dsigCtx->signKey = NULL; // Desvincular certificado do dsigCtx
 	xmlSecDSigCtxDestroy(dsigCtx);
     }
     
