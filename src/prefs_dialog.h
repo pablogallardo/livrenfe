@@ -1,4 +1,4 @@
-/* Copyright (c) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
+/* Copyright (c) 2017 Pablo G. Gallardo <pggllrd@gmail.com>
  *
  * This file is part of LivreNFE.
  *
@@ -17,15 +17,23 @@
  *
  */
 
-#ifndef	SEND_H
-#define	SEND_H
+#ifndef	PREFS_DIALOG_H
+#define	PREFS_DIALOG_H
 
-#include "livrenfe.h"
+#include "lnfe_window.h"
+#include <gtk/gtk.h>
 
-/**
- * Send request to SEFAZ
- */
-extern char *send_sefaz(char *service, int ambiente, int cuf, char *xml,
-		char *password);
+#define PREFS_TYPE	(prefs_get_type())
+#define	PREFS(obj)	(G_TYPE_CHECK_INSTANCE_CAST((obj), PREFS_TYPE, Prefs))
+
+typedef struct _Prefs Prefs;
+typedef struct _PrefsClass PrefsClass;
+
+GType pregs_get_type(void);
+Prefs *prefs_new(LivrenfeWindow *win);
+
+struct _Prefs{
+	GtkDialog parent;
+};
 
 #endif

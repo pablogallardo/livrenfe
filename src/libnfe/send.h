@@ -1,4 +1,4 @@
-/* Copyright (c) 2017 Pablo G. Gallardo <pggllrd@gmail.com>
+/* Copyright (c) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
  *
  * This file is part of LivreNFE.
  *
@@ -17,17 +17,17 @@
  *
  */
 
-#ifndef	PREFS_H
-#define	PREFS_H
+#ifndef	SEND_H
+#define	SEND_H
 
-#include "livrenfe.h"
+#include <libnfe/libnfe.h>
+#include <openssl/evp.h>
+#include <openssl/x509.h>
 
-extern void free_urls(URLS *u);
-
-extern void free_prefs(PREFS *p);
-
-extern void empty_prefs_urls(PREFS_URLS *u);
-
-extern void free_prefs_urls(PREFS_URLS *u);
+/**
+ * Send request to SEFAZ
+ */
+extern char *send_sefaz(sefaz_servico_t service, char *URL, int ambiente, 
+		int cuf, char *xml, EVP_PKEY *, X509 *);
 
 #endif

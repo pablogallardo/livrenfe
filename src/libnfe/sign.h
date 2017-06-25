@@ -1,4 +1,4 @@
-/* Copyright (c) 2017 Pablo G. Gallardo <pggllrd@gmail.com>
+/* Copyright (c) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
  *
  * This file is part of LivreNFE.
  *
@@ -17,17 +17,13 @@
  *
  */
 
-#ifndef	PREFS_H
-#define	PREFS_H
+#ifndef SIGN_H
+#define SIGN_H
 
-#include "livrenfe.h"
+#include <libxml/tree.h>
+#include <openssl/x509.h>
+#include <openssl/evp.h>
 
-extern void free_urls(URLS *u);
-
-extern void free_prefs(PREFS *p);
-
-extern void empty_prefs_urls(PREFS_URLS *u);
-
-extern void free_prefs_urls(PREFS_URLS *u);
+extern int sign_xml(xmlDocPtr, EVP_PKEY *, X509 *, char*id);
 
 #endif

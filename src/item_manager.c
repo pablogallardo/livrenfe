@@ -19,10 +19,10 @@
 
 #include "item_manager.h"
 #include "nfe_manager.h"
-#include "nfe.h"
-#include "utils.h"
+#include "libnfe/utils.h"
 #include "gtk_common.h"
-#include "errno.h"
+#include <libnfe/errno.h>
+#include <libnfe/nfe.h>
 #include <gtk/gtk.h>
 #include <stdlib.h>
 

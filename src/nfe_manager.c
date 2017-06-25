@@ -21,11 +21,12 @@
 #include "nfe_manager.h"
 #include "item_manager.h"
 #include "db_interface.h"
-#include "nfe.h"
 #include "livrenfe.h"
-#include "utils.h"
 #include "gtk_common.h"
-#include "errno.h"
+#include "libnfe/utils.h"
+#include <libnfe/errno.h>
+#include <libnfe/nfe.h>
+#include <libnfe/libnfe.h>
 #include <gtk/gtk.h>
 #include <string.h>
 #include <stdlib.h>

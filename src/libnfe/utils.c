@@ -26,6 +26,8 @@
 #include <time.h>
 #include <string.h>
 
+#define DHDEFAULT  "%Y-%m-%d-T-%H:%M:%S-"
+
 char *timetostr(time_t t){
 	char *buffer;
 	buffer = malloc(sizeof(char) * 20);
@@ -93,7 +95,7 @@ char *str_replace(char *search , char *replace , char *subject){
     //Final size
     c = ( strlen(replace) - search_size )*c + strlen(subject);
     //New subject with new size
-    new_subject = malloc( 99999999);
+    new_subject = malloc(c);
     //Set it to blank
     strcpy(new_subject , "");
     //The start position
@@ -110,3 +112,46 @@ char *str_replace(char *search , char *replace , char *subject){
     strcpy(new_subject + strlen(new_subject) , old);
     return new_subject;
 }
+
+/*Data e hora do evento no formato AAAA-MM-DDThh:mm:ssTZD (UTC - Universal Coordinated
+ * Time , onde TZD pode ser 
+ * -02:00 (Fernando de Noronha), 
+ * -03:00 (Brasília) ou 
+ * -04:00 (Manaus), no  horário de verão serão 
+ * -01:00, -02:00 e -03:00. Ex.:
+ * 2010-08-19T13:00:15-03:00.
+ * */
+ char  *dhnfe(int tzd, int hverao,char **str){
+ 	 char *aux;
+
+	if (hverao == 1){
+
+		switch (tzd){
+			case -2: /*Fuso de Fernando de Noronha */
+				aux = "2:00";
+				break;
+			case -3:/*Fuso de Brasilia*/
+			default:		
+				aux = "3:00";
+				break;
+			case -4:/*Fuso de manaus*/
+				aux = "4:00";
+				break;
+		}
+	}else if(hverao == 0){
+		switch (tzd){
+			case -2:/*Fuso de Fernando de Noronha Horario de Verao*/
+				aux = "1:00";
+				break;
+			case -3:/*Fuso de Brasilia Horario de Verao*/
+			default:		
+				aux = "2:00";
+				break;
+			case -4:/*Fuso de Manaus Hoario de Verao*/
+				aux = "3:00";
+				break;
+		}
+	}
+	strcat(*str,DHDEFAULT);
+	return strcat(*str,aux);
+ }

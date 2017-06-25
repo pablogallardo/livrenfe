@@ -20,8 +20,8 @@
 #ifndef	ITEM_MANAGER_H
 #define	ITEM_MANAGER_H
 
-#include "livrenfe.h"
 #include "nfe_manager.h"
+#include <libnfe/libnfe.h>
 #include <gtk/gtk.h>
 
 #define ITEM_MANAGER_TYPE	(item_manager_get_type())

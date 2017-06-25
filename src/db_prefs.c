@@ -18,7 +18,8 @@
 
 #include "db_interface.h"
 #include "db.h"
-#include "errno.h"
+#include "livrenfe.h"
+#include <libnfe/errno.h>
 #include <sqlite3.h>
 #include <string.h>
 #include <stdlib.h>

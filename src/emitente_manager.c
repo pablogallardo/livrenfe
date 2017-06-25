@@ -20,11 +20,11 @@
 #include "emitente_manager.h"
 #include "lnfe_window.h"
 #include "db_interface.h"
-#include "utils.h"
-#include "nfe.h"
-#include "livrenfe.h"
 #include "gtk_common.h"
-#include "errno.h"
+#include <libnfe/errno.h>
+#include <libnfe/utils.h>
+#include <libnfe/nfe.h>
+#include <libnfe/libnfe.h>
 #include <gtk/gtk.h>
 #include <stdlib.h>
 

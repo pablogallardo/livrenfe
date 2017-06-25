@@ -20,7 +20,7 @@
 #ifndef	DB_H
 #define	DB_H
 
-#include "livrenfe.h"
+#include "libnfe/libnfe.h"
 #include <sqlite3.h>
 
 #define DB_VERSION	1

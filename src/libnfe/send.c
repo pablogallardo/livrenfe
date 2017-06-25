@@ -1,4 +1,4 @@
-/* Copyright (c) 2016 Pablo G. Gallardo <pggllrd@gmail.com>
+/* Copyright (c) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
  *
  * This file is part of LivreNFE.
  * LivreNFE is free software: you can redistribute it and/or modify
@@ -17,11 +17,9 @@
  */
 
 #include "send.h"
-#include "livrenfe.h"
-#include "errno.h"
-#include "gen_xml.h"
-#include "db_interface.h"
-#include "crypto_interface.h"
+#include <libnfe/libnfe.h>
+#include <libnfe/errno.h>
+#include <libnfe/gen_xml.h>
 #include <curl/curl.h>
 #include <openssl/evp.h>
 #include <openssl/ssl.h>
@@ -33,6 +31,11 @@
 #include <libxml/xmlwriter.h>
 #include <string.h>
 
+typedef struct {
+	EVP_PKEY *key;
+	X509 *cert;
+} SSL_KEY;
+
 static size_t writefunction(void *ptr, size_t size,
 		size_t nmemb, void *s){
 	char **r = (char**) s;
@@ -40,14 +43,14 @@ static size_t writefunction(void *ptr, size_t size,
 	return (nmemb*size);
 }
 
-CURLcode sslctx_function(CURL *curl, void *sslctx, char *pwd){
-	X509 *cert = NULL;
+CURLcode sslctx_function(CURL *curl, void *sslctx, SSL_KEY *ssl_key){
 	RSA *rsa = NULL;
-	EVP_PKEY *pKey = NULL;
+	X509 *cert = ssl_key->cert;
+	EVP_PKEY *pKey = ssl_key->key;
 	int rc;
 	(void)curl; //avoid warnings
 
-	get_private_key(&pKey, &cert, pwd);
+	//get_private_key(&pKey, &cert, pwd);
 	if(pKey == NULL){
 		return -1;
 	}
@@ -66,8 +69,8 @@ CURLcode sslctx_function(CURL *curl, void *sslctx, char *pwd){
 	return CURLE_OK;
 }
 
-static char *format_soap(char *service, char *xml, int cuf, char *url_cabec,
-			char *url_dados){
+static char *format_soap(sefaz_servico_t service, char *xml, int cuf, 
+		const char *wsdl){
 	int rc, buffersize;
 	xmlTextWriterPtr writer;
 	xmlDocPtr doc;
@@ -101,7 +104,7 @@ static char *format_soap(char *service, char *xml, int cuf, char *url_cabec,
 		return NULL;
 
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
-		BAD_CAST url_cabec);
+		BAD_CAST wsdl);
 	if (rc < 0)
 		return NULL;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "versaoDados",
@@ -125,7 +128,7 @@ static char *format_soap(char *service, char *xml, int cuf, char *url_cabec,
 	if (rc < 0)
 		return NULL;
 	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
-			BAD_CAST url_dados);
+			BAD_CAST wsdl);
 	if (rc < 0)
 		return NULL;
 	rc = xmlTextWriterWriteRaw(writer, BAD_CAST xml);
@@ -145,19 +148,21 @@ static char *format_soap(char *service, char *xml, int cuf, char *url_cabec,
 		return NULL;
 	xmlTextWriterEndDocument(writer);
 	xmlDocDumpMemory(doc, &xmlbuf, &buffersize);
-	//char *xml_inline = str_replace(">\n<","><", xmlbuf);
-	free(url_cabec);
-	free(url_dados);
+
 	return (char*) xmlbuf;
 }
 
-char *send_sefaz(char *service, int ambiente, int cuf, char *xml,
-		char *password){
+char *send_sefaz(sefaz_servico_t service, char *URL, int ambiente, int cuf, 
+		char *xml, EVP_PKEY *key, X509 *cert){
 	CURL *ch;
 	CURLcode rv;
 	rv = curl_global_init(CURL_GLOBAL_ALL);
 	ch = curl_easy_init();
 	struct curl_slist *header = NULL;
+	SSL_KEY ssl_key = { 
+		.key = key,
+		.cert = cert
+	};
 	char *server_response;
 	header = curl_slist_append(header, 
 		"Content-type: application/soap+xml; charset=UTF-8");
@@ -167,11 +172,9 @@ char *send_sefaz(char *service, int ambiente, int cuf, char *xml,
 	rv = curl_easy_setopt(ch, CURLOPT_NOSIGNAL, 1L);
 	rv = curl_easy_setopt(ch, CURLOPT_WRITEFUNCTION, writefunction);
 	rv = curl_easy_setopt(ch, CURLOPT_WRITEDATA, &server_response);
-	//rv = curl_easy_setopt(ch, CURLOPT_HEADERDATA, stderr);
-	char *URL, *url_cabec, *url_body;
-	URL = get_ws_url(service, ambiente, &url_cabec, &url_body);
-	char *h = format_soap(service, xml, cuf, url_cabec, url_body);
-	fprintf(stdout, "%s\n", h);
+
+	char *h = format_soap(service, xml, cuf, SEFAZ_WSDL[service]);
+
 	rv = curl_easy_setopt(ch, CURLOPT_POSTFIELDS, h);
 
 	/* both VERIFYPEER and VERIFYHOST are set to 0 in this case because there is
@@ -181,9 +184,9 @@ char *send_sefaz(char *service, int ambiente, int cuf, char *xml,
 	rv = curl_easy_setopt(ch, CURLOPT_SSL_VERIFYHOST, 0L);
 	rv = curl_easy_setopt(ch, CURLOPT_URL, URL);
 	rv = curl_easy_setopt(ch, CURLOPT_SSL_CTX_FUNCTION, *sslctx_function);
-	rv = curl_easy_setopt(ch, CURLOPT_SSL_CTX_DATA, password);
+	rv = curl_easy_setopt(ch, CURLOPT_SSL_CTX_DATA, &ssl_key);
 	rv = curl_easy_perform(ch);
-	free(URL);
+
 	free(h);
 	if(rv!=CURLE_OK) {
 		return NULL;

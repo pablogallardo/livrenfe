@@ -16,7 +16,7 @@
  * along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
  * */ 
 
-#include "livrenfe.h"
+#include <libnfe/libnfe.h>
 #include <time.h>
 
 extern NFE *new_nfe();
@@ -94,11 +94,3 @@ extern void free_destinatario(DESTINATARIO *d);
 extern int add_nfe(LOTE *lote, NFE *nfe);
 
 extern int add_evento(LOTE_EVENTO *lote, EVENTO *e);
-
-extern void free_urls(URLS *u);
-
-extern void free_prefs(PREFS *p);
-
-extern void empty_prefs_urls(PREFS_URLS *u);
-
-extern void free_prefs_urls(PREFS_URLS *u);

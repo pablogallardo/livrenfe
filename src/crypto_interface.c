@@ -18,9 +18,9 @@
  */
 
 #include "crypto_interface.h"
-#include "errno.h"
 #include "db_interface.h"
-#include "nfe.h"
+#include <libnfe/nfe.h>
+#include <libnfe/errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
