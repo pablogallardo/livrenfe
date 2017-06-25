@@ -44,7 +44,7 @@ char *gen_cons_status(int ambiente, int cuf){
 	
 	writer = xmlNewTextWriterDoc(&doc, 0);
 	if (writer == NULL) {
-	printf("Error NewDoc");
+		printf("Error NewDoc");
 		return NULL;
 	}
 	xmlTextWriterStartDocument(writer, NULL, "utf-8", NULL);
