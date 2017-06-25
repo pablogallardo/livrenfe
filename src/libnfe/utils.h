@@ -24,7 +24,8 @@
 /*Gera parametros para gerar data e hora no formato exigido pela Sefaz
 * O resuldato deve ser usado no 3º parametro da função  strftime(). 
 */
-extern char  *dhnfe(signed char tzd,signed char hverao);
+
+extern char  *dhnfe(int tzd, int hverao,char **str)
 
 extern char *timetostr(time_t);
 
