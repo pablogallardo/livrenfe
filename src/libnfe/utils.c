@@ -152,6 +152,6 @@ char *str_replace(char *search , char *replace , char *subject){
 				break;
 		}
 	}
-	strcat(*str,*DHDEFAULT);
+	strcat(*str,DHDEFAULT);
 	return strcat(*str,aux);
  }

@@ -10,7 +10,7 @@ typedef enum t_indPag {
    OUTROS = 2
 }TE_INDPAG  ;
 
- typedef enum /* t_mod*/ {
+ typedef enum  t_mod {
 	 NFE  =55,
 	 NFCe = 65
  }TE_MOD;

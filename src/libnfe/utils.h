@@ -25,7 +25,7 @@
 * O resuldato deve ser usado no 3º parametro da função  strftime(). 
 */
 
-extern char  *dhnfe(int tzd, int hverao,char **str)
+extern char  *dhnfe(int tzd, int hverao,char **str);
 
 extern char *timetostr(time_t);
 
