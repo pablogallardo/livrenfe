@@ -3,16 +3,16 @@
  * This file is part of LivreNFE.
  *
  * LivreNFE is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
  * LivreNFE is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
@@ -269,7 +269,7 @@ static void about_activate(GtkMenuItem *i, gpointer win){
 		"comments", LIVRENFE_COMMENT,
 		"website", LIVRENFE_WEBSITE,
 		"website-label", LIVRENFE_WEBSITE,
-		"license_type", GTK_LICENSE_GPL_3_0, NULL);
+		"license_type", GTK_LICENSE_LGPL_3_0, NULL);
 }
 
 static void pref_activate(GtkMenuItem *i, gpointer win){
