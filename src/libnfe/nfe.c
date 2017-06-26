@@ -198,9 +198,9 @@ NFE *new_nfe(){
 	return p;
 }
 
-LOTE *new_lote(){
+LOTE *new_lote(int id){
 	LOTE m = {
-		.id = get_lote_id()
+		.id = id 
 	};
 	LOTE *l = malloc(sizeof(LOTE));
 	memcpy(l, &m, sizeof(LOTE));
@@ -230,9 +230,9 @@ static LOTE_EVENTO_ITEM *new_lote_evento_item(){
 	return l;
 }
 
-LOTE_EVENTO *new_lote_evento(){
+LOTE_EVENTO *new_lote_evento(int id){
 	LOTE_EVENTO m = {
-		.id = get_lote_evento_id()
+		.id = id
 	};
 	LOTE_EVENTO *l = malloc(sizeof(LOTE_EVENTO));
 	memcpy(l, &m, sizeof(LOTE_EVENTO));

@@ -115,7 +115,7 @@ static void sefaz_emitir(gpointer *b, LivrenfeWindow *win){
 		int idnfe;
 		gtk_tree_model_get(model, &iter, 0, &idnfe, -1);
 		NFE *nfe = get_nfe(idnfe);
-		lote = new_lote();
+		lote = new_lote(get_lote_id());
 		add_nfe(lote, nfe);
 	}
 	char *password = strdup(gtk_entry_get_text(win->password));
@@ -139,7 +139,7 @@ static void sefaz_cancelar(gpointer *b, LivrenfeWindow *win){
 		int idnfe;
 		gtk_tree_model_get(model, &iter, 0, &idnfe, -1);
 		NFE *nfe = get_nfe(idnfe);
-		lote = new_lote_evento();
+		lote = new_lote_evento(get_lote_evento_id());
 		EVENTO_CANCELAMENTO *ec = new_evento_cancelamento();
 		ec->evento.nfe = nfe;
 		char *j = strdup(gtk_entry_get_text(win->justificativa));

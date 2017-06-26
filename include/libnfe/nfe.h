@@ -21,13 +21,13 @@
 
 extern NFE *new_nfe();
 
-extern LOTE *new_lote();
+extern LOTE *new_lote(int id);
 
 extern ITEM *new_item();
 
 extern EVENTO_CANCELAMENTO *new_evento_cancelamento();
 
-extern LOTE_EVENTO *new_lote_evento();
+extern LOTE_EVENTO *new_lote_evento(int id);
 
 extern EMITENTE *new_emitente();
 
