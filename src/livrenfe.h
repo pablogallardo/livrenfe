@@ -83,8 +83,7 @@ typedef struct {
  */
 typedef struct {
 	URLS *urls;
-	char *public_key;
-	char *private_key;
+	char *cert_file;
 	char *card_reader_lib;
 	int ambiente;
 	int cert_type;

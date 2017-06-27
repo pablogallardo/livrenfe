@@ -29,7 +29,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 struct _PrefsClass{
 	GtkDialogClass parent_class;
 };
@@ -42,8 +41,7 @@ struct _PrefsPrivate{
 	GtkRadioButton *cert_a1;
 	GtkRadioButton *cert_a3;
 
-	GtkEntry *public_key;
-	GtkEntry *private_key;
+	GtkEntry *cert_file;
 	GtkEntry *card_reader_lib;
 	GtkEntry *recepcaoevento_prod;
 	GtkEntry *recepcaoevento_cert;
@@ -85,8 +83,7 @@ static void inst_urls(PrefsPrivate *priv){
 	gtk_entry_set_text(priv->nfeautorizacao_cert, url->nfeautorizacao_cert);
 	gtk_entry_set_text(priv->nferetautorizacao_cert, url->nferetautorizacao_cert);
 
-	gtk_entry_set_text(priv->public_key, pref_data->public_key);
-	gtk_entry_set_text(priv->private_key, pref_data->private_key);
+	gtk_entry_set_text(priv->cert_file, pref_data->cert_file);
 	gtk_entry_set_text(priv->card_reader_lib, pref_data->card_reader_lib);
 
 	if(pref_data->ambiente == AMBIENTE_PRODUCAO)
@@ -127,14 +124,11 @@ static void save_prefs(gpointer btn, Prefs *p){
 	PrefsPrivate *priv;
 	priv = prefs_get_instance_private(PREFS(p));
 	PREFS *prefs = get_prefs();
-	char *pub_key = strdup(gtk_entry_get_text(priv->public_key));
-	char *priv_key = strdup(gtk_entry_get_text(priv->private_key));
+	char *cert_file = strdup(gtk_entry_get_text(priv->cert_file));
 	char *cert_lib = strdup(gtk_entry_get_text(priv->card_reader_lib));
-	free(prefs->private_key);
-	free(prefs->public_key);
+	free(prefs->cert_file);
 	free(prefs->card_reader_lib);
-	prefs->private_key = priv_key;
-	prefs->public_key = pub_key;
+	prefs->cert_file = cert_file;
 	prefs->card_reader_lib = cert_lib;
 	if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(priv->ambiente_p))){
 		prefs->ambiente = AMBIENTE_PRODUCAO;
@@ -182,9 +176,7 @@ static void prefs_class_init(PrefsClass *class){
 	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
 		Prefs, cert_a3);
 	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
-		Prefs, public_key);
-	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
-		Prefs, private_key);
+		Prefs, cert_file);
 	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 
 		Prefs, card_reader_lib);
 	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), 

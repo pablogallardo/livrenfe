@@ -21,6 +21,7 @@
 #include "db.h"
 #include "livrenfe.h"
 #include <libnfe/errno.h>
+#include <libnfe/libnfe.h>
 #include <sqlite3.h>
 #include <string.h>
 #include <stdlib.h>
@@ -146,11 +147,10 @@ int set_prefs(PREFS *prefs){
 	err = NULL;
 	if(prefs){
 		sql = sqlite3_mprintf("REPLACE INTO prefs (id, ambiente,\
-			cert_type, a1_public_key, a1_private_key, a3_library)\
-			VALUES  (%d, %d, %d, %Q, %Q, %Q);",
+			cert_type, a1_cert_file, a3_library)\
+			VALUES  (%d, %d, %d, %Q, %Q);",
 			1, prefs->ambiente, prefs->cert_type,
-			prefs->public_key, prefs->private_key,
-			prefs->card_reader_lib);
+			prefs->cert_file, prefs->card_reader_lib);
 		db_exec(sql, &err);
 		if(err){
 			fprintf(stderr, "livrenfe: Error: %s", err);
@@ -181,31 +181,31 @@ PREFS_URLS *get_prefs_urls(){
 			const char *prod = (char*)sqlite3_column_text(stmt, 1);
 			const char *cert = (char*)sqlite3_column_text(stmt, 2);
 			switch(id_url){
-				case 1: //RecepcaoEvento
+				case SEFAZ_RECEPCAO_EVENTO: //RecepcaoEvento
 					p->recepcaoevento_prod = strdup(prod);
 					p->recepcaoevento_cert = strdup(cert);
 					break;
-				case 2: //NfeConsultaCadastro
+				case SEFAZ_NFE_CONSULTA_CADASTRO: //NfeConsultaCadastro
 					p->nfeconsultacadastro_prod = strdup(prod);
 					p->nfeconsultacadastro_cert = strdup(cert);
 					break;
-				case 3: //NfeInutilizacao
+				case SEFAZ_NFE_INUTILIZACAO: //NfeInutilizacao
 					p->nfeinutilizacao_prod = strdup(prod);
 					p->nfeinutilizacao_cert = strdup(cert);
 					break;
-				case 4: //NfeConsultaProtocolo
+				case SEFAZ_NFE_CONSULTA_PROTOCOLO: //NfeConsultaProtocolo
 					p->nfeconsultaprotocolo_prod = strdup(prod);
 					p->nfeconsultaprotocolo_cert = strdup(cert);
 					break;
-				case 5: //NfeStatusServico
+				case SEFAZ_NFE_STATUS_SERVICO: //NfeStatusServico
 					p->nfestatusservico_prod = strdup(prod);
 					p->nfestatusservico_cert = strdup(cert);
 					break;
-				case 6: //NfeAutorizacao
+				case SEFAZ_NFE_AUTORIZACAO: //NfeAutorizacao
 					p->nfeautorizacao_prod = strdup(prod);
 					p->nfeautorizacao_cert = strdup(cert);
 					break;
-				case 7: //NFeRetAutorizacao
+				case SEFAZ_NFE_RET_AUTORIZACAO: //NFeRetAutorizacao
 					p->nferetautorizacao_prod = strdup(prod);
 					p->nferetautorizacao_cert = strdup(cert);
 					break;
@@ -240,25 +240,25 @@ static URLS *get_ambiente_urls(int ambiente){
 			int id_url = sqlite3_column_int(stmt, 0);
 			const char *link = (char*)sqlite3_column_text(stmt, ambiente);
 			switch(id_url){
-				case 1: //RecepcaoEvento
+				case SEFAZ_RECEPCAO_EVENTO: //RecepcaoEvento
 					u->recepcaoevento = strdup(link);
 					break;
-				case 2: //NfeConsultaCadastro
+				case SEFAZ_NFE_CONSULTA_CADASTRO: //NfeConsultaCadastro
 					u->nfeconsultacadastro = strdup(link);
 					break;
-				case 3: //NfeInutilizacao
+				case SEFAZ_NFE_INUTILIZACAO: //NfeInutilizacao
 					u->nfeinutilizacao = strdup(link);
 					break;
-				case 4: //NfeConsultaProtocolo
+				case SEFAZ_NFE_CONSULTA_PROTOCOLO: //NfeConsultaProtocolo
 					u->nfeconsultaprotocolo = strdup(link);
 					break;
-				case 5: //NfeStatusServico
+				case SEFAZ_NFE_STATUS_SERVICO: //NfeStatusServico
 					u->nfestatusservico = strdup(link);
 					break;
-				case 6: //NfeAutorizacao
+				case SEFAZ_NFE_AUTORIZACAO: //NfeAutorizacao
 					u->nfeautorizacao = strdup(link);
 					break;
-				case 7: //NFeRetAutorizacao
+				case SEFAZ_NFE_RET_AUTORIZACAO: //NFeRetAutorizacao
 					u->nferetautorizacao = strdup(link);
 					break;
 			}
@@ -279,8 +279,8 @@ PREFS *get_prefs(){
 	int rc;
 	err = malloc(sizeof(char) * 200);
 	
-	char *sql = sqlite3_mprintf("SELECT ambiente, cert_type, a1_public_key,\
-		a1_private_key, a3_library\
+	char *sql = sqlite3_mprintf("SELECT ambiente, cert_type, a1_cert_file,\
+		a3_library\
 		FROM prefs");
 	if(db_select(sql, &err, &stmt)){
 		free(p);
@@ -291,12 +291,10 @@ PREFS *get_prefs(){
 		if(rc == SQLITE_ROW){
 			int ambiente = sqlite3_column_int(stmt, 0);
 			int cert_type = sqlite3_column_int(stmt, 1);
-			const char *a1_pub = (char*)sqlite3_column_text(stmt, 2);
-			const char *a1_priv = (char*)sqlite3_column_text(stmt, 3);
-			const char *a3_lib = (char*)sqlite3_column_text(stmt, 4);
+			const char *a1_cert = (char*)sqlite3_column_text(stmt, 2);
+			const char *a3_lib = (char*)sqlite3_column_text(stmt, 3);
 
-			p->public_key = a1_pub? strdup(a1_pub):strdup("");
-			p->private_key = a1_priv? strdup(a1_priv):strdup("");
+			p->cert_file = a1_cert? strdup(a1_cert):strdup("");
 			p->card_reader_lib = a3_lib? strdup(a3_lib):strdup("");
 			p->ambiente = ambiente;
 			p->cert_type = cert_type;
@@ -306,8 +304,7 @@ PREFS *get_prefs(){
 			p->ambiente = DEFAULT_AMBIENTE;
 			p->cert_type = DEFAULT_CERT_TYPE;
 			p->urls = get_ambiente_urls(DEFAULT_AMBIENTE);
-			p->public_key = strdup("");
-			p->private_key = strdup( "");
+			p->cert_file = strdup("");
 			p->card_reader_lib = strdup("");
 			break;
 		} else {

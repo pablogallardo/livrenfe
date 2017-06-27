@@ -31,21 +31,21 @@
 #include <libp11.h>
 #include <openssl/rsa.h>
 #include <openssl/x509.h>
+#include <openssl/err.h>
+#include <openssl/pkcs12.h>
 
 
 static int smartcard_login(const char *password, PKCS11_SLOT **s, 
-		unsigned int *nc){
+		unsigned int *nc, PREFS *prefs){
 
 	PKCS11_CTX *ctx;
 	PKCS11_SLOT *slots;
-	PREFS *prefs;
 	
 	int rc = 0, logged_in;
 	unsigned int nslots;
 
 	ctx = PKCS11_CTX_new();
 
-	prefs = get_prefs();
 	/* load pkcs #11 module */
 	rc = PKCS11_CTX_load(ctx, prefs->card_reader_lib);
 	if (rc) {
@@ -97,18 +97,15 @@ static int smartcard_login(const char *password, PKCS11_SLOT **s,
 	return 0;
 }
 
-int encrypt(char *in, char **out, char *password){
-	return 0;
-}
-
-int get_private_key(EVP_PKEY **k, X509 **c, const char *password){
+static int get_private_key_a3(EVP_PKEY **k, X509 **c, const char *password,
+		PREFS *prefs){
 	unsigned int ncerts;
 	int rc;
 	PKCS11_SLOT *slot;
 	PKCS11_CERT *certs, *authcert;
 	PKCS11_KEY *authkey;
 
-	rc = smartcard_login(password, &slot, &ncerts);
+	rc = smartcard_login(password, &slot, &ncerts, prefs);
 	if(rc)
 		return -ELIBP11;
 
@@ -130,5 +127,31 @@ int get_private_key(EVP_PKEY **k, X509 **c, const char *password){
 		return -ELIBP11;
 	}
 	*k = PKCS11_get_private_key(authkey);
+}
+
+static int get_private_key_a1(EVP_PKEY **k, X509 **c, const char *password,
+		PREFS *prefs){
+	char *file = prefs->cert_file;
+	FILE *p12_file;
+	PKCS12 *p12_cert = NULL;
+	STACK_OF(X509) *additional_certs = NULL;
+
+	p12_file = fopen(file, "rb");
+	d2i_PKCS12_fp(p12_file, &p12_cert);
+	fclose(p12_file);
+
+	PKCS12_parse(p12_cert, password, k, c, &additional_certs);
 	return 0;
+}
+
+int get_private_key(EVP_PKEY **k, X509 **c, const char *password){
+	PREFS *prefs = get_prefs();
+	switch(prefs->cert_type){
+		case CERT_TYPE_A1:
+			return get_private_key_a1(k, c, password, prefs);
+			break;
+		case CERT_TYPE_A3:
+			return get_private_key_a3(k, c, password, prefs);
+			break;
+	}
 }

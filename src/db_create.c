@@ -102,8 +102,7 @@ CREATE TABLE nfe_itens (id_nfe integer, ordem integer, id_produto integer, icms_
 	CONSTRAINT itens_produto_fk FOREIGN KEY (id_produto)\
 	REFERENCES produtos(id_produto));\
 CREATE TABLE prefs (id integer, ambiente integer, cert_type integer,\
-	a1_public_key varchar(800), a1_private_key varchar(800),\
-	a3_library varchar(800),\
+	a1_cert_file varchar(800), a3_library varchar(800),\
 	CONSTRAINT pref_pk PRIMARY KEY (id));\
 CREATE TABLE lotes_evento (id_lote_evento integer, recibo varchar(20), xml_response text,\
 	CONSTRAINT lote_evento_pk PRIMARY KEY (id_lote_evento));\

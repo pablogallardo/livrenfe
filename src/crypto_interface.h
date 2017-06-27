@@ -22,12 +22,6 @@
 
 #include <openssl/rsa.h>
 
-extern int encrypt(char *in, char **out, char *password);
-
-extern int decrypt(char *in, char **out, char *password);
-
-extern int sign(char *in, char **out, char *password);
-
 extern int get_private_key(EVP_PKEY **, X509 **, const char *password);
 
 #endif
