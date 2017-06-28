@@ -20,7 +20,7 @@
 #define	LIBNFE_H
 
 #include <time.h>
-
+#include <enum.h>
 #define	VERSION_NAME			"0.1.0"
 #define	VERSION_COUNTER			1
 #define VERSION_TITLE			"Tartagal"
@@ -78,29 +78,33 @@ typedef struct {
 
 /*
  * NFE identification
+ *
+ * @Pablo
+ * Manteve-se o nome dos fields
+ * para compatibilidade, porem
+ * deveriamos muda-los para o nome
+ * do elemento.
+ * EX's:ind_pag --> indPag
+ * 	tipo --> tpNF	
  */
 typedef struct {
 	MUNICIPIO *municipio;
 	unsigned int id_nfe;
 	const char *nat_op;
-	enum t_ind_pag {A_VISTA, A_PRAZO, OUTRO} ind_pag;
-	enum t_mod {MOD_NFE=55, MOD_NFCE=65} mod;
+	TE_INDPAG  ind_pag;
+	TE_MOD mod;
 	int serie;
 	unsigned int num_nf;
 	time_t dh_emis;
 	time_t *dh_saida;
-	enum t_tipo {TIPO_ENTRADA=0,TIPO_SAIDA=1} tipo;
-	enum t_local_destino {DEST_INTERNA=1,DEST_INTERESTADUAL=2,DEST_EXTERIOR=3} local_destino;
-	enum t_tipo_impressao {IMP_NONE=0,IMP_RET=1,IMP_PAI=2,IMP_SIMP=3,IMP_NFCE=4,IMP_NFCE_MSG=5}
-		tipo_impressao;
-	enum t_tipo_emissao {TE_NORMAL=1, TE_FS=2, TE_SCAN=3, TE_DPEC=4, TE_FSDA=5, TE_SVCAN=6, 
-		TE_SVCRS=7, TE_OFFLINE_NFCE=9} tipo_emissao;
-	enum t_tipo_ambiente {PRODUCAO=1, HOMOLOGACAO=2} tipo_ambiente;
-	enum t_finalidade {FIN_NORMAL=1, FIN_COMPLEMENTAR=2, FIN_AJUSTE=3, FIN_RETORNO=4}
-	finalidade;
-	enum t_consumidor_final {NAO=0, SIM=1} consumidor_final;
-	enum t_presencial {PRE_NA=0, PRE_PRESENCIAL=1, PRE_INTERNET=2, PRE_TELEATENDIMENTO=3,
-		PRE_NFCE_ED=4, PRE_OUTRO=5} presencial;
+	TE_TPNF tipo;
+	TE_IDDEST local_destino;
+	TE_TPIMP tipo_impressao;
+	TE_TPEMIS tipo_emissao;
+	TE_TAMB tipo_ambiente;
+	TE_FINNFE finalidade;
+	TE_INDFINAL consumidor_final;
+	TE_INDPRES presencial;
 	const char *versao;
 	char div;
 	char *chave;
