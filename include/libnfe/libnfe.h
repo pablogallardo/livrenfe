@@ -20,7 +20,6 @@
 #define	LIBNFE_H
 
 #include <time.h>
-#include <enum.h>
 #define	VERSION_NAME			"0.1.0"
 #define	VERSION_COUNTER			1
 #define VERSION_TITLE			"Tartagal"
@@ -48,6 +47,85 @@
 #define WSDL_NFE_STATUS_SERVICO		"http://www.portalfiscal.inf.br/nfe/wsdl/NfeStatusServico2"
 #define WSDL_NFE_AUTORIZACAO		"http://www.portalfiscal.inf.br/nfe/wsdl/NfeAutorizacao"
 #define WSDL_NFE_RET_AUTORIZACAO	"http://www.portalfiscal.inf.br/nfe/wsdl/NfeRetAutorizacao"
+
+
+
+
+
+typedef enum t_indPag {
+  A_VISTA = 0,
+  A_PRAZO = 1,
+   OUTROS = 2
+}TE_INDPAG  ;
+
+ typedef enum  t_mod {
+	 NFE  =55,
+	 NFCe = 65
+ }TE_MOD;
+
+typedef enum t_tpNF{
+	ENTRADA = 0,
+	SAIDA   = 1
+}TE_TPNF;
+
+typedef enum t_idDest{
+	OPERACAO_INTERNA = 1,
+	OPERACAO_INTERESTADUAL = 2,
+	OPERACAO_EXTERIOR = 3
+}TE_IDDEST;
+
+typedef enum t_tpImp{
+	SEM_GERAR_DANFE = 0,
+	DANFE_NORMAL_RETRATO = 1,
+	DANFE_NORMAL_PAISAGEM = 2,
+	DANFE_SIMPLIFICADO = 3,
+	DANFE_NFCe = 4,
+	DANFE_NFCe_ELETRONICA = 5
+}TE_TPIMP;
+
+typedef enum t_tpEmis{
+	EMISSAO_NORMAL =1,
+	EMISSAO_CONTIGENCIA_FSIA = 2,
+	EMISSAO_CONTIGENCIA_SCAN = 3,
+	EMISSAO_CONTIGENCIA_DPEC = 4,
+	EMISSAO_CONTIGENCIA_FSDA = 5,
+	EMISSAO_CONTIGENCIA_SVC_AN = 6,
+	EMISSAO_CONTIGENCIA_SVC_RS = 7,
+	EMISSAO_CONTIGENCIA_OFFLINE = 9
+}TE_TPEMIS;
+
+typedef enum t_tpAmb{
+	PRODUCAO = 1,
+	HOMOLOGACAO = 2
+}TE_TPAMB;
+
+typedef enum t_finNFe{
+	NFe_NORMAL = 1,
+	NFe_COMPLEMENTAR = 2,
+	NFe_AJUSTE = 3,
+	NFe_DEVOLUCAO = 4
+}TE_FINNFE;
+
+typedef enum t_indFinal{
+	NORMAL = 0,
+	CONSUMIDOR_FINAL = 1
+}TE_INDFINAL;
+
+typedef enum t_indPres{
+	NAO_SE_APLICA = 0,
+	OPERACAO_PRESENCIAL = 1,
+	OPERACAO_NAO_PRESENCIAL_INTERNET = 2,
+	OPERACAO_NAO_PRESENCIAL_TELEATENDIMENTO = 3,
+	OPERACAO_NFCe_ENTREGA_DOMICILIO = 4,
+	OPERACAO_NAO_PRESENCIAL_OUTROS = 9
+}TE_INDPRES;
+
+typedef enum t_procEmi{
+	EMISSAO_NFE_APP_CLIENTE = 0,
+	EMISSAO_NFE_AVULSA_FISCO = 1,
+	EMISSAO_NFE_AVULSA_CONT_CERT_SITE_FISCO = 2,
+	EMISSAO_NFE_FISCO_APP = 3
+}TE_PROCEMI;
 
 typedef enum {
 	SEFAZ_RECEPCAO_EVENTO,
