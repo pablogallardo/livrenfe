@@ -146,7 +146,6 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
                   <object class="GtkRadioButton" id="cert_a1">
                     <property name="label" translatable="yes">A1</property>
                     <property name="visible">True</property>
-                    <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="active">True</property>
@@ -166,6 +165,7 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="receives_default">False</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <property name="group">cert_a1</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -175,7 +175,6 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
                 <child>
                   <object class="GtkEntry" id="cert_file">
                     <property name="visible">True</property>
-                    <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                   </object>
                   <packing>
