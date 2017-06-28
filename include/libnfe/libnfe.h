@@ -20,7 +20,6 @@
 #define	LIBNFE_H
 
 #include <time.h>
-
 #define	VERSION_NAME			"0.1.0"
 #define	VERSION_COUNTER			1
 #define VERSION_TITLE			"Tartagal"
@@ -48,6 +47,88 @@
 #define WSDL_NFE_STATUS_SERVICO		"http://www.portalfiscal.inf.br/nfe/wsdl/NfeStatusServico2"
 #define WSDL_NFE_AUTORIZACAO		"http://www.portalfiscal.inf.br/nfe/wsdl/NfeAutorizacao"
 #define WSDL_NFE_RET_AUTORIZACAO	"http://www.portalfiscal.inf.br/nfe/wsdl/NfeRetAutorizacao"
+
+/*
+ *Colecao de enums
+ *
+ * */
+
+typedef enum indPag_t {
+  A_VISTA = 0,
+  A_PRAZO = 1,
+   OUTROS = 2
+}indPag  ;
+
+ typedef enum  Mod_t {
+	 MOD_NFe  = 55,
+	 MOD_NFCe = 65
+ }Mod;
+
+typedef enum tpNF_t{
+	ENTRADA = 0,
+	SAIDA   = 1
+}tpNF;
+
+typedef enum idDest_t{
+	OPERACAO_INTERNA = 1,
+	OPERACAO_INTERESTADUAL = 2,
+	OPERACAO_EXTERIOR = 3
+}idDest;
+
+typedef enum tpImp_t{
+	SEM_GERAR_DANFE = 0,
+	DANFE_NORMAL_RETRATO = 1,
+	DANFE_NORMAL_PAISAGEM = 2,
+	DANFE_SIMPLIFICADO = 3,
+	DANFE_NFCe = 4,
+	DANFE_NFCe_ELETRONICA = 5
+}tpImp;
+
+typedef enum tpEmis_t{
+	EMISSAO_NORMAL =1,
+	EMISSAO_CONTIGENCIA_FSIA = 2,
+	EMISSAO_CONTIGENCIA_SCAN = 3,
+	EMISSAO_CONTIGENCIA_DPEC = 4,
+	EMISSAO_CONTIGENCIA_FSDA = 5,
+	EMISSAO_CONTIGENCIA_SVC_AN = 6,
+	EMISSAO_CONTIGENCIA_SVC_RS = 7,
+	EMISSAO_CONTIGENCIA_OFFLINE = 9
+}tpEmis;
+
+typedef enum tpAmb_t{
+	PRODUCAO = 1,
+	HOMOLOGACAO = 2
+}tpAmb;
+
+
+
+typedef enum finNFe_t{
+	NFe_NORMAL = 1,
+	NFe_COMPLEMENTAR = 2,
+	NFe_AJUSTE = 3,
+	NFe_DEVOLUCAO = 4
+}finNFe;
+
+typedef enum indFinal_t{
+	NORMAL = 0,
+	CONSUMIDOR_FINAL = 1
+}indFinal;
+
+typedef enum indPres_t{
+	NAO_SE_APLICA = 0,
+	OPERACAO_PRESENCIAL = 1,
+	OPERACAO_NAO_PRESENCIAL_INTERNET = 2,
+	OPERACAO_NAO_PRESENCIAL_TELEATENDIMENTO = 3,
+	OPERACAO_NFCe_ENTREGA_DOMICILIO = 4,
+	OPERACAO_NAO_PRESENCIAL_OUTROS = 9
+}indPres;
+
+typedef enum procEmi_t{
+	EMISSAO_NFE_APP_CLIENTE = 0,
+	EMISSAO_NFE_AVULSA_FISCO = 1,
+	EMISSAO_NFE_AVULSA_CONT_CERT_SITE_FISCO = 2,
+	EMISSAO_NFE_FISCO_APP = 3
+}procEmi;
 
 typedef enum {
 	SEFAZ_RECEPCAO_EVENTO,
@@ -78,29 +159,33 @@ typedef struct {
 
 /*
  * NFE identification
+ *
+ * @Pablo
+ * Manteve-se o nome dos fields
+ * para compatibilidade, porem
+ * deveriamos muda-los para o nome
+ * do elemento.
+ * EX's:ind_pag --> indPag
+ * 	tipo --> tpNF	
  */
 typedef struct {
 	MUNICIPIO *municipio;
 	unsigned int id_nfe;
 	const char *nat_op;
-	enum t_ind_pag {A_VISTA, A_PRAZO, OUTRO} ind_pag;
-	enum t_mod {MOD_NFE=55, MOD_NFCE=65} mod;
+	indPag  ind_pag;
+	Mod mod;
 	int serie;
 	unsigned int num_nf;
 	time_t dh_emis;
 	time_t *dh_saida;
-	enum t_tipo {TIPO_ENTRADA=0,TIPO_SAIDA=1} tipo;
-	enum t_local_destino {DEST_INTERNA=1,DEST_INTERESTADUAL=2,DEST_EXTERIOR=3} local_destino;
-	enum t_tipo_impressao {IMP_NONE=0,IMP_RET=1,IMP_PAI=2,IMP_SIMP=3,IMP_NFCE=4,IMP_NFCE_MSG=5}
-		tipo_impressao;
-	enum t_tipo_emissao {TE_NORMAL=1, TE_FS=2, TE_SCAN=3, TE_DPEC=4, TE_FSDA=5, TE_SVCAN=6, 
-		TE_SVCRS=7, TE_OFFLINE_NFCE=9} tipo_emissao;
-	enum t_tipo_ambiente {PRODUCAO=1, HOMOLOGACAO=2} tipo_ambiente;
-	enum t_finalidade {FIN_NORMAL=1, FIN_COMPLEMENTAR=2, FIN_AJUSTE=3, FIN_RETORNO=4}
-	finalidade;
-	enum t_consumidor_final {NAO=0, SIM=1} consumidor_final;
-	enum t_presencial {PRE_NA=0, PRE_PRESENCIAL=1, PRE_INTERNET=2, PRE_TELEATENDIMENTO=3,
-		PRE_NFCE_ED=4, PRE_OUTRO=5} presencial;
+	tpNF tipo;
+	idDest local_destino;
+	tpImp tipo_impressao;
+	tpEmis tipo_emissao;
+	tpAmb tipo_ambiente;
+	finNFe finalidade;
+	indFinal consumidor_final;
+	indPres presencial;
 	const char *versao;
 	char div;
 	char *chave;
