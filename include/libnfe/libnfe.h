@@ -48,7 +48,10 @@
 #define WSDL_NFE_AUTORIZACAO		"http://www.portalfiscal.inf.br/nfe/wsdl/NfeAutorizacao"
 #define WSDL_NFE_RET_AUTORIZACAO	"http://www.portalfiscal.inf.br/nfe/wsdl/NfeRetAutorizacao"
 
-
+/*
+ *Colecao de enums
+ *
+ * */
 
 
 
@@ -59,7 +62,7 @@ typedef enum t_indPag {
 }TE_INDPAG  ;
 
  typedef enum  t_mod {
-	 NFE  =55,
+	 NFe  = 55,
 	 NFCe = 65
  }TE_MOD;
 
@@ -98,6 +101,8 @@ typedef enum t_tpAmb{
 	PRODUCAO = 1,
 	HOMOLOGACAO = 2
 }TE_TPAMB;
+
+
 
 typedef enum t_finNFe{
 	NFe_NORMAL = 1,
@@ -179,7 +184,7 @@ typedef struct {
 	TE_IDDEST local_destino;
 	TE_TPIMP tipo_impressao;
 	TE_TPEMIS tipo_emissao;
-	TE_TAMB tipo_ambiente;
+	TE_TPAMB tipo_ambiente;
 	TE_FINNFE finalidade;
 	TE_INDFINAL consumidor_final;
 	TE_INDPRES presencial;
