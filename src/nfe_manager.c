@@ -316,6 +316,7 @@ static int save_nfe(GtkButton *b, GtkWidget *win){
 	nfe->inf_ad_contrib = gtk_entry_get_text(priv->inf_ad_contrib);
 	nfe->inf_ad_contrib = strlen(nfe->inf_ad_contrib) == 0? 
 		NULL : nfe->inf_ad_contrib;
+	nfe->emitente->id = 1;
 	register_nfe(nfe);
 	gtk_widget_destroy(win);
 	return 0;
