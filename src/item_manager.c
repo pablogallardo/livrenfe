@@ -106,10 +106,13 @@ static int set_item(GtkButton *b, GtkWidget *iman){
 	inst_icms(1, 1, atof(gtk_entry_get_text(priv->icms_aliquota)),
 		atof(gtk_entry_get_text(priv->icms_credito_aproveitado)),
 		item->imposto->icms);
-	inst_ipi(atoi(gtk_combo_box_get_active_id(priv->ipi_situacao_tributaria)),
-		gtk_entry_get_text(priv->ipi_classe),
-		gtk_entry_get_text(priv->ipi_codigo),
-		item->imposto->ipi);
+	const char *ipi_situacao_tributaria = gtk_combo_box_get_active_id(priv->ipi_situacao_tributaria);
+	if(ipi_situacao_tributaria){
+		inst_ipi(atoi(ipi_situacao_tributaria),
+			gtk_entry_get_text(priv->ipi_classe),
+			gtk_entry_get_text(priv->ipi_codigo),
+			item->imposto->ipi);
+	}
 	item->valor = atof(gtk_entry_get_text(priv->valor));
 	item->quantidade = atoi(gtk_entry_get_text(priv->quantidade));
 	item->ordem = (ITEM_MANAGER(iman))->nfe->q_itens + 1; 
