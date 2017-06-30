@@ -3,18 +3,19 @@ TODO list for LivreNFE
 
 For the 1st release
 ---------------
-* Implement XML export
-* When having items with values and quantity with floating points the total value is incorrect. Fix it.
-* Implement service "InutilizacaoNFE"
-* Implement A1 certs
+* Implementar botão de exportão XML
+* Validar números decimais no valor do item (Bug)
+* Implementar serviço "InutilizacaoNFE"
+* Testar emissão de NFe com certificado A1 
+* Revisar enums
+* Restruturar strucs de endereço
 
 
 Others
 ---------------
-* Migrate XMLs to layout V4.0
-* Implement invoices filter on main window
-* Add popup calendar for selecting dates
-* Free PKCS after using it.
-* Implement DANFE export
+* Migrar XMLs para layout V4.0
+* Implementar filtros de NF na tela principal (lnfe_window)
+* Implementar seleção de datas por calendario
+* Implementar exportação DANFE 
 
 Pablo G. Gallardo
