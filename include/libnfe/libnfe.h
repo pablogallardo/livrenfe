@@ -54,6 +54,47 @@
  * */
 
 
+/*
+ *Objeto TPais
+ * */
+struct pais_t{
+	const char *xPais;
+	unsigned char cPais;
+}Pais;
+
+	
+/*
+ *Objeto TUF (Unidade Federada)
+ * */
+struct uf_t{
+	const char *xUF;
+	unsigned char cUF;
+	Pais pais;
+}Uf;
+
+/*
+ *Objeto TMunicipio
+  * */
+struct municipio_t{
+	const char *xMun;
+	unsigned char cMun;
+	Uf uf;
+}Municipio;
+
+/*
+ * Objeto Tendereco
+ * */
+struct endereco_t{
+	const char *xLgr;
+	const char *nro;
+	const char *Cpl;
+	const char *xBairro;
+	unsigned int CEP;
+	Municipio Mun;
+}Endereco;
+
+
+
 
 typedef enum indPag_t {
   A_VISTA = 0,
