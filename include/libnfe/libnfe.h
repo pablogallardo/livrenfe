@@ -55,38 +55,38 @@
 
 
 
-typedef enum t_indPag {
+typedef enum indPag_t {
   A_VISTA = 0,
   A_PRAZO = 1,
    OUTROS = 2
-}TE_INDPAG  ;
+}indPag  ;
 
- typedef enum  t_mod {
-	 NFe  = 55,
-	 NFCe = 65
- }TE_MOD;
+ typedef enum  Mod_t {
+	 MOD_NFe  = 55,
+	 MOD_NFCe = 65
+ }Mod;
 
-typedef enum t_tpNF{
+typedef enum tpNF_t{
 	ENTRADA = 0,
 	SAIDA   = 1
-}TE_TPNF;
+}tpNF;
 
-typedef enum t_idDest{
+typedef enum idDest_t{
 	OPERACAO_INTERNA = 1,
 	OPERACAO_INTERESTADUAL = 2,
 	OPERACAO_EXTERIOR = 3
-}TE_IDDEST;
+}idDest;
 
-typedef enum t_tpImp{
+typedef enum tpImp_t{
 	SEM_GERAR_DANFE = 0,
 	DANFE_NORMAL_RETRATO = 1,
 	DANFE_NORMAL_PAISAGEM = 2,
 	DANFE_SIMPLIFICADO = 3,
 	DANFE_NFCe = 4,
 	DANFE_NFCe_ELETRONICA = 5
-}TE_TPIMP;
+}tpImp;
 
-typedef enum t_tpEmis{
+typedef enum tpEmis_t{
 	EMISSAO_NORMAL =1,
 	EMISSAO_CONTIGENCIA_FSIA = 2,
 	EMISSAO_CONTIGENCIA_SCAN = 3,
@@ -95,42 +95,42 @@ typedef enum t_tpEmis{
 	EMISSAO_CONTIGENCIA_SVC_AN = 6,
 	EMISSAO_CONTIGENCIA_SVC_RS = 7,
 	EMISSAO_CONTIGENCIA_OFFLINE = 9
-}TE_TPEMIS;
+}tpEmis;
 
-typedef enum t_tpAmb{
+typedef enum tpAmb_t{
 	PRODUCAO = 1,
 	HOMOLOGACAO = 2
-}TE_TPAMB;
+}tpAmb;
 
 
 
-typedef enum t_finNFe{
+typedef enum finNFe_t{
 	NFe_NORMAL = 1,
 	NFe_COMPLEMENTAR = 2,
 	NFe_AJUSTE = 3,
 	NFe_DEVOLUCAO = 4
-}TE_FINNFE;
+}finNFe;
 
-typedef enum t_indFinal{
+typedef enum indFinal_t{
 	NORMAL = 0,
 	CONSUMIDOR_FINAL = 1
-}TE_INDFINAL;
+}indFinal;
 
-typedef enum t_indPres{
+typedef enum indPres_t{
 	NAO_SE_APLICA = 0,
 	OPERACAO_PRESENCIAL = 1,
 	OPERACAO_NAO_PRESENCIAL_INTERNET = 2,
 	OPERACAO_NAO_PRESENCIAL_TELEATENDIMENTO = 3,
 	OPERACAO_NFCe_ENTREGA_DOMICILIO = 4,
 	OPERACAO_NAO_PRESENCIAL_OUTROS = 9
-}TE_INDPRES;
+}indPres;
 
-typedef enum t_procEmi{
+typedef enum procEmi_t{
 	EMISSAO_NFE_APP_CLIENTE = 0,
 	EMISSAO_NFE_AVULSA_FISCO = 1,
 	EMISSAO_NFE_AVULSA_CONT_CERT_SITE_FISCO = 2,
 	EMISSAO_NFE_FISCO_APP = 3
-}TE_PROCEMI;
+}procEmi;
 
 typedef enum {
 	SEFAZ_RECEPCAO_EVENTO,
@@ -174,20 +174,20 @@ typedef struct {
 	MUNICIPIO *municipio;
 	unsigned int id_nfe;
 	const char *nat_op;
-	TE_INDPAG  ind_pag;
-	TE_MOD mod;
+	indPag  ind_pag;
+	Mod mod;
 	int serie;
 	unsigned int num_nf;
 	time_t dh_emis;
 	time_t *dh_saida;
-	TE_TPNF tipo;
-	TE_IDDEST local_destino;
-	TE_TPIMP tipo_impressao;
-	TE_TPEMIS tipo_emissao;
-	TE_TPAMB tipo_ambiente;
-	TE_FINNFE finalidade;
-	TE_INDFINAL consumidor_final;
-	TE_INDPRES presencial;
+	tpNF tipo;
+	idDest local_destino;
+	tpImp tipo_impressao;
+	tpEmis tipo_emissao;
+	tpAmb tipo_ambiente;
+	finNFe finalidade;
+	indFinal consumidor_final;
+	indPres presencial;
 	const char *versao;
 	char div;
 	char *chave;

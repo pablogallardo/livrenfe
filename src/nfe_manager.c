@@ -289,7 +289,7 @@ static int save_nfe(GtkButton *b, GtkWidget *win){
 	idnfe->num_nf = atoi(gtk_entry_get_text(priv->num));
 	idnfe->nat_op = gtk_entry_get_text(priv->nat_op);
 	idnfe->ind_pag = atoi(gtk_combo_box_get_active_id(priv->forma_pagamento));
-	idnfe->mod = NFe;
+	idnfe->mod = MOD_NFe;
 	idnfe->dh_emis = strtotime(gtk_entry_get_text(priv->dh_emis));
 	time_t saida = strtotime(gtk_entry_get_text(priv->dh_saida));
 	idnfe->dh_saida = saida == -1? NULL:&saida;
