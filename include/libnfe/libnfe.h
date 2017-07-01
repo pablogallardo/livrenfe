@@ -57,7 +57,9 @@
 /*
  *Objeto TPais
  * */
-struct pais_t{
+
+
+typedef struct pais_t{
 	const char *xPais;
 	unsigned char cPais;
 }Pais;
@@ -69,7 +71,7 @@ struct pais_t{
 struct uf_t{
 	const char *xUF;
 	unsigned char cUF;
-	Pais pais;
+	struct pais_t pais;
 }Uf;
 
 /*
@@ -78,7 +80,7 @@ struct uf_t{
 struct municipio_t{
 	const char *xMun;
 	unsigned char cMun;
-	Uf uf;
+	struct uf_t uf;
 }Municipio;
 
 /*
@@ -90,7 +92,7 @@ struct endereco_t{
 	const char *Cpl;
 	const char *xBairro;
 	unsigned int CEP;
-	Municipio Mun;
+	struct municipio_t Mun;
 }Endereco;
 
 
