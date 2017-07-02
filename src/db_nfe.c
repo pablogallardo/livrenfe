@@ -300,7 +300,7 @@ static int get_itens(NFE *n){
 			int ordem, id_produto, icms_origem, icms_tipo,
 				pis_quantidade, pis_nt, cofins_quantidade,
 				cofins_nt, ipi_sit_trib, ncm, cfop;
-			float icms_aliquota, icms_valor, pis_aliquota,
+			double icms_aliquota, icms_valor, pis_aliquota,
 				cofins_aliquota, valor, quantidade;
 			char *descricao, *unidade, *ipi_classe, *ipi_codigo,
 				*cod_prod; 
@@ -373,7 +373,7 @@ NFE *get_nfe(int id){
 		id_mun_dest = id_uf_dest = cod_nfe =
 		num_e_emit = num_e_dest = cep_dest = canceled = 0;
 	time_t dh_emis = 0, *dh_saida = NULL;
-	float total = 0;
+	double total = 0;
 	char *nome_mun, *uf, *nat_op, *versao,  *nome_emit, 
 		*cnpj_emit, *rua_emit, *comp_emit, *bairro_emit,
 		*mun_emit, *uf_emit, *nome_dest, *cnpj_dest,
@@ -466,7 +466,7 @@ NFE *get_nfe(int id){
 			canceled = sqlite3_column_int(stmt, CANCELED); 
 
 			dh_emis = sqlite3_column_double(stmt, DH_EMIS);
-			dh_saida = malloc(sizeof(float));
+			dh_saida = malloc(sizeof(time_t));
 			if(sqlite3_column_type(stmt, DH_SAIDA) == SQLITE_NULL){
 				free(dh_saida);
 				dh_saida = NULL;

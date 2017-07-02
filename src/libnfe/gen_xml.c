@@ -32,8 +32,8 @@ int _gen_emit(xmlTextWriterPtr, NFE *);
 int _gen_dest(xmlTextWriterPtr, NFE *);
 int _gen_det(xmlTextWriterPtr, ITEM *);
 int _gen_prod(xmlTextWriterPtr, ITEM *);
-int _gen_imposto(xmlTextWriterPtr, IMPOSTO *, float);
-int _gen_total(xmlTextWriterPtr, float );
+int _gen_imposto(xmlTextWriterPtr, IMPOSTO *, double);
+int _gen_total(xmlTextWriterPtr, double);
 static char *generate_evento_xml(EVENTO *e, EVP_PKEY *key, X509 *cert);
 
 char *gen_cons_status(int ambiente, int cuf){
@@ -229,7 +229,7 @@ int gen_inf_nfe(xmlTextWriterPtr writer, NFE *nfe){
 		return -EXML;
 
 	ITEM *item = nfe->itens;
-	float valor = 0;
+	double valor = 0;
 	int i ;
 	for (i = 0; i < nfe->q_itens; i++){
 		rc = _gen_det(writer, item);
@@ -615,7 +615,7 @@ int _gen_prod(xmlTextWriterPtr writer, ITEM *i){
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "qCom",
-			"%.4f", (float) i->quantidade);
+			"%.4f", (double) i->quantidade);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vUnCom",
@@ -637,7 +637,7 @@ int _gen_prod(xmlTextWriterPtr writer, ITEM *i){
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "qTrib",
-			"%.4f", (float)i->quantidade);
+			"%.4f", (double)i->quantidade);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vUnTrib",
@@ -654,7 +654,7 @@ int _gen_prod(xmlTextWriterPtr writer, ITEM *i){
 	return 0;
 }
 
-int _gen_imposto(xmlTextWriterPtr writer, IMPOSTO *i, float v){
+int _gen_imposto(xmlTextWriterPtr writer, IMPOSTO *i, double v){
 
 	int rc;
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "imposto");
@@ -787,7 +787,7 @@ int _gen_imposto(xmlTextWriterPtr writer, IMPOSTO *i, float v){
 	return 0;
 }
 
-int _gen_total(xmlTextWriterPtr writer, float v){
+int _gen_total(xmlTextWriterPtr writer, double v){
 
 	int rc;
 

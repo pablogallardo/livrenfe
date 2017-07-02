@@ -240,7 +240,7 @@ LOTE_EVENTO *new_lote_evento(int id){
 }
 
 int inst_produto(int id, const char *codigo, const char *desc, unsigned int ncm, 
-		unsigned int cfop, const char *unidade_comercial, float valor, 
+		unsigned int cfop, const char *unidade_comercial, double valor, 
 		PRODUTO *p){
 	p->id = id;
 	if(desc != NULL){
@@ -259,7 +259,7 @@ int inst_produto(int id, const char *codigo, const char *desc, unsigned int ncm,
 	return 0;
 }
 
-int inst_icms(int origem, unsigned int tipo, float aliquota, float valor,
+int inst_icms(int origem, unsigned int tipo, double aliquota, double valor,
 		ICMS *i){
 	i->origem = origem;
 	i->tipo = tipo;
@@ -282,12 +282,12 @@ static int inst_imposto(ICMS *i, PIS *p, COFINS *c, IMPOSTO *imp){
 	return 0;
 }
 
-int inst_item(float valor, float quantidade, 
+int inst_item(double valor, double quantidade, 
 		unsigned int ordem, int id_produto, char *cod_produto, 
 		int icms_origem, int icms_tipo, int pis_quantidade, int pis_nt,
 		int cofins_quantidade, int cofins_nt, int ncm, int cfop,
-		float icms_aliquota, float icms_valor, float pis_aliquota,
-		float cofins_aliquota, int ipi_sit_trib, char *ipi_classe,
+		double icms_aliquota, double icms_valor, double pis_aliquota,
+		double cofins_aliquota, int ipi_sit_trib, char *ipi_classe,
 		char *ipi_codigo, char *descricao, char *unidade, ITEM *i){
 	inst_produto(id_produto, cod_produto, descricao, ncm, cfop, unidade, 
 		valor, i->produto);
@@ -435,7 +435,7 @@ int inst_nfe(int id_nfe, int id_mun, int id_uf, int ind_pag, int mod_nfe,
 		int id_uf_emit, int cep_emit, int num_e_emit, int id_dest, 
 		int t_ie_dest, int id_mun_dest, int id_uf_dest, int num_e_dest,
 		int cod_nfe, int cep_dest, int canceled, time_t dh_emis, 
-		time_t *dh_saida, float total,
+		time_t *dh_saida, double total,
 		char *nome_mun, char *uf, char *nat_op, char *versao, 
 		char *nome_emit, char *cnpj_emit, char *rua_emit,
 		char *comp_emit, char *bairro_emit, char *mun_emit, char *uf_emit,

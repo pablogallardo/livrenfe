@@ -163,7 +163,7 @@ typedef struct {
 	unsigned int ncm;
 	unsigned int cfop;
 	const char *unidade_comercial;
-	float valor;
+	double valor;
 } PRODUTO;
 
 /*
@@ -172,15 +172,15 @@ typedef struct {
 typedef struct {
 	enum t_origem {NACIONAL=0, E_ID=1, E_AI=2} origem;
 	unsigned int tipo;
-	float aliquota;
-	float valor;
+	double aliquota;
+	double valor;
 } ICMS;
 
 /*
  * PIS tax
  */
 typedef struct {
-	float aliquota;
+	double aliquota;
 	unsigned int quantidade;
 	const char *nt;
 } PIS;
@@ -189,7 +189,7 @@ typedef struct {
  * COFINS tax
  */
 typedef struct {
-	float aliquota;
+	double aliquota;
 	unsigned int quantidade;
 	const char *nt;
 } COFINS;
@@ -223,7 +223,7 @@ struct ITEM {
 	IMPOSTO *imposto;
 	unsigned int ordem;
 	unsigned int quantidade;
-	float valor;
+	double valor;
 	ITEM *pointer; //next item
 };
 
@@ -256,7 +256,7 @@ typedef struct {
 	DESTINATARIO *destinatario;
 	ITEM *itens;
 	unsigned int q_itens;
-	float total;
+	double total;
 	TRANSP *transp;
 	PROTOCOLO *protocolo;
 	const char *xml;
