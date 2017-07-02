@@ -41,12 +41,12 @@ static IDNFE *new_idnfe(){
 		.municipio = new_municipio(),
 		.dh_saida = malloc(sizeof(time_t)),
 		.cod_nfe = rand() % 99999999,
-		.tipo_emissao = TE_NORMAL,
-		.local_destino = DEST_INTERNA,
-		.tipo = TIPO_SAIDA,
-		.tipo_impressao = IMP_RET,
-		.finalidade = FIN_NORMAL,
-		.consumidor_final = SIM
+		.tipo_emissao = EMISSAO_NORMAL,
+		.local_destino = OPERACAO_INTERNA,
+		.tipo = SAIDA,
+		.tipo_impressao = DANFE_NORMAL_RETRATO,
+		.finalidade = NFe_NORMAL,
+		.consumidor_final = CONSUMIDOR_FINAL
 	};
 	IDNFE *p = malloc(sizeof(IDNFE));
 	memcpy(p, &i, sizeof(IDNFE));

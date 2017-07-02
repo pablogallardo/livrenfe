@@ -87,7 +87,7 @@ static void list_forma_pagamento(GtkComboBox *fp){
 	gtk_list_store_set(list_store, &iter, ID, itoa(A_PRAZO), 
 			TEXT, "A prazo", -1);
 	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, ID, itoa(OUTRO), 
+	gtk_list_store_set(list_store, &iter, ID, itoa(OUTROS), 
 			TEXT, "Outro", -1);
 
 	GtkCellRenderer *r_fp;
@@ -289,7 +289,7 @@ static int save_nfe(GtkButton *b, GtkWidget *win){
 	idnfe->num_nf = atoi(gtk_entry_get_text(priv->num));
 	idnfe->nat_op = gtk_entry_get_text(priv->nat_op);
 	idnfe->ind_pag = atoi(gtk_combo_box_get_active_id(priv->forma_pagamento));
-	idnfe->mod = MOD_NFE;
+	idnfe->mod = MOD_NFe;
 	idnfe->dh_emis = strtotime(gtk_entry_get_text(priv->dh_emis));
 	time_t saida = strtotime(gtk_entry_get_text(priv->dh_saida));
 	idnfe->dh_saida = saida == -1? NULL:&saida;
