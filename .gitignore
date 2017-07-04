@@ -30,3 +30,7 @@ ltmain.sh
 m4
 config.lt
 config.h.in
+gtk-doc.make
+docs/reference/libnfe/html
+docs/reference/libnfe/xml
+docs/reference/libnfe/libnfe*

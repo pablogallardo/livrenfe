@@ -4,7 +4,7 @@
 AC_PREREQ([2.69])
 AC_INIT([LivreNFE], [0.1], [pggllrd@gmail.com])
 AM_INIT_AUTOMAKE([livrenfe], [2.6])
-AC_OUTPUT([Makefile src/Makefile include/Makefile src/libnfe/Makefile include/libnfe/Makefile])
+AC_OUTPUT([Makefile src/Makefile include/Makefile src/libnfe/Makefile include/libnfe/Makefile docs/reference/libnfe/Makefile])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([subdir-objects])
 AC_CONFIG_SRCDIR(src)
@@ -15,6 +15,14 @@ AC_PROG_CC
 
 # Checks for libraries.
 AC_CHECK_LIB([sqlite3], [main])
+
+m4_ifdef([GTK_DOC_CHECK], [
+GTK_DOC_CHECK([1.14], [--flavour no-tmpl])
+],[
+AM_CONDITIONAL([ENABLE_GTK_DOC], false)
+])
+
+AC_CONFIG_MACRO_DIR(m4)
 
 # Checks for header files.
 AC_CHECK_HEADERS([stdlib.h string.h sqlite3.h])
