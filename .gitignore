@@ -45,3 +45,4 @@ docs/reference/libnfe/xml
 *.interfaces
 *.prerequisites
 *.signals
+*.bak
