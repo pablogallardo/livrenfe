@@ -10,14 +10,14 @@
   <bookinfo>
     <title>&package_name; Reference Manual</title>
     <releaseinfo>
-      for &package_string;.
-      The latest version of this documentation can be found on-line at
+      libnfe
+      A última versão desta documentação está disponível em
       <ulink role="online-location" url="http://livrenfe.org/libnfe/index.html">http://livrenfe.org/libnfe/</ulink>.
     </releaseinfo>
   </bookinfo>
 
   <chapter>
-    <title>Libnfe - Biblioteca opensource para emissão de notas fiscais eletrónicas</title>
+    <title>Libnfe - Biblioteca opensource em C para emissão de notas fiscais eletrónicas</title>
         <xi:include href="xml/errno.xml"/>
     <xi:include href="xml/gen_xml.xml"/>
     <xi:include href="xml/libnfe.xml"/>

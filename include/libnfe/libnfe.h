@@ -16,6 +16,16 @@
  * along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
  * */
 
+/**
+ * SECTION:libnfe
+ * @short-description: Structs tipos e funções principais usados para emissão de NF
+ * @title: Interface da libnfe
+ * @include: libnfe/libnfe.h
+ *
+ * Interface principal da biblioteca
+ */
+
+
 #ifndef	LIBNFE_H
 #define	LIBNFE_H
 
