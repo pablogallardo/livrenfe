@@ -52,7 +52,6 @@
  *Colecao de enums
  *
  * */
-
 typedef enum indPag_t {
   A_VISTA = 0,
   A_PRAZO = 1,
@@ -141,14 +140,22 @@ typedef enum {
 } sefaz_servico_t;
 
 /**
+ * SEFAZ_WSDL:
+ *
  * Array com URL WSDL de cada serviço do SEFAZ
  */
 extern const char *SEFAZ_WSDL[7];
 
 typedef int evento_t;
 
-/*
- * City information
+/**
+ * MUNICIPIO:
+ * @uf: UF (ex. "SP")
+ * @municipio: Nome do municício 
+ * @codigo: Código IBGE do municício 
+ * @cod_uf: Código IBGE da UF
+ *
+ * Informação do Município
  */
 typedef struct {
 	const char *uf;
@@ -157,16 +164,31 @@ typedef struct {
 	unsigned int cod_uf;
 } MUNICIPIO;
 
-/*
- * NFE identification
+/**
+ * IDNFE:
+ * @municipio: Município
+ * @id_nfe: Id da NF
+ * @nat_op: Natureza de operação
+ * @ind_pag: Índice de pagamento
+ * @mod: Modelo de NF
+ * @serie: Série da NF
+ * @num_nf: Número da NF
+ * @dh_emis: Data e hora de emissão
+ * @dh_saida: Data e hora de saída 
+ * @tipo: Tipo de NF
+ * @local_destino: Local de destino da operação
+ * @tipo_impressao: Formato de impressão do DANFE
+ * @tipo_emissao: Forma de emissão
+ * @tipo_ambiente: Ambiente de emissão
+ * @finalidade: Finalidade da NF
+ * @consumidor_final: Operação com consumidor final
+ * @presencial: Indicador de presencia do consumidor
+ * @versao: Versão do aplicativo usado para a emissão
+ * @div: Dígito verificador da NF
+ * @chave: Chave da NF
+ * @cod_nfe: Código aleatório da NF (parte da chave)
  *
- * @Pablo
- * Manteve-se o nome dos fields
- * para compatibilidade, porem
- * deveriamos muda-los para o nome
- * do elemento.
- * EX's:ind_pag --> indPag
- * 	tipo --> tpNF	
+ * Identificação da Nota Fiscal Eletrónica
  */
 typedef struct {
 	MUNICIPIO *municipio;
@@ -192,16 +214,29 @@ typedef struct {
 	int cod_nfe;
 } IDNFE;
 
-/*
- * Country information
+/**
+ * PAIS:
+ * @codigo: Código do país
+ * @nome: Nome do país
+ *
+ * País
  */
 typedef struct {
 	unsigned int codigo;
 	const char *nome;
 } PAIS;
 
-/*
- * Address information
+/**
+ * ENDERECO:
+ * @rua: Rua do endereço
+ * @num: Número do endereço na rua
+ * @complemento: Complemento do endereço
+ * @bairro: Bairro do endereço
+ * @municipio: Município do endereço
+ * @cep: CEP do endereço
+ * @pais: País
+ *
+ * Endereço
  */
 typedef struct {
 	const char *rua;
@@ -213,8 +248,16 @@ typedef struct {
 	PAIS *pais;
 } ENDERECO;
 
-/*
- * Issuer information
+/**
+ * EMITENTE:
+ * @id: Id do emitente
+ * @nome: Nome do emitente
+ * @inscricao_estadual: Inscrição estadual do emitente
+ * @endereco: Endereço do emitente
+ * @crt: Código de Regime Tributário
+ * @cnpj: CNPJ do emitente
+ *
+ * Emitente da NF
  */
 typedef struct {
 	int id;
@@ -225,8 +268,17 @@ typedef struct {
 	const char *cnpj;
 } EMITENTE;
 
-/*
- * Recipient information
+/**
+ * DESTINATARIO:
+ * @id: Id do destinatário
+ * @nome: Nome do destinatário
+ * @endereco: Endereço do destinatário
+ * @tipo_ie: Tipo de inscrição estadual do destinatário
+ * @cnpj: CNPJ do destinatário
+ * @tipo_doc: tipo de documento (CNPJ ou CPF) do destinatário
+ * @inscricao_estadual: Inscrição estadual do destinatário
+ *
+ * Destinatário da NF
  */
 typedef struct {
 	int id;
@@ -238,8 +290,17 @@ typedef struct {
 	const char *inscricao_estadual;
 } DESTINATARIO;
 
-/*
- * Product information
+/**
+ * PRODUTO:
+ * @id: Id do produto 
+ * @codigo: Código do produto
+ * @descricao: Descrição do produto
+ * @ncm: Código NCM
+ * @cfop: CFOP do produto
+ * @unidade_comercial: Unidade comercial do produto
+ * @valor: Valor do produto
+ *
+ * Produto
  */
 typedef struct {
 	int id;
@@ -251,8 +312,14 @@ typedef struct {
 	double valor;
 } PRODUTO;
 
-/*
- * ICMS tax
+/**
+ * ICMS:
+ * @origem: Origem da mercadoria
+ * @tipo: Tipo de ICMS
+ * @aliquota: Alíquota do ICMS
+ * @valor: Valor do ICMS
+ *
+ * Imposto ICMS 
  */
 typedef struct {
 	enum t_origem {NACIONAL=0, E_ID=1, E_AI=2} origem;
@@ -261,8 +328,13 @@ typedef struct {
 	double valor;
 } ICMS;
 
-/*
- * PIS tax
+/**
+ * PIS:
+ * @aliquota: Alíquota do PIS 
+ * @quantidade: Código de situação tributária do PIS 03
+ * @nt: Código de situação tributária do PIS 04
+ *
+ * Imposto PIS
  */
 typedef struct {
 	double aliquota;
@@ -270,8 +342,13 @@ typedef struct {
 	const char *nt;
 } PIS;
 
-/* 
- * COFINS tax
+/**
+ * COFINS:
+ * @aliquota: Alíquota do COFINS 
+ * @quantidade: Código de situação tributária do COFINS 01
+ * @nt: Código de situação tributária do COFINS 04
+ *
+ * Imposto COFINS 
  */
 typedef struct {
 	double aliquota;
@@ -279,8 +356,13 @@ typedef struct {
 	const char *nt;
 } COFINS;
 
-/* 
- * IPI tax
+/**
+ * IPI:
+ * @sit_trib: Situação tributária do IPI
+ * @classe: Classe do IPI
+ * @codigo: Código do IPI
+ *
+ * Imposto IPI
  */
 typedef struct {
 	int sit_trib;
@@ -288,8 +370,14 @@ typedef struct {
 	const char *codigo;
 } IPI;
 
-/*
- * Tax information
+/**
+ * IMPOSTO:
+ * @icms: Imposto ICMS
+ * @pis: Imposto PIS
+ * @cofins: Imposto COFINS 
+ * @ipi: Imposto IPI
+ *
+ * Impostos
  */
 typedef struct {
 	ICMS *icms;
@@ -300,8 +388,16 @@ typedef struct {
 
 typedef struct ITEM ITEM;
 
-/*
- * Items
+/**
+ * ITEM:
+ * @produto: Produto do item
+ * @imposto: Imposto do item
+ * @ordem: Ordem do item
+ * @quantidade: Quantidade de produtos do item
+ * @valor: Valor do item
+ * @pointer: Pointer to next item
+ *
+ * Item da NF
  */
 struct ITEM {
 	PRODUTO *produto;
@@ -312,8 +408,11 @@ struct ITEM {
 	ITEM *pointer; //next item
 };
 
-/*
- * Transportation information
+/**
+ * TRANSP:
+ * @modfrete: Modalidade de frete
+ *
+ * Transportadora da NF
  */
 typedef struct {
 	enum t_modfrete {FRETE_EMITENTE=0, FRETE_DESTINATARIO=1, 
@@ -321,8 +420,15 @@ typedef struct {
 		modfrete;
 } TRANSP;
 
-/* 
- * SEFAZ record information
+/**
+ * PROTOCOLO:
+ * @dh_recib: Timestamp do recebimento do protocolo
+ * @numero: Número do protocolo
+ * @cod_status: Código de status do protocolo
+ * @xml: XML do protocolo
+ * @xmot: Tag xmot to protocolo
+ *
+ * Protocolo da NF enviada para o SEFAZ
  */
 typedef struct {
 	const char *dh_recib;
@@ -332,8 +438,22 @@ typedef struct {
 	const char *xmot;
 } PROTOCOLO;
 
-/*
- * Complete NFE information
+/**
+ * NFE:
+ * @idnfe: Identificação da NF
+ * @emitente: Emitente da NF
+ * @destinatario: Destinatário da NF
+ * @itens: Itens da NF
+ * @q_itens: Quantidade de itens da NF
+ * @total: Valor total da NF
+ * @transp: Transportadora NF
+ * @protocolo: Protocolo de emissão da NF
+ * @xml: XML da NF
+ * @canceled: Flag de NF cancelada
+ * @inf_ad_fisco: Informação adicional para o fisco
+ * @inf_ad_contrib: Informação adicional para o contribuinte 
+ *
+ * Nota fiscal eletrónica
  */
 typedef struct {
 	IDNFE *idnfe;
@@ -353,7 +473,11 @@ typedef struct {
 typedef struct LOTE_ITEM LOTE_ITEM;
 
 /**
- * List items
+ * LOTE_ITEM:
+ * @nfe: NF do lote
+ * @next: Seguinte nota fiscal do lote
+ *
+ * Item do lote
  */
 struct LOTE_ITEM{
 	NFE *nfe;
@@ -361,7 +485,14 @@ struct LOTE_ITEM{
 };
 
 /**
- * NFE Lote
+ * LOTE:
+ * @id: Id do lote
+ * @recibo: Recibo do lote
+ * @qtd: Quantidade de itens do lote
+ * @nfes: Itens do lote
+ * @xml_response: XML de resposta do lote
+ *
+ * Lote de envio de NFs para o SEFAZ
  */
 typedef struct {
 	unsigned int id;
@@ -372,7 +503,18 @@ typedef struct {
 } LOTE;
 
 /**
- * Evento
+ * EVENTO:
+ * @id: Id do evento 
+ * @seq: Sequência do evento
+ * @nfe: NF do evento
+ * @type: Tipo de evento
+ * @cStat: Código de status do evento
+ * @xmot: xmot tag na resposta do Evento
+ * @protocolo: Protocolo do Evento
+ * @xml: XML do evento
+ * @xml_response: XML de resposta do evento
+ *
+ * Evento de NF
  */
 typedef struct {
 	const char *id;
@@ -387,7 +529,11 @@ typedef struct {
 } EVENTO;
 
 /**
- * Evento cancelamento
+ * EVENTO_CANCELAMENTO:
+ * @evento: Evento
+ * @justificativa: Justificativa do cancelamento
+ *
+ * Evento de cancelamento de NF
  */
 typedef struct {
 	EVENTO evento;
@@ -398,13 +544,28 @@ typedef struct {
  * List evento items
  */
 typedef struct LOTE_EVENTO_ITEM LOTE_EVENTO_ITEM;
+
+/**
+ * LOTE_EVENTO_ITEM:
+ * @evento: Evento
+ * @next: Próximo item
+ *
+ * Item de lote de eventos
+ */
 struct LOTE_EVENTO_ITEM {
 	EVENTO *evento;
 	LOTE_EVENTO_ITEM *next;
 };
 
 /**
- * Eventos Lote
+ * LOTE_EVENTO:
+ * @id: Id do lote de eventos
+ * @recibo: Recibo do lote de eventos
+ * @qtd: Quantidade de eventos do lote
+ * @eventos: Itens de lote de eventos
+ * @xml_response: Resposta XML do lote de eventos
+ *
+ * Item de lote de eventos
  */
 typedef struct {
 	unsigned int id;
