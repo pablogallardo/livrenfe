@@ -141,10 +141,10 @@ static void list_crt(GtkComboBox *fp){
 
 	list_store = gtk_list_store_new(N_COLS, G_TYPE_STRING, G_TYPE_STRING);
 	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, ID, itoa(CRT_SNAC), 
+	gtk_list_store_set(list_store, &iter, ID, itoa(CRT_SIMPLES_NAC), 
 			TEXT, "Simples nacional", -1);
 	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, ID, itoa(CRT_SNAC_EXC), 
+	gtk_list_store_set(list_store, &iter, ID, itoa(CRT_SIMPLES_NAC_EXC), 
 			TEXT, "Simples nacional - Exceso de sublimite de receita bruta", -1);
 	gtk_list_store_append(list_store, &iter);
 	gtk_list_store_set(list_store, &iter, ID, itoa(CRT_NORMAL), 

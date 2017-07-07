@@ -149,6 +149,31 @@ typedef enum {
 	SEFAZ_NFE_RET_AUTORIZACAO
 } sefaz_servico_t;
 
+typedef enum crt_t {
+	CRT_SIMPLES_NAC = 1,
+	CRT_SIMPLES_NAC_EXC = 2,
+	CRT_NORMAL = 3
+} Crt;
+
+typedef enum tpIE_t {
+	IE_CONTRIBUINTE_PAG_AVISTA = 1,
+	IE_CONTRIBUINTE_ISENTO = 2,
+	IE_NAO_CONTRIBUINTE = 9
+} tpIE;
+
+typedef enum origem_t {
+	ORIGEM_NACIONAL = 0, 
+	ORIGEM_ESTRANGEIRA_IMP_DIRETA = 1, 
+	ORIGEM_ESTRANGEIRA_MERC_INTERNO = 2
+} Origem;
+
+typedef enum modfrete_t {
+	FRETE_EMITENTE = 0, 
+	FRETE_DESTINATARIO = 1, 
+	FRETE_TERCEIROS = 2, 
+	FRETE_SEM = 9
+} modFrete;
+
 /**
  * SEFAZ_WSDL:
  *
@@ -274,7 +299,7 @@ typedef struct {
 	const char *nome;
 	const char *inscricao_estadual;
 	ENDERECO *endereco;
-	enum t_crt {CRT_SNAC=1, CRT_SNAC_EXC=2, CRT_NORMAL=3} crt;
+	Crt crt;
 	const char *cnpj;
 } EMITENTE;
 
@@ -294,7 +319,7 @@ typedef struct {
 	int id;
 	const char *nome;
 	ENDERECO *endereco;
-	enum t_tipo_ie {CONT_AV=1, CONT_IS=2, NAO_CONT=9} tipo_ie;
+	tpIE tipo_ie;
 	const char *cnpj;
 	const char *tipo_doc;
 	const char *inscricao_estadual;
@@ -332,7 +357,7 @@ typedef struct {
  * Imposto ICMS 
  */
 typedef struct {
-	enum t_origem {NACIONAL=0, E_ID=1, E_AI=2} origem;
+	Origem origem;
 	unsigned int tipo;
 	double aliquota;
 	double valor;
@@ -425,9 +450,7 @@ struct ITEM {
  * Transportadora da NF
  */
 typedef struct {
-	enum t_modfrete {FRETE_EMITENTE=0, FRETE_DESTINATARIO=1, 
-		FRETE_TERCEIROS=2, FRETE_SEM=9}
-		modfrete;
+	modFrete modfrete;
 } TRANSP;
 
 /**

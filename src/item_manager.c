@@ -217,13 +217,13 @@ static void list_icms_origem(GtkComboBox *t){
 
 	list_store = gtk_list_store_new(N_COLS, G_TYPE_STRING, G_TYPE_STRING);
 	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, ID, itoa(NACIONAL), 
+	gtk_list_store_set(list_store, &iter, ID, itoa(ORIGEM_NACIONAL), 
 			TEXT, "Nacional", -1);
 	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, ID, itoa(E_ID), 
+	gtk_list_store_set(list_store, &iter, ID, itoa(ORIGEM_ESTRANGEIRA_IMP_DIRETA), 
 			TEXT, "Estrangeira - Importação direta", -1);
 	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, ID, itoa(E_AI), 
+	gtk_list_store_set(list_store, &iter, ID, itoa(ORIGEM_ESTRANGEIRA_MERC_INTERNO), 
 			TEXT, "Estrangeira - Adquirida no mercado interno", -1);
 
 	GtkCellRenderer *r;

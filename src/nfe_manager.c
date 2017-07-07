@@ -136,13 +136,13 @@ static void list_tipo_contribuinte(GtkComboBox *t){
 
 	list_store = gtk_list_store_new(N_COLS, G_TYPE_STRING, G_TYPE_STRING);
 	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, ID, itoa(CONT_AV), 
+	gtk_list_store_set(list_store, &iter, ID, itoa(IE_CONTRIBUINTE_PAG_AVISTA), 
 			TEXT, "Contrinuinte ICMS", -1);
 	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, ID, itoa(CONT_IS), 
+	gtk_list_store_set(list_store, &iter, ID, itoa(IE_CONTRIBUINTE_ISENTO), 
 			TEXT, "Contribuinte isento", -1);
 	gtk_list_store_append(list_store, &iter);
-	gtk_list_store_set(list_store, &iter, ID, itoa(NAO_CONT), 
+	gtk_list_store_set(list_store, &iter, ID, itoa(IE_NAO_CONTRIBUINTE), 
 			TEXT, "Não contribuinte", -1);
 
 	GtkCellRenderer *r;
