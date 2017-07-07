@@ -19,24 +19,79 @@
 #include <libnfe/libnfe.h>
 #include <time.h>
 
+/**
+ * new_nfe:
+ *
+ * Criar um objeto NFE
+ */
 extern NFE *new_nfe();
 
+/**
+ * new_lote:
+ *
+ * Cria um objeto LOTE 
+ */
 extern LOTE *new_lote(int id);
 
+/**
+ * new_item:
+ *
+ * Cria um objeto ITEM 
+ */
 extern ITEM *new_item();
 
+/**
+ * new_evento_cancelamento:
+ *
+ * Cria um objeto EVENTO_CANCELAMENTO 
+ */
 extern EVENTO_CANCELAMENTO *new_evento_cancelamento();
 
+/**
+ * new_lote_evento:
+ *
+ * Cria um objeto LOTE_EVENTO 
+ */
 extern LOTE_EVENTO *new_lote_evento(int id);
 
+/**
+ * new_emitente:
+ *
+ * Cria um objeto EMITENTE 
+ */
 extern EMITENTE *new_emitente();
 
+/**
+ * new_destinatario:
+ *
+ * Cria um objeto DESTINATARIO 
+ */
 extern DESTINATARIO *new_destinatario();
 
+/**
+ * add_item:
+ * @nfe: Nota fiscal (Objeto NFE)
+ * @i: Item que será adicionado (objeto ITEM)
+ *
+ * Adiciona um ITEM a um objeto NFE
+ */
 extern int add_item(NFE *nfe, ITEM *i);
 
+/**
+ * rm_item:
+ * @nfe: Nota fiscal (Objeto NFE)
+ * @i: Item que será removido (objeto ITEM)
+ *
+ * TODO: Remove um ITEM a um objeto NFE
+ */
 extern int rm_item(NFE *nfe, ITEM *i);
 
+/**
+ * set_chave:
+ * @nfe: Nota fiscal (Objeto NFE)
+ *
+ * Calcula a chave da NFE
+ */
 extern void set_chave(NFE *nfe);
 
 extern int inst_produto(int id, const char *codigo, const char *desc, 
