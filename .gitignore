@@ -46,3 +46,4 @@ docs/reference/libnfe/xml
 *.prerequisites
 *.signals
 *.bak
+*.sgml
