@@ -82,20 +82,21 @@ static int save_emitente(GtkButton *b, GtkWidget *win){
 	unsigned int id, crt, num, cod_mun, cod_uf, cep;
 	const char *nome, *ie, *cnpj, *rua, *complemento, *bairro;
 	id = 1;
-	num = atoi(gtk_entry_get_text(priv->num));
-	cep = atoi(gtk_entry_get_text(priv->cep));
-	cnpj = gtk_entry_get_text(priv->cnpj);
+	e->endereco->nro = gtk_entry_get_text(priv->num);
+	e->endereco->CEP = atoi(gtk_entry_get_text(priv->cep));
+	cnpj =  gtk_entry_get_text(priv->cnpj);
 	nome = gtk_entry_get_text(priv->razao_social);
 	ie = gtk_entry_get_text(priv->ie);
-	rua = gtk_entry_get_text(priv->rua);
-	complemento = gtk_entry_get_text(priv->complemento);
-	bairro = gtk_entry_get_text(priv->bairro);
+	e->endereco->xLgr = gtk_entry_get_text(priv->rua);
+	e->endereco->Cpl = gtk_entry_get_text(priv->complemento);
+	e->endereco->xBairro = gtk_entry_get_text(priv->bairro);
 
 	crt = atoi(gtk_combo_box_get_active_id(priv->crt));
-	cod_uf = atoi(gtk_combo_box_get_active_id(priv->uf));
-	cod_mun = atoi(gtk_combo_box_get_active_id(priv->municipio));
-	inst_emitente(id, nome, ie, crt, cnpj, rua, num, complemento,
-		bairro, NULL, NULL, cod_mun, cod_uf, cep, e);
+	e->endereco->Mun->uf->cUF = atoi(gtk_combo_box_get_active_id(priv->uf));
+	e->endereco->Mun->cMun = atoi(gtk_combo_box_get_active_id(priv->municipio));
+	
+	inst_emitente(id, nome, ie, crt, cnpj, e,e->endereco);
+	
 	set_emitente(e);
 	free_emitente(e);
 	gtk_widget_destroy(win);
@@ -172,17 +173,17 @@ static void inst_emitente_manager(gpointer p, EmitenteManager *eman){
 		gtk_entry_set_text(priv->cnpj, e->cnpj);
 		gtk_entry_set_text(priv->razao_social, e->nome);
 		gtk_entry_set_text(priv->ie, e->inscricao_estadual);
-		gtk_entry_set_text(priv->rua, e->endereco->rua);
-		gtk_entry_set_text(priv->num, itoa(e->endereco->num));
+		gtk_entry_set_text(priv->rua, e->endereco->xLgr);
+		gtk_entry_set_text(priv->num,e->endereco->nro);
 		gtk_entry_set_text(priv->complemento, 
-			e->endereco->complemento);
-		gtk_entry_set_text(priv->bairro, e->endereco->bairro);
-		gtk_entry_set_text(priv->cep, itoa(e->endereco->cep));
+			e->endereco->Cpl);
+		gtk_entry_set_text(priv->bairro, e->endereco->xBairro);
+		gtk_entry_set_text(priv->cep, itoa(e->endereco->CEP));
 
 		gtk_combo_box_set_active_id(priv->uf, 
-			itoa(e->endereco->municipio->cod_uf));
+			itoa(e->endereco->Mun->uf->cUF));
 		gtk_combo_box_set_active_id(priv->municipio, 
-			itoa(e->endereco->municipio->codigo));
+			itoa(e->endereco->Mun->cMun));
 		gtk_combo_box_set_active_id(priv->crt, 
 			itoa(e->crt));
 	}

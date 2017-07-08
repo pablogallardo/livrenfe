@@ -293,8 +293,8 @@ static int save_nfe(GtkButton *b, GtkWidget *win){
 	idnfe->dh_emis = strtotime(gtk_entry_get_text(priv->dh_emis));
 	time_t saida = strtotime(gtk_entry_get_text(priv->dh_saida));
 	idnfe->dh_saida = saida == -1? NULL:&saida;
-	idnfe->municipio->cod_uf = atoi(gtk_combo_box_get_active_id(priv->uf));
-	idnfe->municipio->codigo = atoi(gtk_combo_box_get_active_id(priv->municipio));
+	idnfe->endereco->Mun->uf->cUF = atoi(gtk_combo_box_get_active_id(priv->uf));
+	idnfe->endereco->Mun->cMun = atoi(gtk_combo_box_get_active_id(priv->municipio));
 
 	destinatario->tipo_doc = gtk_combo_box_get_active_id(priv->t_doc);
 	destinatario->cnpj = gtk_entry_get_text(priv->doc);
@@ -302,13 +302,14 @@ static int save_nfe(GtkButton *b, GtkWidget *win){
 	destinatario->tipo_ie = atoi(gtk_combo_box_get_active_id(priv->tipo_contribuinte));
 	destinatario->inscricao_estadual= gtk_entry_get_text(priv->ie);
 
-	endereco->rua = gtk_entry_get_text(priv->logradouro);
-	endereco->num = atoi(gtk_entry_get_text(priv->numero_endereco));
-	endereco->complemento = gtk_entry_get_text(priv->complemento);
-	endereco->bairro = gtk_entry_get_text(priv->bairro);
-	endereco->cep = atoi(gtk_entry_get_text(priv->cep));
-	endereco->municipio->cod_uf = atoi(gtk_combo_box_get_active_id(priv->uf_destinatario));
-	endereco->municipio->codigo = atoi(gtk_combo_box_get_active_id(priv->municipio_destinatario));
+	endereco->xLgr = gtk_entry_get_text(priv->logradouro);
+	//TODO:Corrigir Warning
+	endereco->nro = gtk_entry_get_text(priv->numero_endereco);
+	endereco->Cpl = gtk_entry_get_text(priv->complemento);
+	endereco->xBairro = gtk_entry_get_text(priv->bairro);
+	endereco->CEP = atoi(gtk_entry_get_text(priv->cep));
+	endereco->Mun->uf->cUF = atoi(gtk_combo_box_get_active_id(priv->uf_destinatario));
+	endereco->Mun->cMun = atoi(gtk_combo_box_get_active_id(priv->municipio_destinatario));
 
 	nfe->inf_ad_fisco = gtk_entry_get_text(priv->inf_ad_fisco);
 	nfe->inf_ad_fisco = strlen(nfe->inf_ad_fisco) == 0? 
@@ -340,15 +341,15 @@ static void inst_nfe_destinatario(gpointer p, NFEManager *nman){
 		gtk_entry_set_text(priv->ie, 
 			destinatario->inscricao_estadual);
 
-	gtk_entry_set_text(priv->logradouro, endereco->rua);
-	gtk_entry_set_text(priv->numero_endereco, itoa(endereco->num));
-	gtk_entry_set_text(priv->complemento, endereco->complemento);
-	gtk_entry_set_text(priv->bairro, endereco->bairro);
-	gtk_entry_set_text(priv->cep, itoa(endereco->cep));
+	gtk_entry_set_text(priv->logradouro, endereco->xLgr);
+	gtk_entry_set_text(priv->numero_endereco, endereco->nro);
+	gtk_entry_set_text(priv->complemento, endereco->Cpl);
+	gtk_entry_set_text(priv->bairro, endereco->xBairro);
+	gtk_entry_set_text(priv->cep, itoa(endereco->CEP));
 	gtk_combo_box_set_active_id(priv->uf_destinatario, 
-		itoa(endereco->municipio->cod_uf));
+		itoa(endereco->Mun->uf->cUF));
 	gtk_combo_box_set_active_id(priv->municipio_destinatario, 
-		itoa(endereco->municipio->codigo));
+		itoa(endereco->Mun->cMun));
 }
 
 static void lookup_destinatario(gpointer p,  NFEManager *nman){
@@ -396,9 +397,9 @@ static void inst_nfe_manager(gpointer p, NFEManager *nman){
 		time_t saida = strtotime(gtk_entry_get_text(priv->dh_saida));
 		idnfe->dh_saida = saida == -1? NULL:&saida; */
 		gtk_combo_box_set_active_id(priv->uf, 
-			itoa(idnfe->municipio->cod_uf));
+			itoa(idnfe->endereco->Mun->uf->cUF));
 		gtk_combo_box_set_active_id(priv->municipio, 
-			itoa(idnfe->municipio->codigo));
+			itoa(idnfe->endereco->Mun->cMun));
 
 		inst_nfe_destinatario(NULL, nman);
 		gtk_widget_set_sensitive(GTK_WIDGET(priv->chave_nfe), TRUE);
