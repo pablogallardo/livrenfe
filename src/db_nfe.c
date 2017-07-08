@@ -570,22 +570,25 @@ EMITENTE *get_emitente(int id){
 		return NULL;
 	}
 	crt = sqlite3_column_int(stmt, CRT);
-	num = sqlite3_column_int(stmt, NUM);
-	id_uf = sqlite3_column_int(stmt, ID_UF);
-	id_mun = sqlite3_column_int(stmt, ID_MUN);
-	cep = sqlite3_column_int(stmt, CEP);
-
+	
+	//Nome do Municipio o Emitente? Acho que do Emitente
 	nome = strdup((char*)sqlite3_column_text(stmt, NOME));
 	ie = strdup((char*)sqlite3_column_text(stmt, IE));
 	cnpj = strdup((char*)sqlite3_column_text(stmt, CNPJ));
-	rua = strdup((char*)sqlite3_column_text(stmt, RUA));
-	bairro = strdup((char*)sqlite3_column_text(stmt, BAIRRO));
-	mun = strdup((char*)sqlite3_column_text(stmt, MUN));
-	uf = strdup((char*)sqlite3_column_text(stmt, UF));
-	comp = sqlite3_column_text(stmt, COMP)? 
+	e->endereco->xLgr = strdup((char*)sqlite3_column_text(stmt, RUA));
+	e->endereco->xBairro = strdup((char*)sqlite3_column_text(stmt, BAIRRO));
+	e->endereco->Mun->xMun = strdup((char*)sqlite3_column_text(stmt, MUN));
+	
+	e->endereco->Mun->uf->cUF = sqlite3_column_int(stmt, UF);
+	
+	e->endereco->Cpl = sqlite3_column_text(stmt, COMP)? 
 		strdup((char*)sqlite3_column_text(stmt, COMP)) : NULL;
-//	inst_emitente(id, nome, ie, crt, cnpj, rua, num, comp,
-//		bairro, uf, mun, id_mun, id_uf, cep, e);
+	e->endereco->nro         = itoa( sqlite3_column_int(stmt, NUM));
+//	e->endereco->Mun-uf->cUF = sqlite3_column_int(stmt, ID_UF);
+	e->endereco->Mun->cMun    = sqlite3_column_int(stmt, ID_MUN);
+	e->endereco->CEP         = sqlite3_column_int(stmt, CEP);
+
+	inst_emitente(id, nome, ie, crt, cnpj, e, e->endereco);
 	return e;
 
 }
