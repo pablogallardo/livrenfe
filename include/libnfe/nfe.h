@@ -131,16 +131,44 @@ extern int inst_nfe(int id_nfe, int id_mun, int id_uf, int ind_pag, int mod_nfe,
 		char *tipo_doc_dest, char *inf_ad_fisco, char *inf_ad_contrib,
 		char *protocolo, NFE *nfe);
 
-extern int inst_emitente(int id, const char *nome, const char *ie, int crt, 
-		const char *cnpj, const char *rua, unsigned int num, 
-		const char *complemento, const char *bairro, const char *uf, 
-		const char *nome_mun, unsigned int codigo,
-		unsigned int cod_uf, unsigned int cep, EMITENTE *e);
+extern int inst_emitente(int id, 
+		const char *nome, 
+		const char *ie, 
+		int crt, 
+		const char *cnpj, 
+	/*
+		const char *rua, 
+		unsigned int num, 
+		const char *complemento, 
+		const char *bairro, 
+		const char *uf, 
+		const char *nome_mun,
+		unsigned int codigo,
+		unsigned int cod_uf, 
+		unsigned int cep, 
+	*/
+		EMITENTE *e,
+		ENDERECO *end);
 
-extern int inst_destinatario(int id, char *nome, int t_ie, char *tipo_doc, char *ie,
-		char *cnpj, char *rua, unsigned int num, char *complemento,
-		char *bairro, char *uf, char *nome_mun, unsigned int codigo,
-		unsigned int cod_uf, unsigned int cep, DESTINATARIO *d);
+extern int inst_destinatario(int id, 
+		char *nome, 
+		int t_ie, 
+		char *tipo_doc, 
+		char *ie,
+		char *cnpj, 
+	/*	
+		char *rua, 
+		unsigned int num, 
+		char *complemento,
+		char *bairro, 
+		char *uf, 
+		char *nome_mun, 
+		unsigned int codigo,
+		unsigned int cod_uf, 
+		unsigned int cep, 
+	*/	
+		DESTINATARIO *d,
+		ENDERECO *end);
 
 extern void free_emitente(EMITENTE *e);
 

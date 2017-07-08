@@ -57,6 +57,10 @@
 #define WSDL_NFE_STATUS_SERVICO		"http://www.portalfiscal.inf.br/nfe/wsdl/NfeStatusServico2"
 #define WSDL_NFE_AUTORIZACAO		"http://www.portalfiscal.inf.br/nfe/wsdl/NfeAutorizacao"
 #define WSDL_NFE_RET_AUTORIZACAO	"http://www.portalfiscal.inf.br/nfe/wsdl/NfeRetAutorizacao"
+typedef struct pais_t PAIS;
+typedef struct uf_t   UF;
+typedef struct municipio_t MUNICIPIO;
+typedef struct endereco_t ENDERECO;
 
 /*
  *Colecao de enums
@@ -174,6 +178,45 @@ typedef enum modfrete_t {
 	FRETE_SEM = 9
 } modFrete;
 
+/*
+ *Objeto TPais
+ * */
+struct pais_t{
+	const char *xPais;
+	unsigned int cPais;
+};
+
+	
+/*
+ *Objeto TUF (Unidade Federada)
+ * */
+struct uf_t{
+	const char *xUF;
+	unsigned int cUF;
+	PAIS *pais;
+};
+
+/*
+ *Objeto TMunicipio
+  * */
+struct municipio_t{
+	const char *xMun;
+	unsigned int cMun;
+	UF *uf;
+};
+
+/*
+ * Objeto Tendereco
+ * */
+struct endereco_t{
+	const char *xLgr;
+	const char *nro;
+	const char *Cpl;
+	const char *xBairro;
+	unsigned int CEP;
+	MUNICIPIO *Mun;
+};
+
 /**
  * SEFAZ_WSDL:
  *
@@ -192,12 +235,15 @@ typedef int evento_t;
  *
  * Informação do Município
  */
+
+/*
 typedef struct {
 	const char *uf;
 	const char *municipio;
 	unsigned int codigo;
 	unsigned int cod_uf;
 } MUNICIPIO;
+*/
 
 /**
  * IDNFE:
@@ -226,7 +272,7 @@ typedef struct {
  * Identificação da Nota Fiscal Eletrónica
  */
 typedef struct {
-	MUNICIPIO *municipio;
+	ENDERECO *endereco;
 	unsigned int id_nfe;
 	const char *nat_op;
 	indPag  ind_pag;
@@ -256,10 +302,13 @@ typedef struct {
  *
  * País
  */
+
+/*
 typedef struct {
 	unsigned int codigo;
 	const char *nome;
 } PAIS;
+*/
 
 /**
  * ENDERECO:
@@ -273,6 +322,8 @@ typedef struct {
  *
  * Endereço
  */
+
+/*
 typedef struct {
 	const char *rua;
 	unsigned int num;
@@ -282,6 +333,7 @@ typedef struct {
 	unsigned int cep;
 	PAIS *pais;
 } ENDERECO;
+*/
 
 /**
  * EMITENTE:

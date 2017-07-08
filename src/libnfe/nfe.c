@@ -26,19 +26,69 @@
 #include <stdio.h>
 #include <string.h>
 
-
-static MUNICIPIO *new_municipio(){
-	MUNICIPIO m = {
-		.codigo = 0
+/*
+ *Funcao para instanciar struct pais_t
+ * */
+static
+PAIS *new_pais(){
+	PAIS *p = malloc(sizeof(PAIS));
+	PAIS m = {
+		.cPais = 1058,
+		.xPais = "BRASIL"
 	};
+	memcpy(p, &m, sizeof(PAIS));
+	return p;
+}
+
+/*
+ *Funcao para instanciar struct uf_t
+ * */
+static
+UF *new_uf(){
+	UF *p = malloc(sizeof(UF));
+	UF m = {
+		.cUF = 0,
+//		.xUF = "",
+		.pais = new_pais()
+	};
+	memcpy(p, &m, sizeof(UF));
+	return p;
+}	
+/*
+ *Funcao para instanciar struct municipio_t
+ **/
+static 
+MUNICIPIO *new_municipio(){
 	MUNICIPIO *p = malloc(sizeof(MUNICIPIO));
+	MUNICIPIO m = {
+		.cMun = 0,
+//		.xMun = "",
+		.uf = new_uf()
+	};
 	memcpy(p, &m, sizeof(MUNICIPIO));
 	return p;
 }
 
+/*
+ *Funcao para instanciar struct endereco_t
+ **/
+static 
+ENDERECO *new_endereco(){
+	ENDERECO *p = malloc(sizeof(ENDERECO));
+	ENDERECO m = {
+		.CEP = 0,
+		.Mun = new_municipio()
+	};
+	memcpy(p, &m, sizeof(ENDERECO));
+	return p;
+}
+
+
+
+
 static IDNFE *new_idnfe(){
 	IDNFE i = {
-		.municipio = new_municipio(),
+		.endereco = new_endereco(),
 		.dh_saida = malloc(sizeof(time_t)),
 		.cod_nfe = rand() % 99999999,
 		.tipo_emissao = EMISSAO_NORMAL,
@@ -53,26 +103,20 @@ static IDNFE *new_idnfe(){
 	return p;
 }
 
-static PAIS *new_pais(){
-	PAIS m = {
-		.codigo = 1058,
-		.nome = "BRASIL"
-	};
-	PAIS *p = malloc(sizeof(PAIS));
-	memcpy(p, &m, sizeof(PAIS));
-	return p;
-}
 
+/*
 
 static ENDERECO *new_endereco(){
 	ENDERECO e = {
 		.pais = new_pais(),
-		.municipio = new_municipio()
+		.Mun = new_municipio()
 	};
 	ENDERECO *p = malloc(sizeof(ENDERECO));
 	memcpy(p, &e, sizeof(ENDERECO));
 	return p;
 }
+*/
+
 
 EMITENTE *new_emitente(){
 	EMITENTE e = {
@@ -364,7 +408,7 @@ static char get_dv(char *base){
 void set_chave(NFE *nfe){
 	char *base = malloc(sizeof(char) * 60);
 	sprintf(base, "%02d%s%s%02d%03d%09d%d%08d",
-		nfe->idnfe->municipio->cod_uf,
+		nfe->idnfe->endereco->Mun->uf->cUF,
 		timef(nfe->idnfe->dh_emis, "%y%m", 4),
 		nfe->emitente->cnpj,
 		nfe->idnfe->mod,
@@ -376,7 +420,7 @@ void set_chave(NFE *nfe){
 	nfe->idnfe->chave = malloc(sizeof(char) * (strlen(base) + 2));
 	sprintf(nfe->idnfe->chave, "%s%c", base , nfe->idnfe->div);
 }
-
+/*
 static int inst_municipio(const char *uf, const char *nome, unsigned int codigo,
 		unsigned int cod_uf, MUNICIPIO *m){
 	m->uf = uf;		
@@ -385,45 +429,102 @@ static int inst_municipio(const char *uf, const char *nome, unsigned int codigo,
 	m->cod_uf = cod_uf;
 	return 0;
 }
+*/
 
-static int inst_endereco(const char *rua, unsigned int num, 
-		const char *complemento, const char *bairro, unsigned int cep, 
+static 
+int inst_endereco(
+		const char *xPais,
+		unsigned int cPais,
+		
+		const char *xUF,
+		unsigned int cUF,
+		
+		const char *xMun,
+		unsigned int cMun,
+		
+		const char *rua, 
+		const char *num, 
+		const char *complemento, 
+		const char *bairro, 
+		unsigned int cep, 
+		
 		ENDERECO *e){
-	e->rua = rua;
-	e->num = num;
-	e->complemento = complemento;
-	e->bairro = bairro;
-	e->cep = cep;
-	return 0;
+	
+	e->xLgr = rua;
+	e->nro = num;
+	e->Cpl = complemento;
+	e->xBairro = bairro;
+	e->CEP = cep;
+	
+	e->Mun->xMun = xMun;
+	e->Mun->cMun = cMun;
+	
+	e->Mun->uf->xUF = xUF;
+	e->Mun->uf->cUF = cUF;
+	
+	if(e->Mun->uf->pais->xPais != "\0")
+		e->Mun->uf->pais->xPais = xPais;
+	if(e->Mun->uf->pais->cPais != 1058)
+		e->Mun->uf->pais->cPais = cPais;
+
+
+
+	return 0 ;
 }
 
-int inst_emitente(int id, const char *nome, const char *ie, int crt, 
-		const char *cnpj, const char *rua, unsigned int num, 
-		const char *complemento, const char *bairro, const char *uf, 
-		const char *nome_mun, unsigned int codigo, unsigned int cod_uf, 
-		unsigned int cep, EMITENTE *e){
+int inst_emitente(int id, 
+		const char *nome, 
+		const char *ie, 
+		int crt, 
+		const char *cnpj, 
+	/*	const char *rua, 
+		unsigned int num, 
+		const char *complemento, 
+		const char *bairro, 
+		const char *uf, 
+		const char *nome_mun, 
+		unsigned int codigo, 
+		unsigned int cod_uf, 
+		unsigned int cep, */
+		ENDERECO *end,
+		EMITENTE *e){
 	e->id = id;
 	e->nome = nome;
 	e->inscricao_estadual = ie;
 	e->crt = crt;
 	e->cnpj = cnpj;
-	inst_endereco(rua, num, complemento, bairro, cep, e->endereco);
-	inst_municipio(uf, nome_mun, codigo, cod_uf, e->endereco->municipio);
+	e->endereco = end;
+//	inst_endereco(rua, num, complemento, bairro, cep, e->endereco);
+//	inst_municipio(uf, nome_mun, codigo, cod_uf, e->endereco->municipio);
 	return 0;
 }
 
-int inst_destinatario(int id, char *nome, int t_ie, char *tipo_doc, char *ie,
-		char *cnpj, char *rua, unsigned int num, char *complemento,
-		char *bairro, char *uf, char *nome_mun, unsigned int codigo,
-		unsigned int cod_uf, unsigned int cep, DESTINATARIO *d){
+int inst_destinatario(int id, 
+		char *nome, 
+		int t_ie, 
+		char *tipo_doc, 
+		char *ie,
+		char *cnpj, 
+		char *rua, 
+		unsigned int num, 
+		char *complemento,
+		char *bairro, 
+		char *uf, 
+		char *nome_mun, 
+		unsigned int codigo,
+		unsigned int cod_uf,
+	       	unsigned int cep, 
+		DESTINATARIO *d,
+		ENDERECO *end){
 	d->id = id;
 	d->nome = nome;
 	d->tipo_ie = t_ie;
 	d->cnpj = cnpj;
 	d->tipo_doc = tipo_doc;
 	d->inscricao_estadual = ie;
-	inst_endereco(rua, num, complemento, bairro, cep, d->endereco);
-	inst_municipio(uf, nome_mun, codigo, cod_uf, d->endereco->municipio);
+	d->endereco = end;
+//	inst_endereco(rua, num, complemento, bairro, cep, d->endereco);
+//	inst_municipio(uf, nome_mun, codigo, cod_uf, d->endereco->municipio);
 	return 0;
 }
 
@@ -480,6 +581,9 @@ int inst_nfe(int id_nfe, int id_mun, int id_uf, int ind_pag, int mod_nfe,
 		nfe->destinatario);
 	return 0;
 }
+
+
+
 
 static void free_endereco(ENDERECO *e){
 	free(e->pais);
