@@ -1,2 +1,5 @@
+if type "gtkdocize" > /dev/null; then
+	gtkdocize
+fi
 autoreconf -i
-gtkdocize || exit 1
+./configure
