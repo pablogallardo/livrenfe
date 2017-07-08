@@ -48,7 +48,6 @@ UF *new_uf(){
 	UF *p = malloc(sizeof(UF));
 	UF m = {
 		.cUF = 0,
-//		.xUF = "",
 		.pais = new_pais()
 	};
 	memcpy(p, &m, sizeof(UF));
@@ -62,7 +61,6 @@ MUNICIPIO *new_municipio(){
 	MUNICIPIO *p = malloc(sizeof(MUNICIPIO));
 	MUNICIPIO m = {
 		.cMun = 0,
-//		.xMun = "",
 		.uf = new_uf()
 	};
 	memcpy(p, &m, sizeof(MUNICIPIO));
@@ -472,7 +470,8 @@ int inst_endereco(
 	return 0 ;
 }
 
-int inst_emitente(int id, 
+int inst_emitente(
+		int id, 
 		const char *nome, 
 		const char *ie, 
 		int crt, 
@@ -486,8 +485,8 @@ int inst_emitente(int id,
 		unsigned int codigo, 
 		unsigned int cod_uf, 
 		unsigned int cep, */
-		ENDERECO *end,
-		EMITENTE *e){
+		EMITENTE *e,
+		ENDERECO *end){
 	e->id = id;
 	e->nome = nome;
 	e->inscricao_estadual = ie;
@@ -505,6 +504,7 @@ int inst_destinatario(int id,
 		char *tipo_doc, 
 		char *ie,
 		char *cnpj, 
+	/*	
 		char *rua, 
 		unsigned int num, 
 		char *complemento,
@@ -514,6 +514,7 @@ int inst_destinatario(int id,
 		unsigned int codigo,
 		unsigned int cod_uf,
 	       	unsigned int cep, 
+	*/	
 		DESTINATARIO *d,
 		ENDERECO *end){
 	d->id = id;
@@ -528,67 +529,28 @@ int inst_destinatario(int id,
 	return 0;
 }
 
-int inst_nfe(int id_nfe, int id_mun, int id_uf, int ind_pag, int mod_nfe,
-		int serie, int num_nf, int tipo, int local_destino, 
-		int tipo_impressao, int tipo_emissao, int tipo_ambiente, 
-		int finalidade, int consumidor_final, int presencial, int q_itens,
-		int id_emit, char *ie_emit, int crt_emit, int id_mun_emit,
-		int id_uf_emit, int cep_emit, int num_e_emit, int id_dest, 
-		int t_ie_dest, int id_mun_dest, int id_uf_dest, int num_e_dest,
-		int cod_nfe, int cep_dest, int canceled, time_t dh_emis, 
-		time_t *dh_saida, double total,
-		char *nome_mun, char *uf, char *nat_op, char *versao, 
-		char *nome_emit, char *cnpj_emit, char *rua_emit,
-		char *comp_emit, char *bairro_emit, char *mun_emit, char *uf_emit,
-		char *nome_dest, char *cnpj_dest, char *rua_dest, 
-		char *comp_dest, char *bairro_dest, char *mun_dest,
-		char *uf_dest, char *chave, char div, char *ie_dest,
-		char *tipo_doc_dest, char *inf_ad_fisco, char *inf_ad_contrib,
-		char *protocolo, NFE *nfe){
-	IDNFE *idnfe = nfe->idnfe;
-	idnfe->id_nfe = id_nfe;
-	idnfe->nat_op = nat_op;
-	idnfe->ind_pag = ind_pag;
-	idnfe->mod = mod_nfe;
-	idnfe->serie = serie;
-	idnfe->num_nf = num_nf;
-	idnfe->dh_emis = dh_emis;
-	idnfe->dh_saida = dh_saida;
-	idnfe->tipo = tipo;
-	idnfe->local_destino = local_destino;
-	idnfe->tipo_impressao = tipo_impressao;
-	idnfe->tipo_emissao = tipo_emissao;
-	idnfe->tipo_ambiente = tipo_ambiente;
-	idnfe->finalidade = finalidade;
-	idnfe->consumidor_final = consumidor_final;
-	idnfe->presencial = presencial;
-	idnfe->versao = versao;
-	idnfe->div = div;
-	idnfe->chave = chave;
-	idnfe->cod_nfe = cod_nfe;
-	nfe->canceled = canceled;
-	nfe->inf_ad_fisco = inf_ad_fisco;
-	nfe->inf_ad_contrib = inf_ad_contrib;
-	nfe->protocolo->numero = protocolo;
-	inst_municipio(uf, nome_mun, id_mun, id_uf, idnfe->municipio);
-	inst_emitente(id_emit, nome_emit, ie_emit, crt_emit, 
-		cnpj_emit, rua_emit, num_e_emit, comp_emit, bairro_emit, uf_emit,
-		mun_emit, id_mun_emit, id_uf_emit, cep_emit, nfe->emitente);
-	inst_destinatario(id_dest, nome_dest, t_ie_dest,
-		tipo_doc_dest, ie_dest, cnpj_dest, rua_dest, num_e_dest,
-		comp_dest, bairro_dest, 
-		uf_dest, mun_dest, id_mun_dest, id_uf_dest, cep_dest, 
-		nfe->destinatario);
+int inst_nfe(	){
+
 	return 0;
 }
 
-
-
-
-static void free_endereco(ENDERECO *e){
-	free(e->pais);
-	free(e->municipio);
+static void free_pais(PAIS *e){
+	free(e);
 }
+
+static void free_uf(UF *e){
+	free_pais(e->pais);
+	free(e);
+}
+static void free_municipio(MUNICIPIO *e){
+	free_uf(e->uf);
+	free(e);
+}
+static void free_endereco(ENDERECO *e){
+	free(e->Mun);
+	free(e);
+}
+
 void free_emitente(EMITENTE *e){
 	free_endereco(e->endereco);
 	free(e);
