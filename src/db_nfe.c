@@ -107,8 +107,8 @@ int register_nfe(NFE *nfe){
 		tipo_doc) VALUES (%Q, %Q, '%d', %Q, %Q, %Q, %Q, \
 		'%d', '%d', %d, %Q, %Q);", 
 		d->id == 0? NULL : itoa(d->id), d->nome, d->tipo_ie, d->cnpj, 
-		ed->rua, ed->complemento, ed->bairro, ed->municipio->codigo, 
-		ed->cep, ed->num, d->inscricao_estadual, d->tipo_doc);
+		ed->xLgr, ed->Cpl, ed->xBairro, ed->Mun->cMun, 
+		ed->CEP, ed->nro, d->inscricao_estadual, d->tipo_doc);
 	db_exec(sql, &err);
 	if(err){
 		fprintf(stderr, "livrenfe: Error: %s", err);
@@ -125,8 +125,8 @@ int register_nfe(NFE *nfe){
 		(%d, %Q, %d, '%d', '%d', '%d', %lu, %Q, '%d', '%d' , '%d', '%d', \
 		 '%d', '%d', '%d', '%s', '%d', %Q, %d, '%d' , '%d', %f, %Q,\
 		 %d, %d, %Q, %Q, %Q, %d, %Q, %Q, %d, %Q, %Q);",
-		idnfe->municipio->codigo, idnfe->nat_op, idnfe->ind_pag, idnfe->mod, idnfe->serie,
-		idnfe->num_nf, (unsigned long)idnfe->dh_emis, idnfe->dh_saida == NULL? NULL:itoa(*idnfe->dh_saida), idnfe->tipo,
+		idnfe->endereco->Mun->cMun, idnfe->nat_op, idnfe->ind_pag, idnfe->mod, idnfe->serie,
+		idnfe->endereco->Mun->uf->cUF, (unsigned long)idnfe->dh_emis, idnfe->dh_saida == NULL? NULL:itoa(*idnfe->dh_saida), idnfe->tipo,
 		idnfe->local_destino, idnfe->tipo_impressao, idnfe->tipo_ambiente, idnfe->finalidade, idnfe->consumidor_final, idnfe->presencial,
 		VERSION_NAME, idnfe->div, idnfe->chave, nfe->emitente->id, 
 		last_id, nfe->q_itens, nfe->total, nfe->transp, idnfe->cod_nfe, 
@@ -542,6 +542,7 @@ NFE *get_nfe(int id){
 
 EMITENTE *get_emitente(int id){
 	EMITENTE *e = new_emitente();
+
 	char *err;
 	sqlite3_stmt *stmt;
 	enum{
@@ -583,8 +584,8 @@ EMITENTE *get_emitente(int id){
 	uf = strdup((char*)sqlite3_column_text(stmt, UF));
 	comp = sqlite3_column_text(stmt, COMP)? 
 		strdup((char*)sqlite3_column_text(stmt, COMP)) : NULL;
-	inst_emitente(id, nome, ie, crt, cnpj, rua, num, comp,
-		bairro, uf, mun, id_mun, id_uf, cep, e);
+//	inst_emitente(id, nome, ie, crt, cnpj, rua, num, comp,
+//		bairro, uf, mun, id_mun, id_uf, cep, e);
 	return e;
 
 }
@@ -632,8 +633,8 @@ DESTINATARIO *get_destinatario_by_doc(const char *doc){
 	tipo_doc = strdup((char*)sqlite3_column_text(stmt, TIPO_DOC));
 	comp = sqlite3_column_text(stmt, COMP)? 
 		strdup((char*)sqlite3_column_text(stmt, COMP)) : NULL;
-	inst_destinatario(id, nome, t_ie, tipo_doc, ie, cnpj, rua, 
-		num, comp, bairro, uf, mun, id_mun, id_uf, cep, d);
+//	inst_destinatario(id, nome, t_ie, tipo_doc, ie, cnpj, rua, 
+//		num, comp, bairro, uf, mun, id_mun, id_uf, cep, d);
 	return d;
 }
 
@@ -645,9 +646,9 @@ int set_emitente(EMITENTE *e){
 		complemento, bairro, id_municipio, cep, numero)\
  		VALUES (1, %Q, %Q, %d, %Q, %Q, %Q, %Q, %d, %d, %d);", 
 		e->nome, e->inscricao_estadual, e->crt, e->cnpj,
-		e->endereco->rua, e->endereco->complemento,
-		e->endereco->bairro, e->endereco->municipio->codigo,
-		e->endereco->cep, e->endereco->num);
+		e->endereco->xLgr, e->endereco->Cpl,
+		e->endereco->xBairro, e->endereco->Mun->cMun,
+		e->endereco->CEP, e->endereco->nro);
 	db_exec(sql, &err);
 	if(err)
 		return -ESQL;
