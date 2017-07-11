@@ -302,7 +302,7 @@ int _gen_ide(xmlTextWriterPtr writer, NFE *nfe){
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cUF",
-			"%d", nfe->idnfe->municipio->cod_uf);
+			"%d", nfe->idnfe->municipio->uf->cUF);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cNF",
@@ -348,7 +348,7 @@ int _gen_ide(xmlTextWriterPtr writer, NFE *nfe){
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cMunFG",	
-			"%d", nfe->idnfe->municipio->codigo);
+			"%d", nfe->idnfe->municipio->cMun);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "tpImp",	
@@ -417,39 +417,39 @@ int _gen_emit(xmlTextWriterPtr writer, NFE *nfe){
 		return -EXML;
 
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "xLgr",
-			"%s", nfe->emitente->endereco->rua);
+			"%s", nfe->emitente->endereco->xLgr);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "nro",
-			"%d", nfe->emitente->endereco->num);
+			"%d", nfe->emitente->endereco->nro);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "xBairro",
-			"%s", nfe->emitente->endereco->bairro);
+			"%s", nfe->emitente->endereco->xBairro);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cMun",
-			"%d", nfe->emitente->endereco->municipio->codigo);
+			"%d", nfe->emitente->endereco->municipio->cMun);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "xMun",
-			"%s", nfe->emitente->endereco->municipio->municipio);
+			"%s", nfe->emitente->endereco->municipio->xMun);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "UF",
-			"%s", nfe->emitente->endereco->municipio->uf);
+			"%s", nfe->emitente->endereco->municipio->uf->xUF);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "CEP",
-			"%d", nfe->emitente->endereco->cep);
+			"%d", nfe->emitente->endereco->CEP);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cPais",
-			"%d", nfe->emitente->endereco->pais->codigo);
+			"%d", nfe->emitente->endereco->municipio->uf->pais->cPais);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "xPais",
-			"%s", nfe->emitente->endereco->pais->nome);
+			"%s", nfe->emitente->endereco->municipio->uf->pais->xPais);
 	if (rc < 0)
 		return -EXML;
 
@@ -502,35 +502,35 @@ int _gen_dest(xmlTextWriterPtr writer, NFE *nfe){
 		return -EXML;
 
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "xLgr",
-			"%s", nfe->destinatario->endereco->rua);
+			"%s", nfe->destinatario->endereco->xLgr);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "nro",
-			"%d", nfe->destinatario->endereco->num);
+			"%d", nfe->destinatario->endereco->nro);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "xBairro",
-			"%s", nfe->destinatario->endereco->bairro);
+			"%s", nfe->destinatario->endereco->xBairro);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cMun",
-			"%d", nfe->destinatario->endereco->municipio->codigo);
+			"%d", nfe->destinatario->endereco->municipio->cMun);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "xMun",
-			"%s", nfe->destinatario->endereco->municipio->municipio);
+			"%s", nfe->destinatario->endereco->municipio->xMun);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "UF",
-			"%s", nfe->destinatario->endereco->municipio->uf);
+			"%s", nfe->destinatario->endereco->municipio->uf->xUF);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cPais",
-			"%d", nfe->destinatario->endereco->pais->codigo);
+			"%d", nfe->destinatario->endereco->municipio->uf->pais->cPais);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "xPais",
-			"%s", nfe->destinatario->endereco->pais->nome);
+			"%s", nfe->destinatario->endereco->municipio->uf->pais->xPais);
 	if (rc < 0)
 		return -EXML;
 
@@ -966,7 +966,7 @@ char *generate_evento_xml(EVENTO *e, EVP_PKEY *key, X509 *cert) {
 	if (rc < 0)
 		return NULL;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "cOrgao",
-			"%d", nfe->idnfe->municipio->cod_uf);
+			"%d", nfe->idnfe->municipio->uf->cUF);
 	if (rc < 0)
 		return NULL;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "tpAmb",

@@ -55,6 +55,27 @@ extern EVENTO_CANCELAMENTO *new_evento_cancelamento();
 extern LOTE_EVENTO *new_lote_evento(int id);
 
 /**
+ * new_uf:
+ *
+ * Cria um objeto UF 
+ */
+extern UF *new_uf();
+
+/**
+ * new_municipio:
+ *
+ * Cria um objeto MUNICIPIO 
+ */
+extern MUNICIPIO *new_municipio();
+
+/**
+ * new_endereco:
+ *
+ * Cria um objeto ENDERECO 
+ */
+extern ENDERECO *new_endereco();
+
+/**
  * new_emitente:
  *
  * Cria um objeto EMITENTE 
@@ -113,38 +134,75 @@ extern int inst_item(double valor, double quantidade,
 		char *ipi_codigo, char *descricao, char *unidade,
 		ITEM *);
 
-extern int inst_nfe(int id_nfe, int id_mun, int id_uf, int ind_pag, int mod_nfe,
-		int serie, int num_nf, int tipo, int local_destino, 
-		int tipo_impressao, int tipo_emissao, int tipo_ambiente, 
-		int finalidade, int consumidor_final, int presencial, int q_itens,
-		int id_emit, char *ie_emit, int crt_emit, int id_mun_emit,
-		int id_uf_emit, int cep_emit, int num_e_emit, int id_dest, 
-		int t_ie_dest, int id_mun_dest, int id_uf_dest, int num_e_dest,
-		int cod_nfe, int cep_dest, int canceled, time_t dh_emis, 
-		time_t *dh_saida, double total,
-		char *nome_mun, char *uf, char *nat_op, char *versao, 
-		char *nome_emit, char *cnpj_emit, char *rua_emit,
-		char *comp_emit, char *bairro_emit, char *mun_emit, char *uf_emit,
-		char *nome_dest, char *cnpj_dest, char *rua_dest, 
-		char *comp_dest, char *bairro_dest, char *mun_dest,
-		char *uf_dest, char *chave, char div, char *ie_dest,
-		char *tipo_doc_dest, char *inf_ad_fisco, char *inf_ad_contrib,
-		char *protocolo, NFE *nfe);
+extern int inst_nfe(unsigned int id_nfe, 
+		int serie, 
+		unsigned int num_nf,
+		indPag ind_pag, 
+		Mod mod, 
+		tpNF tipo, 
+		idDest local_destino, 
+		tpImp tipo_impressao, 
+		tpEmis tipo_emissao, 
+		tpAmb tipo_ambiente, 
+		finNFe finalidade, 
+		indFinal consumidor_final, 
+		indPres presencial, 
+		int cod_nfe, 
+		time_t dh_emis,
+		time_t *dh_saida, 
+		const char *nat_op,
+		char *versao,
+		char *inf_ad_fisco,
+		char *inf_ad_contrib, 
+		PROTOCOLO *protocolo,
+		EMITENTE *emitente,
+		DESTINATARIO *destinatario,
+		MUNICIPIO *municipio, 
+		NFE *nfe);
 
-extern int inst_emitente(int id, const char *nome, const char *ie, int crt, 
-		const char *cnpj, const char *rua, unsigned int num, 
-		const char *complemento, const char *bairro, const char *uf, 
-		const char *nome_mun, unsigned int codigo,
-		unsigned int cod_uf, unsigned int cep, EMITENTE *e);
+extern int inst_emitente(int id, 
+		const char *nome, 
+		const char *ie, 
+		int crt, 
+		const char *cnpj, 
+		ENDERECO *end,
+		EMITENTE *e);
 
-extern int inst_destinatario(int id, char *nome, int t_ie, char *tipo_doc, char *ie,
-		char *cnpj, char *rua, unsigned int num, char *complemento,
-		char *bairro, char *uf, char *nome_mun, unsigned int codigo,
-		unsigned int cod_uf, unsigned int cep, DESTINATARIO *d);
+extern int inst_destinatario(int id, 
+		char *nome, 
+		int t_ie, 
+		char *tipo_doc, 
+		char *ie,
+		char *cnpj, 
+		ENDERECO *end,
+		DESTINATARIO *d);
+
+extern int inst_endereco(const char *rua, 
+		unsigned int num, 
+		const char *complemento, 
+		const char *bairro, 
+		unsigned int cep, 
+		const char *xMun,
+		unsigned int cMun,
+		const char *xUF,
+		unsigned int cUF,
+		const char *xPais,
+		unsigned int cPais,
+		ENDERECO *e);
+
+extern int inst_municipio(const char *xMun, 
+		unsigned int cMun, 
+		const char *xUF, 
+		unsigned int cUF, 
+		const char *xPais, 
+		unsigned int cPais, 
+		MUNICIPIO *m);
 
 extern void free_emitente(EMITENTE *e);
 
 extern void free_destinatario(DESTINATARIO *d);
+
+extern void free_endereco(ENDERECO *e);
 
 extern int add_nfe(LOTE *lote, NFE *nfe);
 

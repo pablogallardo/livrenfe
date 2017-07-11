@@ -61,7 +61,7 @@ static void *sefaz_thread(void *arg){
 	int ambiente = prefs->ambiente;
 	URLS *urls = prefs->urls;
 	if(sr->lote){
-		send_lote(sr->lote, urls->recepcaoevento, prefs->ambiente, 
+		send_lote(sr->lote, urls->nfeautorizacao, prefs->ambiente, 
 			pKey, cert, &msg);
 		cons_lote(sr->lote, urls->nferetautorizacao, ambiente, 
 			pKey, cert, &msg);
