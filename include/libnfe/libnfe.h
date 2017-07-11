@@ -58,8 +58,8 @@
 #define WSDL_NFE_AUTORIZACAO		"http://www.portalfiscal.inf.br/nfe/wsdl/NfeAutorizacao"
 #define WSDL_NFE_RET_AUTORIZACAO	"http://www.portalfiscal.inf.br/nfe/wsdl/NfeRetAutorizacao"
 
-/*
- *Colecao de enums
+/**
+ * Coleção de enums
  *
  * */
 typedef enum indPag_t {
@@ -184,20 +184,64 @@ extern const char *SEFAZ_WSDL[7];
 typedef int evento_t;
 
 /**
+ * PAIS:
+ * @cPais: Código do país
+ * @xPais: Nome do país
+ *
+ * País
+ */
+typedef struct pais_t{
+	const char *xPais;
+	unsigned int cPais;
+} PAIS;
+
+/**
+ * UF:
+ * @cUF: Código IBGE da UF 
+ * @xUF: Nome da UF
+ * @pais: Pais
+ *
+ * País
+ */
+typedef struct uf_t{
+	const char *xUF;
+	unsigned int cUF;
+	PAIS *pais;
+} UF;
+
+/**
  * MUNICIPIO:
- * @uf: UF (ex. "SP")
- * @municipio: Nome do municício 
- * @codigo: Código IBGE do municício 
- * @cod_uf: Código IBGE da UF
+ * @xMun: Nome do municício 
+ * @cMun: Código IBGE do municício 
+ * @uf: UF
  *
  * Informação do Município
  */
-typedef struct {
-	const char *uf;
-	const char *municipio;
-	unsigned int codigo;
-	unsigned int cod_uf;
+typedef struct municipio_t{
+	const char *xMun;
+	unsigned int cMun;
+	UF *uf;
 } MUNICIPIO;
+
+/**
+ * ENDERECO:
+ * @xLgr: Rua do endereço
+ * @nro: Número do endereço na rua
+ * @Cpl: Complemento do endereço
+ * @xBairro: Bairro do endereço
+ * @municipio: Município do endereço
+ * @CEP: CEP do endereço
+ *
+ * Endereço
+ */
+typedef struct endereco_t{
+	const char *xLgr;
+	unsigned int nro;
+	const char *Cpl;
+	const char *xBairro;
+	unsigned int CEP;
+	MUNICIPIO *municipio;
+} ENDERECO;
 
 /**
  * IDNFE:
@@ -248,40 +292,6 @@ typedef struct {
 	char *chave;
 	int cod_nfe;
 } IDNFE;
-
-/**
- * PAIS:
- * @codigo: Código do país
- * @nome: Nome do país
- *
- * País
- */
-typedef struct {
-	unsigned int codigo;
-	const char *nome;
-} PAIS;
-
-/**
- * ENDERECO:
- * @rua: Rua do endereço
- * @num: Número do endereço na rua
- * @complemento: Complemento do endereço
- * @bairro: Bairro do endereço
- * @municipio: Município do endereço
- * @cep: CEP do endereço
- * @pais: País
- *
- * Endereço
- */
-typedef struct {
-	const char *rua;
-	unsigned int num;
-	const char *complemento;
-	const char *bairro;
-	MUNICIPIO *municipio;
-	unsigned int cep;
-	PAIS *pais;
-} ENDERECO;
 
 /**
  * EMITENTE:

@@ -26,13 +26,56 @@
 #include <stdio.h>
 #include <string.h>
 
-
-static MUNICIPIO *new_municipio(){
-	MUNICIPIO m = {
-		.codigo = 0
+/*
+ * Funcao para instanciar struct pais_t
+ * */
+static
+PAIS *new_pais(){
+	PAIS *p = malloc(sizeof(PAIS));
+	PAIS m = {
+		.cPais = 1058,
+		.xPais = "BRASIL"
 	};
+	memcpy(p, &m, sizeof(PAIS));
+	return p;
+}
+
+/*
+ * Funcao para instanciar struct uf_t
+ * */
+UF *new_uf(){
+	UF *p = malloc(sizeof(UF));
+	UF m = {
+		.cUF = 0,
+		.pais = new_pais()
+	};
+	memcpy(p, &m, sizeof(UF));
+	return p;
+}
+
+/*
+ * Funcao para instanciar struct municipio_t
+ **/
+MUNICIPIO *new_municipio(){
 	MUNICIPIO *p = malloc(sizeof(MUNICIPIO));
+	MUNICIPIO m = {
+		.cMun = 0,
+		.uf = new_uf()
+	};
 	memcpy(p, &m, sizeof(MUNICIPIO));
+	return p;
+}
+
+/*
+ *Funcao para instanciar struct endereco_t
+ **/
+ENDERECO *new_endereco(){
+	ENDERECO *p = malloc(sizeof(ENDERECO));
+	ENDERECO m = {
+		.CEP = 0,
+		.municipio = new_municipio()
+	};
+	memcpy(p, &m, sizeof(ENDERECO));
 	return p;
 }
 
@@ -50,27 +93,6 @@ static IDNFE *new_idnfe(){
 	};
 	IDNFE *p = malloc(sizeof(IDNFE));
 	memcpy(p, &i, sizeof(IDNFE));
-	return p;
-}
-
-static PAIS *new_pais(){
-	PAIS m = {
-		.codigo = 1058,
-		.nome = "BRASIL"
-	};
-	PAIS *p = malloc(sizeof(PAIS));
-	memcpy(p, &m, sizeof(PAIS));
-	return p;
-}
-
-
-static ENDERECO *new_endereco(){
-	ENDERECO e = {
-		.pais = new_pais(),
-		.municipio = new_municipio()
-	};
-	ENDERECO *p = malloc(sizeof(ENDERECO));
-	memcpy(p, &e, sizeof(ENDERECO));
 	return p;
 }
 
@@ -364,7 +386,7 @@ static char get_dv(char *base){
 void set_chave(NFE *nfe){
 	char *base = malloc(sizeof(char) * 60);
 	sprintf(base, "%02d%s%s%02d%03d%09d%d%08d",
-		nfe->idnfe->municipio->cod_uf,
+		nfe->idnfe->municipio->uf->cUF,
 		timef(nfe->idnfe->dh_emis, "%y%m", 4),
 		nfe->emitente->cnpj,
 		nfe->idnfe->mod,
@@ -377,78 +399,123 @@ void set_chave(NFE *nfe){
 	sprintf(nfe->idnfe->chave, "%s%c", base , nfe->idnfe->div);
 }
 
-static int inst_municipio(const char *uf, const char *nome, unsigned int codigo,
-		unsigned int cod_uf, MUNICIPIO *m){
-	m->uf = uf;		
-	m->municipio = nome;
-	m->codigo = codigo;
-	m->cod_uf = cod_uf;
+static int inst_pais(const char *xPais, 
+		unsigned int cPais, 
+		PAIS *p){
+	p->xPais = xPais;
+	p->cPais = cPais;
 	return 0;
 }
 
-static int inst_endereco(const char *rua, unsigned int num, 
-		const char *complemento, const char *bairro, unsigned int cep, 
+static int inst_uf(const char *xUF, 
+		unsigned int cUF, 
+		const char *xPais, 
+		unsigned int cPais, 
+		UF *u){
+	u->xUF = xUF;
+	u->cUF = cUF;
+	inst_pais(xPais, cPais, u->pais);
+	return 0;
+}
+
+int inst_municipio(const char *xMun, 
+		unsigned int cMun, 
+		const char *xUF, 
+		unsigned int cUF, 
+		const char *xPais, 
+		unsigned int cPais, 
+		MUNICIPIO *m){
+	m->xMun = xMun;
+	m->cMun = cMun;
+	inst_uf(xUF, cUF, xPais, cPais, m->uf);
+	return 0;
+}
+
+int inst_endereco(const char *rua, 
+		unsigned int num, 
+		const char *complemento, 
+		const char *bairro, 
+		unsigned int cep, 
+		const char *xMun,
+		unsigned int cMun,
+		const char *xUF,
+		unsigned int cUF,
+		const char *xPais,
+		unsigned int cPais,
 		ENDERECO *e){
-	e->rua = rua;
-	e->num = num;
-	e->complemento = complemento;
-	e->bairro = bairro;
-	e->cep = cep;
-	return 0;
+	e->xLgr = rua;
+	e->nro = num;
+	e->Cpl = complemento;
+	e->xBairro = bairro;
+	e->CEP = cep;
+	inst_municipio(xMun, cMun, xUF, cUF, xPais, cPais, e->municipio);
+	return 0 ;
 }
 
-int inst_emitente(int id, const char *nome, const char *ie, int crt, 
-		const char *cnpj, const char *rua, unsigned int num, 
-		const char *complemento, const char *bairro, const char *uf, 
-		const char *nome_mun, unsigned int codigo, unsigned int cod_uf, 
-		unsigned int cep, EMITENTE *e){
+int inst_emitente(int id, 
+		const char *nome, 
+		const char *ie, 
+		int crt, 
+		const char *cnpj, 
+		ENDERECO *endereco,
+		EMITENTE *e){
 	e->id = id;
 	e->nome = nome;
 	e->inscricao_estadual = ie;
 	e->crt = crt;
 	e->cnpj = cnpj;
-	inst_endereco(rua, num, complemento, bairro, cep, e->endereco);
-	inst_municipio(uf, nome_mun, codigo, cod_uf, e->endereco->municipio);
+	e->endereco = endereco;
 	return 0;
 }
 
-int inst_destinatario(int id, char *nome, int t_ie, char *tipo_doc, char *ie,
-		char *cnpj, char *rua, unsigned int num, char *complemento,
-		char *bairro, char *uf, char *nome_mun, unsigned int codigo,
-		unsigned int cod_uf, unsigned int cep, DESTINATARIO *d){
+int inst_destinatario(int id, 
+		char *nome, 
+		int t_ie, 
+		char *tipo_doc, 
+		char *ie,
+		char *cnpj, 
+		ENDERECO *endereco,
+		DESTINATARIO *d){
 	d->id = id;
 	d->nome = nome;
 	d->tipo_ie = t_ie;
 	d->cnpj = cnpj;
 	d->tipo_doc = tipo_doc;
 	d->inscricao_estadual = ie;
-	inst_endereco(rua, num, complemento, bairro, cep, d->endereco);
-	inst_municipio(uf, nome_mun, codigo, cod_uf, d->endereco->municipio);
+	d->endereco = endereco;
 	return 0;
 }
 
-int inst_nfe(int id_nfe, int id_mun, int id_uf, int ind_pag, int mod_nfe,
-		int serie, int num_nf, int tipo, int local_destino, 
-		int tipo_impressao, int tipo_emissao, int tipo_ambiente, 
-		int finalidade, int consumidor_final, int presencial, int q_itens,
-		int id_emit, char *ie_emit, int crt_emit, int id_mun_emit,
-		int id_uf_emit, int cep_emit, int num_e_emit, int id_dest, 
-		int t_ie_dest, int id_mun_dest, int id_uf_dest, int num_e_dest,
-		int cod_nfe, int cep_dest, int canceled, time_t dh_emis, 
-		time_t *dh_saida, double total,
-		char *nome_mun, char *uf, char *nat_op, char *versao, 
-		char *nome_emit, char *cnpj_emit, char *rua_emit,
-		char *comp_emit, char *bairro_emit, char *mun_emit, char *uf_emit,
-		char *nome_dest, char *cnpj_dest, char *rua_dest, 
-		char *comp_dest, char *bairro_dest, char *mun_dest,
-		char *uf_dest, char *chave, char div, char *ie_dest,
-		char *tipo_doc_dest, char *inf_ad_fisco, char *inf_ad_contrib,
-		char *protocolo, NFE *nfe){
+int inst_nfe(unsigned int id_nfe, 
+		int serie, 
+		unsigned int num_nf,
+		indPag ind_pag, 
+		Mod mod, 
+		tpNF tipo, 
+		idDest local_destino, 
+		tpImp tipo_impressao, 
+		tpEmis tipo_emissao, 
+		tpAmb tipo_ambiente, 
+		finNFe finalidade, 
+		indFinal consumidor_final, 
+		indPres presencial, 
+		int cod_nfe, 
+		time_t dh_emis,
+		time_t *dh_saida, 
+		const char *nat_op,
+		char *versao,
+		char *inf_ad_fisco,
+		char *inf_ad_contrib, 
+		PROTOCOLO *protocolo,
+		EMITENTE *emitente,
+		DESTINATARIO *destinatario,
+		MUNICIPIO *municipio, 
+		NFE *nfe){
 	IDNFE *idnfe = nfe->idnfe;
 	idnfe->id_nfe = id_nfe;
 	idnfe->nat_op = nat_op;
 	idnfe->ind_pag = ind_pag;
-	idnfe->mod = mod_nfe;
+	idnfe->mod = mod;
 	idnfe->serie = serie;
 	idnfe->num_nf = num_nf;
 	idnfe->dh_emis = dh_emis;
@@ -462,29 +529,40 @@ int inst_nfe(int id_nfe, int id_mun, int id_uf, int ind_pag, int mod_nfe,
 	idnfe->consumidor_final = consumidor_final;
 	idnfe->presencial = presencial;
 	idnfe->versao = versao;
-	idnfe->div = div;
-	idnfe->chave = chave;
 	idnfe->cod_nfe = cod_nfe;
-	nfe->canceled = canceled;
+	idnfe->municipio = municipio;
 	nfe->inf_ad_fisco = inf_ad_fisco;
 	nfe->inf_ad_contrib = inf_ad_contrib;
-	nfe->protocolo->numero = protocolo;
-	inst_municipio(uf, nome_mun, id_mun, id_uf, idnfe->municipio);
-	inst_emitente(id_emit, nome_emit, ie_emit, crt_emit, 
-		cnpj_emit, rua_emit, num_e_emit, comp_emit, bairro_emit, uf_emit,
-		mun_emit, id_mun_emit, id_uf_emit, cep_emit, nfe->emitente);
-	inst_destinatario(id_dest, nome_dest, t_ie_dest,
-		tipo_doc_dest, ie_dest, cnpj_dest, rua_dest, num_e_dest,
-		comp_dest, bairro_dest, 
-		uf_dest, mun_dest, id_mun_dest, id_uf_dest, cep_dest, 
-		nfe->destinatario);
-	return 0;
+	nfe->emitente = emitente;
+	nfe->destinatario = destinatario;
+	nfe->protocolo = protocolo;
+
+	if(!protocolo){
+		nfe->protocolo = new_protocolo();
+	}
+
+  set_chave(nfe);
+  return 0;
 }
 
-static void free_endereco(ENDERECO *e){
-	free(e->pais);
-	free(e->municipio);
+static void free_pais(PAIS *e){
+	free(e);
 }
+
+static void free_uf(UF *e){
+	free_pais(e->pais);
+	free(e);
+}
+
+static void free_municipio(MUNICIPIO *e){
+	free_uf(e->uf);
+	free(e);
+}
+void free_endereco(ENDERECO *e){
+	free(e->municipio);
+	free(e);
+}
+
 void free_emitente(EMITENTE *e){
 	free_endereco(e->endereco);
 	free(e);
