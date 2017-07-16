@@ -63,9 +63,9 @@
  *
  * */
 typedef enum indPag_t {
-  A_VISTA = 0,
-  A_PRAZO = 1,
-   OUTROS = 2
+	A_VISTA = 0,
+	A_PRAZO = 1,
+	OUTROS = 2
 }indPag  ;
 
  typedef enum  Mod_t {
