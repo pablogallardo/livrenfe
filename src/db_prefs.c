@@ -78,7 +78,7 @@ int set_prefs_urls(PREFS_URLS *urls){
 		sql = sqlite3_mprintf("UPDATE urls SET url_prod = %Q,\
 			url_cert = %Q WHERE id_url = %d;",
 			urls->recepcaoevento_prod, 
-			urls->recepcaoevento_cert, 1);
+			urls->recepcaoevento_cert, SEFAZ_RECEPCAO_EVENTO);
 		db_exec(sql, &err);
 		if(err){
 			fprintf(stderr, "livrenfe: Error: %s", err);
@@ -87,7 +87,7 @@ int set_prefs_urls(PREFS_URLS *urls){
 		sql = sqlite3_mprintf("UPDATE urls SET url_prod = %Q,\
 			url_cert = %Q WHERE id_url = %d;",
 			urls->nfeconsultacadastro_prod, 
-			urls->nfeconsultacadastro_cert, 2);
+			urls->nfeconsultacadastro_cert, SEFAZ_NFE_CONSULTA_CADASTRO);
 		db_exec(sql, &err);
 		if(err){
 			fprintf(stderr, "livrenfe: Error: %s", err);
@@ -96,7 +96,7 @@ int set_prefs_urls(PREFS_URLS *urls){
 		sql = sqlite3_mprintf("UPDATE urls SET url_prod = %Q,\
 			url_cert = %Q WHERE id_url = %d;",
 			urls->nfeinutilizacao_prod, 
-			urls->nfeinutilizacao_cert, 3);
+			urls->nfeinutilizacao_cert, SEFAZ_NFE_INUTILIZACAO);
 		db_exec(sql, &err);
 		if(err){
 			fprintf(stderr, "livrenfe: Error: %s", err);
@@ -105,7 +105,7 @@ int set_prefs_urls(PREFS_URLS *urls){
 		sql = sqlite3_mprintf("UPDATE urls SET url_prod = %Q,\
 			url_cert = %Q WHERE id_url = %d;",
 			urls->nfeconsultaprotocolo_prod, 
-			urls->nfeconsultaprotocolo_cert, 4);
+			urls->nfeconsultaprotocolo_cert, SEFAZ_NFE_CONSULTA_PROTOCOLO);
 		db_exec(sql, &err);
 		if(err){
 			fprintf(stderr, "livrenfe: Error: %s", err);
@@ -114,7 +114,7 @@ int set_prefs_urls(PREFS_URLS *urls){
 		sql = sqlite3_mprintf("UPDATE urls SET url_prod = %Q,\
 			url_cert = %Q WHERE id_url = %d;",
 			urls->nfestatusservico_prod, 
-			urls->nfestatusservico_cert, 5);
+			urls->nfestatusservico_cert, SEFAZ_NFE_STATUS_SERVICO);
 		db_exec(sql, &err);
 		if(err){
 			fprintf(stderr, "livrenfe: Error: %s", err);
@@ -123,7 +123,7 @@ int set_prefs_urls(PREFS_URLS *urls){
 		sql = sqlite3_mprintf("UPDATE urls SET url_prod = %Q,\
 			url_cert = %Q WHERE id_url = %d;",
 			urls->nfeautorizacao_prod, 
-			urls->nfeautorizacao_cert, 6);
+			urls->nfeautorizacao_cert, SEFAZ_NFE_AUTORIZACAO);
 		db_exec(sql, &err);
 		if(err){
 			fprintf(stderr, "livrenfe: Error: %s", err);
@@ -132,7 +132,7 @@ int set_prefs_urls(PREFS_URLS *urls){
 		sql = sqlite3_mprintf("UPDATE urls SET url_prod = %Q,\
 			url_cert = %Q WHERE id_url = %d;",
 			urls->nferetautorizacao_prod, 
-			urls->nferetautorizacao_cert, 7);
+			urls->nferetautorizacao_cert, SEFAZ_NFE_RET_AUTORIZACAO);
 		db_exec(sql, &err);
 		if(err){
 			fprintf(stderr, "livrenfe: Error: %s", err);
