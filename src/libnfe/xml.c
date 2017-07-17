@@ -103,9 +103,9 @@ xmlNodePtr get_xml_node(xmlDocPtr doc, char *xpath){
 	result = getnodeset(doc, (xmlChar*)xpath);
 	if(result) {
 		nodeset = result->nodesetval;
-		node =  xmlCopyNode(nodeset->nodeTab[0], 1);
+		return nodeset->nodeTab[0];
 	}
 	//xmlFreeDoc(doc);
 	//xmlCleanupParser();
-	return node;
+	return NULL;
 }
