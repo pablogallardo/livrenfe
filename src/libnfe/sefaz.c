@@ -63,7 +63,7 @@ static int sefaz_response_protocolos(LOTE *lote, xmlDocPtr doc){
 		int cStat;
 		NFE *n = it->nfe;
 		char *xp = malloc(sizeof(char) * 100);
-		sprintf(xp, "//nfe:protNFe/nfe:infProt[nfe:chNFe='%s']/nfe:cStat", 
+		sprintf(xp, "nfe:protNFe/nfe:infProt[nfe:chNFe='%s']/nfe:cStat", 
 			n->idnfe->chave);
 		status = get_xml_element(doc, xp);
 		if(status == NULL){
@@ -75,18 +75,18 @@ static int sefaz_response_protocolos(LOTE *lote, xmlDocPtr doc){
 		xmlFree(status);
 		n->protocolo->cod_status = cStat;
 
-		sprintf(xp, "//nfe:protNFe/nfe:infProt[nfe:chNFe='%s']/nfe:xMotivo", 
+		sprintf(xp, "nfe:protNFe/nfe:infProt[nfe:chNFe='%s']/nfe:xMotivo", 
 			n->idnfe->chave);
 		motivo = get_xml_element(doc, xp);
 		n->protocolo->xmot = strdup(motivo);
 		xmlFree(motivo);
-		if(cStat == 135 || cStat == 136){
+		if(cStat == 100){
 			char *nProt;
-			sprintf(xp, "//nfe:protNFe/nfe:infProt[nfe:chNFe='%s']/nfe:nProt", 
+			sprintf(xp, "nfe:protNFe/nfe:infProt[nfe:chNFe='%s']/nfe:nProt", 
 				n->idnfe->chave);
 			nProt = get_xml_element(doc, xp);
 			n->protocolo->numero = strdup(nProt);
-			sprintf(xp, "//nfe:protNFe/nfe:infProt[nfe:chNFe='%s']/..", 
+			sprintf(xp, "nfe:protNFe/nfe:infProt[nfe:chNFe='%s']/..", 
 				n->idnfe->chave);
 			char *xml_prot = get_xml_subtree(doc, xp);
 			n->protocolo->xml = strdup(xml_prot);
@@ -108,7 +108,7 @@ static int sefaz_response_eventos(LOTE_EVENTO *lote, xmlDocPtr doc){
 		EVENTO *e = it->evento;
 		NFE *n = e->nfe;
 		char *xp = malloc(sizeof(char) * 100);
-		sprintf(xp, "//nfe:retEvento/nfe:infEvento[nfe:chNFe='%s']/nfe:cStat", 
+		sprintf(xp, "nfe:retEvento/nfe:infEvento[nfe:chNFe='%s']/nfe:cStat", 
 			n->idnfe->chave);
 		status = get_xml_element(doc, xp);
 		if(status == NULL){
@@ -120,18 +120,18 @@ static int sefaz_response_eventos(LOTE_EVENTO *lote, xmlDocPtr doc){
 		xmlFree(status);
 		e->cStat = cStat;
 
-		sprintf(xp, "//nfe:retEvento/nfe:infEvento[nfe:chNFe='%s']/nfe:xMotivo", 
+		sprintf(xp, "nfe:retEvento/nfe:infEvento[nfe:chNFe='%s']/nfe:xMotivo", 
 			n->idnfe->chave);
 		motivo = get_xml_element(doc, xp);
 		e->xmot = strdup(motivo);
 		xmlFree(motivo);
-		if(cStat == 100){
+		if(cStat == 135 || cStat == 136){
 			char *nProt;
-			sprintf(xp, "//nfe:protNFe/nfe:infProt[nfe:chNFe='%s']/nfe:nProt", 
+			sprintf(xp, "nfe:protNFe/nfe:infProt[nfe:chNFe='%s']/nfe:nProt", 
 				n->idnfe->chave);
 			nProt = get_xml_element(doc, xp);
 			e->protocolo = strdup(nProt);
-			sprintf(xp, "//nfe:protNFe/nfe:infProt[nfe:chNFe='%s']/..", 
+			sprintf(xp, "nfe:protNFe/nfe:infProt[nfe:chNFe='%s']/..", 
 				n->idnfe->chave);
 			char *xml_prot = get_xml_subtree(doc, xp);
 			e->xml_response = strdup(xml_prot);

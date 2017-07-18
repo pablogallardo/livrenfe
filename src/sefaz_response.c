@@ -24,6 +24,7 @@
 #include "prefs.h"
 #include "crypto_interface.h"
 #include <libnfe/nfe.h>
+#include <libnfe/libnfe.h>
 #include <libnfe/sefaz.h>
 #include <gtk/gtk.h>
 #include <openssl/evp.h>
@@ -65,10 +66,12 @@ static void *sefaz_thread(void *arg){
 			pKey, cert, &msg);
 		cons_lote(sr->lote, urls->nferetautorizacao, ambiente, 
 			pKey, cert, &msg);
+		db_save_lote(sr->lote);
 
 	} else if(sr->lote_evento){
 		send_lote_evento(sr->lote_evento, urls->nfeconsultaprotocolo, 
 			ambiente, pKey, cert, &msg);
+		db_save_lote_evento(sr->lote_evento);
 	} else {
 		get_status_servico(ambiente, urls->nfestatusservico, 35, 
 			pKey, cert, &msg);
