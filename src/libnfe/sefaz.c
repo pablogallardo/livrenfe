@@ -86,7 +86,7 @@ static int sefaz_response_protocolos(LOTE *lote, xmlDocPtr doc){
 				n->idnfe->chave);
 			nProt = get_xml_element(doc, xp);
 			n->protocolo->numero = strdup(nProt);
-			sprintf(xp, "nfe:protNFe/nfe:infProt[nfe:chNFe='%s']/..", 
+			sprintf(xp, "//nfe:protNFe/nfe:infProt[nfe:chNFe='%s']/..", 
 				n->idnfe->chave);
 			char *xml_prot = get_xml_subtree(doc, xp);
 			n->protocolo->xml = strdup(xml_prot);
@@ -131,7 +131,7 @@ static int sefaz_response_eventos(LOTE_EVENTO *lote, xmlDocPtr doc){
 				n->idnfe->chave);
 			nProt = get_xml_element(doc, xp);
 			e->protocolo = strdup(nProt);
-			sprintf(xp, "nfe:protNFe/nfe:infProt[nfe:chNFe='%s']/..", 
+			sprintf(xp, "//nfe:protNFe/nfe:infProt[nfe:chNFe='%s']/..", 
 				n->idnfe->chave);
 			char *xml_prot = get_xml_subtree(doc, xp);
 			e->xml_response = strdup(xml_prot);
