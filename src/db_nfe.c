@@ -643,7 +643,8 @@ DESTINATARIO *get_destinatario_by_doc(const char *doc){
 	t_ie = sqlite3_column_int(stmt, TIPO_IE);
 
 	nome = strdup((char*)sqlite3_column_text(stmt, NOME));
-	ie = strdup((char*)sqlite3_column_text(stmt, IE));
+	ie = sqlite3_column_text(stmt, IE)? 
+		strdup((char*)sqlite3_column_text(stmt, IE)) : NULL;
 	cnpj = strdup((char*)sqlite3_column_text(stmt, CNPJ));
 	rua = strdup((char*)sqlite3_column_text(stmt, RUA));
 	bairro = strdup((char*)sqlite3_column_text(stmt, BAIRRO));
