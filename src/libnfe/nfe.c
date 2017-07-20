@@ -337,6 +337,11 @@ int add_item(NFE *nfe, ITEM *item){
 	return 0;
 }
 
+int rm_item(NFE *nfe, ITEM *item){
+	//TODO
+	return 0;
+}
+
 int add_nfe(LOTE *lote, NFE *nfe){
 	LOTE_ITEM *i = new_lote_item();
 	LOTE_ITEM *aux;

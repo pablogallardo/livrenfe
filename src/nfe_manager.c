@@ -246,6 +246,8 @@ static void item_manager_activate(GtkButton *b, gpointer win){
 
 	iman = item_manager_new(NFE_MANAGER(win));
 	iman->nfe = (NFE_MANAGER(win))->nfe;
+	iman->item = new_item();
+	add_item(iman->nfe, iman->item);
 	gtk_window_present(GTK_WINDOW(iman));
 	g_signal_connect(iman, "destroy", G_CALLBACK(list_items), win);
 }
