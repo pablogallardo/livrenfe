@@ -94,7 +94,9 @@ static int set_item(GtkButton *b, GtkWidget *iman){
 	if(check_fields(iman))
 		return -EINVFIELD;
 
-	ITEM *item = ITEM_MANAGER(iman)->item;
+	ITEM *item = ITEM_MANAGER(iman)->item?
+		ITEM_MANAGER(iman)->item : new_item();
+
 	NFE *nfe = (ITEM_MANAGER(iman))->nfe;
 	inst_produto(0, gtk_entry_get_text(priv->codigo),
 		gtk_entry_get_text(priv->descricao),
@@ -116,13 +118,11 @@ static int set_item(GtkButton *b, GtkWidget *iman){
 	item->valor = atof(gtk_entry_get_text(priv->valor));
 	item->quantidade = atoi(gtk_entry_get_text(priv->quantidade));
 	item->ordem = (ITEM_MANAGER(iman))->nfe->q_itens + 1; 
+	if(!ITEM_MANAGER(iman)->item){
+		add_item(nfe, item);
+	}
 	gtk_widget_destroy(iman);
 	return 0;
-}
-
-static void on_cancel(GtkButton *btn, ItemManager *iman){
-	rm_item(iman->nfe, iman->item);
-	gtk_widget_destroy(GTK_WIDGET(iman));
 }
 
 static void list_icms_regime(GtkComboBox *t){
@@ -277,8 +277,6 @@ static void item_manager_init(ItemManager *iman){
 	list_cofins_st(priv->pis_situacao_tributaria);
 	list_ipi_st(priv->ipi_situacao_tributaria);
 	g_signal_connect(priv->ok_btn, "clicked", G_CALLBACK(set_item),
-			iman);
-	g_signal_connect(priv->cancel_btn, "clicked", G_CALLBACK(on_cancel),
 			iman);
 }
 
