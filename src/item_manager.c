@@ -142,6 +142,9 @@ static void inst_item_manager(gpointer p, ItemManager *iman){
 		gtk_entry_set_text(priv->descricao, p->descricao);
 		gtk_entry_set_text(priv->unidade, p->unidade_comercial);
 		gtk_entry_set_text(priv->valor, dtoa(p->valor));
+		gtk_entry_set_text(priv->quantidade, itoa(i->quantidade));
+		gtk_entry_set_text(priv->ncm, itoa(p->ncm));
+		gtk_entry_set_text(priv->cfop, itoa(p->cfop));
 	}
 }
 
