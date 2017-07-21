@@ -338,7 +338,21 @@ int add_item(NFE *nfe, ITEM *item){
 }
 
 int rm_item(NFE *nfe, ITEM *item){
-	//TODO
+	ITEM *i = nfe->itens;
+	if(item == NULL){
+		return 0;
+	}
+	if(i == item){
+		nfe->itens = i->pointer;
+		return 1;
+	}
+	while(i != NULL){
+		if(i->pointer == item){
+			i->pointer = item->pointer;
+			return 1;
+		}
+		i = i->pointer;
+	}
 	return 0;
 }
 
