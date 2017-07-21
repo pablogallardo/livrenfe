@@ -33,6 +33,8 @@ extern time_t strtotime(const char *);
 
 extern char *itoa(int);
 
+extern char *dtoa(double);
+
 extern char *strrev(char *);
 
 extern char *timef(time_t t, char *format, int chars);

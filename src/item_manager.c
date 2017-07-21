@@ -125,6 +125,26 @@ static int set_item(GtkButton *b, GtkWidget *iman){
 	return 0;
 }
 
+static void inst_item_manager(gpointer p, ItemManager *iman){
+	ItemManagerPrivate *priv;
+	priv = item_manager_get_instance_private(iman);
+
+	ITEM *i = iman->item;
+	if(i){
+		PRODUTO *p = i->produto;
+		IMPOSTO *imp = i->imposto;
+		ICMS *icms = imp->icms;
+		PIS *pis = imp->pis;
+		COFINS *cofins = imp->cofins;
+		IPI *ipi = imp->ipi;
+
+		gtk_entry_set_text(priv->codigo, p->codigo);
+		gtk_entry_set_text(priv->descricao, p->descricao);
+		gtk_entry_set_text(priv->unidade, p->unidade_comercial);
+		gtk_entry_set_text(priv->valor, dtoa(p->valor));
+	}
+}
+
 static void list_icms_regime(GtkComboBox *t){
 	GtkListStore *list_store;
 	GtkTreeIter iter;
@@ -277,6 +297,8 @@ static void item_manager_init(ItemManager *iman){
 	list_cofins_st(priv->pis_situacao_tributaria);
 	list_ipi_st(priv->ipi_situacao_tributaria);
 	g_signal_connect(priv->ok_btn, "clicked", G_CALLBACK(set_item),
+			iman);
+	g_signal_connect(iman, "show", G_CALLBACK(inst_item_manager),
 			iman);
 }
 
