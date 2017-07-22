@@ -105,7 +105,9 @@ static int set_item(GtkButton *b, GtkWidget *iman){
 		gtk_entry_get_text(priv->unidade),
 		atof(gtk_entry_get_text(priv->valor)),
 		item->produto);
-	inst_icms(1, 1, atof(gtk_entry_get_text(priv->icms_aliquota)),
+	inst_icms(atoi(gtk_combo_box_get_active_id(priv->icms_regime)),
+		atoi(gtk_combo_box_get_active_id(priv->icms_situacao_tributaria)), 
+		atof(gtk_entry_get_text(priv->icms_aliquota)),
 		atof(gtk_entry_get_text(priv->icms_credito_aproveitado)),
 		item->imposto->icms);
 	const char *ipi_situacao_tributaria = gtk_combo_box_get_active_id(priv->ipi_situacao_tributaria);
@@ -145,6 +147,30 @@ static void inst_item_manager(gpointer p, ItemManager *iman){
 		gtk_entry_set_text(priv->quantidade, itoa(i->quantidade));
 		gtk_entry_set_text(priv->ncm, itoa(p->ncm));
 		gtk_entry_set_text(priv->cfop, itoa(p->cfop));
+
+		//ICMS
+		gtk_combo_box_set_active_id(priv->icms_regime, 
+			itoa(icms->origem));
+		gtk_combo_box_set_active_id(priv->icms_situacao_tributaria, 
+			itoa(icms->tipo));
+		gtk_entry_set_text(priv->icms_aliquota, dtoa(icms->aliquota));
+		gtk_entry_set_text(priv->icms_credito_aproveitado, 
+			dtoa(icms->valor));
+
+		//COFINS
+		gtk_combo_box_set_active_id(priv->cofins_situacao_tributaria, 
+			"8");
+
+		//PIS
+		gtk_combo_box_set_active_id(priv->pis_situacao_tributaria, 
+			"8");
+
+		//IPI
+		gtk_combo_box_set_active_id(priv->ipi_situacao_tributaria, 
+			itoa(ipi->sit_trib));
+		gtk_entry_set_text(priv->ipi_classe, ipi->classe);
+		gtk_entry_set_text(priv->ipi_codigo, ipi->codigo);
+
 	}
 }
 
