@@ -288,6 +288,10 @@ static void list_cofins_st(GtkComboBox *t){
 	gtk_combo_box_set_id_column(t, ID);
 }
 
+static void on_item_manager_destroy(gpointer btn, GtkWidget *iman){
+	gtk_widget_destroy(GTK_WIDGET(iman));
+}
+
 static void item_manager_init(ItemManager *iman){
 	ItemManagerPrivate *priv;
 
@@ -302,6 +306,8 @@ static void item_manager_init(ItemManager *iman){
 	g_signal_connect(priv->ok_btn, "clicked", G_CALLBACK(set_item),
 			iman);
 	g_signal_connect(iman, "show", G_CALLBACK(inst_item_manager),
+			iman);
+	g_signal_connect(priv->cancel_btn, "clicked", G_CALLBACK(on_item_manager_destroy),
 			iman);
 }
 
