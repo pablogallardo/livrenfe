@@ -313,7 +313,7 @@ int inst_item(double valor, double quantidade,
 		char *ipi_codigo, char *descricao, char *unidade, ITEM *i){
 	inst_produto(id_produto, cod_produto, descricao, ncm, cfop, unidade, 
 		valor, i->produto);
-	inst_icms(ordem, icms_tipo, icms_aliquota, icms_valor,i->imposto->icms);
+	inst_icms(icms_origem, icms_tipo, icms_aliquota, icms_valor,i->imposto->icms);
 	inst_ipi(ipi_sit_trib, ipi_classe, ipi_codigo, i->imposto->ipi);
 	i->ordem = ordem;
 	i->quantidade = quantidade;

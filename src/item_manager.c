@@ -105,7 +105,7 @@ static int set_item(GtkButton *b, GtkWidget *iman){
 		gtk_entry_get_text(priv->unidade),
 		atof(gtk_entry_get_text(priv->valor)),
 		item->produto);
-	inst_icms(atoi(gtk_combo_box_get_active_id(priv->icms_regime)),
+	inst_icms(atoi(gtk_combo_box_get_active_id(priv->icms_origem)),
 		atoi(gtk_combo_box_get_active_id(priv->icms_situacao_tributaria)), 
 		atof(gtk_entry_get_text(priv->icms_aliquota)),
 		atof(gtk_entry_get_text(priv->icms_credito_aproveitado)),
@@ -150,6 +150,8 @@ static void inst_item_manager(gpointer p, ItemManager *iman){
 
 		//ICMS
 		gtk_combo_box_set_active_id(priv->icms_regime, 
+			"1");
+		gtk_combo_box_set_active_id(priv->icms_origem, 
 			itoa(icms->origem));
 		gtk_combo_box_set_active_id(priv->icms_situacao_tributaria, 
 			itoa(icms->tipo));
