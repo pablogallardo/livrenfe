@@ -54,6 +54,16 @@ char *itoa(int i){
 	return s;
 }
 
+char *dtoa(double d){
+	char *s = malloc(10);
+	char *formated;
+	sprintf(s, "%f", d);
+
+	formated = str_replace(".", ",", s);
+	free(s);
+	return formated;
+}
+
 char *strrev(char *s){
 	if(!s)
 		return NULL;
@@ -95,7 +105,7 @@ char *str_replace(char *search , char *replace , char *subject){
     //Final size
     c = ( strlen(replace) - search_size )*c + strlen(subject);
     //New subject with new size
-    new_subject = malloc(c);
+    new_subject = malloc(sizeof(char) * (c + 5));
     //Set it to blank
     strcpy(new_subject , "");
     //The start position

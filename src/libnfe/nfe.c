@@ -337,6 +337,25 @@ int add_item(NFE *nfe, ITEM *item){
 	return 0;
 }
 
+int rm_item(NFE *nfe, ITEM *item){
+	ITEM *i = nfe->itens;
+	if(item == NULL){
+		return 0;
+	}
+	if(i == item){
+		nfe->itens = i->pointer;
+		return 1;
+	}
+	while(i != NULL){
+		if(i->pointer == item){
+			i->pointer = item->pointer;
+			return 1;
+		}
+		i = i->pointer;
+	}
+	return 0;
+}
+
 int add_nfe(LOTE *lote, NFE *nfe){
 	LOTE_ITEM *i = new_lote_item();
 	LOTE_ITEM *aux;

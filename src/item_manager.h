@@ -36,6 +36,7 @@ ItemManager *item_manager_new(NFEManager *win);
 struct _ItemManager{
 	GtkDialog parent;
 	NFE *nfe;
+	ITEM *item;
 };
 
 #endif

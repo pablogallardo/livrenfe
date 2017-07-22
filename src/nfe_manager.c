@@ -105,10 +105,10 @@ static GtkListStore *get_item_list(NFE *nfe){
 	GtkTreeIter iter;
 	ITEM *i;
 
-	enum{ COD_PRODUTO, DESCRICAO, QTD, VALOR, N_COLS };
+	enum{ COD_PRODUTO, DESCRICAO, QTD, VALOR, POINTER, N_COLS };
 
 	list_store = gtk_list_store_new(N_COLS, G_TYPE_STRING, G_TYPE_STRING,
-		G_TYPE_INT, G_TYPE_FLOAT);
+		G_TYPE_INT, G_TYPE_FLOAT, G_TYPE_POINTER);
 	i = nfe->itens;
 	while(i){
 		gtk_list_store_append(list_store, &iter);
@@ -116,7 +116,8 @@ static GtkListStore *get_item_list(NFE *nfe){
 			COD_PRODUTO, i->produto->codigo, 
 			DESCRICAO, i->produto->descricao,
 			QTD, i->quantidade,
-			VALOR, i->valor, -1);
+			VALOR, i->valor,
+			POINTER, i, -1);
 		
 		i = i->pointer;
 	}
@@ -240,6 +241,24 @@ static void list_items(gpointer p, NFEManager *win){
 		gtk_tree_view_append_column (GTK_TREE_VIEW (priv->treeview), col_valor);
 	}
 }
+
+static void view_on_row_activated(GtkTreeView *t, GtkTreePath *path, 
+		GtkTreeViewColumn *col, gpointer win){
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	model = gtk_tree_view_get_model(t);
+	if(gtk_tree_model_get_iter(model, &iter, path)){
+		ITEM *i;
+		gtk_tree_model_get(model, &iter, 4, &i, -1);
+		ItemManager *iman;
+		iman = item_manager_new(NFE_MANAGER(win));
+		iman->nfe = (NFE_MANAGER(win))->nfe;
+		iman->item = i;
+		gtk_window_present(GTK_WINDOW(iman));
+		g_signal_connect(iman, "destroy", G_CALLBACK(list_items), win);
+	}
+}
+
 
 static void item_manager_activate(GtkButton *b, gpointer win){
 	ItemManager *iman;
@@ -394,9 +413,6 @@ static void inst_nfe_manager(gpointer p, NFEManager *nman){
 			gtk_entry_set_text(priv->dh_saida, timef(*idnfe->dh_saida,
 				"%d/%m/%Y %H:%M:%S", 19));
 		}
-		/**TODO idnfe->dh_emis = strtotime(gtk_entry_get_text(priv->dh_emis));
-		time_t saida = strtotime(gtk_entry_get_text(priv->dh_saida));
-		idnfe->dh_saida = saida == -1? NULL:&saida; */
 		gtk_combo_box_set_active_id(priv->uf, 
 			itoa(idnfe->municipio->uf->cUF));
 		gtk_combo_box_set_active_id(priv->municipio, 
@@ -449,6 +465,8 @@ static void nfe_manager_init(NFEManager *nman){
 	g_signal_connect(G_OBJECT(priv->uf), "changed", G_CALLBACK(list_municipios), priv->municipio);
 	g_signal_connect(G_OBJECT(priv->uf_destinatario), "changed", G_CALLBACK(list_municipios),
 		priv->municipio_destinatario);
+	g_signal_connect(priv->treeview, "row-activated",
+			G_CALLBACK(view_on_row_activated), nman);
 	list_uf(priv->uf);
 	list_uf(priv->uf_destinatario);
 	list_forma_pagamento(priv->forma_pagamento);

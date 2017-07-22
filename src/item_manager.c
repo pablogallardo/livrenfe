@@ -94,7 +94,9 @@ static int set_item(GtkButton *b, GtkWidget *iman){
 	if(check_fields(iman))
 		return -EINVFIELD;
 
-	ITEM *item = new_item();
+	ITEM *item = ITEM_MANAGER(iman)->item?
+		ITEM_MANAGER(iman)->item : new_item();
+
 	NFE *nfe = (ITEM_MANAGER(iman))->nfe;
 	inst_produto(0, gtk_entry_get_text(priv->codigo),
 		gtk_entry_get_text(priv->descricao),
@@ -103,7 +105,9 @@ static int set_item(GtkButton *b, GtkWidget *iman){
 		gtk_entry_get_text(priv->unidade),
 		atof(gtk_entry_get_text(priv->valor)),
 		item->produto);
-	inst_icms(1, 1, atof(gtk_entry_get_text(priv->icms_aliquota)),
+	inst_icms(atoi(gtk_combo_box_get_active_id(priv->icms_regime)),
+		atoi(gtk_combo_box_get_active_id(priv->icms_situacao_tributaria)), 
+		atof(gtk_entry_get_text(priv->icms_aliquota)),
 		atof(gtk_entry_get_text(priv->icms_credito_aproveitado)),
 		item->imposto->icms);
 	const char *ipi_situacao_tributaria = gtk_combo_box_get_active_id(priv->ipi_situacao_tributaria);
@@ -116,9 +120,58 @@ static int set_item(GtkButton *b, GtkWidget *iman){
 	item->valor = atof(gtk_entry_get_text(priv->valor));
 	item->quantidade = atoi(gtk_entry_get_text(priv->quantidade));
 	item->ordem = (ITEM_MANAGER(iman))->nfe->q_itens + 1; 
-	add_item(nfe, item);
+	if(!ITEM_MANAGER(iman)->item){
+		add_item(nfe, item);
+	}
 	gtk_widget_destroy(iman);
 	return 0;
+}
+
+static void inst_item_manager(gpointer p, ItemManager *iman){
+	ItemManagerPrivate *priv;
+	priv = item_manager_get_instance_private(iman);
+
+	ITEM *i = iman->item;
+	if(i){
+		PRODUTO *p = i->produto;
+		IMPOSTO *imp = i->imposto;
+		ICMS *icms = imp->icms;
+		PIS *pis = imp->pis;
+		COFINS *cofins = imp->cofins;
+		IPI *ipi = imp->ipi;
+
+		gtk_entry_set_text(priv->codigo, p->codigo);
+		gtk_entry_set_text(priv->descricao, p->descricao);
+		gtk_entry_set_text(priv->unidade, p->unidade_comercial);
+		gtk_entry_set_text(priv->valor, dtoa(p->valor));
+		gtk_entry_set_text(priv->quantidade, itoa(i->quantidade));
+		gtk_entry_set_text(priv->ncm, itoa(p->ncm));
+		gtk_entry_set_text(priv->cfop, itoa(p->cfop));
+
+		//ICMS
+		gtk_combo_box_set_active_id(priv->icms_regime, 
+			itoa(icms->origem));
+		gtk_combo_box_set_active_id(priv->icms_situacao_tributaria, 
+			itoa(icms->tipo));
+		gtk_entry_set_text(priv->icms_aliquota, dtoa(icms->aliquota));
+		gtk_entry_set_text(priv->icms_credito_aproveitado, 
+			dtoa(icms->valor));
+
+		//COFINS
+		gtk_combo_box_set_active_id(priv->cofins_situacao_tributaria, 
+			"8");
+
+		//PIS
+		gtk_combo_box_set_active_id(priv->pis_situacao_tributaria, 
+			"8");
+
+		//IPI
+		gtk_combo_box_set_active_id(priv->ipi_situacao_tributaria, 
+			itoa(ipi->sit_trib));
+		gtk_entry_set_text(priv->ipi_classe, ipi->classe);
+		gtk_entry_set_text(priv->ipi_codigo, ipi->codigo);
+
+	}
 }
 
 static void list_icms_regime(GtkComboBox *t){
@@ -261,6 +314,10 @@ static void list_cofins_st(GtkComboBox *t){
 	gtk_combo_box_set_id_column(t, ID);
 }
 
+static void on_item_manager_destroy(gpointer btn, GtkWidget *iman){
+	gtk_widget_destroy(GTK_WIDGET(iman));
+}
+
 static void item_manager_init(ItemManager *iman){
 	ItemManagerPrivate *priv;
 
@@ -273,6 +330,10 @@ static void item_manager_init(ItemManager *iman){
 	list_cofins_st(priv->pis_situacao_tributaria);
 	list_ipi_st(priv->ipi_situacao_tributaria);
 	g_signal_connect(priv->ok_btn, "clicked", G_CALLBACK(set_item),
+			iman);
+	g_signal_connect(iman, "show", G_CALLBACK(inst_item_manager),
+			iman);
+	g_signal_connect(priv->cancel_btn, "clicked", G_CALLBACK(on_item_manager_destroy),
 			iman);
 }
 
