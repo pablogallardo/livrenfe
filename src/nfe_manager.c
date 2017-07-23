@@ -295,6 +295,13 @@ static int check_fields(GtkWidget *nman){
 	return 0;
 }
 
+static void set_read_only(NFEManager *nman){
+	NFEManagerPrivate *priv;
+	int rc;
+
+	priv = nfe_manager_get_instance_private(nman);
+}
+
 static int save_nfe(GtkButton *b, GtkWidget *win){
 	NFEManagerPrivate *priv;
 	if(check_fields(win))
