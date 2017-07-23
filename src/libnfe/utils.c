@@ -57,7 +57,7 @@ char *itoa(int i){
 char *dtoa(double d){
 	char *s = malloc(10);
 	char *formated;
-	sprintf(s, "%f", d);
+	sprintf(s, "%.2f", d);
 
 	formated = str_replace(".", ",", s);
 	free(s);
@@ -105,16 +105,17 @@ char *str_replace(char *search , char *replace , char *subject){
     //Final size
     c = ( strlen(replace) - search_size )*c + strlen(subject);
     //New subject with new size
-    new_subject = malloc(sizeof(char) * (c + 5));
+    new_subject = malloc(sizeof(char) * (c + 1));
     //Set it to blank
     strcpy(new_subject , "");
     //The start position
     old = subject;
     for(p = strstr(subject , search) ; p != NULL ; p = strstr(p + search_size , search)){
+    	char *aux = new_subject + strlen(new_subject);
         //move ahead and copy some text from original subject , from a certain position
-        strncpy(new_subject + strlen(new_subject) , old , p - old);
+        strncpy(aux , old , p - old);
         //move ahead and copy the replacement text
-        strcpy(new_subject + strlen(new_subject) , replace);
+        strcpy(aux + (p - old) , replace);
         //The new start position after this search match
         old = p + search_size;
     }
