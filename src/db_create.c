@@ -122,6 +122,7 @@ CREATE TABLE urls (id_url integer, service varchar(200), url_prod varchar(255),\
 	CONSTRAINT url_pk PRIMARY KEY (id_url));";
 
 const char *insert_sql = "INSERT INTO paises (id_pais, nome) VALUES (1, 'Brasil');\
+		    BEGIN TRANSACTION;\
 		    INSERT INTO municipios (id_municipio, id_uf, nome, id_pais) VALUES ('1100015', 'RO', 'Alta Floresta D''Oeste', 1);\
 		    INSERT INTO municipios (id_municipio, id_uf, nome, id_pais) VALUES ('1100379', 'RO', 'Alto Alegre dos Parecis', 1);\
 		    INSERT INTO municipios (id_municipio, id_uf, nome, id_pais) VALUES ('1100403', 'RO', 'Alto Paraíso', 1);\
@@ -5687,6 +5688,7 @@ const char *insert_sql = "INSERT INTO paises (id_pais, nome) VALUES (1, 'Brasil'
 		    INSERT INTO municipios (id_municipio, id_uf, nome, id_pais) VALUES ('5222203', 'GO', 'Vila Boa', 1);\
 		    INSERT INTO municipios (id_municipio, id_uf, nome, id_pais) VALUES ('5222302', 'GO', 'Vila Propício', 1);\
 		    INSERT INTO municipios (id_municipio, id_uf, nome, id_pais) VALUES ('5300108', 'DF', 'Brasília', 1);\
+		    COMMIT TRANSACTION;\
 		    INSERT INTO uf (id_uf, nome, cod_ibge) SELECT DISTINCT id_uf, id_uf, substr(id_municipio,1,2)\
 		    	FROM municipios;\
 		    INSERT INTO urls (id_url, service, url_prod, url_cert, url_header,\
