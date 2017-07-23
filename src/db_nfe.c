@@ -381,13 +381,14 @@ NFE *get_nfe(int id){
 		*mun_emit, *uf_emit, *nome_dest, *cnpj_dest,
 		*rua_dest, *comp_dest,*bairro_dest, *mun_dest,
 		*uf_dest, *chave, div, *ie_emit, *ie_dest,
-		*inf_ad_fisco, *inf_ad_contrib, *tipo_doc_dest, *protocolo;
+		*inf_ad_fisco, *inf_ad_contrib, *tipo_doc_dest, *protocolo,
+		*xml;
 	nome_mun = uf = nat_op = versao =  nome_emit = 
 		cnpj_emit = rua_emit = comp_emit = bairro_emit =
 		mun_emit = uf_emit = nome_dest = cnpj_dest =
 		rua_dest = comp_dest =bairro_dest = mun_dest =
 		uf_dest = chave = ie_emit = ie_dest = inf_ad_fisco 
-		= inf_ad_contrib = tipo_doc_dest = protocolo = NULL;
+		= inf_ad_contrib = tipo_doc_dest = protocolo = xml = NULL;
 	div = 0;
 
 	enum{
@@ -401,7 +402,7 @@ NFE *get_nfe(int id){
 		CNPJ_DEST, RUA_DEST, COMP_DEST, BAIRRO_DEST, ID_MUN_DEST, 
 		MUN_DEST, ID_UF_DEST, UF_DEST, COD_NFE, NUM_E_EMIT, NUM_E_DEST,
 		IE_DEST, TIPO_DOC_DEST, CEP_DEST, CANCELED, PROTOCOLO, 
-		INF_AD_FISCO, INF_AD_CONTRIB, N_COLS
+		INF_AD_FISCO, INF_AD_CONTRIB, NFE_XML, N_COLS
 	};
 
 	char *sql = sqlite3_mprintf("SELECT n.id_nfe, m.id_municipio, m.nome, u.cod_ibge, u.nome, \
@@ -414,7 +415,7 @@ NFE *get_nfe(int id){
 		d.cnpj, d.rua, d.complemento, d.bairro, m_d.id_municipio, m_d.nome, \
 		u_d.cod_ibge, u_d.nome, n.cod_nfe, e.numero, d.numero, \
 		d.inscricao_estadual, d.tipo_doc, d.cep, n.canceled, n.protocolo,\
-		n.inf_ad_fisco, n.inf_ad_contrib\
+		n.inf_ad_fisco, n.inf_ad_contrib, n.xml\
 		FROM nfe n LEFT JOIN municipios m ON m.id_municipio = n.id_municipio \
 		LEFT JOIN uf u ON u.id_uf = m.id_uf \
 		LEFT JOIN emitentes e ON e.id_emitente = n.id_emitente \
@@ -517,6 +518,10 @@ NFE *get_nfe(int id){
 				inf_ad_contrib = strdup((char*)sqlite3_column_text(stmt,
 					INF_AD_CONTRIB)); 
 			}
+			if(sqlite3_column_type(stmt, NFE_XML) != SQLITE_NULL){
+				xml = strdup((char*)sqlite3_column_text(stmt,
+					NFE_XML)); 
+			}
 		} else if(rc == SQLITE_DONE){
 			break;
 		} else {
@@ -550,6 +555,7 @@ NFE *get_nfe(int id){
 		nat_op, versao, inf_ad_fisco, inf_ad_contrib, NULL,
 		nfe->emitente, nfe->destinatario, nfe->idnfe->municipio,
 		nfe);
+	nfe->xml = xml;
 	get_itens(nfe);
 	return nfe; 
 }
