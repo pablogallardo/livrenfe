@@ -127,11 +127,33 @@ static int set_item(GtkButton *b, GtkWidget *iman){
 	return 0;
 }
 
+static void set_read_only(ItemManagerPrivate *priv){
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->codigo), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->ncm), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->descricao), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->cfop), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->unidade), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->quantidade), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->valor), FALSE);
+
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->icms_regime), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->icms_situacao_tributaria), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->icms_origem), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->icms_aliquota), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->icms_credito_aproveitado), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->cofins_situacao_tributaria), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->pis_situacao_tributaria), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->ipi_situacao_tributaria), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->ipi_classe), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->ipi_codigo), FALSE);
+}
+
 static void inst_item_manager(gpointer p, ItemManager *iman){
 	ItemManagerPrivate *priv;
 	priv = item_manager_get_instance_private(iman);
 
 	ITEM *i = iman->item;
+	NFE *n = iman->nfe;
 	if(i){
 		PRODUTO *p = i->produto;
 		IMPOSTO *imp = i->imposto;
@@ -172,6 +194,9 @@ static void inst_item_manager(gpointer p, ItemManager *iman){
 			itoa(ipi->sit_trib));
 		gtk_entry_set_text(priv->ipi_classe, ipi->classe);
 		gtk_entry_set_text(priv->ipi_codigo, ipi->codigo);
+
+		if(n->xml)
+			set_read_only(priv);
 
 	}
 }
