@@ -295,11 +295,31 @@ static int check_fields(GtkWidget *nman){
 	return 0;
 }
 
-static void set_read_only(NFEManager *nman){
-	NFEManagerPrivate *priv;
-	int rc;
+static void set_read_only(NFEManagerPrivate *priv){
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->num), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->serie), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->dh_emis), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->dh_saida), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->uf), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->municipio), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->nat_op), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->forma_pagamento), FALSE);
 
-	priv = nfe_manager_get_instance_private(nman);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->t_doc), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->doc), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->razao_social), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->ie), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->logradouro), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->numero_endereco), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->complemento), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->bairro), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->cep), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->uf_destinatario), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->municipio_destinatario), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->tipo_contribuinte), FALSE);
+
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->inf_ad_fisco), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->inf_ad_contrib), FALSE);
 }
 
 static int save_nfe(GtkButton *b, GtkWidget *win){
@@ -433,6 +453,9 @@ static void inst_nfe_manager(gpointer p, NFEManager *nman){
 			gtk_entry_set_text(priv->inf_ad_fisco, nfe->inf_ad_fisco);
 		if(nfe->inf_ad_contrib)
 			gtk_entry_set_text(priv->inf_ad_contrib, nfe->inf_ad_contrib);
+
+		if(nfe->xml)
+			set_read_only(priv);
 	}
 }
 
