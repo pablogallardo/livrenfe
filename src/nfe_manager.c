@@ -333,7 +333,7 @@ static int save_nfe(GtkButton *b, GtkWidget *win){
 	PREFS *prefs = get_prefs();
 	NFE *nfe = (NFE_MANAGER(win))->nfe;
 
-	if(nfe->protocolo->numero != NULL){
+	if(nfe->protocolo->numero == NULL){
 		IDNFE *idnfe = nfe->idnfe;
 		DESTINATARIO *destinatario = nfe->destinatario;
 		ENDERECO *endereco = destinatario->endereco;
