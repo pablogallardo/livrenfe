@@ -195,7 +195,7 @@ static void inst_item_manager(gpointer p, ItemManager *iman){
 		gtk_entry_set_text(priv->ipi_classe, ipi->classe);
 		gtk_entry_set_text(priv->ipi_codigo, ipi->codigo);
 
-		if(n->xml)
+		if(n->protocolo->numero)
 			set_read_only(priv);
 
 	}

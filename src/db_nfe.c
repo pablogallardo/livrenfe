@@ -555,7 +555,10 @@ NFE *get_nfe(int id){
 		nat_op, versao, inf_ad_fisco, inf_ad_contrib, NULL,
 		nfe->emitente, nfe->destinatario, nfe->idnfe->municipio,
 		nfe);
+
 	nfe->xml = xml;
+	nfe->protocolo->numero = protocolo;
+
 	get_itens(nfe);
 	return nfe; 
 }

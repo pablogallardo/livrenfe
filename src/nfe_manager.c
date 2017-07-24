@@ -318,6 +318,8 @@ static void set_read_only(NFEManagerPrivate *priv){
 	gtk_widget_set_sensitive(GTK_WIDGET(priv->municipio_destinatario), FALSE);
 	gtk_widget_set_sensitive(GTK_WIDGET(priv->tipo_contribuinte), FALSE);
 
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->novo_item), FALSE);
+
 	gtk_widget_set_sensitive(GTK_WIDGET(priv->inf_ad_fisco), FALSE);
 	gtk_widget_set_sensitive(GTK_WIDGET(priv->inf_ad_contrib), FALSE);
 }
@@ -330,43 +332,47 @@ static int save_nfe(GtkButton *b, GtkWidget *win){
 	priv = nfe_manager_get_instance_private(NFE_MANAGER(win));
 	PREFS *prefs = get_prefs();
 	NFE *nfe = (NFE_MANAGER(win))->nfe;
-	IDNFE *idnfe = nfe->idnfe;
-	DESTINATARIO *destinatario = nfe->destinatario;
-	ENDERECO *endereco = destinatario->endereco;
-	idnfe->serie = atoi(gtk_entry_get_text(priv->serie));
-	idnfe->num_nf = atoi(gtk_entry_get_text(priv->num));
-	idnfe->nat_op = gtk_entry_get_text(priv->nat_op);
-	idnfe->ind_pag = atoi(gtk_combo_box_get_active_id(priv->forma_pagamento));
-	idnfe->mod = MOD_NFe;
-	idnfe->dh_emis = strtotime(gtk_entry_get_text(priv->dh_emis));
-	time_t saida = strtotime(gtk_entry_get_text(priv->dh_saida));
-	idnfe->dh_saida = saida == -1? NULL:&saida;
-	idnfe->municipio->uf->cUF = atoi(gtk_combo_box_get_active_id(priv->uf));
-	idnfe->municipio->cMun = atoi(gtk_combo_box_get_active_id(priv->municipio));
-	idnfe->tipo_ambiente = prefs->ambiente;
 
-	destinatario->tipo_doc = gtk_combo_box_get_active_id(priv->t_doc);
-	destinatario->cnpj = gtk_entry_get_text(priv->doc);
-	destinatario->nome = gtk_entry_get_text(priv->razao_social);
-	destinatario->tipo_ie = atoi(gtk_combo_box_get_active_id(priv->tipo_contribuinte));
-	destinatario->inscricao_estadual= gtk_entry_get_text(priv->ie);
+	if(nfe->protocolo->numero != NULL){
+		IDNFE *idnfe = nfe->idnfe;
+		DESTINATARIO *destinatario = nfe->destinatario;
+		ENDERECO *endereco = destinatario->endereco;
+		idnfe->serie = atoi(gtk_entry_get_text(priv->serie));
+		idnfe->num_nf = atoi(gtk_entry_get_text(priv->num));
+		idnfe->nat_op = gtk_entry_get_text(priv->nat_op);
+		idnfe->ind_pag = atoi(gtk_combo_box_get_active_id(priv->forma_pagamento));
+		idnfe->mod = MOD_NFe;
+		idnfe->dh_emis = strtotime(gtk_entry_get_text(priv->dh_emis));
+		time_t saida = strtotime(gtk_entry_get_text(priv->dh_saida));
+		idnfe->dh_saida = saida == -1? NULL:&saida;
+		idnfe->municipio->uf->cUF = atoi(gtk_combo_box_get_active_id(priv->uf));
+		idnfe->municipio->cMun = atoi(gtk_combo_box_get_active_id(priv->municipio));
+		idnfe->tipo_ambiente = prefs->ambiente;
 
-	endereco->xLgr = gtk_entry_get_text(priv->logradouro);
-	endereco->nro = atoi(gtk_entry_get_text(priv->numero_endereco));
-	endereco->Cpl = gtk_entry_get_text(priv->complemento);
-	endereco->xBairro = gtk_entry_get_text(priv->bairro);
-	endereco->CEP = atoi(gtk_entry_get_text(priv->cep));
-	endereco->municipio->uf->cUF = atoi(gtk_combo_box_get_active_id(priv->uf_destinatario));
-	endereco->municipio->cMun = atoi(gtk_combo_box_get_active_id(priv->municipio_destinatario));
+		destinatario->tipo_doc = gtk_combo_box_get_active_id(priv->t_doc);
+		destinatario->cnpj = gtk_entry_get_text(priv->doc);
+		destinatario->nome = gtk_entry_get_text(priv->razao_social);
+		destinatario->tipo_ie = atoi(gtk_combo_box_get_active_id(priv->tipo_contribuinte));
+		destinatario->inscricao_estadual= gtk_entry_get_text(priv->ie);
 
-	nfe->inf_ad_fisco = gtk_entry_get_text(priv->inf_ad_fisco);
-	nfe->inf_ad_fisco = strlen(nfe->inf_ad_fisco) == 0? 
-		NULL : nfe->inf_ad_fisco;
-	nfe->inf_ad_contrib = gtk_entry_get_text(priv->inf_ad_contrib);
-	nfe->inf_ad_contrib = strlen(nfe->inf_ad_contrib) == 0? 
-		NULL : nfe->inf_ad_contrib;
-	nfe->emitente->id = 1;
-	register_nfe(nfe);
+		endereco->xLgr = gtk_entry_get_text(priv->logradouro);
+		endereco->nro = atoi(gtk_entry_get_text(priv->numero_endereco));
+		endereco->Cpl = gtk_entry_get_text(priv->complemento);
+		endereco->xBairro = gtk_entry_get_text(priv->bairro);
+		endereco->CEP = atoi(gtk_entry_get_text(priv->cep));
+		endereco->municipio->uf->cUF = atoi(gtk_combo_box_get_active_id(priv->uf_destinatario));
+		endereco->municipio->cMun = atoi(gtk_combo_box_get_active_id(priv->municipio_destinatario));
+
+		nfe->inf_ad_fisco = gtk_entry_get_text(priv->inf_ad_fisco);
+		nfe->inf_ad_fisco = strlen(nfe->inf_ad_fisco) == 0? 
+			NULL : nfe->inf_ad_fisco;
+		nfe->inf_ad_contrib = gtk_entry_get_text(priv->inf_ad_contrib);
+		nfe->inf_ad_contrib = strlen(nfe->inf_ad_contrib) == 0? 
+			NULL : nfe->inf_ad_contrib;
+		nfe->emitente->id = 1;
+		register_nfe(nfe);
+	}
+
 	gtk_widget_destroy(win);
 	return 0;
 }
@@ -454,7 +460,7 @@ static void inst_nfe_manager(gpointer p, NFEManager *nman){
 		if(nfe->inf_ad_contrib)
 			gtk_entry_set_text(priv->inf_ad_contrib, nfe->inf_ad_contrib);
 
-		if(nfe->xml)
+		if(nfe->protocolo->numero)
 			set_read_only(priv);
 	}
 }
