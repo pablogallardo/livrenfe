@@ -145,6 +145,9 @@ int register_nfe(NFE *nfe){
 	last_id = db_last_insert_id();
 	id_nf = last_id;
 	ITEM *item = nfe->itens;
+	sql = sqlite3_mprintf("DELETE FROM nfe_itens WHERE id_nfe = %d;",
+		last_id);
+	db_exec(sql, &err);
 	while(item != NULL){
 		PRODUTO *p = item->produto;
 		IMPOSTO *imp = item->imposto;

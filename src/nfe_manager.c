@@ -65,6 +65,8 @@ struct _NFEManagerPrivate{
 	GtkEntry *inf_ad_fisco;
 	GtkEntry *inf_ad_contrib;
 	GtkTreeView *treeview;
+	GtkMenu *item_menu;
+	GtkMenuItem *item_remover;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(NFEManager, nfe_manager, GTK_TYPE_DIALOG)
@@ -484,6 +486,72 @@ static void default_nfe_number(NFEManagerPrivate *priv){
 	gtk_entry_set_text(priv->serie, itoa(serie));
 }
 
+static void on_remover_item_click(GtkMenuItem *m, NFEManager *nman){
+	NFEManagerPrivate *priv;
+
+	priv = nfe_manager_get_instance_private(nman);
+	GtkTreeView *t = priv->treeview;
+	GtkTreeSelection *s;
+	s = gtk_tree_view_get_selection(t);
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+
+	if(gtk_tree_selection_get_selected(s, &model, &iter)){
+		ITEM *item;
+		NFE *nfe = nman->nfe;
+		gtk_tree_model_get(model, &iter, 4, &item, -1);
+		rm_item(nfe, item);
+		list_items(NULL, nman);
+	}
+}
+
+static gint popup_menu_item(GtkTreeView *t, GdkEventButton *e, NFEManager *nman){
+	NFEManagerPrivate *priv;
+
+	priv = nfe_manager_get_instance_private(nman);
+	GtkTreeSelection *s;
+	s = gtk_tree_view_get_selection(t);
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+
+	if(gtk_tree_selection_get_selected(s, &model, &iter)){
+	}
+
+#if GTK_CHECK_VERSION(3,22,0)
+	gtk_menu_popup_at_pointer(priv->item_menu, 
+		(GdkEvent*) e);
+#else
+	gtk_menu_popup(priv->item_menu, NULL,
+		NULL, NULL, NULL, e->button, e->time);
+#endif
+	return TRUE;
+}
+
+static gint item_context_menu_show(GtkTreeView *t, GdkEventButton *e, 
+		gpointer win){
+	if(e->type == GDK_BUTTON_PRESS){
+		if(e->button == GDK_BUTTON_SECONDARY){
+			GtkTreeSelection *s;
+			GtkTreePath *p;
+			s = gtk_tree_view_get_selection(t);
+			if(gtk_tree_view_get_path_at_pos(t, e->x, e->y, &p,
+					NULL, NULL, NULL)){
+				gtk_tree_selection_unselect_all(s);
+				gtk_tree_selection_select_path(s, p);
+				gtk_tree_path_free(p);
+			}
+			popup_menu_item(t, e, win);
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+static gint item_on_popup(GtkTreeView *t, gpointer win){
+	popup_menu_item(t, NULL, win);
+	return TRUE;
+}
+
 static void nfe_manager_init(NFEManager *nman){
 	NFEManagerPrivate *priv;
 
@@ -504,6 +572,12 @@ static void nfe_manager_init(NFEManager *nman){
 		priv->municipio_destinatario);
 	g_signal_connect(priv->treeview, "row-activated",
 			G_CALLBACK(view_on_row_activated), nman);
+	g_signal_connect(priv->treeview, "popup-menu",
+			G_CALLBACK(item_on_popup), nman);
+	g_signal_connect(priv->treeview, "button-press-event",
+			G_CALLBACK(item_context_menu_show), nman);
+	g_signal_connect(priv->item_remover, "activate",
+			G_CALLBACK(on_remover_item_click), nman);
 	list_uf(priv->uf);
 	list_uf(priv->uf_destinatario);
 	list_forma_pagamento(priv->forma_pagamento);
@@ -575,6 +649,10 @@ static void nfe_manager_class_init(NFEManagerClass *class){
 		       	inf_ad_contrib);
 	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
 		       	treeview);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	item_remover);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), NFEManager,
+		       	item_menu);
 }
 
 NFEManager *nfe_manager_new(LivrenfeWindow *win){

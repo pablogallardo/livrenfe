@@ -697,4 +697,16 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
       </object>
     </child>
   </template>
+  <object class="GtkMenu" id="item_menu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="item_remover">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Remover</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+  </object>
 </interface>

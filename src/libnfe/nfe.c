@@ -337,6 +337,16 @@ int add_item(NFE *nfe, ITEM *item){
 	return 0;
 }
 
+static reorder_items(NFE *nfe){
+	ITEM *i = nfe->itens;
+	int n = 1;
+	while(i != NULL){
+		i->ordem = n;
+		n++;
+		i = i->pointer;
+	}
+}
+
 int rm_item(NFE *nfe, ITEM *item){
 	ITEM *i = nfe->itens;
 	if(item == NULL){
@@ -344,11 +354,15 @@ int rm_item(NFE *nfe, ITEM *item){
 	}
 	if(i == item){
 		nfe->itens = i->pointer;
+		nfe->q_itens--;
+		reorder_items(nfe);
 		return 1;
 	}
 	while(i != NULL){
 		if(i->pointer == item){
 			i->pointer = item->pointer;
+			nfe->q_itens--;
+			reorder_items(nfe);
 			return 1;
 		}
 		i = i->pointer;

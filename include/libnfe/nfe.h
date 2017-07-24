@@ -103,7 +103,7 @@ extern int add_item(NFE *nfe, ITEM *i);
  * @nfe: Nota fiscal (Objeto NFE)
  * @i: Item que será removido (objeto ITEM)
  *
- * TODO: Remove um ITEM a um objeto NFE
+ * Remove um ITEM a um objeto NFE
  */
 extern int rm_item(NFE *nfe, ITEM *i);
 
