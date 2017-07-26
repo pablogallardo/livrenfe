@@ -41,8 +41,8 @@ struct _PrefsPrivate{
 	GtkRadioButton *cert_a1;
 	GtkRadioButton *cert_a3;
 
-	GtkEntry *cert_file;
-	GtkEntry *card_reader_lib;
+	GtkFileChooser *cert_file;
+	GtkFileChooser *card_reader_lib;
 	GtkEntry *recepcaoevento_prod;
 	GtkEntry *recepcaoevento_cert;
 	GtkEntry *nfeconsultacadastro_prod;
@@ -83,8 +83,12 @@ static void inst_urls(PrefsPrivate *priv){
 	gtk_entry_set_text(priv->nfeautorizacao_cert, url->nfeautorizacao_cert);
 	gtk_entry_set_text(priv->nferetautorizacao_cert, url->nferetautorizacao_cert);
 
-	gtk_entry_set_text(priv->cert_file, pref_data->cert_file);
-	gtk_entry_set_text(priv->card_reader_lib, pref_data->card_reader_lib);
+	if(strcmp(pref_data->cert_file, "")){
+		gtk_file_chooser_set_filename(priv->cert_file, pref_data->cert_file);
+	}
+	if(strcmp(pref_data->card_reader_lib, "")){
+		gtk_file_chooser_set_filename(priv->card_reader_lib, pref_data->card_reader_lib);
+	}
 
 	if(pref_data->ambiente == AMBIENTE_PRODUCAO)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(priv->ambiente_p), TRUE);
@@ -124,8 +128,8 @@ static void save_prefs(gpointer btn, Prefs *p){
 	PrefsPrivate *priv;
 	priv = prefs_get_instance_private(PREFS(p));
 	PREFS *prefs = get_prefs();
-	char *cert_file = strdup(gtk_entry_get_text(priv->cert_file));
-	char *cert_lib = strdup(gtk_entry_get_text(priv->card_reader_lib));
+	char *cert_file = strdup(gtk_file_chooser_get_filename(priv->cert_file));
+	char *cert_lib = strdup(gtk_file_chooser_get_filename(priv->card_reader_lib));
 	free(prefs->cert_file);
 	free(prefs->card_reader_lib);
 	prefs->cert_file = cert_file;
