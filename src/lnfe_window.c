@@ -184,6 +184,10 @@ static void export_nfe(NFE *nfe, GtkWindow *win){
 		"Salvar", GTK_RESPONSE_ACCEPT, NULL);
 	chooser = GTK_FILE_CHOOSER(dialog);
 	gtk_file_chooser_set_do_overwrite_confirmation(chooser, TRUE);
+	char default_name[500];
+	strcpy(default_name, nfe->idnfe->chave);
+	strcat(default_name, ".xml");
+	gtk_file_chooser_set_current_name(chooser, default_name);
 	res = gtk_dialog_run(GTK_DIALOG(dialog));
 
 	if(res == GTK_RESPONSE_ACCEPT){
@@ -192,7 +196,7 @@ static void export_nfe(NFE *nfe, GtkWindow *win){
 		FILE *f = fopen(filename, "w");
 		if(f){
 			char *content = gen_export_nfe_xml(nfe);
-			fprintf(f, "%s", content);
+			fprintf(f, "%s\n", content);
 			fclose(f);
 		} else {
 			GtkDialogFlags flag = GTK_DIALOG_DESTROY_WITH_PARENT;
