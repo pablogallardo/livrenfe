@@ -389,5 +389,13 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
         <property name="use_underline">True</property>
       </object>
     </child>
+    <child>
+      <object class="GtkMenuItem" id="export_nfe">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Exportar XML</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
   </object>
 </interface>

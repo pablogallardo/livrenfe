@@ -26,6 +26,7 @@
 #include "db_interface.h"
 #include <libnfe/nfe.h>
 #include <libnfe/libnfe.h>
+#include <libnfe/gen_xml.h>
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include <string.h>
@@ -43,6 +44,7 @@ struct _LivrenfeWindow{
 	GtkMenuItem *abrir_nfe;
 	GtkMenuItem *emitir_nfe;
 	GtkMenuItem *cancel_nfe;
+	GtkMenuItem *export_nfe;
 	GtkDialog *password_modal;
 	GtkDialog *just_modal;
 	GtkEntry *password;
@@ -169,6 +171,55 @@ static void on_emitir_nfe_click(GtkMenuItem *m, LivrenfeWindow *win){
 		"clicked", G_CALLBACK(sefaz_emitir), win);
 	win->passwd_key_signal_handler =  g_signal_connect(win->password, 
 		"activate", G_CALLBACK(sefaz_emitir), win);
+}
+
+static void export_nfe(NFE *nfe, GtkWindow *win){
+	GtkWidget *dialog;
+	GtkFileChooser *chooser;
+	GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_SAVE;
+	int res;
+
+	dialog = gtk_file_chooser_dialog_new("Exportar NFE",
+		win, action, "Cancelar", GTK_RESPONSE_CANCEL,
+		"Salvar", GTK_RESPONSE_ACCEPT, NULL);
+	chooser = GTK_FILE_CHOOSER(dialog);
+	gtk_file_chooser_set_do_overwrite_confirmation(chooser, TRUE);
+	res = gtk_dialog_run(GTK_DIALOG(dialog));
+
+	if(res == GTK_RESPONSE_ACCEPT){
+		char *filename = NULL;
+		filename = gtk_file_chooser_get_filename(chooser);
+		FILE *f = fopen(filename, "w");
+		if(f){
+			char *content = gen_export_nfe_xml(nfe);
+			fprintf(f, "%s", content);
+			fclose(f);
+		} else {
+			GtkDialogFlags flag = GTK_DIALOG_DESTROY_WITH_PARENT;
+			GtkWidget *msg = gtk_message_dialog_new(win, flag,
+				GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE,
+				"Erro ao salvar");
+			gtk_dialog_run(GTK_DIALOG(msg));
+			gtk_widget_destroy(msg);
+		}
+	}
+
+	gtk_widget_destroy(dialog);
+}
+
+static void on_export_nfe_click(GtkMenuItem *m, LivrenfeWindow *win){
+	GtkTreeView *t = win->treeview;
+	GtkTreeSelection *s;
+	s = gtk_tree_view_get_selection(t);
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+
+	if(gtk_tree_selection_get_selected(s, &model, &iter)){
+		int idnfe;
+		gtk_tree_model_get(model, &iter, 0, &idnfe, -1);
+		NFE *nfe = get_nfe(idnfe);
+		export_nfe(nfe, GTK_WINDOW(win));
+	}
 }
 
 static void on_just_ok_click(GtkButton *m, LivrenfeWindow *win){
@@ -308,6 +359,8 @@ static gint popup_menu_nfe(GtkTreeView *t, GdkEventButton *e, LivrenfeWindow *wi
 		if(cancelada || !emitida){
 			gtk_widget_set_sensitive(GTK_WIDGET(win->cancel_nfe),
 				FALSE);
+			gtk_widget_set_sensitive(GTK_WIDGET(win->export_nfe),
+				FALSE);
 			if(!cancelada){
 				gtk_widget_set_sensitive(GTK_WIDGET(win->emitir_nfe),
 					TRUE);
@@ -317,6 +370,8 @@ static gint popup_menu_nfe(GtkTreeView *t, GdkEventButton *e, LivrenfeWindow *wi
 				TRUE);
 			gtk_widget_set_sensitive(GTK_WIDGET(win->emitir_nfe),
 				FALSE);
+			gtk_widget_set_sensitive(GTK_WIDGET(win->export_nfe),
+				TRUE);
 		}
 	}
 
@@ -406,6 +461,8 @@ static void livrenfe_window_init(LivrenfeWindow *win){
 			G_CALLBACK(on_emitir_nfe_click), win);
 	g_signal_connect((LIVRENFE_WINDOW(win))->cancel_nfe, "activate",
 			G_CALLBACK(on_cancel_nfe_click), win);
+	g_signal_connect((LIVRENFE_WINDOW(win))->export_nfe, "activate",
+			G_CALLBACK(on_export_nfe_click), win);
 
 	GdkPixbuf *icon;
 	GError *error = NULL;
@@ -438,6 +495,8 @@ static void livrenfe_window_class_init(LivrenfeWindowClass *class){
 		       	emitir_nfe);
 	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
 		       	cancel_nfe);
+	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
+		       	export_nfe);
 	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
 		       	status_servico_btn);
 	gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(class), LivrenfeWindow,
