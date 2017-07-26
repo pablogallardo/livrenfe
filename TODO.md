@@ -3,13 +3,9 @@ TODO - Lista de atividades pendentes
 
 Para o primeiro release
 -----------------------
-* Implementar botão de exportão XML
 * Validar números decimais no valor do item (Bug)
 * Implementar serviço "InutilizacaoNFE"
 * Testar emissão de NFe com certificado A1 
-* Revisar enums
-* Restruturar strucs de endereço
-
 
 Outros
 ------
