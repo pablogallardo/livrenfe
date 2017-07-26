@@ -60,6 +60,11 @@ extern char *gen_cons_status(int ambiente, int cuf);
 extern char *gen_cons_nfe(LOTE *, int ambiente);
 
 /**
+ * Gerar XML para exportação da NFE
+ */
+extern char *gen_export_nfe_xml(NFE *nfe);
+
+/**
  * Get XML message version for service
  */
 extern char *get_versao(sefaz_servico_t service);

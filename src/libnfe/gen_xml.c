@@ -1055,6 +1055,37 @@ char *generate_evento_xml(EVENTO *e, EVP_PKEY *key, X509 *cert) {
 	return (char*)buf->content;
 }
 
+char *gen_export_nfe_xml(NFE *nfe){
+	int rc;
+	xmlTextWriterPtr writer;
+	xmlDocPtr doc;
+	xmlBufferPtr buf = xmlBufferCreate();
+
+	writer = xmlNewTextWriterDoc(&doc, 0);
+	if (writer == NULL)
+		return NULL;
+	xmlTextWriterStartDocument(writer, NULL, "UTF-8", NULL);
+	rc = xmlTextWriterStartElement(writer, BAD_CAST "nfeProc");
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "versao",
+			BAD_CAST NFE_VERSAO);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteRaw(writer, BAD_CAST nfe->xml);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterWriteRaw(writer, BAD_CAST nfe->protocolo->xml);
+	if (rc < 0)
+		return NULL;
+	rc = xmlTextWriterEndElement(writer);
+	if (rc < 0)
+		return NULL;
+	xmlTextWriterEndDocument(writer);
+	xmlNodeDump(buf, NULL, xmlDocGetRootElement(doc), 0, 0);
+	return (char*)buf->content;
+}
+
 char *get_versao(sefaz_servico_t service){
 	char *versao = malloc(sizeof(char) * 5);
 	switch(service){
