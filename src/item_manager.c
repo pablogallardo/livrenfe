@@ -176,15 +176,17 @@ static void inst_item_manager(gpointer p, ItemManager *iman){
 		gtk_entry_set_text(priv->cfop, itoa(p->cfop));
 
 		//ICMS
-		gtk_combo_box_set_active_id(priv->icms_regime, 
-			"1");
-		gtk_combo_box_set_active_id(priv->icms_origem, 
-			itoa(icms->origem));
-		gtk_combo_box_set_active_id(priv->icms_situacao_tributaria, 
-			itoa(icms->tipo));
-		gtk_entry_set_text(priv->icms_aliquota, dtoa(icms->aliquota));
-		gtk_entry_set_text(priv->icms_credito_aproveitado, 
-			dtoa(icms->valor));
+		if(icms->tipo != 0){
+			gtk_combo_box_set_active_id(priv->icms_regime, 
+				"1");
+			gtk_combo_box_set_active_id(priv->icms_origem, 
+				itoa(icms->origem));
+			gtk_combo_box_set_active_id(priv->icms_situacao_tributaria, 
+				itoa(icms->tipo));
+			gtk_entry_set_text(priv->icms_aliquota, dtoa(icms->aliquota));
+			gtk_entry_set_text(priv->icms_credito_aproveitado, 
+				dtoa(icms->valor));
+		}
 
 		//COFINS
 		gtk_combo_box_set_active_id(priv->cofins_situacao_tributaria, 
@@ -195,10 +197,12 @@ static void inst_item_manager(gpointer p, ItemManager *iman){
 			"8");
 
 		//IPI
-		gtk_combo_box_set_active_id(priv->ipi_situacao_tributaria, 
-			itoa(ipi->sit_trib));
-		gtk_entry_set_text(priv->ipi_classe, ipi->classe);
-		gtk_entry_set_text(priv->ipi_codigo, ipi->codigo);
+		if(ipi->sit_trib != 0){
+			gtk_combo_box_set_active_id(priv->ipi_situacao_tributaria, 
+				itoa(ipi->sit_trib));
+			gtk_entry_set_text(priv->ipi_classe, ipi->classe);
+			gtk_entry_set_text(priv->ipi_codigo, ipi->codigo);
+		}
 
 		if(n->protocolo->numero)
 			set_read_only(priv);
