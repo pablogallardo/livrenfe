@@ -332,12 +332,18 @@ static int get_itens(NFE *n){
 
 			descricao = strdup((char*)sqlite3_column_text(stmt, DESC));
 			unidade = strdup((char*)sqlite3_column_text(stmt, UNIDADE));
-			ipi_classe = strdup((char*)sqlite3_column_text(stmt, 
-				IPI_CLASSE));
-			ipi_codigo = strdup((char*)sqlite3_column_text(stmt, 
-				IPI_CODIGO));
-			cod_prod = strdup((char*)sqlite3_column_text(stmt, 
-				COD_PROD));
+			if(sqlite3_column_type(stmt, IPI_CLASSE) != SQLITE_NULL){
+				ipi_classe = strdup((char*)sqlite3_column_text(stmt, 
+					IPI_CLASSE));
+			}
+			if(sqlite3_column_type(stmt, IPI_CODIGO) != SQLITE_NULL){
+				ipi_codigo = strdup((char*)sqlite3_column_text(stmt, 
+					IPI_CODIGO));
+			}
+			if(sqlite3_column_type(stmt, COD_PROD) != SQLITE_NULL){
+				cod_prod = strdup((char*)sqlite3_column_text(stmt, 
+					COD_PROD));
+			}
 
 			inst_item(valor, quantidade, 
 				ordem, id_produto, cod_prod, icms_origem,
