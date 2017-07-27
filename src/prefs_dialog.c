@@ -128,8 +128,10 @@ static void save_prefs(gpointer btn, Prefs *p){
 	PrefsPrivate *priv;
 	priv = prefs_get_instance_private(PREFS(p));
 	PREFS *prefs = get_prefs();
-	char *cert_file = strdup(gtk_file_chooser_get_filename(priv->cert_file));
-	char *cert_lib = strdup(gtk_file_chooser_get_filename(priv->card_reader_lib));
+	char *aux = gtk_file_chooser_get_filename(priv->cert_file);
+	char *cert_file = aux == NULL? strdup("") : strdup(aux);
+	aux = gtk_file_chooser_get_filename(priv->card_reader_lib);
+	char *cert_lib = aux == NULL? strdup("") : strdup(aux);
 	free(prefs->cert_file);
 	free(prefs->card_reader_lib);
 	prefs->cert_file = cert_file;
