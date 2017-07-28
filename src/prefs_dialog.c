@@ -172,6 +172,18 @@ static void prefs_init(Prefs *p){
 	g_signal_connect(p, "show", G_CALLBACK(inst_window), p);
 	g_signal_connect(priv->ok_btn, "clicked", G_CALLBACK(save_prefs), p);
 	g_signal_connect(priv->cancel_btn, "clicked", G_CALLBACK(prefs_destroy), p);
+
+	GtkFileFilter *filter_pk12 = gtk_file_filter_new();
+	gtk_file_filter_add_mime_type(filter_pk12, "application/x-pkcs12");
+	gtk_file_filter_set_name(filter_pk12, "Arquivo de certificado PKCS12 (*.pk12,*.pfx)");
+	gtk_file_chooser_add_filter(priv->cert_file, filter_pk12);
+	gtk_file_chooser_set_filter(priv->cert_file, filter_pk12);
+
+	GtkFileFilter *filter_lib = gtk_file_filter_new();
+	gtk_file_filter_add_mime_type(filter_lib, "application/x-sharedlib");
+	gtk_file_filter_set_name(filter_lib, "Arquivo de biblioteca dinâmica (*.so)");
+	gtk_file_chooser_add_filter(priv->card_reader_lib, filter_lib);
+	gtk_file_chooser_set_filter(priv->card_reader_lib, filter_lib);
 }
 
 static void prefs_class_init(PrefsClass *class){
