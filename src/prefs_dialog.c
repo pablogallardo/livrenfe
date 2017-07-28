@@ -141,6 +141,11 @@ static void save_prefs(gpointer btn, Prefs *p){
 	} else {
 		prefs->ambiente = AMBIENTE_HOMOLOGACAO;
 	}
+	if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(priv->cert_a1))){
+		prefs->cert_type = CERT_TYPE_A1;
+	} else {
+		prefs->cert_type = CERT_TYPE_A3;
+	}
 	set_prefs(prefs);
 	save_prefs_urls(priv);
 	gtk_widget_destroy(GTK_WIDGET(p));
