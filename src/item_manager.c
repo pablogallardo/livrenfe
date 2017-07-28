@@ -103,7 +103,7 @@ static int set_item(GtkButton *b, GtkWidget *iman){
 		atoi(gtk_entry_get_text(priv->ncm)),
 		atoi(gtk_entry_get_text(priv->cfop)),
 		gtk_entry_get_text(priv->unidade),
-		atof(gtk_entry_get_text(priv->valor)),
+		atof(str_replace(",",".",(char*)gtk_entry_get_text(priv->valor))),
 		item->produto);
 	
 	const char *icms_situacao_tributaria = gtk_combo_box_get_active_id(priv->icms_situacao_tributaria);
@@ -122,7 +122,7 @@ static int set_item(GtkButton *b, GtkWidget *iman){
 			gtk_entry_get_text(priv->ipi_codigo),
 			item->imposto->ipi);
 	}
-	item->valor = atof(gtk_entry_get_text(priv->valor));
+	item->valor = atof(str_replace(",",".",(char*)gtk_entry_get_text(priv->valor)));
 	item->quantidade = atoi(gtk_entry_get_text(priv->quantidade));
 	if(ITEM_MANAGER(iman)->item == NULL){
 		item->ordem = (ITEM_MANAGER(iman))->nfe->q_itens + 1; 
