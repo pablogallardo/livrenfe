@@ -337,7 +337,7 @@ int add_item(NFE *nfe, ITEM *item){
 	return 0;
 }
 
-static reorder_items(NFE *nfe){
+static void reorder_items(NFE *nfe){
 	ITEM *i = nfe->itens;
 	int n = 1;
 	while(i != NULL){
