@@ -1056,10 +1056,10 @@ char *generate_evento_xml(EVENTO *e, EVP_PKEY *key, X509 *cert) {
 }
 
 char *gen_export_nfe_xml(NFE *nfe){
-	int rc;
+	int rc, buffersize;
 	xmlTextWriterPtr writer;
 	xmlDocPtr doc;
-	xmlBufferPtr buf = xmlBufferCreate();
+	xmlChar *xmlbuf;
 
 	writer = xmlNewTextWriterDoc(&doc, 0);
 	if (writer == NULL)
@@ -1082,8 +1082,8 @@ char *gen_export_nfe_xml(NFE *nfe){
 	if (rc < 0)
 		return NULL;
 	xmlTextWriterEndDocument(writer);
-	xmlNodeDump(buf, NULL, xmlDocGetRootElement(doc), 0, 0);
-	return (char*)buf->content;
+	xmlDocDumpMemory(doc, &xmlbuf, &buffersize);
+	return (char*)xmlbuf;
 }
 
 char *get_versao(sefaz_servico_t service){
