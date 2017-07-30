@@ -231,11 +231,11 @@ int gen_inf_nfe(xmlTextWriterPtr writer, NFE *nfe){
 	ITEM *item = nfe->itens;
 	double valor = 0;
 	int i ;
-	for (i = 0; i < nfe->q_itens; i++){
+	while(item){
 		rc = _gen_det(writer, item);
 		if (rc < 0)
 			return -EXML;
-		valor += nfe->itens->produto->valor;
+		valor += item->produto->valor * item->quantidade;
 		item = item->pointer;
 	}
 
