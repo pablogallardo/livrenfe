@@ -271,6 +271,9 @@ static void list_icms_st(GtkComboBox *t){
 
 	list_store = gtk_list_store_new(N_COLS, G_TYPE_STRING, G_TYPE_STRING);
 	gtk_list_store_append(list_store, &iter);
+	gtk_list_store_set(list_store, &iter, ID, "0", 
+			TEXT, "Sem ICMS", -1);
+	gtk_list_store_append(list_store, &iter);
 	gtk_list_store_set(list_store, &iter, ID, "101", 
 			TEXT, "Tributada pelo Simples Nacional com permissão de crédito", -1);
 	gtk_list_store_append(list_store, &iter);
@@ -285,6 +288,7 @@ static void list_icms_st(GtkComboBox *t){
 				r, "text", TEXT, NULL);
 	gtk_combo_box_set_model(t, GTK_TREE_MODEL(list_store));
 	gtk_combo_box_set_id_column(t, ID);
+	gtk_combo_box_set_active_id(t, "0");
 }
 
 static void list_ipi_st(GtkComboBox *t){
@@ -299,6 +303,9 @@ static void list_ipi_st(GtkComboBox *t){
 
 	list_store = gtk_list_store_new(N_COLS, G_TYPE_STRING, G_TYPE_STRING);
 	gtk_list_store_append(list_store, &iter);
+	gtk_list_store_set(list_store, &iter, ID, "0", 
+			TEXT, "Sem IPI", -1);
+	gtk_list_store_append(list_store, &iter);
 	gtk_list_store_set(list_store, &iter, ID, "53", 
 			TEXT, "Saída não tributada", -1);
 
@@ -310,6 +317,7 @@ static void list_ipi_st(GtkComboBox *t){
 				r, "text", TEXT, NULL);
 	gtk_combo_box_set_model(t, GTK_TREE_MODEL(list_store));
 	gtk_combo_box_set_id_column(t, ID);
+	gtk_combo_box_set_active_id(t, "0");
 }
 
 static void list_icms_origem(GtkComboBox *t){
@@ -366,6 +374,7 @@ static void list_cofins_st(GtkComboBox *t){
 				r, "text", TEXT, NULL);
 	gtk_combo_box_set_model(t, GTK_TREE_MODEL(list_store));
 	gtk_combo_box_set_id_column(t, ID);
+	gtk_combo_box_set_active_id(t, "8");
 }
 
 static void on_item_manager_destroy(gpointer btn, GtkWidget *iman){
