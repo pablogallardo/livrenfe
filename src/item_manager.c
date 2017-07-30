@@ -53,6 +53,7 @@ struct _ItemManagerPrivate{
 	GtkEntry *ipi_codigo;
 	GtkButton *ok_btn;
 	GtkButton *cancel_btn;
+	GtkLabel *subtotal;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(ItemManager, item_manager, GTK_TYPE_DIALOG)
@@ -156,6 +157,19 @@ static void set_read_only(ItemManagerPrivate *priv){
 	gtk_widget_set_sensitive(GTK_WIDGET(priv->ipi_codigo), FALSE);
 }
 
+static void calc_subtotal(gpointer p, GdkEvent *e, ItemManager *iman){
+	ItemManagerPrivate *priv;
+
+	priv = item_manager_get_instance_private(iman);
+	int qtd = atoi(gtk_entry_get_text(priv->quantidade));
+	char *valor_str = (char*) gtk_entry_get_text(priv->valor);
+	valor_str = str_replace(",", ".", valor_str);
+	double valor = atof(valor_str);
+	char *subtotal = dtoa(qtd * valor);
+	gtk_label_set_text(priv->subtotal, subtotal);
+	free(subtotal);
+}
+
 static void inst_item_manager(gpointer p, ItemManager *iman){
 	ItemManagerPrivate *priv;
 	priv = item_manager_get_instance_private(iman);
@@ -207,6 +221,7 @@ static void inst_item_manager(gpointer p, ItemManager *iman){
 			gtk_entry_set_text(priv->ipi_codigo, ipi->codigo);
 		}
 
+		calc_subtotal(NULL, NULL, iman);
 		if(n->protocolo->numero)
 			set_read_only(priv);
 
@@ -374,6 +389,10 @@ static void item_manager_init(ItemManager *iman){
 			iman);
 	g_signal_connect(priv->cancel_btn, "clicked", G_CALLBACK(on_item_manager_destroy),
 			iman);
+	g_signal_connect(priv->quantidade, "focus-out-event", 
+		G_CALLBACK(calc_subtotal), iman);
+	g_signal_connect(priv->valor, "focus-out-event", 
+		G_CALLBACK(calc_subtotal), iman);
 }
 
 
@@ -421,6 +440,8 @@ static void item_manager_class_init(ItemManagerClass *class){
 		       	ipi_classe);
 	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), ItemManager,
 		       	ipi_codigo);
+	gtk_widget_class_bind_template_child_private(GTK_WIDGET_CLASS(class), ItemManager,
+		       	subtotal);
 }
 
 ItemManager *item_manager_new(NFEManager *win){
