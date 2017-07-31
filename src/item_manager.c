@@ -108,18 +108,18 @@ static int set_item(GtkButton *b, GtkWidget *iman){
 		atof(valor),
 		item->produto);
 	
-	const char *icms_situacao_tributaria = gtk_combo_box_get_active_id(priv->icms_situacao_tributaria);
+	int icms_situacao_tributaria = atoi(gtk_combo_box_get_active_id(priv->icms_situacao_tributaria));
 	if(icms_situacao_tributaria){
 		inst_icms(atoi(gtk_combo_box_get_active_id(priv->icms_origem)),
-			atoi(gtk_combo_box_get_active_id(priv->icms_situacao_tributaria)), 
+			icms_situacao_tributaria,
 			atof(gtk_entry_get_text(priv->icms_aliquota)),
 			atof(gtk_entry_get_text(priv->icms_credito_aproveitado)),
 			item->imposto->icms);
 	}
 
-	const char *ipi_situacao_tributaria = gtk_combo_box_get_active_id(priv->ipi_situacao_tributaria);
+	int ipi_situacao_tributaria = atoi(gtk_combo_box_get_active_id(priv->ipi_situacao_tributaria));
 	if(ipi_situacao_tributaria){
-		inst_ipi(atoi(ipi_situacao_tributaria),
+		inst_ipi(ipi_situacao_tributaria,
 			gtk_entry_get_text(priv->ipi_classe),
 			gtk_entry_get_text(priv->ipi_codigo),
 			item->imposto->ipi);

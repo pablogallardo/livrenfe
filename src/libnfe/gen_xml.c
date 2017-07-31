@@ -660,91 +660,97 @@ int _gen_imposto(xmlTextWriterPtr writer, IMPOSTO *i, double v){
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "imposto");
 	if (rc < 0)
 		return -EXML;
-	rc = xmlTextWriterStartElement(writer, BAD_CAST "ICMS");
-	if (rc < 0)
-		return -EXML;
-	switch(i->icms->tipo){
-		case 101:
-			rc = xmlTextWriterStartElement(writer, 
-				BAD_CAST "ICMSSN101");
-			if (rc < 0)
-				return -EXML;
-			rc = xmlTextWriterWriteFormatElement(writer, 
-				BAD_CAST "orig",
-					"%d", i->icms->origem);
-			if (rc < 0)
-				return -EXML;
-			rc = xmlTextWriterWriteFormatElement(writer, 
-				BAD_CAST "CSOSN",
-					"%d", i->icms->tipo);
-			if (rc < 0)
-				return -EXML;
-			rc = xmlTextWriterWriteFormatElement(writer, 
-				BAD_CAST "pCredSN",
-					"%.4f", i->icms->aliquota);
-			if (rc < 0)
-				return -EXML;
-			rc = xmlTextWriterWriteFormatElement(writer, 
-				BAD_CAST "vCredICMSSN",
-					"%.2f", i->icms->aliquota);
-			if (rc < 0)
-				return -EXML;
-			break;
-		case 102:
-		default:
-			rc = xmlTextWriterStartElement(writer, 
-				BAD_CAST "ICMSSN102");
-			if (rc < 0)
-				return -EXML;
-			rc = xmlTextWriterWriteFormatElement(writer, 
-				BAD_CAST "orig",
-					"%d", i->icms->origem);
-			if (rc < 0)
-				return -EXML;
-			rc = xmlTextWriterWriteFormatElement(writer, 
-				BAD_CAST "CSOSN",
-					//"%d", i->icms->tipo);
-					"%d", 102);
-			if (rc < 0)
-				return -EXML;
-	
-			break;
+	if(i->icms->tipo){
+		rc = xmlTextWriterStartElement(writer, BAD_CAST "ICMS");
+		if (rc < 0)
+			return -EXML;
+		switch(i->icms->tipo){
+			case 101:
+				rc = xmlTextWriterStartElement(writer, 
+					BAD_CAST "ICMSSN101");
+				if (rc < 0)
+					return -EXML;
+				rc = xmlTextWriterWriteFormatElement(writer, 
+					BAD_CAST "orig",
+						"%d", i->icms->origem);
+				if (rc < 0)
+					return -EXML;
+				rc = xmlTextWriterWriteFormatElement(writer, 
+					BAD_CAST "CSOSN",
+						"%d", i->icms->tipo);
+				if (rc < 0)
+					return -EXML;
+				rc = xmlTextWriterWriteFormatElement(writer, 
+					BAD_CAST "pCredSN",
+						"%.4f", i->icms->aliquota);
+				if (rc < 0)
+					return -EXML;
+				rc = xmlTextWriterWriteFormatElement(writer, 
+					BAD_CAST "vCredICMSSN",
+						"%.2f", i->icms->aliquota);
+				if (rc < 0)
+					return -EXML;
+				rc = xmlTextWriterEndElement(writer);
+				if (rc < 0)
+					return -EXML;
+				break;
+			case 102:
+			default:
+				rc = xmlTextWriterStartElement(writer, 
+					BAD_CAST "ICMSSN102");
+				if (rc < 0)
+					return -EXML;
+				rc = xmlTextWriterWriteFormatElement(writer, 
+					BAD_CAST "orig",
+						"%d", i->icms->origem);
+				if (rc < 0)
+					return -EXML;
+				rc = xmlTextWriterWriteFormatElement(writer, 
+					BAD_CAST "CSOSN",
+						//"%d", i->icms->tipo);
+						"%d", 102);
+				if (rc < 0)
+					return -EXML;
+				rc = xmlTextWriterEndElement(writer);
+				if (rc < 0)
+					return -EXML;
+				break;
+		}
+		rc = xmlTextWriterEndElement(writer);
+		if (rc < 0)
+			return -EXML;
 	}
-	rc = xmlTextWriterEndElement(writer);
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterEndElement(writer);
-	if (rc < 0)
-		return -EXML;
 
-	rc = xmlTextWriterStartElement(writer, BAD_CAST "IPI");
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterWriteFormatElement(writer, 
-		BAD_CAST "clEnq",
-			"%s", i->ipi->classe);
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterWriteFormatElement(writer, 
-		BAD_CAST "cEnq",
-			"%s", i->ipi->codigo);
-	if (rc < 0)
-		return -EXML;
+	if(i->ipi->sit_trib != 0){
+		rc = xmlTextWriterStartElement(writer, BAD_CAST "IPI");
+		if (rc < 0)
+			return -EXML;
+		rc = xmlTextWriterWriteFormatElement(writer, 
+			BAD_CAST "clEnq",
+				"%s", i->ipi->classe);
+		if (rc < 0)
+			return -EXML;
+		rc = xmlTextWriterWriteFormatElement(writer, 
+			BAD_CAST "cEnq",
+				"%s", i->ipi->codigo);
+		if (rc < 0)
+			return -EXML;
 
-	rc = xmlTextWriterStartElement(writer, BAD_CAST "IPINT");
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterWriteFormatElement(writer, 
-		BAD_CAST "CST",
-			"%d", i->ipi->sit_trib);
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterEndElement(writer);
-	if (rc < 0)
-		return -EXML;
-	rc = xmlTextWriterEndElement(writer);
-	if (rc < 0)
-		return -EXML;
+		rc = xmlTextWriterStartElement(writer, BAD_CAST "IPINT");
+		if (rc < 0)
+			return -EXML;
+		rc = xmlTextWriterWriteFormatElement(writer, 
+			BAD_CAST "CST",
+				"%d", i->ipi->sit_trib);
+		if (rc < 0)
+			return -EXML;
+		rc = xmlTextWriterEndElement(writer);
+		if (rc < 0)
+			return -EXML;
+		rc = xmlTextWriterEndElement(writer);
+		if (rc < 0)
+			return -EXML;
+	}
 
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "PIS");
 	if (rc < 0)
