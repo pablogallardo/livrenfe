@@ -157,6 +157,37 @@ static void set_read_only(ItemManagerPrivate *priv){
 	gtk_widget_set_sensitive(GTK_WIDGET(priv->ipi_codigo), FALSE);
 }
 
+static void set_icms_fields(ItemManagerPrivate *priv, gboolean sensitive){
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->icms_regime), sensitive);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->icms_origem), sensitive);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->icms_aliquota), sensitive);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->icms_credito_aproveitado), 
+		sensitive);
+}
+
+static void set_ipi_fields(ItemManagerPrivate *priv, gboolean sensitive){
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->ipi_classe), sensitive);
+	gtk_widget_set_sensitive(GTK_WIDGET(priv->ipi_codigo), sensitive);
+}
+
+static void on_icms_type_change(GtkComboBox *c, ItemManager *iman){
+	ItemManagerPrivate *priv;
+
+	priv = item_manager_get_instance_private(iman);
+	int id = atoi(gtk_combo_box_get_active_id(c));
+	gboolean sensitivity = id == 0? FALSE : TRUE;
+	set_icms_fields(priv, sensitivity);
+}
+
+static void on_ipi_type_change(GtkComboBox *c, ItemManager *iman){
+	ItemManagerPrivate *priv;
+
+	priv = item_manager_get_instance_private(iman);
+	int id = atoi(gtk_combo_box_get_active_id(c));
+	gboolean sensitivity = id == 0? FALSE : TRUE;
+	set_ipi_fields(priv, sensitivity);
+}
+
 static void calc_subtotal(gpointer p, GdkEvent *e, ItemManager *iman){
 	ItemManagerPrivate *priv;
 
@@ -259,9 +290,12 @@ static void list_icms_regime(GtkComboBox *t){
 	gtk_combo_box_set_id_column(t, ID);
 }
 
-static void list_icms_st(GtkComboBox *t){
+static void list_icms_st(GtkComboBox *t, ItemManager *iman){
 	GtkListStore *list_store;
 	GtkTreeIter iter;
+	ItemManagerPrivate *priv;
+
+	priv = item_manager_get_instance_private(iman);
 
 	enum{
 		ID,
@@ -289,11 +323,15 @@ static void list_icms_st(GtkComboBox *t){
 	gtk_combo_box_set_model(t, GTK_TREE_MODEL(list_store));
 	gtk_combo_box_set_id_column(t, ID);
 	gtk_combo_box_set_active_id(t, "0");
+	on_icms_type_change(t, iman);
 }
 
-static void list_ipi_st(GtkComboBox *t){
+static void list_ipi_st(GtkComboBox *t, ItemManager *iman){
 	GtkListStore *list_store;
 	GtkTreeIter iter;
+	ItemManagerPrivate *priv;
+
+	priv = item_manager_get_instance_private(iman);
 
 	enum{
 		ID,
@@ -318,6 +356,7 @@ static void list_ipi_st(GtkComboBox *t){
 	gtk_combo_box_set_model(t, GTK_TREE_MODEL(list_store));
 	gtk_combo_box_set_id_column(t, ID);
 	gtk_combo_box_set_active_id(t, "0");
+	on_ipi_type_change(t, iman);
 }
 
 static void list_icms_origem(GtkComboBox *t){
@@ -388,10 +427,10 @@ static void item_manager_init(ItemManager *iman){
 	gtk_widget_init_template(GTK_WIDGET(iman));
 	list_icms_regime(priv->icms_regime);
 	list_icms_origem(priv->icms_origem);
-	list_icms_st(priv->icms_situacao_tributaria);
+	list_icms_st(priv->icms_situacao_tributaria, iman);
 	list_cofins_st(priv->cofins_situacao_tributaria);
 	list_cofins_st(priv->pis_situacao_tributaria);
-	list_ipi_st(priv->ipi_situacao_tributaria);
+	list_ipi_st(priv->ipi_situacao_tributaria, iman);
 	g_signal_connect(priv->ok_btn, "clicked", G_CALLBACK(set_item),
 			iman);
 	g_signal_connect(iman, "show", G_CALLBACK(inst_item_manager),
@@ -402,6 +441,10 @@ static void item_manager_init(ItemManager *iman){
 		G_CALLBACK(calc_subtotal), iman);
 	g_signal_connect(priv->valor, "focus-out-event", 
 		G_CALLBACK(calc_subtotal), iman);
+	g_signal_connect(priv->icms_situacao_tributaria, "changed", 
+		G_CALLBACK(on_icms_type_change), iman);
+	g_signal_connect(priv->ipi_situacao_tributaria, "changed", 
+		G_CALLBACK(on_ipi_type_change), iman);
 }
 
 
