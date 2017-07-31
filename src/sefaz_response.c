@@ -76,6 +76,8 @@ static void *sefaz_thread(void *arg){
 		get_status_servico(ambiente, urls->nfestatusservico, 35, 
 			pKey, cert, &msg);
 	}
+	EVP_PKEY_free(pKey);
+	X509_free(cert);
 
 	gtk_spinner_stop(priv->spinner);
 	gtk_label_set_text(priv->resposta, msg);
