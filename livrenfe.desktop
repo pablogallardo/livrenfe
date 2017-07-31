@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=0.1.0
+Type=Application
+Name=LivreNFE
+Exec=livrenfe
+Comment=O emissor código aberto de Notas Fiscais Eletrónicas
+Icon=livrenfe
+Terminal=false
+Category=Utility
