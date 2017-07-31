@@ -94,6 +94,7 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
                   <object class="GtkRadioButton" id="ambiente_p">
                     <property name="label" translatable="yes">Produção</property>
                     <property name="visible">True</property>
+                    <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="active">True</property>
