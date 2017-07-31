@@ -151,6 +151,7 @@ char *gen_lote_xml(LOTE *lote, EVP_PKEY *key, X509 *cert){
 	for (i = 0; i < lote->qtd; i++){
 		char *xml;
 		xml = generate_xml(it->nfe, key, cert);
+		printf("%s\n", xml);
 		rc = xmlTextWriterWriteRaw(writer, BAD_CAST xml);
 		if (rc < 0)
 			return NULL;
@@ -623,7 +624,7 @@ int _gen_prod(xmlTextWriterPtr writer, ITEM *i){
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "vProd",
-			"%.2f", p->valor);
+			"%.2f", p->valor * i->quantidade);
 	if (rc < 0)
 		return -EXML;
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "cEANTrib");
