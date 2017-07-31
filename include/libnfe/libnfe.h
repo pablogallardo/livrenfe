@@ -44,12 +44,6 @@
 #define	AMBIENTE_PRODUCAO		1
 #define	AMBIENTE_HOMOLOGACAO		2
 
-#define	CERT_TYPE_A1			1
-#define	CERT_TYPE_A3			2
-
-#define	DEFAULT_AMBIENTE		AMBIENTE_HOMOLOGACAO
-#define	DEFAULT_CERT_TYPE		CERT_TYPE_A3
-
 #define WSDL_RECEPCAO_EVENTO		"http://www.portalfiscal.inf.br/nfe/wsdl/RecepcaoEvento"
 #define WSDL_NFE_CONSULTA_CADASTRO	"http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro2"
 #define WSDL_NFE_INUTILIZACAO		"http://www.portalfiscal.inf.br/nfe/wsdl/NfeInutilizacao"
