@@ -110,10 +110,12 @@ static int set_item(GtkButton *b, GtkWidget *iman){
 	
 	int icms_situacao_tributaria = atoi(gtk_combo_box_get_active_id(priv->icms_situacao_tributaria));
 	if(icms_situacao_tributaria){
+		char *aliquota = str_replace(",",".",gtk_entry_get_text(priv->icms_aliquota));
+		CHAR *valor = str_replace(",",".",gtk_entry_get_text(priv->icms_credito_aproveitado));
 		inst_icms(atoi(gtk_combo_box_get_active_id(priv->icms_origem)),
 			icms_situacao_tributaria,
-			atof(gtk_entry_get_text(priv->icms_aliquota)),
-			atof(gtk_entry_get_text(priv->icms_credito_aproveitado)),
+			atof(aliquota),
+			atof(valor),
 			item->imposto->icms);
 	}
 
