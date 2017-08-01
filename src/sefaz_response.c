@@ -31,6 +31,7 @@
 #include <openssl/x509.h>
 #include <pthread.h>
 #include <stdlib.h>
+#include <string.h>
 
 
 struct _SefazResponseClass {
@@ -51,33 +52,40 @@ G_DEFINE_TYPE_WITH_PRIVATE(SefazResponse, sefaz_response, GTK_TYPE_DIALOG)
 static void *sefaz_thread(void *arg){
 	SefazResponse *sr = SEFAZ_RESPONSE(arg);
 	SefazResponsePrivate *priv;
+	priv = sefaz_response_get_instance_private(sr);
 	X509 *cert = NULL;
 	EVP_PKEY *pKey = NULL;
-
-	get_private_key(&pKey, &cert, sr->password);
-	priv = sefaz_response_get_instance_private(sr);
-	char *msg = malloc(sizeof(char) * 255);
-
 	PREFS *prefs = get_prefs();
-	int ambiente = prefs->ambiente;
-	URLS *urls = prefs->urls;
-	if(sr->lote){
-		send_lote(sr->lote, urls->nfeautorizacao, prefs->ambiente, 
-			pKey, cert, &msg);
-		cons_lote(sr->lote, urls->nferetautorizacao, ambiente, 
-			pKey, cert, &msg);
-		db_save_lote(sr->lote);
+	char *msg;
 
-	} else if(sr->lote_evento){
-		send_lote_evento(sr->lote_evento, urls->nfeconsultaprotocolo, 
-			ambiente, pKey, cert, &msg);
-		db_save_lote_evento(sr->lote_evento);
+	if((prefs->cert_type == CERT_TYPE_A1 && strcmp("", prefs->cert_file))
+		|| (prefs->cert_type == CERT_TYPE_A3 && 
+		strcmp("", prefs->card_reader_lib))){
+		get_private_key(&pKey, &cert, sr->password);
+		msg = malloc(sizeof(char) * 255);
+
+		int ambiente = prefs->ambiente;
+		URLS *urls = prefs->urls;
+		if(sr->lote){
+			send_lote(sr->lote, urls->nfeautorizacao, prefs->ambiente, 
+				pKey, cert, &msg);
+			cons_lote(sr->lote, urls->nferetautorizacao, ambiente, 
+				pKey, cert, &msg);
+			db_save_lote(sr->lote);
+
+		} else if(sr->lote_evento){
+			send_lote_evento(sr->lote_evento, urls->nfeconsultaprotocolo, 
+				ambiente, pKey, cert, &msg);
+			db_save_lote_evento(sr->lote_evento);
+		} else {
+			get_status_servico(ambiente, urls->nfestatusservico, 35, 
+				pKey, cert, &msg);
+		}
+		EVP_PKEY_free(pKey);
+		X509_free(cert);
 	} else {
-		get_status_servico(ambiente, urls->nfestatusservico, 35, 
-			pKey, cert, &msg);
+		msg = strdup("Configure o certificado");
 	}
-	EVP_PKEY_free(pKey);
-	X509_free(cert);
 
 	gtk_spinner_stop(priv->spinner);
 	gtk_label_set_text(priv->resposta, msg);
