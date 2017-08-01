@@ -9,3 +9,4 @@ README: README.md
 
 desktopdir = $(datadir)/applications
 dist_desktop_DATA = livrenfe.desktop
+
