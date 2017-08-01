@@ -1,4 +1,4 @@
-SUBDIRS = libnfe
+SUBDIRS = libnfe icons
 AM_CFLAGS = -I../include -I$(top_srcdir)/include `pkg-config --cflags gtk+-3.0`\
     	`xml2-config --cflags` `pkg-config --cflags xmlsec1-openssl`\
        	`curl-config --cflags`
@@ -13,6 +13,7 @@ livrenfe_SOURCES = main.c db.c db_create.c db_init.c livrenfe.c lnfe_window.c \
 		   prefs.c prefs_dialog.c gtk_common.c
 
 livrenfe_LDADD = libnfe/libnfe.la
+
 
 resources.c: livrenfe.gresource.xml window.ui nfe_manager.ui item_manager.ui \
 		emitente_manager.ui sefaz_response.ui icons/livrenfe.png \

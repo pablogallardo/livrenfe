@@ -5,7 +5,7 @@ libnfe_la_SOURCES = gen_xml.c nfe.c sefaz.c send.c \
 
 libnfe_la_LDFLAGS = -L/usr/local/lib -lssl -lcrypto -lp11 \
 	`xml2-config --libs` `pkg-config --libs xmlsec1-openssl`\
-       	`curl-config --libs`
+       	`curl-config --libs` -version-info 0:0:0
 
  
 libnfe_la_CFLAGS = -I../include -I$(top_srcdir)/include \
