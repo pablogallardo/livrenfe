@@ -64,28 +64,32 @@ static void *sefaz_thread(void *arg){
 	if((prefs->cert_type == CERT_TYPE_A1 && strcmp("", prefs->cert_file))
 		|| (prefs->cert_type == CERT_TYPE_A3 && 
 		strcmp("", prefs->card_reader_lib))){
-		get_private_key(&pKey, &cert, sr->password);
-		msg = malloc(sizeof(char) * 255);
+		int rc = get_private_key(&pKey, &cert, sr->password);
 
-		int ambiente = prefs->ambiente;
-		URLS *urls = prefs->urls;
-		if(sr->lote){
-			send_lote(sr->lote, urls->nfeautorizacao, prefs->ambiente, 
-				cuf, pKey, cert, &msg);
-			cons_lote(sr->lote, urls->nferetautorizacao, ambiente, 
-				cuf, pKey, cert, &msg);
-			db_save_lote(sr->lote);
+		if(rc == 0){
+			msg = malloc(sizeof(char) * 255);
+			int ambiente = prefs->ambiente;
+			URLS *urls = prefs->urls;
+			if(sr->lote){
+				send_lote(sr->lote, urls->nfeautorizacao, prefs->ambiente, 
+					cuf, pKey, cert, &msg);
+				cons_lote(sr->lote, urls->nferetautorizacao, ambiente, 
+					cuf, pKey, cert, &msg);
+				db_save_lote(sr->lote);
 
-		} else if(sr->lote_evento){
-			send_lote_evento(sr->lote_evento, urls->nfeconsultaprotocolo, 
-				ambiente, cuf, pKey, cert, &msg);
-			db_save_lote_evento(sr->lote_evento);
+			} else if(sr->lote_evento){
+				send_lote_evento(sr->lote_evento, urls->nfeconsultaprotocolo, 
+					ambiente, cuf, pKey, cert, &msg);
+				db_save_lote_evento(sr->lote_evento);
+			} else {
+				get_status_servico(ambiente, urls->nfestatusservico, cuf, 
+					pKey, cert, &msg);
+			}
+			EVP_PKEY_free(pKey);
+			X509_free(cert);
 		} else {
-			get_status_servico(ambiente, urls->nfestatusservico, cuf, 
-				pKey, cert, &msg);
+			msg = strdup("Error ao obter certificado e chave");
 		}
-		EVP_PKEY_free(pKey);
-		X509_free(cert);
 	} else {
 		msg = strdup("Configure o certificado");
 	}
