@@ -144,13 +144,13 @@ static int sefaz_response_eventos(LOTE_EVENTO *lote, xmlDocPtr doc){
 	return 0;
 }
 
-int send_lote(LOTE *lote, char *URL, int ambiente, EVP_PKEY *key, X509 *cert,
-		char **msg){
+int send_lote(LOTE *lote, char *URL, int ambiente, int cuf, EVP_PKEY *key, 
+		X509 *cert, char **msg){
 	char *response, *status;
 	int cStat, rc;
 	xmlDocPtr doc;
 	char *xml = gen_lote_xml(lote, key, cert);
-	response = send_sefaz(SEFAZ_NFE_AUTORIZACAO, URL, ambiente, 35, 
+	response = send_sefaz(SEFAZ_NFE_AUTORIZACAO, URL, ambiente, cuf, 
 		xml, key, cert);
 	if(response == NULL){
 		*msg = strdup("Sem resposta do SEFAZ, tente novamente");
@@ -184,13 +184,13 @@ int send_lote(LOTE *lote, char *URL, int ambiente, EVP_PKEY *key, X509 *cert,
 	return cStat;
 }
 
-int send_lote_evento(LOTE_EVENTO *lote, char *URL, int ambiente, EVP_PKEY *key,
-		X509 *cert, char **msg){
+int send_lote_evento(LOTE_EVENTO *lote, char *URL, int ambiente, int cuf, 
+		EVP_PKEY *key, X509 *cert, char **msg){
 	char *response, *status;
 	int cStat, rc = 0;
 	xmlDocPtr doc;
 	char *xml = gen_lote_evento_xml(lote, key, cert);
-	response = send_sefaz(SEFAZ_RECEPCAO_EVENTO, URL, ambiente, 35, 
+	response = send_sefaz(SEFAZ_RECEPCAO_EVENTO, URL, ambiente, cuf, 
 		xml, key, cert);
 	if(response == NULL){
 		*msg = strdup("Sem resposta do SEFAZ, tente novamente");
@@ -223,13 +223,13 @@ int send_lote_evento(LOTE_EVENTO *lote, char *URL, int ambiente, EVP_PKEY *key,
 	return cStat;
 }
 
-int cons_lote(LOTE *lote, char *URL, int ambiente, EVP_PKEY *key, X509 *cert, 
-		char **msg){
+int cons_lote(LOTE *lote, char *URL, int ambiente, int cuf, EVP_PKEY *key, 
+		X509 *cert, char **msg){
 	char *response, *status;
 	int cStat;
 	xmlDocPtr doc;
 	char *xml = gen_cons_nfe(lote, ambiente);
-	response = send_sefaz(SEFAZ_NFE_RET_AUTORIZACAO, URL, ambiente, 35, 
+	response = send_sefaz(SEFAZ_NFE_RET_AUTORIZACAO, URL, ambiente, cuf, 
 		xml, key, cert);
 	if(response == NULL){
 		*msg = strdup("Sem resposta do SEFAZ, tente novamente");
