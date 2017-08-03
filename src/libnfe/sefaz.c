@@ -197,6 +197,7 @@ int send_lote_evento(LOTE_EVENTO *lote, char *URL, int ambiente, int cuf,
 		return -ESEFAZ;
 	}
 	fprintf(stdout, "%s\n", response);
+	lote->xml_response = response;
 	doc = xmlReadMemory(response, strlen(response), "noname.xml", NULL, 0);
 	status = get_xml_element(doc, "nfe:cStat");
 	if(status == NULL){
@@ -210,8 +211,9 @@ int send_lote_evento(LOTE_EVENTO *lote, char *URL, int ambiente, int cuf,
 	fprintf(stdout, "%s\n", response);
 	*msg = strdup(motivo);
 
-	if(cStat == 128)
+	if(cStat == 128){
 		rc = sefaz_response_eventos(lote, doc);
+	}
 	xmlFree(motivo);
 	xmlFree(status);
 
