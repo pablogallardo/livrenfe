@@ -127,7 +127,7 @@ static int get_private_key_a3(EVP_PKEY **k, X509 **c, const char *password,
 		return -ELIBP11;
 	}
 	*k = PKCS11_get_private_key(authkey);
-	return 0;
+	return 1;
 }
 
 static int get_private_key_a1(EVP_PKEY **k, X509 **c, const char *password,
