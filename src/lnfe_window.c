@@ -417,18 +417,31 @@ static gint nfe_on_popup(GtkTreeView *t, gpointer win){
 }
 
 static void on_status_servico_click(gpointer p, LivrenfeWindow *win){
-	gtk_widget_set_visible(GTK_WIDGET(win->password_modal), TRUE);
-	gtk_widget_grab_focus(GTK_WIDGET(win->password));
-	if(win->passwd_click_signal_handler != 0){
-		g_signal_handler_disconnect(win->pw_ok_btn, 
-			win->passwd_click_signal_handler);
-		g_signal_handler_disconnect(win->password, 
-			win->passwd_key_signal_handler);
+	EMITENTE *e = get_emitente(1);
+	if(e){
+		gtk_widget_set_visible(GTK_WIDGET(win->password_modal), TRUE);
+		gtk_widget_grab_focus(GTK_WIDGET(win->password));
+		if(win->passwd_click_signal_handler != 0){
+			g_signal_handler_disconnect(win->pw_ok_btn, 
+				win->passwd_click_signal_handler);
+			g_signal_handler_disconnect(win->password, 
+				win->passwd_key_signal_handler);
+		}
+		win->passwd_click_signal_handler =  g_signal_connect(win->pw_ok_btn, 
+			"clicked", G_CALLBACK(sefaz_status), win);
+		win->passwd_key_signal_handler =  g_signal_connect(win->password, 
+			"activate", G_CALLBACK(sefaz_status), win);
+	} else {
+		GtkWidget *dialog;
+		dialog = gtk_message_dialog_new(GTK_WINDOW(win),
+			GTK_DIALOG_DESTROY_WITH_PARENT,
+			GTK_MESSAGE_ERROR,
+			GTK_BUTTONS_CLOSE,
+			"Cadastre primeiro o emitente");
+		gtk_dialog_run(GTK_DIALOG(dialog));
+		gtk_widget_destroy(GTK_WIDGET(dialog));
+		emitente_manager_activate(NULL, win);
 	}
-	win->passwd_click_signal_handler =  g_signal_connect(win->pw_ok_btn, 
-		"clicked", G_CALLBACK(sefaz_status), win);
-	win->passwd_key_signal_handler =  g_signal_connect(win->password, 
-		"activate", G_CALLBACK(sefaz_status), win);
 }
 
 static void livrenfe_window_init(LivrenfeWindow *win){
@@ -472,7 +485,7 @@ static void livrenfe_window_init(LivrenfeWindow *win){
 
 	GdkPixbuf *icon;
 	GError *error = NULL;
-	icon = gdk_pixbuf_new_from_resource("/br/com/lapagina/livrenfe/icons/livrenfe_128x128.png",
+	icon = gdk_pixbuf_new_from_resource("/br/com/lapagina/livrenfe/icons/livrenfe.png",
 		&error);
 	gtk_window_set_default_icon(icon);
 	gtk_window_set_icon(GTK_WINDOW(win), icon);

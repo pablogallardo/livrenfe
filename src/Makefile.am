@@ -17,7 +17,7 @@ livrenfe_LDADD = libnfe/libnfe.la
 
 resources.c: livrenfe.gresource.xml window.ui nfe_manager.ui item_manager.ui \
 		emitente_manager.ui sefaz_response.ui icons/livrenfe.png \
-		icons/livrenfe_128x128.png prefs_dialog.ui
+		prefs_dialog.ui
 	glib-compile-resources --target=$@ --generate-source $<
 
 clean-local:

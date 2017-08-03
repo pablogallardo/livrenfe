@@ -8,6 +8,5 @@
     <file preprocess="xml-stripblanks">sefaz_response.ui</file>
     <file preprocess="xml-stripblanks">prefs_dialog.ui</file>
     <file>icons/livrenfe.png</file>
-    <file>icons/livrenfe_128x128.png</file>
   </gresource>
 </gresources>
