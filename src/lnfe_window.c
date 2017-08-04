@@ -367,10 +367,8 @@ static gint popup_menu_nfe(GtkTreeView *t, GdkEventButton *e, LivrenfeWindow *wi
 				FALSE);
 			gtk_widget_set_sensitive(GTK_WIDGET(win->export_nfe),
 				FALSE);
-			if(!cancelada){
-				gtk_widget_set_sensitive(GTK_WIDGET(win->emitir_nfe),
-					TRUE);
-			}
+			gtk_widget_set_sensitive(GTK_WIDGET(win->emitir_nfe),
+				cancelada? FALSE:TRUE);
 		} else {
 			gtk_widget_set_sensitive(GTK_WIDGET(win->cancel_nfe),
 				TRUE);
