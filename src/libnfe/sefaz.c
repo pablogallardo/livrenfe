@@ -127,11 +127,11 @@ static int sefaz_response_eventos(LOTE_EVENTO *lote, xmlDocPtr doc){
 		xmlFree(motivo);
 		if(cStat == 135 || cStat == 136){
 			char *nProt;
-			sprintf(xp, "nfe:protNFe/nfe:infProt[nfe:chNFe='%s']/nfe:nProt", 
+			sprintf(xp, "nfe:protNFe/nfe:infEvento[nfe:chNFe='%s']/nfe:nProt", 
 				n->idnfe->chave);
 			nProt = get_xml_element(doc, xp);
 			e->protocolo = strdup(nProt);
-			sprintf(xp, "//nfe:protNFe/nfe:infProt[nfe:chNFe='%s']/..", 
+			sprintf(xp, "//nfe:protNFe/nfe:infEvento[nfe:chNFe='%s']/..", 
 				n->idnfe->chave);
 			char *xml_prot = get_xml_subtree(doc, xp);
 			e->xml_response = strdup(xml_prot);
@@ -196,7 +196,6 @@ int send_lote_evento(LOTE_EVENTO *lote, char *URL, int ambiente, int cuf,
 		*msg = strdup("Sem resposta do SEFAZ, tente novamente");
 		return -ESEFAZ;
 	}
-	fprintf(stdout, "%s\n", response);
 	lote->xml_response = response;
 	doc = xmlReadMemory(response, strlen(response), "noname.xml", NULL, 0);
 	status = get_xml_element(doc, "nfe:cStat");
@@ -208,7 +207,6 @@ int send_lote_evento(LOTE_EVENTO *lote, char *URL, int ambiente, int cuf,
 	if(motivo == NULL){
 		return -ESEFAZ;	
 	}
-	fprintf(stdout, "%s\n", response);
 	*msg = strdup(motivo);
 
 	if(cStat == 128){
@@ -237,7 +235,6 @@ int cons_lote(LOTE *lote, char *URL, int ambiente, int cuf, EVP_PKEY *key,
 		*msg = strdup("Sem resposta do SEFAZ, tente novamente");
 		return -ESEFAZ;
 	}
-	fprintf(stdout, "%s\n", response);
 	doc = xmlReadMemory(response, strlen(response), "noname.xml", NULL, 0);
 	status = get_xml_element(doc, "nfe:cStat");
 	if(status == NULL){
