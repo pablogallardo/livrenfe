@@ -993,7 +993,7 @@ char *generate_evento_xml(EVENTO *e, EVP_PKEY *key, X509 *cert) {
 	struct tm *tm_info;
 	time(&now);
 	tm_info = localtime(&(now));
-	strftime(buffer, 26, "%Y-%m-%dT%H:%M:%S-02:00", tm_info);
+	strftime(buffer, 26, "%Y-%m-%dT%H:%M:%S-03:00", tm_info);
 
 	rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "dhEvento",
 			"%s", buffer);
