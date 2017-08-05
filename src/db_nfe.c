@@ -809,7 +809,6 @@ int db_save_lote_evento(LOTE_EVENTO *lote){
 			strcat(sql, aux);
 			i = i->next;
 		}
-		printf("%s", sql);
 		db_exec(sql, &err);
 		if(err)
 			return -ESQL;
