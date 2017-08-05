@@ -826,6 +826,7 @@ int register_evento(EVENTO *e){
 		VALUES (%Q, %d, %d, %Q, %Q, %Q);",
 		e->id == 0? NULL : e->id, e->nfe->idnfe->id_nfe, e->type, 
 		e->xml, e->xml_response, e->xmot);
+	printf("%s\n", sql);
 	db_exec(sql, &err);
 	last_id = db_last_insert_id();
 	e->id = itoa(last_id);
