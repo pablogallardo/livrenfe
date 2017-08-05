@@ -821,12 +821,11 @@ int register_evento(EVENTO *e){
 	sql = malloc(400);
 	err = NULL;
 	int last_id; 
-	sql = sqlite3_mprintf("REPLACE INTO evento (id_evento, id_nfe, type,\
+	sql = sqlite3_mprintf("REPLACE INTO eventos (id_evento, id_nfe, type,\
 		xml, xml_response, xmot)\
 		VALUES (%Q, %d, %d, %Q, %Q, %Q);",
 		e->id == 0? NULL : e->id, e->nfe->idnfe->id_nfe, e->type, 
 		e->xml, e->xml_response, e->xmot);
-	printf("%s\n", sql);
 	db_exec(sql, &err);
 	last_id = db_last_insert_id();
 	e->id = itoa(last_id);
