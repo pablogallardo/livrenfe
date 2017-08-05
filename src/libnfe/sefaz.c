@@ -135,6 +135,7 @@ static int sefaz_response_eventos(LOTE_EVENTO *lote, xmlDocPtr doc){
 				n->idnfe->chave);
 			char *xml_prot = get_xml_subtree(doc, xp);
 			e->xml_response = strdup(xml_prot);
+			n->canceled = 1;
 			xmlFree(nProt);
 			xmlFree(xml_prot);
 		}
