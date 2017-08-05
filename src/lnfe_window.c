@@ -157,6 +157,8 @@ static void sefaz_cancelar(gpointer *b, LivrenfeWindow *win){
 	sr = sefaz_response_new(LIVRENFE_WINDOW(win));
 	sr->password = password;
 	sr->lote_evento = lote;
+	g_signal_connect(sr, "destroy", 
+		G_CALLBACK(on_nfe_manager_destroy), win);
 	gtk_window_present(GTK_WINDOW(sr));
 }
 
