@@ -127,11 +127,11 @@ static int sefaz_response_eventos(LOTE_EVENTO *lote, xmlDocPtr doc){
 		xmlFree(motivo);
 		if(cStat == 135 || cStat == 136){
 			char *nProt;
-			sprintf(xp, "nfe:protNFe/nfe:infEvento[nfe:chNFe='%s']/nfe:nProt", 
+			sprintf(xp, "nfe:retEvento/nfe:infEvento[nfe:chNFe='%s']/nfe:nProt", 
 				n->idnfe->chave);
 			nProt = get_xml_element(doc, xp);
 			e->protocolo = strdup(nProt);
-			sprintf(xp, "//nfe:protNFe/nfe:infEvento[nfe:chNFe='%s']/..", 
+			sprintf(xp, "//nfe:retEvento/nfe:infEvento[nfe:chNFe='%s']/..", 
 				n->idnfe->chave);
 			char *xml_prot = get_xml_subtree(doc, xp);
 			e->xml_response = strdup(xml_prot);
