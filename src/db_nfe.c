@@ -801,14 +801,15 @@ int db_save_lote_evento(LOTE_EVENTO *lote){
 			id_evento) VALUES ");
 		while(i != NULL){
 			EVENTO *e = i->evento;
+			register_evento(e);
 			char *aux = sqlite3_mprintf("(%d, %Q)", lote->id,
 				e->id);
 			if(i != lote->eventos)
 				strcat(sql, ", ");
 			strcat(sql, aux);
-			register_evento(e);
 			i = i->next;
 		}
+		printf("%s", sql);
 		db_exec(sql, &err);
 		if(err)
 			return -ESQL;
@@ -828,6 +829,7 @@ int register_evento(EVENTO *e){
 		e->xml, e->xml_response, e->xmot);
 	db_exec(sql, &err);
 	last_id = db_last_insert_id();
+	e->id = itoa(last_id);
 	if(err){
 		fprintf(stderr, "livrenfe: Error: %s", err);
 		return -ESQL;
