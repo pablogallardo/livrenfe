@@ -832,6 +832,7 @@ int register_evento(EVENTO *e){
 		fprintf(stderr, "livrenfe: Error: %s", err);
 		return -ESQL;
 	}
+	register_nfe(e->nfe);
 	switch(e->type){
 		case CANCELAMENTO_TYPE:{
 			EVENTO_CANCELAMENTO *ec = (EVENTO_CANCELAMENTO*) e;
