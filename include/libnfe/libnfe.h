@@ -56,6 +56,23 @@
  * Coleção de enums
  *
  * */
+
+/* Este tipo de dado
+ * é para ser usado 
+ * para dinheiro na
+ * notacao de centavos.
+ */
+typedef long int cents;
+/*Este tipo de dado
+ * eh para ser usado
+ * como porcentagem (%),
+ * será em especial,
+ * útil para alíquotas
+ * de impostos
+ */
+
+typedef int aliquota;
+
 typedef enum indPag_t {
 	A_VISTA = 0,
 	A_PRAZO = 1,
