@@ -27,15 +27,15 @@
 #define	SEFAZ_STATUS_OK	107
 
 extern int get_status_servico(int ambiente, char *URL, int cuf, EVP_PKEY *, 
-	X509 *, char **msg);
+	X509 *, char *msg);
 
 extern int send_lote(LOTE *lote, char *URL, int ambiente, int cuf, EVP_PKEY *, 
-	X509 *, char **msg);
+	X509 *, char *msg);
 
 extern int send_lote_evento(LOTE_EVENTO *lote, char *URL, int ambiente, int cuf,
-	EVP_PKEY *, X509 *, char **msg);
+	EVP_PKEY *, X509 *, char *msg);
 
 extern int cons_lote(LOTE *, char *URL, int ambiente, int cuf, EVP_PKEY *, 
-	X509 *, char **msg);
+	X509 *, char *msg);
 
 #endif

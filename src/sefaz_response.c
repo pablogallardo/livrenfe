@@ -72,18 +72,18 @@ static void *sefaz_thread(void *arg){
 			URLS *urls = prefs->urls;
 			if(sr->lote){
 				send_lote(sr->lote, urls->nfeautorizacao, prefs->ambiente, 
-					cuf, pKey, cert, &msg);
+					cuf, pKey, cert, msg);
 				cons_lote(sr->lote, urls->nferetautorizacao, ambiente, 
-					cuf, pKey, cert, &msg);
+					cuf, pKey, cert, msg);
 				db_save_lote(sr->lote);
 
 			} else if(sr->lote_evento){
 				send_lote_evento(sr->lote_evento, urls->nfeconsultaprotocolo, 
-					ambiente, cuf, pKey, cert, &msg);
+					ambiente, cuf, pKey, cert, msg);
 				db_save_lote_evento(sr->lote_evento);
 			} else {
 				get_status_servico(ambiente, urls->nfestatusservico, cuf, 
-					pKey, cert, &msg);
+					pKey, cert, msg);
 			}
 			EVP_PKEY_free(pKey);
 			X509_free(cert);
