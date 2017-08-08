@@ -16,7 +16,6 @@
  * along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include "item_manager.h"
 #include "nfe_manager.h"
 #include "gtk_common.h"
@@ -24,6 +23,7 @@
 #include <libnfe/nfe.h>
 #include <gtk/gtk.h>
 #include <stdlib.h>
+#include <libnfe/utils.h>
 
 
 struct _ItemManagerClass{
@@ -123,7 +123,7 @@ static int set_item(GtkButton *b,GtkWidget *iman){
 		double valor_double = atof(valor_str);
 		cents valor = doubletocents(valor_double);
 		aliquota aliqt = doubletoaliquota(aliquota_double);	
-		inst_icms(atoi(gtk_combo_box_get_active_id(priv->icms_origem)),
+	inst_icms(atoi(gtk_combo_box_get_active_id(priv->icms_origem)),
 			icms_situacao_tributaria,
 			aliqt,
 			valor,
@@ -211,7 +211,8 @@ static void calc_subtotal(gpointer p, GdkEvent *e, ItemManager *iman){
 	char *valor_str = (char*) gtk_entry_get_text(priv->valor);
 	valor_str = str_replace(",", ".", valor_str);
 	double valor = atof(valor_str);
-	char *subtotal = dtoa(qtd * valor);
+	double total = (qtd * valor);
+	char *subtotal = dtoa(total);
 	gtk_label_set_text(priv->subtotal, subtotal);
 	free(subtotal);
 }
@@ -233,7 +234,7 @@ static void inst_item_manager(gpointer p, ItemManager *iman){
 		gtk_entry_set_text(priv->codigo, p->codigo);
 		gtk_entry_set_text(priv->descricao, p->descricao);
 		gtk_entry_set_text(priv->unidade, p->unidade_comercial);
-		gtk_entry_set_text(priv->valor, dtoa(p->valor));
+		gtk_entry_set_text(priv->valor, dtoa(centstodouble(p->valor)));//centstodouble?
 		gtk_entry_set_text(priv->quantidade, itoa(i->quantidade));
 		gtk_entry_set_text(priv->ncm, itoa(p->ncm));
 		gtk_entry_set_text(priv->cfop, itoa(p->cfop));
@@ -246,9 +247,10 @@ static void inst_item_manager(gpointer p, ItemManager *iman){
 				itoa(icms->origem));
 			gtk_combo_box_set_active_id(priv->icms_situacao_tributaria, 
 				itoa(icms->tipo));
-			gtk_entry_set_text(priv->icms_aliquota, dtoa(icms->aliquota));
+			gtk_entry_set_text(priv->icms_aliquota, dtoa(aliquotatodouble(icms->aliquota)));
+								     
 			gtk_entry_set_text(priv->icms_credito_aproveitado, 
-				dtoa(icms->valor));
+				dtoa(centstodouble(icms->valor)));
 		}
 
 		//COFINS

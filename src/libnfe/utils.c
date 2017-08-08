@@ -55,7 +55,7 @@ char *itoa(int i){
 }
 
 char *dtoa(double d){
-	char *s = malloc(10);
+	char *s =(char *) malloc(sizeof(char) * 10);
 	char *formated;
 	sprintf(s, "%.2f", d);
 
