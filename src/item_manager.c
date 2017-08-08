@@ -128,8 +128,8 @@ static int set_item(GtkButton *b,GtkWidget *iman){
 			aliqt,
 			valor,
 			item->imposto->icms);
-//		free(aliquota_str);
-//		free(valor_str);
+		free(aliquota_str);
+		free(valor_str);
 	}
 
 	int ipi_situacao_tributaria = atoi(gtk_combo_box_get_active_id(priv->ipi_situacao_tributaria));
@@ -140,7 +140,7 @@ static int set_item(GtkButton *b,GtkWidget *iman){
 			item->imposto->ipi);
 	}
 	item->valor = valor;
-//	free(valor_formatado);
+	free(valor_formatado);
 
 	item->quantidade = atoi(gtk_entry_get_text(priv->quantidade));
 	if(ITEM_MANAGER(iman)->item == NULL){
