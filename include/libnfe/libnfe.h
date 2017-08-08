@@ -365,7 +365,7 @@ typedef struct {
 	unsigned int ncm;
 	unsigned int cfop;
 	const char *unidade_comercial;
-	double valor;
+	cents valor;
 } PRODUTO;
 
 /**
@@ -380,8 +380,8 @@ typedef struct {
 typedef struct {
 	Origem origem;
 	unsigned int tipo;
-	double aliquota;
-	double valor;
+	aliquota aliquota;
+	cents valor;
 } ICMS;
 
 /**
@@ -393,7 +393,7 @@ typedef struct {
  * Imposto PIS
  */
 typedef struct {
-	double aliquota;
+	aliquota aliquota;
 	unsigned int quantidade;
 	const char *nt;
 } PIS;
@@ -407,7 +407,7 @@ typedef struct {
  * Imposto COFINS 
  */
 typedef struct {
-	double aliquota;
+	aliquota aliquota;
 	unsigned int quantidade;
 	const char *nt;
 } COFINS;
@@ -460,7 +460,7 @@ struct ITEM {
 	IMPOSTO *imposto;
 	unsigned int ordem;
 	unsigned int quantidade;
-	double valor;
+	cents valor;
 	ITEM *pointer; //next item
 };
 
@@ -515,7 +515,7 @@ typedef struct {
 	DESTINATARIO *destinatario;
 	ITEM *itens;
 	unsigned int q_itens;
-	double total;
+	cents total;
 	TRANSP *transp;
 	PROTOCOLO *protocolo;
 	const char *xml;

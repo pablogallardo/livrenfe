@@ -19,7 +19,6 @@
 
 #include "item_manager.h"
 #include "nfe_manager.h"
-#include "libnfe/utils.h"
 #include "gtk_common.h"
 #include <libnfe/errno.h>
 #include <libnfe/nfe.h>
@@ -90,9 +89,15 @@ static int check_fields(GtkWidget *iman){
 	return 0;
 }
 
-static int set_item(GtkButton *b, GtkWidget *iman){
+static int set_item(GtkButton *b,GtkWidget *iman){
+		
 	ItemManagerPrivate *priv = item_manager_get_instance_private(ITEM_MANAGER(iman));
-	char *valor = str_replace(",",".",(char*)gtk_entry_get_text(priv->valor));
+	
+	//parei aqui
+	char *valor_formatado = str_replace(",",".",(char*)gtk_entry_get_text(priv->valor));
+	double valor_double = atof(valor_formatado);
+	cents valor = doubletocents(valor_double);
+		      	
 	if(check_fields(iman))
 		return -EINVFIELD;
 
@@ -100,25 +105,31 @@ static int set_item(GtkButton *b, GtkWidget *iman){
 		ITEM_MANAGER(iman)->item : new_item();
 
 	NFE *nfe = (ITEM_MANAGER(iman))->nfe;
-	inst_produto(0, gtk_entry_get_text(priv->codigo),
+	inst_produto(0, 
+		gtk_entry_get_text(priv->codigo),
 		gtk_entry_get_text(priv->descricao),
 		atoi(gtk_entry_get_text(priv->ncm)),
 		atoi(gtk_entry_get_text(priv->cfop)),
 		gtk_entry_get_text(priv->unidade),
-		atof(valor),
+		valor,
 		item->produto);
 	
 	int icms_situacao_tributaria = atoi(gtk_combo_box_get_active_id(priv->icms_situacao_tributaria));
+	
 	if(icms_situacao_tributaria){
-		char *aliquota = str_replace(",",".",(char*)gtk_entry_get_text(priv->icms_aliquota));
-		char *valor = str_replace(",",".",(char*)gtk_entry_get_text(priv->icms_credito_aproveitado));
+		char *aliquota_str = str_replace(",",".",(char*)gtk_entry_get_text(priv->icms_aliquota));
+		double aliquota_double = atof(aliquota_str);
+		char *valor_str = str_replace(",",".",(char*)gtk_entry_get_text(priv->icms_credito_aproveitado));
+		double valor_double = atof(valor_str);
+		cents valor = doubletocents(valor_double);
+		aliquota aliqt = doubletoaliquota(aliquota_double);	
 		inst_icms(atoi(gtk_combo_box_get_active_id(priv->icms_origem)),
 			icms_situacao_tributaria,
-			atof(aliquota),
-			atof(valor),
+			aliqt,
+			valor,
 			item->imposto->icms);
-		free(aliquota);
-		free(valor);
+//		free(aliquota_str);
+//		free(valor_str);
 	}
 
 	int ipi_situacao_tributaria = atoi(gtk_combo_box_get_active_id(priv->ipi_situacao_tributaria));
@@ -128,8 +139,8 @@ static int set_item(GtkButton *b, GtkWidget *iman){
 			gtk_entry_get_text(priv->ipi_codigo),
 			item->imposto->ipi);
 	}
-	item->valor = atof(valor);
-	free(valor);
+	item->valor = valor;
+//	free(valor_formatado);
 
 	item->quantidade = atoi(gtk_entry_get_text(priv->quantidade));
 	if(ITEM_MANAGER(iman)->item == NULL){

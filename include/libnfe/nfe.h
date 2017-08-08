@@ -115,26 +115,56 @@ extern int rm_item(NFE *nfe, ITEM *i);
  */
 extern void set_chave(NFE *nfe);
 
-extern int inst_produto(int id, const char *codigo, const char *desc, 
-		unsigned int ncm, unsigned int cfop, 
-		const char *unidade_comercial, double valor, PRODUTO *p);
+extern int inst_produto(
+		int id, 
+		const char *codigo, 
+		const char *desc, 
+		unsigned int ncm, 
+		unsigned int cfop, 
+		const char *unidade_comercial, 
+		cents valor, 
+		PRODUTO *p);
 
-extern int inst_icms(int origem, unsigned int tipo, double aliquota, double valor,
+extern int inst_icms(
+		int origem, 
+		unsigned int tipo, 
+		aliquota aliquota, 
+		cents valor,
 		ICMS *i);
 
-extern int inst_ipi(int sit_trib, const char *classe, 
-		const char *codigo, IPI *i);
+extern int inst_ipi(
+		int sit_trib, 
+		const char *classe, 
+		const char *codigo, 
+		IPI *i);
 
-extern int inst_item(double valor, double quantidade, 
-		unsigned int ordem, int id_produto, char *cod_prod,
-		int icms_origem, int icms_tipo, int pis_quantidade, int pis_nt,
-		int cofins_quantidade, int cofins_nt, int ncm, int cfop,
-		double icms_aliquota, double icms_valor, double pis_aliquota,
-		double cofins_aliquota, int ipi_sit_trib, char *ipi_classe,
-		char *ipi_codigo, char *descricao, char *unidade,
+extern int inst_item(
+		cents valor, 
+		double quantidade, 
+		unsigned int ordem, 
+		int id_produto, 
+		char *cod_prod,
+		int icms_origem, 
+		int icms_tipo, 
+		int pis_quantidade, 
+		int pis_nt,
+		int cofins_quantidade, 
+		int cofins_nt, 
+		int ncm, 
+		int cfop,
+		aliquota icms_aliquota, 
+		cents icms_valor, 
+		aliquota pis_aliquota,
+		aliquota cofins_aliquota, 
+		int ipi_sit_trib, 
+		char *ipi_classe,
+		char *ipi_codigo, 
+		char *descricao, 
+		char *unidade,
 		ITEM *);
 
-extern int inst_nfe(unsigned int id_nfe, 
+extern int inst_nfe(
+		unsigned int id_nfe, 
 		int serie, 
 		unsigned int num_nf,
 		indPag ind_pag, 

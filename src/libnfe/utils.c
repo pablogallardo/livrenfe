@@ -168,23 +168,22 @@ char *str_replace(char *search , char *replace , char *subject){
  }
 
 cents doubletocents(double valor){
-
 	if(valor)
-		return (valor * 100);
+		return   (valor * 100);
 	else
 		return 0;
 }
 
 double centstodouble(cents moeda){
-	
+
 	if(moeda)
-		return (moeda / 100);
+		return (double) (moeda / 100);
 	else
 		return 0;
 }
 
 aliquota doubletoaliquota(double percentual){
-		
+
 	if(percentual)
 		return (percentual * 100);
 	else
@@ -193,7 +192,7 @@ aliquota doubletoaliquota(double percentual){
 
 double aliquotatoduble(aliquota percentual){
 	if(percentual)
-		return (percentual / 10000);
+		return (double)(percentual / 10000);
 	else
 		return 0;
 }

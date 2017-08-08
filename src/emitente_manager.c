@@ -58,7 +58,6 @@ G_DEFINE_TYPE_WITH_PRIVATE(EmitenteManager, emitente_manager, GTK_TYPE_DIALOG)
 static int check_fields(GtkWidget *eman){
 	EmitenteManagerPrivate *priv;
 	int rc;
-
 	priv = emitente_manager_get_instance_private(EMITENTE_MANAGER(eman));
 	if(validate_integer(priv->cnpj, "Número de CNPJ inválido", eman, FALSE))
 		return -EINVFIELD;
