@@ -119,9 +119,14 @@ static int get_private_key_a3(EVP_PKEY **k, X509 **c, const char *password,
 		fprintf(stderr, "no certificates found\n");
 		return -ELIBP11;
 	}
-	authcert=&certs[3];
+	int i;
+	for(i = 0;i < ncerts; i++){
+		authcert=&certs[i];
+		authkey = PKCS11_find_key(authcert);
+		if(authkey != NULL)
+			break;
+	}
 	*c = X509_dup(authcert->x509);
-	authkey = PKCS11_find_key(authcert);
 	if (authkey == NULL) {
 		fprintf(stderr, "no key matching certificate available\n");
 		return -ELIBP11;
