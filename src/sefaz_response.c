@@ -96,6 +96,13 @@ static void *sefaz_thread(void *arg){
 
 	gtk_spinner_stop(priv->spinner);
 	gtk_label_set_text(priv->resposta, msg);
+
+	gint width;
+	gint height;
+	gtk_widget_get_preferred_height(GTK_WIDGET(priv->resposta), NULL, &height);
+	gtk_widget_get_preferred_width(GTK_WIDGET(priv->resposta), NULL, &width);
+	gtk_widget_set_size_request(GTK_WIDGET(&(sr->parent)), width, height);
+	gtk_window_set_position(GTK_WINDOW(&(sr->parent)), GTK_WIN_POS_CENTER_ALWAYS);
 #if GTK_CHECK_VERSION(3,18,0)
 	gtk_overlay_reorder_overlay(priv->overlay, GTK_WIDGET(priv->resposta),
 		-1);
