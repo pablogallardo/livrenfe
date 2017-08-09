@@ -28,7 +28,7 @@
 #define LIVRENFE_COPYRIGHT	"© 2016, 2017 Pablo G. Gallardo"
 #define	LIVRENFE_FOLDER_NAME	"/.livrenfe"
 #define	LIVRENFE_DB		"/livrenfe.db"
-#define LIVRENFE_COMMENT	"Emissor Código Aberto de Notas Fiscais Eletrónicas"
+#define LIVRENFE_COMMENT	"Emissor Código Aberto de Notas Fiscais Eletrônicas"
 #define LIVRENFE_WEBSITE	"livrenfe.org"
 #define LIVRENFE_TITLE		"LivreNFE"
 
