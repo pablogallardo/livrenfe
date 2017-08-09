@@ -88,7 +88,7 @@ static void *sefaz_thread(void *arg){
 			EVP_PKEY_free(pKey);
 			X509_free(cert);
 		} else {
-			msg = strdup("Error ao obter certificado e chave");
+			msg = strdup("Erro ao obter certificado e chave");
 		}
 	} else {
 		msg = strdup("Configure o certificado");
