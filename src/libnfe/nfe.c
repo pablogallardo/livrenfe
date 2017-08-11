@@ -299,10 +299,13 @@ int inst_icms(int origem,
 }
 
 int inst_ipi(int sit_trib, const char *classe, const char *codigo, IPI *i){
+	if(i == NULL)
+		return -1;
 	i->sit_trib = sit_trib;
 	if(classe)
 		i->classe = strdup(classe);
-	i->codigo = strdup(codigo);
+	if(codigo)
+		i->codigo = strdup(codigo);
 	return 0;
 }
 
