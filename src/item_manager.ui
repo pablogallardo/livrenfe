@@ -564,6 +564,7 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkEntry" id="ipi_classe">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="max_length">5</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -574,6 +575,7 @@ along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkEntry" id="ipi_codigo">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="max_length">3</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
