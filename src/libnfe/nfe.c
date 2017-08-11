@@ -300,7 +300,8 @@ int inst_icms(int origem,
 
 int inst_ipi(int sit_trib, const char *classe, const char *codigo, IPI *i){
 	i->sit_trib = sit_trib;
-	i->classe = strdup(classe);
+	if(classe)
+		i->classe = strdup(classe);
 	i->codigo = strdup(codigo);
 	return 0;
 }
