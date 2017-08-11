@@ -126,7 +126,7 @@ int register_nfe(NFE *nfe){
 		xml, protocolo, sefaz_cstat, sefaz_xmot, xml_protocolo, canceled,\
 		inf_ad_fisco, inf_ad_contrib) VALUES  \
 		(%d, %Q, %d, '%d', '%d', '%d', %lu, %Q, '%d', '%d' , '%d', '%d', \
-		 '%d', '%d', '%d', '%s', '%d', %Q, %d, '%d' , '%d', %i, %Q,\
+		 '%d', '%d', '%d', '%s', '%d', %Q, %d, '%d' , '%d', %d, %Q,\
 		 %d, %d, %Q, %Q, %Q, %d, %Q, %Q, %d, %Q, %Q);",
 		idnfe->municipio->cMun, idnfe->nat_op, idnfe->ind_pag, idnfe->mod, 
 		idnfe->serie, idnfe->num_nf, (unsigned long)idnfe->dh_emis,

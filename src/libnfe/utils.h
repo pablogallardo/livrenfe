@@ -21,7 +21,7 @@
 #define UTILS_H
 
 #include <time.h>
-#include "libnfe/libnfe.h"
+#include <libnfe/libnfe.h>
 
 /*Gera parametros para gerar data e hora no formato exigido pela Sefaz
 * O resuldato deve ser usado no 3º parametro da função  strftime(). 

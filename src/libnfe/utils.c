@@ -190,7 +190,7 @@ aliquota doubletoaliquota(double percentual){
 		return 0;
 }
 
-double aliquotatoduble(aliquota percentual){
+double aliquotatodouble(aliquota percentual){
 	if(percentual)
 		return (double)(percentual / 10000);
 	else

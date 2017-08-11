@@ -23,7 +23,7 @@
 #include <libnfe/nfe.h>
 #include <gtk/gtk.h>
 #include <stdlib.h>
-#include <libnfe/utils.h>
+#include "libnfe/utils.h"
 
 
 struct _ItemManagerClass{
@@ -247,7 +247,8 @@ static void inst_item_manager(gpointer p, ItemManager *iman){
 				itoa(icms->origem));
 			gtk_combo_box_set_active_id(priv->icms_situacao_tributaria, 
 				itoa(icms->tipo));
-			gtk_entry_set_text(priv->icms_aliquota, dtoa(aliquotatodouble(icms->aliquota)));
+			double x = aliquotatodouble(icms->aliquota);
+			gtk_entry_set_text(priv->icms_aliquota, dtoa(x));
 								     
 			gtk_entry_set_text(priv->icms_credito_aproveitado, 
 				dtoa(centstodouble(icms->valor)));

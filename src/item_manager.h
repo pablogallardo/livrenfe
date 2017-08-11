@@ -22,6 +22,7 @@
 
 #include "nfe_manager.h"
 #include <libnfe/libnfe.h>
+#include <libnfe/utils.h>
 #include <gtk/gtk.h>
 
 #define ITEM_MANAGER_TYPE	(item_manager_get_type())
