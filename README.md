@@ -47,7 +47,8 @@ $ sudo make install
 ```
 
 * Instalar xmlsec versao 1.2.24 que não está disponível no repositorio APT:
-```$ git clone https://github.com/lsh123/xmlsec
+```
+$ git clone https://github.com/lsh123/xmlsec
 $ cd xmlsec
 $ autoreconf --install
 $ ./configure && make
