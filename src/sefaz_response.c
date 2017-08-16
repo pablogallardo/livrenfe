@@ -82,8 +82,11 @@ static void *sefaz_thread(void *arg){
 					ambiente, cuf, pKey, cert, msg);
 				db_save_lote_evento(sr->lote_evento);
 			} else {
-				get_status_servico(ambiente, urls->nfestatusservico, cuf, 
+				int res = get_status_servico(ambiente, urls->nfestatusservico, cuf, 
 					pKey, cert, msg);
+				if(res < 0){
+					msg = strcpy(msg, "Erro ao consultar status de serviço");
+				}
 			}
 			EVP_PKEY_free(pKey);
 			X509_free(cert);
