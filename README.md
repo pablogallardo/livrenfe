@@ -3,7 +3,11 @@ LivreNFE
 
 Copyright (C) 2016, 2017 Pablo G. Gallardo <pggllrd@gmail.com>
 
-**PROJETO EM CONSTRUÇÃO**
+Aviso
+-------
+Você conhece o projeto microsped (https://github.com/silvioprog/microsped)?
+
+*A MicroSPED e a LivreNFE se tornarão um único projeto e com um novo nome*
 
 Descrição
 ---------
