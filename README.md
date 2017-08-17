@@ -7,7 +7,7 @@ Aviso
 -------
 Você conhece o projeto microsped (https://github.com/silvioprog/microsped)?
 
-*A MicroSPED e a LivreNFE se tornarão um único projeto e com um novo nome*
+**A MicroSPED e a LivreNFE se tornarão um único projeto e com um novo nome**
 
 Descrição
 ---------
