@@ -115,7 +115,10 @@ int register_nfe(NFE *nfe){
 		return -1;
 	}
 	last_id = db_last_insert_id();
-       	sql = sqlite3_mprintf("REPLACE INTO nfe (id_municipio, nat_op, ind_pag, mod_nfe, \
+       	//backtrace #1 #3  0x000000000040616d in register_nfe (nfe=0xb1e350) at db_nfe.c:118
+	//%f -> $i
+	
+	sql = sqlite3_mprintf("REPLACE INTO nfe (id_municipio, nat_op, ind_pag, mod_nfe, \
 		serie, num_nf, dh_emis, dh_saida, tipo, local_destino, \
 		tipo_impressao, tipo_ambiente, finalidade, consumidor_final, \
 		presencial, versao, div, chave, id_emitente, id_destinatario, \
@@ -123,7 +126,7 @@ int register_nfe(NFE *nfe){
 		xml, protocolo, sefaz_cstat, sefaz_xmot, xml_protocolo, canceled,\
 		inf_ad_fisco, inf_ad_contrib) VALUES  \
 		(%d, %Q, %d, '%d', '%d', '%d', %lu, %Q, '%d', '%d' , '%d', '%d', \
-		 '%d', '%d', '%d', '%s', '%d', %Q, %d, '%d' , '%d', %f, %Q,\
+		 '%d', '%d', '%d', '%s', '%d', %Q, %d, '%d' , '%d', %d, %Q,\
 		 %d, %d, %Q, %Q, %Q, %d, %Q, %Q, %d, %Q, %Q);",
 		idnfe->municipio->cMun, idnfe->nat_op, idnfe->ind_pag, idnfe->mod, 
 		idnfe->serie, idnfe->num_nf, (unsigned long)idnfe->dh_emis,

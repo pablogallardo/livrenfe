@@ -55,7 +55,7 @@ char *itoa(int i){
 }
 
 char *dtoa(double d){
-	char *s = malloc(10);
+	char *s =(char *) malloc(sizeof(char) * 10);
 	char *formated;
 	sprintf(s, "%.2f", d);
 
@@ -166,3 +166,33 @@ char *str_replace(char *search , char *replace , char *subject){
 	strcat(*str,DHDEFAULT);
 	return strcat(*str,aux);
  }
+
+cents doubletocents(double valor){
+	if(valor)
+		return   (valor * 100);
+	else
+		return 0;
+}
+
+double centstodouble(cents moeda){
+
+	if(moeda)
+		return (double) (moeda / 100);
+	else
+		return 0;
+}
+
+aliquota doubletoaliquota(double percentual){
+
+	if(percentual)
+		return (percentual * 100);
+	else
+		return 0;
+}
+
+double aliquotatodouble(aliquota percentual){
+	if(percentual)
+		return (double)(percentual / 10000);
+	else
+		return 0;
+}

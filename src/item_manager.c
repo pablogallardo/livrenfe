@@ -16,15 +16,14 @@
  * along with LivreNFE.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include "item_manager.h"
 #include "nfe_manager.h"
-#include "libnfe/utils.h"
 #include "gtk_common.h"
 #include <libnfe/errno.h>
 #include <libnfe/nfe.h>
 #include <gtk/gtk.h>
 #include <stdlib.h>
+#include "libnfe/utils.h"
 
 
 struct _ItemManagerClass{
@@ -90,9 +89,15 @@ static int check_fields(GtkWidget *iman){
 	return 0;
 }
 
-static int set_item(GtkButton *b, GtkWidget *iman){
+static int set_item(GtkButton *b,GtkWidget *iman){
+		
 	ItemManagerPrivate *priv = item_manager_get_instance_private(ITEM_MANAGER(iman));
-	char *valor = str_replace(",",".",(char*)gtk_entry_get_text(priv->valor));
+	
+	//parei aqui
+	char *valor_formatado = str_replace(",",".",(char*)gtk_entry_get_text(priv->valor));
+	double valor_double = atof(valor_formatado);
+	cents valor = doubletocents(valor_double);
+		      	
 	if(check_fields(iman))
 		return -EINVFIELD;
 
@@ -100,25 +105,31 @@ static int set_item(GtkButton *b, GtkWidget *iman){
 		ITEM_MANAGER(iman)->item : new_item();
 
 	NFE *nfe = (ITEM_MANAGER(iman))->nfe;
-	inst_produto(0, gtk_entry_get_text(priv->codigo),
+	inst_produto(0, 
+		gtk_entry_get_text(priv->codigo),
 		gtk_entry_get_text(priv->descricao),
 		atoi(gtk_entry_get_text(priv->ncm)),
 		atoi(gtk_entry_get_text(priv->cfop)),
 		gtk_entry_get_text(priv->unidade),
-		atof(valor),
+		valor,
 		item->produto);
 	
 	int icms_situacao_tributaria = atoi(gtk_combo_box_get_active_id(priv->icms_situacao_tributaria));
+	
 	if(icms_situacao_tributaria){
-		char *aliquota = str_replace(",",".",(char*)gtk_entry_get_text(priv->icms_aliquota));
-		char *valor = str_replace(",",".",(char*)gtk_entry_get_text(priv->icms_credito_aproveitado));
-		inst_icms(atoi(gtk_combo_box_get_active_id(priv->icms_origem)),
+		char *aliquota_str = str_replace(",",".",(char*)gtk_entry_get_text(priv->icms_aliquota));
+		double aliquota_double = atof(aliquota_str);
+		char *valor_str = str_replace(",",".",(char*)gtk_entry_get_text(priv->icms_credito_aproveitado));
+		double valor_double = atof(valor_str);
+		cents valor = doubletocents(valor_double);
+		aliquota aliqt = doubletoaliquota(aliquota_double);	
+	inst_icms(atoi(gtk_combo_box_get_active_id(priv->icms_origem)),
 			icms_situacao_tributaria,
-			atof(aliquota),
-			atof(valor),
+			aliqt,
+			valor,
 			item->imposto->icms);
-		free(aliquota);
-		free(valor);
+		free(aliquota_str);
+		free(valor_str);
 	}
 
 	int ipi_situacao_tributaria = atoi(gtk_combo_box_get_active_id(priv->ipi_situacao_tributaria));
@@ -128,8 +139,8 @@ static int set_item(GtkButton *b, GtkWidget *iman){
 			gtk_entry_get_text(priv->ipi_codigo),
 			item->imposto->ipi);
 	}
-	item->valor = atof(valor);
-	free(valor);
+	item->valor = valor;
+	free(valor_formatado);
 
 	item->quantidade = atoi(gtk_entry_get_text(priv->quantidade));
 	if(ITEM_MANAGER(iman)->item == NULL){
@@ -200,7 +211,8 @@ static void calc_subtotal(gpointer p, GdkEvent *e, ItemManager *iman){
 	char *valor_str = (char*) gtk_entry_get_text(priv->valor);
 	valor_str = str_replace(",", ".", valor_str);
 	double valor = atof(valor_str);
-	char *subtotal = dtoa(qtd * valor);
+	double total = (qtd * valor);
+	char *subtotal = dtoa(total);
 	gtk_label_set_text(priv->subtotal, subtotal);
 	free(subtotal);
 }
@@ -222,7 +234,7 @@ static void inst_item_manager(gpointer p, ItemManager *iman){
 		gtk_entry_set_text(priv->codigo, p->codigo);
 		gtk_entry_set_text(priv->descricao, p->descricao);
 		gtk_entry_set_text(priv->unidade, p->unidade_comercial);
-		gtk_entry_set_text(priv->valor, dtoa(p->valor));
+		gtk_entry_set_text(priv->valor, dtoa(centstodouble(p->valor)));//centstodouble?
 		gtk_entry_set_text(priv->quantidade, itoa(i->quantidade));
 		gtk_entry_set_text(priv->ncm, itoa(p->ncm));
 		gtk_entry_set_text(priv->cfop, itoa(p->cfop));
@@ -235,9 +247,11 @@ static void inst_item_manager(gpointer p, ItemManager *iman){
 				itoa(icms->origem));
 			gtk_combo_box_set_active_id(priv->icms_situacao_tributaria, 
 				itoa(icms->tipo));
-			gtk_entry_set_text(priv->icms_aliquota, dtoa(icms->aliquota));
+			double x = aliquotatodouble(icms->aliquota);
+			gtk_entry_set_text(priv->icms_aliquota, dtoa(x));
+								     
 			gtk_entry_set_text(priv->icms_credito_aproveitado, 
-				dtoa(icms->valor));
+				dtoa(centstodouble(icms->valor)));
 		}
 
 		//COFINS

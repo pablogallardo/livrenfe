@@ -50,7 +50,7 @@ CREATE TABLE destinatarios (id_destinatario integer, nome varchar(200),\
 		REFERENCES municipios(id_municipio));\
 CREATE TABLE produtos (id_produto integer, codigo varchar(40),\
 	descricao varchar(200), ncm integer,\
-	cfop integer, unidade varchar(10), valor real,\
+	cfop integer, unidade varchar(10), valor integer,\
 	CONSTRAINT produto_pk PRIMARY KEY (id_produto));\
 CREATE TABLE transportadoras (id_transportadora varchar(20), modfrete char(1), \
 	nome varchar(200),\
@@ -64,7 +64,7 @@ CREATE TABLE nfe (id_nfe integer, id_municipio varchar(8),\
 	tipo_ambiente char(1), finalidade char(1), consumidor_final char(1),\
 	presencial char(1), versao varchar(10), div char(1), chave varchar(20),\
 	id_emitente integer, id_destinatario integer, q_itens integer,\
-	total real, id_transportadora varchar(20), cod_nfe integer,\
+	total integer, id_transportadora varchar(20), cod_nfe integer,\
 	sefaz_cstat int, sefaz_xmot varchar(255),\
 	protocolo integer, xml text, xml_protocolo text,\
 	canceled boolean NOT NULL DEFAULT 0, inf_ad_fisco text,\
@@ -91,11 +91,11 @@ CREATE TABLE protocolos (id_protocolo integer, numero varchar(20), \
 	CONSTRAINT protocolo_nfe_fk FOREIGN KEY (id_nfe)\
 	REFERENCES nfe(id_nfe));\
 CREATE TABLE nfe_itens (id_nfe integer, ordem integer, id_produto integer, icms_origem char(1),\
-	icms_tipo integer, icms_aliquota real, icms_valor real, pis_aliquota real,\
-	pis_quantidade integer, pis_nt varchar(40), cofins_aliquota real,\
+	icms_tipo integer, icms_aliquota integer, icms_valor integer, pis_aliquota integer,\
+	pis_quantidade integer, pis_nt varchar(40), cofins_aliquota integer,\
 	cofins_quantidade integer, cofins_nt varchar(40), ipi_sit_trib integer,\
 	ipi_classe varchar(10), ipi_codigo varchar(10),\
-	qtd integer, valor real,\
+	qtd integer, valor integer,\
 	CONSTRAINT itens_pk PRIMARY KEY (id_nfe, ordem),\
 	CONSTRAINT itens_nfe_fk FOREIGN KEY (id_nfe)\
 	REFERENCES nfe(id_nfe),\
