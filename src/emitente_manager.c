@@ -22,7 +22,7 @@
 #include "db_interface.h"
 #include "gtk_common.h"
 #include <libnfe/errno.h>
-#include <libnfe/utils.h>
+#include "libnfe/utils.h"
 #include <libnfe/nfe.h>
 #include <libnfe/libnfe.h>
 #include <gtk/gtk.h>
