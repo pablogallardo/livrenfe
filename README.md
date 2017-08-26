@@ -33,6 +33,15 @@ Dependências
 - xmlsec 1.2.24
 - libsqlite3
 
+Exemplo de instalação em Arch linux
+---------
+
+```
+$ wget -c https://raw.githubusercontent.com/gabrielmoura/livrenfe/patch-1/PKGBUILD
+$ makepkg
+# pacman -U livrenfe-<versão>.pkg.tar.xz
+```
+
 Exemplo de instalação em Debian
 ---------
 * Instalar dependências desde repositório APT:
