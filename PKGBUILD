@@ -11,8 +11,8 @@ license=('LGPL')
 depends=('libxml2' 'xmlsec' 'curl' 'openssl' 'sqlite' 'gtk3')
 provides=('livrenfe')
 replaces=('livrenfe')
-source=("https://github.com/pablogallardo/livrenfe/archive/master.tar.gz")
-sha512sums=('5823db5f58374fc387b0e992f8c148ae5f57085256629a71b064b4bde555fa4ee668da4c100292691f23953f93491dc8bcbc176588694c89544ee8ccdf00a895')
+source=("https://github.com/pablogallardo/livrenfe/releases/download/v0.1.1-alpha/livrenfe-0.1.1-alpha.tar.gz")
+sha512sums=('aeefc4b60d9a479b115a52a94d0eb80c99b4cde9406373f14ffb433cf7a8c0007c16b6b61e57ce23e357757413d41265fe6e2b5367250d3d0d7cd9a9ff28afba')
 
 build() {
   cd "$pkgname-master"

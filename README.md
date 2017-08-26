@@ -37,7 +37,7 @@ Exemplo de instalação em Arch linux
 ---------
 
 ```
-$ wget -c https://raw.githubusercontent.com/gabrielmoura/livrenfe/patch-1/PKGBUILD
+$ wget -c https://raw.githubusercontent.com/pablogallardo/livrenfe/master/PKGBUILD
 $ makepkg
 # pacman -U livrenfe-<versão>.pkg.tar.xz
 ```
